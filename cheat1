@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+# look up the first argument passed to the script
+cheat = case ARGV[0]
+when 'git'
+  '
+  Need notes on how to:
+  1) Set colors
+  2) Set name / email
+  3) View/set remote branches
+  '
+
+when 'tar'
+  '
+  tar
+
+  To extract an uncompressed archive: 
+  tar -xvf /path/to/foo.tar
+
+  To extract a compressed archive:
+  tar -xzvf /path/to/foo.tgz
+
+  To create a compressed archive:
+  tar -czvf /path/to/foo.tgz /path/to/foo/
+
+  '
+
+else
+  'No cheat sheet available.'
+
+end
+
+
+# find
+
+# output
+puts cheat
+

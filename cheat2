@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+# Create a hash of cheatsheets
+cheats = {
+  'tar' => '
+some long string
+some long string
+some long string
+some long string
+some long string
+some long string
+  ',
+
+  'git' => '
+some long string about git
+some long string about git
+some long string about git
+some long string about git
+some long string about git
+  ',
+}
+
+# output  
+puts cheats[ARGV[0]] || 'No cheat sheet found.'
