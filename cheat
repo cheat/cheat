@@ -1,10 +1,16 @@
 #!/usr/bin/env python
 import sys
 
-# Create a dictionary of cheat sheets
+# assemble a keyphrase out of all params passed to the script
+keyphrase = ' '.join(sys.argv[1:])
+
+# Create a dictionary of cheatsheets
 cheats = {
 
 'find' : '''
+executable perms
+file not directory
+directory not file
 ''',
 
 'git' : '''
@@ -18,11 +24,7 @@ git config --global color.ui true
 
 'ln' : '''
 To create a symlink:
-
-
-
-
-
+@todo: complete this
 ''',
 
 'tar' : '''
@@ -44,5 +46,13 @@ tar -cjvf /path/to/foo.tgz /path/to/foo/
 
 }
 
+# Print help if requested
+if keyphrase == 'help' or keyphrase == '--help' or keyphrase == '-h':
+  print 'Cheatsheets exist for the following keyphrases:'
+  for key in cheats:
+    print key
+  exit()
+
+
 # Print the cheatsheet if it exists
-print cheats[sys.argv[1]] if sys.argv[1] in cheats.keys() else 'No cheatsheet found.'
+print cheats[keyphrase] if keyphrase in cheats.keys() else 'No cheatsheet found.'
