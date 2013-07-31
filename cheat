@@ -4,8 +4,8 @@ import sys
 # assemble a keyphrase out of all params passed to the script
 keyphrase = ' '.join(sys.argv[1:])
 
-# Create a dictionary of cheatsheets
-cheats = {
+# create a dictionary of cheatsheets
+cheatsheets = {
 
 'find' : '''
 executable perms
@@ -46,13 +46,12 @@ tar -cjvf /path/to/foo.tgz /path/to/foo/
 
 }
 
-# Print help if requested
-if keyphrase == 'help' or keyphrase == '--help' or keyphrase == '-h':
-  print 'Cheatsheets exist for the following keyphrases:'
-  for key in cheats:
+# print help if requested
+if keyphrase in ['help', '--help', '-h']:
+  print 'Available cheatsheets:'
+  for key in cheatsheets:
     print key
   exit()
 
-
-# Print the cheatsheet if it exists
-print cheats[keyphrase] if keyphrase in cheats.keys() else 'No cheatsheet found.'
+# print the cheatsheet if it exists
+print cheatsheets[keyphrase] if keyphrase in cheatsheets.keys() else 'No cheatsheet found.'
