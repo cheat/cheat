@@ -7,12 +7,21 @@ keyphrase = ' '.join(sys.argv[1:])
 # create a dictionary of cheatsheets
 cheatsheets = {
 
+########## dhclient ##########################################################
+'dhclient' : '''
+@todo
+''',
+
+
+########## find ##############################################################
 'find' : '''
 executable perms
 file not directory
 directory not file
 ''',
 
+
+########## git ###############################################################
 'git' : '''
 To set your identify:
 git config --global user.name "John Doe"
@@ -22,36 +31,63 @@ To enable color:
 git config --global color.ui true
 ''',
 
-'ln' : '''
-To create a symlink:
-@todo: complete this
+
+########## ifconfig ##########################################################
+'ifconfig' : '''
+@todo
 ''',
 
+
+########## ln ################################################################
+'ln' : '''
+To create a symlink:
+@todo
+''',
+
+
+########## ssh ###############################################################
+'ssh' : '''
+To execute a command on a remote server:
+@todo
+''',
+
+
+########## tar ###############################################################
 'tar' : '''
 To extract an uncompressed archive: 
 tar -xvf /path/to/foo.tar
 
-To extract a gz archive:
+To extract a .gz archive:
 tar -xzvf /path/to/foo.tgz
 
-To create a gz archive:
+To create a .gz archive:
 tar -czvf /path/to/foo.tgz /path/to/foo/
 
-To extract a bz2 archive:
+To extract a .bz2 archive:
 tar -xjvf /path/to/foo.tgz
 
-To create a bz2 archive:
+To create a .bz2 archive:
 tar -cjvf /path/to/foo.tgz /path/to/foo/
+''',
+
+
+########## x #################################################################
+'x' : '''
+To tunnel an X application over SSH:
+@todo
 ''',
 
 }
 
 # print help if requested
-if keyphrase in ['help', '--help', '-h']:
-  print 'Available cheatsheets:'
+if keyphrase in ['', 'help', '--help', '-h']:
+  print 'Usage: cheat [keyphrase]'
+  print 'Available keyphrases:'
   for key in cheatsheets:
     print key
   exit()
 
 # print the cheatsheet if it exists
+# @todo: if I could get tab-completion on the cheatsheet names, that would
+# be awesome
 print cheatsheets[keyphrase] if keyphrase in cheatsheets.keys() else 'No cheatsheet found.'
