@@ -1,5 +1,7 @@
 #!/usr/bin/env python
+
 cheatsheets = {
+
 # @todo:
 # - adb
 # - at
@@ -9,17 +11,12 @@ cheatsheets = {
 # - fdisk
 # - fstab
 # - mount
-# - mysqldump
-# - mysqlimport
 # - mongodump
 # - mongoimport
 # - nc
 # - rsync
-# - shred
 # - useradd / adduser
 # - xargs
-
-# @see: http://www.thegeekstuff.com/2010/11/50-linux-commands/
 
 ########## apt-cache ##########################################################
 'apt-cache' : '''
@@ -111,6 +108,18 @@ To create a symlink:
 ln -s path/to/the/target/directory name-of-symlink
 ''',
 
+########## mysqldump #########################################################
+'mysqldump' : '''
+To dump a database to a file:
+mysqldump -uusername -ppassword the-database > db.sql
+
+To dump a database to a .tgz file:
+mysqldump -uusername -ppassword the-database | gzip -9 > db.sql
+
+To dump all databases to a file:
+mysqldump -uusername -ppassword --all-databases > all-databases.sql
+''',
+
 ########## netstat ###########################################################
 'netstat' : '''
 To view which users/processes are listening to which ports:
@@ -135,6 +144,23 @@ sed s/day/night file.txt > file.txt
 
 To replace all occurrences of "day" with "night" on stdin:
 echo 'It is daytime' | sed s/day/night/
+''',
+
+########## shred ##############################################################
+'shred' : '''
+To shred a file (5 passes) and verbose output:
+shred -n 5 -v file.txt
+
+To shred a file (5 passes) and a final overwrite of zeroes:
+shred -n 5 -vz file.txt
+
+To do the above, and then truncate and rm the file:
+shred -n 5 -vzu file.txt
+
+To shred a partition:
+shred -n 5 -vz /dev/sda
+
+Remember that shred may not behave as expected on journaled file systems if file data is being journaled.
 ''',
 
 ########## split #############################################################
@@ -223,9 +249,7 @@ tar -cjvf /path/to/foo.tgz /path/to/foo/
 
 }
 
-
 # Cheatsheets can be aliased under a different keyphrase like this:
-#cheatsheets['dbus']        = cheatsheets['notify-send']
-#cheatsheets['imagick']     = cheatsheets['convert']
-#cheatsheets['redirection'] = cheatsheets['stdout']
-
+cheatsheets['dbus']        = cheatsheets['notify-send']
+cheatsheets['imagick']     = cheatsheets['convert']
+cheatsheets['redirection'] = cheatsheets['stdout']
