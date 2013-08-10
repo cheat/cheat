@@ -5,4 +5,5 @@ Cheat
 - examples
 - subcommands
 - anything, really
+- Installing (link to dotfiles.github.com)
 - help
