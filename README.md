@@ -1,4 +1,4 @@
-Cheat
+cheat
 =====
 `cheat` allows you to create and view interactive cheatsheets on the
 command-line. It was designed to help \*nix system administrators remember
