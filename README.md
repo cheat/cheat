@@ -67,7 +67,7 @@ python dictionary. To add new cheatsheets, you need only append new key/value
 pairs to the dictionary.
 
 Note that `cheat` supports subcommands, such that (for example) `git` and `git
-commit` may each be assigned their own cheat sheets.
+commit` may each be assigned their own cheatsheets.
 
 After you've customized your cheatsheets, I urge you to track `.cheat` along
 with your [dotfiles][].
