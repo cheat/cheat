@@ -15,17 +15,16 @@ cheatsheets = {
 # - df
 # - du
 # - fdisk
+# - fstab
 # - mount
 # - mysqldump
 # - mysqlimport
 # - mongodump
 # - mongoimport
 # - nc
-# - redirect to stdout
 # - rsync
 # - sed
 # - shred
-# - ssh-keygen
 # - useradd / adduser
 # - xargs
 
@@ -69,6 +68,11 @@ for file in `ls original/image/path/`;
     new_file=`basename $new_path`;
     convert $file -resize 150 conerted/image/path/$new_file.png;
 done
+''',
+
+########## dd ################################################################
+'dd' : '''
+@todo
 ''',
 
 ########## dhclient ##########################################################
@@ -151,6 +155,15 @@ For more information, see:
 http://unix.stackexchange.com/q/12755/44856
 ''',
 
+########## redirection ########################################################
+'stdout' : '''
+To redirect stderr to stdout:
+some-command 2>&1
+
+To redirect stderr to a file
+some-command 2> errors.txt
+''',
+
 ########## ssh-copy-id ########################################################
 'ssh-copy-id' : '''
 To copy a key to a remote host:
@@ -196,8 +209,9 @@ tar -cjvf /path/to/foo.tgz /path/to/foo/
 }
 
 # Cheatsheets can be aliased under a different keyphrase like this:
-cheatsheets['dbus']    = cheatsheets['notify-send']
-cheatsheets['imagick'] = cheatsheets['convert']
+cheatsheets['dbus']        = cheatsheets['notify-send']
+cheatsheets['imagick']     = cheatsheets['convert']
+cheatsheets['redirection'] = cheatsheets['stdout']
 
 # print help if requested
 if keyphrase in ['', 'help', '--help', '-h']:
