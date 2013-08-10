@@ -7,6 +7,19 @@ keyphrase = ' '.join(sys.argv[1:])
 # create a dictionary of cheatsheets
 cheatsheets = {
 
+# @todo:
+# - adb
+# - apt-cache
+# - dd
+# - fdisk
+# - mount
+# - nc
+# - rsync
+# - shred
+# - useradd / adduser
+
+# @see: http://www.thegeekstuff.com/2010/11/50-linux-commands/
+
 ########## bash ###############################################################
 'bash' : '''
 To implement a for loop:
@@ -132,6 +145,8 @@ tar -cjvf /path/to/foo.tgz /path/to/foo/
 ''',
 
 }
+
+# @todo: demonstrate some keyphrase aliases here
 
 # print help if requested
 if keyphrase in ['', 'help', '--help', '-h']:
