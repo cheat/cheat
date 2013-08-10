@@ -7,11 +7,32 @@ keyphrase = ' '.join(sys.argv[1:])
 # create a dictionary of cheatsheets
 cheatsheets = {
 
+########## convert  ##########################################################
+'convert' : '''
+To resize an image to a fixed width and proportional height:
+convert original-image.jpg -resize 100x converted-image.jpg
+
+To resize an image to a fixed height and proportional width:
+convert original-image.jpg -resize x100 converted-image.jpg
+
+To resize an image to a fixed width and height:
+convert original-image.jpg -resize 100x100 converted-image.jpg
+
+To resize an image and simultaneously change its file type:
+convert original-image.jpg -resize 100x converted-image.png
+
+To resize all of the images within a directory:
+for file in original/image/path/;
+    do new_path=${file%.*};
+    new_file=`basename $new_path`;
+    convert $file -resize 150 conerted/image/path/$new_file.png;
+done
+''',
+
 ########## dhclient ##########################################################
 'dhclient' : '''
 @todo
 ''',
-
 
 ########## find ##############################################################
 'find' : '''
@@ -19,7 +40,6 @@ executable perms
 file not directory
 directory not file
 ''',
-
 
 ########## git ###############################################################
 'git' : '''
@@ -31,26 +51,43 @@ To enable color:
 git config --global color.ui true
 ''',
 
-
 ########## ifconfig ##########################################################
 'ifconfig' : '''
 @todo
 ''',
 
-
 ########## ln ################################################################
 'ln' : '''
 To create a symlink:
-@todo
+ln -s path/to/the/target/directory name-of-symlink
 ''',
 
+########## netstat ###########################################################
+'netstat' : '''
+To view which users/processes are listening to which ports:
+sudo netstat -lnptu
+''',
+
+########## sockstat ##########################################################
+'sockstat' : '''
+To view which users/processes are listening to which ports:
+sudo sockstat -l
+''',
 
 ########## ssh ###############################################################
 'ssh' : '''
 To execute a command on a remote server:
-@todo
-''',
+ssh -t user@example.com 'the-remote-command'
 
+To tunnel an x session over SSH:
+ssh -X user@example.com
+
+To launch a specific x application over SSH:
+ssh -X -t user@example.com 'chromium-browser'
+
+For more information, see:
+http://unix.stackexchange.com/q/12755/44856
+''',
 
 ########## tar ###############################################################
 'tar' : '''
@@ -70,16 +107,10 @@ To create a .bz2 archive:
 tar -cjvf /path/to/foo.tgz /path/to/foo/
 ''',
 
-
-########## x #################################################################
-'x' : '''
-To tunnel an X application over SSH:
-@todo
-''',
-
 }
 
 # print help if requested
+# @todo: alphabetize key names if possible
 if keyphrase in ['', 'help', '--help', '-h']:
   print 'Usage: cheat [keyphrase]'
   print 'Available keyphrases:'
