@@ -9,16 +9,33 @@ cheatsheets = {
 
 # @todo:
 # - adb
-# - apt-cache
+# - at
+# - cut / split?
 # - dd
+# - df
+# - du
 # - fdisk
 # - mount
+# - mysqldump
+# - mysqlimport
+# - mongodump
+# - mongoimport
 # - nc
+# - redirect to stdout
 # - rsync
+# - sed
 # - shred
+# - ssh-keygen
 # - useradd / adduser
+# - xargs
 
 # @see: http://www.thegeekstuff.com/2010/11/50-linux-commands/
+
+########## apt-cache ##########################################################
+'apt-cache' : '''
+To search for apt packages:
+apt-cache search "whatever"
+''',
 
 ########## bash ###############################################################
 'bash' : '''
@@ -105,6 +122,14 @@ To view which users/processes are listening to which ports:
 sudo netstat -lnptu
 ''',
 
+########## notify-send #######################################################
+'notify-send' : '''
+To send a desktop notification via dbus:
+notify-send -i 'icon-file/name' -a 'application_name' 'summary' 'body of message'
+
+The -i and -a flags can be omitted if unneeded.
+''',
+
 ########## sockstat ##########################################################
 'sockstat' : '''
 To view which users/processes are listening to which ports:
@@ -124,6 +149,30 @@ ssh -X -t user@example.com 'chromium-browser'
 
 For more information, see:
 http://unix.stackexchange.com/q/12755/44856
+''',
+
+########## ssh-copy-id ########################################################
+'ssh-copy-id' : '''
+To copy a key to a remote host:
+ssh-copy-id username@host
+
+To copy a key to a remote host on a non-standard port:
+ssh-copy-id username@host -p 2222
+''',
+
+########## ssh-keygen ########################################################
+'ssh-keygen' : '''
+To generate an SSH key:
+ssh-keygen -t rsa
+
+To generate a 4096-bit SSH key:
+ssh-keygen -t rsa -b 4096
+
+To copy a key to a remote host:
+ssh-copy-id username@host
+
+To copy a key to a remote host on a non-standard port:
+ssh-copy-id username@host -p 2222
 ''',
 
 ########## tar ###############################################################
@@ -146,7 +195,9 @@ tar -cjvf /path/to/foo.tgz /path/to/foo/
 
 }
 
-# @todo: demonstrate some keyphrase aliases here
+# Cheatsheets can be aliased under a different keyphrase like this:
+cheatsheets['dbus']    = cheatsheets['notify-send']
+cheatsheets['imagick'] = cheatsheets['convert']
 
 # print help if requested
 if keyphrase in ['', 'help', '--help', '-h']:
