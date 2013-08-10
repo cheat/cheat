@@ -10,7 +10,6 @@ cheatsheets = {
 # @todo:
 # - adb
 # - at
-# - cut / split?
 # - dd
 # - df
 # - du
@@ -23,7 +22,6 @@ cheatsheets = {
 # - mongoimport
 # - nc
 # - rsync
-# - sed
 # - shred
 # - useradd / adduser
 # - xargs
@@ -134,6 +132,30 @@ notify-send -i 'icon-file/name' -a 'application_name' 'summary' 'body of message
 The -i and -a flags can be omitted if unneeded.
 ''',
 
+########## sed ################################################################
+'sed' : '''
+To replace all occurrences of "day" with "night" and write to stdout:
+sed s/day/night file.txt
+
+To replace all occurrences of "day" with "night" within file.txt:
+sed s/day/night file.txt > file.txt
+
+To replace all occurrences of "day" with "night" on stdin:
+echo 'It is daytime' | sed s/day/night/
+''',
+
+########## split #############################################################
+'split' : '''
+To split a large text file into smaller files of 1000 lines each:
+split file.txt -l 1000
+
+To split a large binary file into smaller files of 10M each:
+split file.txt -b 10M
+
+To consolidate split files into a single file: 
+cat x* > file.txt
+''',
+
 ########## sockstat ##########################################################
 'sockstat' : '''
 To view which users/processes are listening to which ports:
@@ -153,15 +175,6 @@ ssh -X -t user@example.com 'chromium-browser'
 
 For more information, see:
 http://unix.stackexchange.com/q/12755/44856
-''',
-
-########## redirection ########################################################
-'stdout' : '''
-To redirect stderr to stdout:
-some-command 2>&1
-
-To redirect stderr to a file
-some-command 2> errors.txt
 ''',
 
 ########## ssh-copy-id ########################################################
@@ -186,6 +199,15 @@ ssh-copy-id username@host
 
 To copy a key to a remote host on a non-standard port:
 ssh-copy-id username@host -p 2222
+''',
+
+########## stdout #############################################################
+'stdout' : '''
+To redirect stderr to stdout:
+some-command 2>&1
+
+To redirect stderr to a file
+some-command 2> errors.txt
 ''',
 
 ########## tar ###############################################################

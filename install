@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+import shutil
+import sys
+
+try:
+  shutil.copy('./cheat', '/usr/local/bin/')
+  # shutil.move('./.cheat', '~')
+except IOError as e:
+   print >> sys.stderr, "This installer must be run as root."
+   sys.exit(1)
