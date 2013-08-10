@@ -7,7 +7,18 @@ keyphrase = ' '.join(sys.argv[1:])
 # create a dictionary of cheatsheets
 cheatsheets = {
 
-########## convert  ##########################################################
+########## bash ###############################################################
+'bash' : '''
+To implement a for loop:
+for file in `ls .`;
+    do echo 'file';
+    echo 'found';
+done
+
+@todo: if (esp. file/directory)
+''',
+
+########## convert ###########################################################
 'convert' : '''
 To resize an image to a fixed width and proportional height:
 convert original-image.jpg -resize 100x converted-image.jpg
@@ -22,7 +33,8 @@ To resize an image and simultaneously change its file type:
 convert original-image.jpg -resize 100x converted-image.png
 
 To resize all of the images within a directory:
-for file in original/image/path/;
+To implement a for loop:
+for file in `ls original/image/path/`;
     do new_path=${file%.*};
     new_file=`basename $new_path`;
     convert $file -resize 150 conerted/image/path/$new_file.png;
@@ -31,14 +43,31 @@ done
 
 ########## dhclient ##########################################################
 'dhclient' : '''
-@todo
+To release the current IP address:
+sudo dhclient -r
+
+To obtain a new IP address:
+sudo dhclient
+
+Running the above in sequence is a common way of refreshing an IP.
 ''',
 
 ########## find ##############################################################
 'find' : '''
-executable perms
-file not directory
-directory not file
+To find files by extension (ex: .jpg):
+find . -iname "*.jpg"
+
+To find directories:
+find . -type d
+
+To find files:
+find . -type f
+
+To find files by octal permission:
+find . -type f -perm 777
+
+To find files with setuid bit set:
+find . -xdev \( -perm -4000 \) -type f -print0 | xargs -0 ls -l
 ''',
 
 ########## git ###############################################################
@@ -49,11 +78,6 @@ git config --global user.email johndoe@example.com
 
 To enable color:
 git config --global color.ui true
-''',
-
-########## ifconfig ##########################################################
-'ifconfig' : '''
-@todo
 ''',
 
 ########## ln ################################################################
