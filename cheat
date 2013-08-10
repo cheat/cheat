@@ -110,15 +110,14 @@ tar -cjvf /path/to/foo.tgz /path/to/foo/
 }
 
 # print help if requested
-# @todo: alphabetize key names if possible
 if keyphrase in ['', 'help', '--help', '-h']:
-  print 'Usage: cheat [keyphrase]'
-  print 'Available keyphrases:'
-  for key in cheatsheets:
-    print key
+  cheatsheets_sorted = cheatsheets.keys()
+  cheatsheets_sorted.sort()
+
+  print "Usage: cheat [keyphrase]\n"
+  print "Available keyphrases:"
+  print "\n".join(cheatsheets_sorted)
   exit()
 
 # print the cheatsheet if it exists
-# @todo: if I could get tab-completion on the cheatsheet names, that would
-# be awesome
 print cheatsheets[keyphrase] if keyphrase in cheatsheets.keys() else 'No cheatsheet found.'
