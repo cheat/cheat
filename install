@@ -1,12 +1,19 @@
 #!/usr/bin/env python
-from os.path import expanduser
+
+import os
+import os.path
 import shutil
 import sys
 
+home = os.path.expanduser('~')
+bindir = os.path.join(home, '/bin/')
 try:
-  shutil.copy('./cheat', '/usr/local/bin/')
-  shutil.copytree('./.cheat', expanduser('~') + '/.cheat')
-  print "cheat has been installed successfully."
+    if not os.path.isdir(bindir):
+        os.path.mkdir(bindir)
+    os.symlink('./cheat', bindir)
+    os.symlink('./.cheat', os.path.join(home, '/.cheat'))
+    print("cheat has been installed successfully.")
 except IOError as e:
-   print >> sys.stderr, "This installer must be run as root."
-   sys.exit(1)
+    sys.stderr.write("Something went wrong: %s\n" % e)
+    sys.stderr.write("Your installation may be incomplete!\n")
+    sys.exit(1)
