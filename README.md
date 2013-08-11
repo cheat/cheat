@@ -1,13 +1,14 @@
 cheat
 =====
 `cheat` allows you to create and view interactive cheatsheets on the
-command-line. It was designed to help \*nix system administrators remember
+command-line. It was designed to help remind \*nix system administrators of
 options for commands that they use frequently, but not frequently enough to
 remember.
 
 ![The obligatory xkcd](http://imgs.xkcd.com/comics/tar.png 'The obligatory xkcd')
 
 `cheat` depends only on python.
+
 
 Examples
 --------
@@ -52,8 +53,8 @@ Do the following to install `cheat`:
 2. Run `sudo ./install`
 
 The `install` script will copy a python file into `/usr/local/bin/`, and will
-also create a hidden file (containing the cheatsheet content) in your home
-directory.
+also create a hidden `.cheat` folder (containing the cheatsheet content) in
+your home directory.
 
 
 Modifying Cheatsheets
@@ -62,14 +63,17 @@ The value of `cheat` is that it allows you to create your own cheatsheets - the
 defaults are meant to serve only as a starting point, and can and should be
 modified.
 
-To modify your cheatsheets, edit the `~/.cheat` file, which simply contains a
-python dictionary. To add new cheatsheets, you need only append new key/value
-pairs to the dictionary.
+Cheatsheets are stored in the `~/.cheat/` directory, and are named on a
+per-keyphrase basis. In other words, the content for the `tar` cheatsheet lives
+in the `~/.cheat/tar` file. To add a cheatsheet for a `foo` command, you would
+create file `~/.cheat/foo`, whereby that file contained the cheatsheet content.
 
-Note that `cheat` supports subcommands, such that (for example) `git` and `git
-commit` may each be assigned their own cheatsheets.
+Note that `cheat` supports "subcommands" simply by naming files appropriately.
+Thus, if you wanted to create a cheatsheet not only (for example) for `git` but
+also for `git commit`, you could do so be creating cheatsheet files of the
+appropriate names (`git` and `git commit`).
 
-After you've customized your cheatsheets, I urge you to track `.cheat` along
+After you've customized your cheatsheets, I urge you to track `~/.cheat/` along
 with your [dotfiles][].
 
 
