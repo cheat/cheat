@@ -6,12 +6,13 @@ import shutil
 import sys
 
 home = os.path.expanduser('~')
-bindir = os.path.join(home, '/bin/')
+thisdir = os.path.dirname(os.path.abspath(__file__))
+bindir = os.path.join(home, 'bin')
 try:
     if not os.path.isdir(bindir):
         os.path.mkdir(bindir)
-    os.symlink('./cheat', bindir)
-    os.symlink('./.cheat', os.path.join(home, '/.cheat'))
+    os.symlink(os.path.join(thisdir, './cheat'), os.path.join(bindir, 'cheat'))
+    os.symlink(os.path.join(thisdir, './.cheat'), os.path.join(home, '.cheat'))
     print("cheat has been installed successfully.")
 except IOError as e:
     sys.stderr.write("Something went wrong: %s\n" % e)
