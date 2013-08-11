@@ -5,7 +5,9 @@ import sys
 
 try:
   shutil.copy('./cheat', '/usr/local/bin/')
-  shutil.copy('./.cheat', expanduser('~'))
+  shutil.copy('./.cheat/', expanduser('~'))
 except IOError as e:
    print >> sys.stderr, "This installer must be run as root."
    sys.exit(1)
+
+# don't forget to chown back to the normal user

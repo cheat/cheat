@@ -1,0 +1,2 @@
+To search for apt packages:
+apt-cache search "whatever"

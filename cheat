@@ -1,23 +1,32 @@
 #!/usr/bin/env python
-from os.path import expanduser
-import imp
+import os
 import sys
 
 # assemble a keyphrase out of all params passed to the script
 keyphrase = ' '.join(sys.argv[1:])
+cheat_dir = os.path.expanduser('~') + '/.cheat/'
 
-# load the dictionary of cheatsheets
-config = imp.load_source('config', expanduser('~') + '/.cheat');
+# verify that the ~/.cheat directory exists
+if not os.path.isdir(cheat_dir):
+  print >> sys.stderr, 'The ~/.cheat directory does not exist.'
+  exit()
+
+# list the files in the ~/.cheat directory
+cheatsheets = os.listdir(cheat_dir)
+cheatsheets.sort()
 
 # print help if requested
 if keyphrase in ['', 'help', '--help', '-h']:
-  cheatsheets_sorted = config.cheatsheets.keys()
-  cheatsheets_sorted.sort()
-
   print "Usage: cheat [keyphrase]\n"
   print "Available keyphrases:"
-  print "\n".join(cheatsheets_sorted)
+  print "\n".join(cheatsheets)
   exit()
 
 # print the cheatsheet if it exists
-print config.cheatsheets[keyphrase] if keyphrase in config.cheatsheets.keys() else 'No cheatsheet found.'
+if keyphrase in cheatsheets:
+  with open (cheat_dir + keyphrase, 'r') as cheatsheet:
+    print cheatsheet.read()
+
+# if it does not, say so
+else:
+  print 'No cheatsheet found.'
