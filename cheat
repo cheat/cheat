@@ -4,7 +4,8 @@ import sys
 
 # assemble a keyphrase out of all params passed to the script
 keyphrase = ' '.join(sys.argv[1:])
-cheat_dir = os.path.expanduser('~') + '/.cheat/'
+home = os.path.expanduser('~') 
+cheat_dir = home + '/.cheat/'
 
 # verify that the ~/.cheat directory exists
 if not os.path.isdir(cheat_dir):
@@ -20,6 +21,16 @@ if keyphrase in ['', 'help', '--help', '-h']:
   print "Usage: cheat [keyphrase]\n"
   print "Available keyphrases:"
   print "\n".join(cheatsheets)
+  exit()
+
+if (len(sys.argv) > 1 and sys.argv[1] == 'add'):
+  if (len(sys.argv) > 2):
+    f = open(home + "/.cheat/" + sys.argv[2], 'a+')
+    f.write(' '.join(sys.argv[2:]))
+    f.close()
+  else:
+    print "Usage: cheat add [command with arguments]\n\n"
+    print "Example: cheat add curl -XPUT \"http://www.github.com\" #change request method for curl\n"
   exit()
 
 # print the cheatsheet if it exists
