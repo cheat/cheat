@@ -3,3 +3,12 @@ for file in `ls .`;
     do echo 'file';
     echo 'found';
 done
+
+To implement a case command:
+case "$1"
+in
+    0) echo "zero found";;
+    1) echo "one found";;
+    2) echo "two found";;
+    3) echo "three found";;
+esac
