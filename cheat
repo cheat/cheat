@@ -1,32 +1,46 @@
 #!/usr/bin/env python
 import os
 import sys
+from itertools import izip_longest, islice
 
-# assemble a keyphrase out of all params passed to the script
-keyphrase = ' '.join(sys.argv[1:])
-cheat_dir = os.path.expanduser('~') + '/.cheat/'
+def columnize(sequence, columns=2):
+    size, remainder = divmod(len(sequence), columns)
+    if remainder: 
+        size += 1
+    slices = [islice(sequence, pos, pos + size) 
+              for pos in xrange(0, len(sequence), size)]
+    return izip_longest(fillvalue='', *slices)
 
-# verify that the ~/.cheat directory exists
-if not os.path.isdir(cheat_dir):
-  print >> sys.stderr, 'The ~/.cheat directory does not exist.'
-  exit()
+def main():
+  # assemble a keyphrase out of all params passed to the script
+  keyphrase = ' '.join(sys.argv[1:])
+  cheat_dir = os.path.expanduser('~') + '/.cheat/'
 
-# list the files in the ~/.cheat directory
-cheatsheets = os.listdir(cheat_dir)
-cheatsheets.sort()
+  # verify that the ~/.cheat directory exists
+  if not os.path.isdir(cheat_dir):
+    sys.stderr.write('The ~/.cheat directory does not exist.')
+    exit()
 
-# print help if requested
-if keyphrase in ['', 'help', '--help', '-h']:
-  print "Usage: cheat [keyphrase]\n"
-  print "Available keyphrases:"
-  print "\n".join(cheatsheets)
-  exit()
+  # list the files in the ~/.cheat directory
+  cheatsheets = os.listdir(cheat_dir)
+  cheatsheets.sort()
 
-# print the cheatsheet if it exists
-if keyphrase in cheatsheets:
-  with open (cheat_dir + keyphrase, 'r') as cheatsheet:
-    print cheatsheet.read()
+  # print help if requested
+  if keyphrase in ['', 'help', '--help', '-h']:
+    print("Usage: cheat [keyphrase]\n")
+    print("Available keyphrases:")
+    for values in columnize(cheatsheets, 4):
+      print(" %s" % ' '.join(value.ljust(20) for value in values))
+    exit()
 
-# if it does not, say so
-else:
-  print 'No cheatsheet found.'
+  # print the cheatsheet if it exists
+  if keyphrase in cheatsheets:
+    with open (cheat_dir + keyphrase, 'r') as cheatsheet:
+      print(cheatsheet.read())
+
+  # if it does not, say so
+  else:
+    print('No cheatsheet found.')
+
+if __name__ == '__main__':
+    main()
