@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 import os
 import sys
+from cheatsheets import cheat_dir
 
 # assemble a keyphrase out of all params passed to the script
 keyphrase = ' '.join(sys.argv[1:])
-cheat_dir = os.path.expanduser('~') + '/.cheat/'
 
-# verify that the ~/.cheat directory exists
+# verify that the cheat directory exists
 if not os.path.isdir(cheat_dir):
-  print >> sys.stderr, 'The ~/.cheat directory does not exist.'
+  print >> sys.stderr, 'The cheat directory does not exist.'
   exit()
 
-# list the files in the ~/.cheat directory
-cheatsheets = os.listdir(cheat_dir)
+# list the files in the cheat directory
+cheatsheets = [f for f in os.listdir(cheat_dir) if '.' not in f]
 cheatsheets.sort()
 
 # print help if requested
@@ -24,7 +24,8 @@ if keyphrase in ['', 'help', '--help', '-h']:
 
 # print the cheatsheet if it exists
 if keyphrase in cheatsheets:
-  with open (cheat_dir + keyphrase, 'r') as cheatsheet:
+  cheatsheet_filename = os.path.join(cheat_dir, keyphrase)
+  with open(cheatsheet_filename, 'r') as cheatsheet:
     print cheatsheet.read()
 
 # if it does not, say so
