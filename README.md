@@ -50,7 +50,7 @@ Installing
 Do the following to install `cheat`:
 
 1. Clone this repository and `cd` into it
-2. Run `sudo ./install`
+2. Run `$ sudo python setup.py install`
 
 The `install` script will copy a python file into `/usr/local/bin/`, and will
 also create a hidden `.cheat` folder (containing the cheatsheet content) in
