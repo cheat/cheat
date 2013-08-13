@@ -6,28 +6,31 @@ from cheatsheets import cheat_dir
 # assemble a keyphrase out of all params passed to the script
 keyphrase = ' '.join(sys.argv[1:])
 
-# verify that the cheat directory exists
-if not os.path.isdir(cheat_dir):
-  print >> sys.stderr, 'The cheat directory does not exist.'
-  exit()
+user_cheat_dir = os.path.join(os.path.expanduser('~'), '.cheat')
 
 # list the files in the cheat directory
-cheatsheets = [f for f in os.listdir(cheat_dir) if '.' not in f]
+cheatsheets = [(f, cheat_dir) for f in os.listdir(cheat_dir) if '.' not in f]
+# add the user's cheat files if they have a ~/.cheat directory
+if os.path.isdir(user_cheat_dir):
+    cheatsheets += [(f, user_cheat_dir) for f in os.listdir(user_cheat_dir)]
 cheatsheets.sort()
 
 # print help if requested
 if keyphrase in ['', 'help', '--help', '-h']:
   print "Usage: cheat [keyphrase]\n"
   print "Available keyphrases:"
-  print "\n".join(cheatsheets)
+  print "\n".join([name[0] for name in cheatsheets])
   exit()
 
+sheet_found = False
 # print the cheatsheet if it exists
-if keyphrase in cheatsheets:
-  cheatsheet_filename = os.path.join(cheat_dir, keyphrase)
-  with open(cheatsheet_filename, 'r') as cheatsheet:
-    print cheatsheet.read()
+for sheet in cheatsheets:
+  if keyphrase == sheet[0]:
+    cheatsheet_filename = os.path.join(sheet[1], keyphrase)
+    with open(cheatsheet_filename, 'r') as cheatsheet:
+      print cheatsheet.read()
+      sheet_found = True
 
 # if it does not, say so
-else:
+if not sheet_found:
   print 'No cheatsheet found.'
