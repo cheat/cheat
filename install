@@ -4,9 +4,9 @@ import shutil
 import sys
 
 try:
-  shutil.copy('./cheat', '/usr/local/bin/')
-  shutil.copytree('./.cheat', expanduser('~') + '/.cheat')
-  print "cheat has been installed successfully."
+    shutil.copy('./cheat', '/usr/local/bin/')
+    shutil.copytree('./.cheat', expanduser('~') + '/.cheat')
+    print "cheat has been installed successfully."
 except IOError as e:
-   print >> sys.stderr, "This installer must be run as root."
-   sys.exit(1)
+    print >> sys.stderr, "This installer must be run as root."
+    sys.exit(1)
