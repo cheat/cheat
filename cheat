@@ -28,7 +28,7 @@ if not cheat_dirs:
 cheatsheets = cheat_files(cheat_dirs)
 
 # print help if requested
-if keyphrase.lower() in ['', 'help', '--help', '-h']:
+if keyphrase.lower() in ['', 'cheat', 'help', '-h', '-help', '--help']:
     print "Usage: cheat [keyphrase]\n"
     print "Available keyphrases:"
     max_command = max([ len(x) for x in cheatsheets.keys() ]) + 3
