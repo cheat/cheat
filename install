@@ -3,10 +3,31 @@ from os.path import expanduser
 import shutil
 import sys
 
+DEFAULT_INSTALLATION_PATH =  '/usr/local/bin/'
+
+def usage():
+    print """usage: %s [-h] [--path /path/to/custom/installation/]
+
+Install cheat on your computer. If the --path option is not used
+install it on %s.
+""" % (sys.argv[0], DEFAULT_INSTALLATION_PATH,)
+    sys.exit(0)
+
+if "-h" in sys.argv:
+    usage()
+
+INSTALLATION_PATH = None
+
 try:
-  shutil.copy('./cheat', '/usr/local/bin/')
+    path_index = sys.argv.index("--path")
+    INSTALLATION_PATH = sys.argv[path_index + 1]
+except ValueError:
+    INSTALLATION_PATH = DEFAULT_INSTALLATION_PATH
+
+try:
+  shutil.copy('./cheat', INSTALLATION_PATH)
   shutil.copytree('./.cheat', expanduser('~') + '/.cheat')
   print "cheat has been installed successfully."
 except IOError as e:
-   print >> sys.stderr, "This installer must be run as root."
+   print >> sys.stderr, e
    sys.exit(1)
