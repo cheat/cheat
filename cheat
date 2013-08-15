@@ -2,31 +2,44 @@
 import os
 import sys
 
+def cheat_directories():
+    default = [ default_dir for default_dir in [os.path.expanduser('~/.cheat')] if os.path.isdir(default_dir) ]
+    if 'CHEATPATH' in os.environ and os.environ['CHEATPATH']:
+        return [ path for path in os.environ['CHEATPATH'].split(os.pathsep) if os.path.isdir(path) ] + default
+    else:
+        return default
+
+def cheat_files(cheat_directories):
+    cheats = {}
+    for cheat_dir in reversed(cheat_directories):
+        cheats.update(dict([ (cheat, cheat_dir) for cheat in os.listdir(cheat_dir) ]))
+    return cheats
+
 # assemble a keyphrase out of all params passed to the script
 keyphrase = ' '.join(sys.argv[1:])
-cheat_dir = os.path.expanduser('~') + '/.cheat/'
+cheat_dirs = cheat_directories()
 
-# verify that the ~/.cheat directory exists
-if not os.path.isdir(cheat_dir):
-    print >> sys.stderr, 'The ~/.cheat directory does not exist.'
-    exit()
+# verify that we have at least one cheat directory
+if not cheat_dirs:
+  print >> sys.stderr, 'The ~/.cheat directory does not exist or the CHEATPATH variable is not set.'
+  exit()
 
 # list the files in the ~/.cheat directory
-cheatsheets = os.listdir(cheat_dir)
-cheatsheets.sort()
+cheatsheets = cheat_files(cheat_dirs)
 
 # print help if requested
-if keyphrase in ['', 'help', '--help', '-h']:
-    print "Usage: cheat [keyphrase]\n"
-    print "Available keyphrases:"
-    print "\n".join(cheatsheets)
-    exit()
+if keyphrase.lower() in ['', 'help', '--help', '-h']:
+  print "Usage: cheat [keyphrase]\n"
+  print "Available keyphrases:"
+  max_command = max([ len(x) for x in cheatsheets.keys() ]) + 3
+  print '\n'.join(sorted([ '%s [%s]' % (key.ljust(max_command), value) for key, value in cheatsheets.items() ]))
+  exit()
 
 # print the cheatsheet if it exists
 if keyphrase in cheatsheets:
-    with open (cheat_dir + keyphrase, 'r') as cheatsheet:
-        print cheatsheet.read()
+  with open (os.path.join(cheatsheets[keyphrase], keyphrase), 'r') as cheatsheet:
+    print cheatsheet.read()
 
 # if it does not, say so
 else:
-    print 'No cheatsheet found.'
+  print 'No cheatsheet found for %s.' % keyphrase
