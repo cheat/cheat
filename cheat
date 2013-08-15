@@ -16,7 +16,7 @@ cheatsheets = os.listdir(cheat_dir)
 cheatsheets.sort()
 
 # print help if requested
-if keyphrase in ['', 'help', '--help', '-h']:
+if keyphrase in ['', '-h', 'help', '-help', '--help', 'cheat']:
     print "Usage: cheat [keyphrase]\n"
     print "Available keyphrases:"
     print "\n".join(cheatsheets)
