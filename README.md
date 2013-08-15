@@ -83,4 +83,18 @@ If you would like to contribute additional cheatsheets for basic \*nix
 commands, please modify the `.cheat` file and send me a pull request.
 
 
-[dotfiles]: http://dotfiles.github.io/
+Related Projects
+----------------
+- [lucaswerkmeister/cheats][1]: An implementation of this concept in pure bash
+  that also allows not only for numerical indexing of subcomands but also
+  supports running commands interactively.
+
+- [jahendrie/cheat][2]: A bash-only implmentation that additionally allows for
+  cheatsheets to be created and `grep` searched from the command-line.
+  ([jahendrie][] contributed key ideas to this project as well.)
+
+
+[dotfiles]:  http://dotfiles.github.io/
+[jahendrie]: https://github.com/jahendrie
+[1]:         https://github.com/lucaswerkmeister/cheats   
+[2]:         https://github.com/jahendrie/cheat
