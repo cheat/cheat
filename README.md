@@ -96,7 +96,7 @@ export CHEATPATH=$CHEATPATH:/path/to/more/cheats
 
 Contributing
 ------------
-If you would like to contribute cheetsheets for program functionality, please
+If you would like to contribute cheetsheets or program functionality, please
 fork this repository, make your chanages, and send me a pull request.
 
 
