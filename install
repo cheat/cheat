@@ -8,5 +8,5 @@ try:
     shutil.copytree('./.cheat', expanduser('~') + '/.cheat')
     print "cheat has been installed successfully."
 except IOError as e:
-    print >> sys.stderr, "This installer must be run as root."
+    print >> sys.stderr, e
     sys.exit(1)
