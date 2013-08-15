@@ -77,6 +77,23 @@ After you've customized your cheatsheets, I urge you to track `~/.cheat/` along
 with your [dotfiles][].
 
 
+Setting a `$CHEATPATH`
+----------------------
+By default, all cheatsheets are installed to `~/.cheat/`, but you can instruct
+`cheat` to look for cheatsheets in other directories by exporting a `CHEATPATH`
+environment variable:
+
+```bash
+export CHEATPATH=/path/to/my/cheats
+```
+
+You may, of course, append multiple directories to your `CHEATPATH`:
+
+```bash
+export CHEATPATH=$CHEATPATH:/path/to/more/cheats
+```
+
+
 Contributing
 ------------
 If you would like to contribute additional cheatsheets for basic \*nix
