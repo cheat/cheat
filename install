@@ -3,4 +3,4 @@
 cp ./cheat /usr/local/bin
 cp -r ./.cheat ~/
 
-printf "Cheat has been intsalled sucessfully."
+printf "Cheat has been intsalled sucessfully.\n"
