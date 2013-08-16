@@ -47,15 +47,21 @@ to store notes on your favorite cookie recipes, feel free.
 
 Installing
 ----------
-Do the following to install `cheat`:
 
-1. Clone this repository and `cd` into it
-2. Run `$ sudo python setup.py install`
+### Installing for all users (requires root)
 
-The `install` script will copy a python file into `/usr/local/bin/`, and will
-also create a hidden `.cheat` folder (containing the cheatsheet content) in
-your home directory.
+Clone this repository and `cd` into it, then run
 
+    sudo python setup.py install
+
+### Installing in your home directory
+
+Clone this repository and `cd` into it, then run
+
+    mkdir -p ~/bin
+    cp cheat ~/bin
+    mkdir ~/.cheat
+    cp cheatsheets/* ~/.cheat
 
 Modifying Cheatsheets
 ---------------------
