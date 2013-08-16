@@ -11,7 +11,7 @@ remember.
 
 
 Examples
---------
+========
 The next time you're forced to disarm a nuclear weapon without consulting
 Google, you may run:
 
@@ -46,7 +46,7 @@ to store notes on your favorite cookie recipes, feel free.
 
 
 Installing
-----------
+==========
 
 ### Installing for all users (requires root)
 
@@ -64,7 +64,7 @@ Clone this repository and `cd` into it, then run
     cp cheatsheets/* ~/.cheat
 
 Modifying Cheatsheets
----------------------
+=====================
 The value of `cheat` is that it allows you to create your own cheatsheets - the
 defaults are meant to serve only as a starting point, and can and should be
 modified.
@@ -84,7 +84,7 @@ with your [dotfiles][].
 
 
 Contributing
-------------
+============
 If you would like to contribute additional cheatsheets for basic \*nix
 commands, please modify the `.cheat` file and send me a pull request.
 
