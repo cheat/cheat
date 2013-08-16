@@ -25,20 +25,20 @@ keyphrase = ' '.join(sys.argv[1:])
 
 # print help if requested
 if keyphrase in ['', 'help', '--help', '-h']:
-  print "Usage: cheat [keyphrase]\n"
-  print "Available keyphrases:"
-  print "\n".join([name[0] for name in cheatsheets])
-  exit()
+    print "Usage: cheat [keyphrase]\n"
+    print "Available keyphrases:"
+    print "\n".join([name[0] for name in cheatsheets])
+    exit()
 
 sheet_found = False
 # print the cheatsheet if it exists
 for sheet in cheatsheets:
-  if keyphrase == sheet[0]:
+    if keyphrase == sheet[0]:
     cheatsheet_filename = os.path.join(sheet[1], keyphrase)
     with open(cheatsheet_filename, 'r') as cheatsheet:
-      print cheatsheet.read()
-      sheet_found = True
+        print cheatsheet.read()
+        sheet_found = True
 
 # if it does not, say so
 if not sheet_found:
-  print 'No cheatsheet found.'
+    print 'No cheatsheet found.'
