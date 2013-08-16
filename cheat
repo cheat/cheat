@@ -1,19 +1,27 @@
 #!/usr/bin/env python
 import os
 import sys
-from cheatsheets import cheat_dir
 
-# assemble a keyphrase out of all params passed to the script
-keyphrase = ' '.join(sys.argv[1:])
+try:
+    # check to see if the cheat package is available
+    import cheatsheets
+    cheat_dir = cheatsheets.cheat_dir
+    cheatsheets = [(f, cheat_dir) for f in os.listdir(cheat_dir) if '.' not in f]
+except ImportError:
+    cheatsheets = []
 
+# construct the path to the cheat directory
 user_cheat_dir = os.path.join(os.path.expanduser('~'), '.cheat')
 
 # list the files in the cheat directory
-cheatsheets = [(f, cheat_dir) for f in os.listdir(cheat_dir) if '.' not in f]
 # add the user's cheat files if they have a ~/.cheat directory
 if os.path.isdir(user_cheat_dir):
-    cheatsheets += [(f, user_cheat_dir) for f in os.listdir(user_cheat_dir)]
+    cheatsheets += [(f, user_cheat_dir) for f in os.listdir(user_cheat_dir)
+                    if '.' not in f]
 cheatsheets.sort()
+
+# assemble a keyphrase out of all params passed to the script
+keyphrase = ' '.join(sys.argv[1:])
 
 # print help if requested
 if keyphrase in ['', 'help', '--help', '-h']:
