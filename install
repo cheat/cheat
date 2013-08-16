@@ -1,12 +1,6 @@
-#!/usr/bin/env python
-from os.path import expanduser
-import shutil
-import sys
+#!/bin/sh
 
-try:
-    shutil.copy('./cheat', '/usr/local/bin/')
-    shutil.copytree('./.cheat', expanduser('~') + '/.cheat')
-    print "cheat has been installed successfully."
-except IOError as e:
-    print >> sys.stderr, e
-    sys.exit(1)
+cp ./cheat /usr/local/bin
+cp -r ./.cheat ~/
+
+printf "Cheat has been intsalled sucessfully."
