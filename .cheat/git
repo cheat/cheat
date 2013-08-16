@@ -4,3 +4,9 @@ git config --global user.email johndoe@example.com
 
 To enable color:
 git config --global color.ui true
+
+To commit all changes:
+git commit -a
+
+To push latest master:
+git push git@github.com:username/project.git
