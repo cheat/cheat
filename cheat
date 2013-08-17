@@ -24,6 +24,16 @@ if 'CHEATPATH' in os.environ and os.environ['CHEATPATH']:
     path = os.environ['CHEATPATH'].split(os.pathsep)
     if os.path.isdir(path):
         cheatsheets += [(f, path) for f in os.listdir(path) if '.' not in f]
+
+# remove any duplicates
+def remove_duplicates(cheats):
+    sheets = []
+    for i, sheet in enumerate(cheats):
+        if sheet[0] not in [c[0] for c in sheets]:
+            sheets.append(sheet)
+    return sheets
+
+cheatsheets = remove_duplicates(cheatsheets)
 cheatsheets.sort()
 
 # assemble a keyphrase out of all params passed to the script
