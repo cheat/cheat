@@ -83,10 +83,40 @@ After you've customized your cheatsheets, I urge you to track `~/.cheat/` along
 with your [dotfiles][].
 
 
+Setting a CHEATPATH
+----------------------
+By default, all cheatsheets are installed to `~/.cheat/`, but you can instruct
+`cheat` to look for cheatsheets in other directories by exporting a `CHEATPATH`
+environment variable:
+
+```bash
+export CHEATPATH=/path/to/my/cheats
+```
+
+You may, of course, append multiple directories to your `CHEATPATH`:
+
+```bash
+export CHEATPATH=$CHEATPATH:/path/to/more/cheats
+```
+
+
 Contributing
 ============
-If you would like to contribute additional cheatsheets for basic \*nix
-commands, please modify the `.cheat` file and send me a pull request.
+If you would like to contribute cheetsheets or program functionality, please
+fork this repository, make your chanages, and send me a pull request.
 
+Related Projects
+================
 
-[dotfiles]: http://dotfiles.github.io/
+- [lucaswerkmeister/cheats][1]: An implementation of this concept in pure bash
+  that also allows not only for numerical indexing of subcomands but also
+  supports running commands interactively.
+
+- [jahendrie/cheat][2]: A bash-only implmentation that additionally allows for
+  cheatsheets to be created and `grep` searched from the command-line.
+  ([jahendrie][] contributed key ideas to this project as well.)
+
+[dotfiles]:  http://dotfiles.github.io/
+[jahendrie]: https://github.com/jahendrie
+[1]:         https://github.com/lucaswerkmeister/cheats   
+[2]:         https://github.com/jahendrie/cheat

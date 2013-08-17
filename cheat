@@ -18,27 +18,42 @@ user_cheat_dir = os.path.join(os.path.expanduser('~'), '.cheat')
 if os.path.isdir(user_cheat_dir):
     cheatsheets += [(f, user_cheat_dir) for f in os.listdir(user_cheat_dir)
                     if '.' not in f]
+
+# add the cheat files from the directory specified in $CHEATPATH
+if 'CHEATPATH' in os.environ and os.environ['CHEATPATH']:
+    path = os.environ['CHEATPATH'].split(os.pathsep)
+    if os.path.isdir(path):
+        cheatsheets += [(f, path) for f in os.listdir(path) if '.' not in f]
 cheatsheets.sort()
+
+# assemble a keyphrase out of all params passed to the script
+keyphrase  = ' '.join(sys.argv[1:])
+
+# verify that we have at least one cheat directory
+if not cheatsheets:
+    print >> sys.stderr, 'The ~/.cheat directory does not exist or the CHEATPATH variable is not set.'
+    exit()
 
 # assemble a keyphrase out of all params passed to the script
 keyphrase = ' '.join(sys.argv[1:])
 
 # print help if requested
-if keyphrase in ['', 'help', '--help', '-h']:
+if keyphrase.lower() in ['', 'cheat', 'help', '-h', '-help', '--help']:
     print "Usage: cheat [keyphrase]\n"
     print "Available keyphrases:"
-    print "\n".join([name[0] for name in cheatsheets])
+    max_command = max([len(sheet[0]) for sheet in cheatsheets]) + 3
+    print '\n'.join(sorted([ '%s [%s]' % (sheet[0].ljust(max_command), sheet[1]) for sheet in cheatsheets]))
     exit()
 
 sheet_found = False
 # print the cheatsheet if it exists
 for sheet in cheatsheets:
     if keyphrase == sheet[0]:
-    cheatsheet_filename = os.path.join(sheet[1], keyphrase)
-    with open(cheatsheet_filename, 'r') as cheatsheet:
-        print cheatsheet.read()
-        sheet_found = True
+        cheatsheet_filename = os.path.join(sheet[1], keyphrase)
+        with open(cheatsheet_filename, 'r') as cheatsheet:
+            print cheatsheet.read()
+            sheet_found = True
 
 # if it does not, say so
-if not sheet_found:
-    print 'No cheatsheet found.'
+else:
+    print 'No cheatsheet found for %s.' % keyphrase
