@@ -11,7 +11,7 @@ remember.
 
 
 Examples
---------
+========
 The next time you're forced to disarm a nuclear weapon without consulting
 Google, you may run:
 
@@ -46,19 +46,25 @@ to store notes on your favorite cookie recipes, feel free.
 
 
 Installing
-----------
-Do the following to install `cheat`:
+==========
 
-1. Clone this repository and `cd` into it
-2. Run `sudo ./install`
+### Installing for all users (requires root)
 
-The `install` script will copy a python file into `/usr/local/bin/`, and will
-also create a hidden `.cheat` folder (containing the cheatsheet content) in
-your home directory.
+Clone this repository and `cd` into it, then run
 
+    sudo python setup.py install
+
+### Installing in your home directory
+
+Clone this repository and `cd` into it, then run
+
+    mkdir -p ~/bin
+    cp cheat ~/bin
+    mkdir ~/.cheat
+    cp cheatsheets/* ~/.cheat
 
 Modifying Cheatsheets
----------------------
+=====================
 The value of `cheat` is that it allows you to create your own cheatsheets - the
 defaults are meant to serve only as a starting point, and can and should be
 modified.
@@ -95,13 +101,13 @@ export CHEATPATH=$CHEATPATH:/path/to/more/cheats
 
 
 Contributing
-------------
+============
 If you would like to contribute cheetsheets or program functionality, please
 fork this repository, make your chanages, and send me a pull request.
 
-
 Related Projects
-----------------
+================
+
 - [lucaswerkmeister/cheats][1]: An implementation of this concept in pure bash
   that also allows not only for numerical indexing of subcomands but also
   supports running commands interactively.
@@ -109,7 +115,6 @@ Related Projects
 - [jahendrie/cheat][2]: A bash-only implmentation that additionally allows for
   cheatsheets to be created and `grep` searched from the command-line.
   ([jahendrie][] contributed key ideas to this project as well.)
-
 
 [dotfiles]:  http://dotfiles.github.io/
 [jahendrie]: https://github.com/jahendrie
