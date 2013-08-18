@@ -1,6 +1,9 @@
 To extract an uncompressed archive: 
 tar -xvf /path/to/foo.tar
 
+To create an uncompressed archive: 
+tar -cvf /path/to/foo.tar /path/to/foo/
+
 To extract a .gz archive:
 tar -xzvf /path/to/foo.tgz
 
