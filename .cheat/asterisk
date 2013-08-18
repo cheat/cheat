@@ -4,7 +4,7 @@ asterisk -rvvv
 To issue a command to Asterisk from the shell:
 asterisk -rx "<command>"
 
-To originate a call from a SIP trunk on an Asterisk server, to a specified number:
+To originate an echo call from a SIP trunk on an Asterisk server, to a specified number:
 asterisk -rx "channel originate SIP/<trunk>/<number> application echo"
 
 To print out the details of SIP accounts:
