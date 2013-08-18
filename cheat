@@ -1,69 +1,46 @@
 #!/usr/bin/env python
 import os
 import sys
+import cheatsheets
 
-try:
-    # check to see if the cheat package is available
-    import cheatsheets
-    cheat_dir = cheatsheets.cheat_dir
-    cheatsheets = [(f, cheat_dir) for f in os.listdir(cheat_dir) if '.' not in f]
-except ImportError:
-    cheatsheets = []
+def cheat_directories():
+    default = [ default_dir for default_dir in [os.path.expanduser('~/.cheat'), cheatsheets.cheat_dir] if os.path.isdir(default_dir) ]
+    if 'CHEATPATH' in os.environ and os.environ['CHEATPATH']:
+        return [ path for path in os.environ['CHEATPATH'].split(os.pathsep) if os.path.isdir(path) ] + default
+    else:
+        return default
 
-# construct the path to the cheat directory
-user_cheat_dir = os.path.join(os.path.expanduser('~'), '.cheat')
-
-# list the files in the cheat directory
-# add the user's cheat files if they have a ~/.cheat directory
-if os.path.isdir(user_cheat_dir):
-    cheatsheets += [(f, user_cheat_dir) for f in os.listdir(user_cheat_dir)
-                    if '.' not in f]
-
-# add the cheat files from the directory specified in $CHEATPATH
-if 'CHEATPATH' in os.environ and os.environ['CHEATPATH']:
-    path = os.environ['CHEATPATH']
-    if os.path.isdir(path):
-        cheatsheets += [(f, path) for f in os.listdir(path) if '.' not in f]
-
-# remove any duplicates
-def remove_duplicates(cheats):
-    sheets = []
-    for i, sheet in enumerate(cheats):
-        if sheet[0] not in [c[0] for c in sheets]:
-            sheets.append(sheet)
-    return sheets
-
-cheatsheets = remove_duplicates(cheatsheets)
-cheatsheets.sort()
+def cheat_files(cheat_directories):
+    cheats = {}
+    for cheat_dir in reversed(cheat_directories):
+        cheats.update(dict([ (cheat, cheat_dir) for cheat in os.listdir(cheat_dir) if '.' not in cheat ]))
+    return cheats
 
 # assemble a keyphrase out of all params passed to the script
 keyphrase  = ' '.join(sys.argv[1:])
+cheat_dirs = cheat_directories()
 
 # verify that we have at least one cheat directory
-if not cheatsheets:
+if not cheat_dirs:
     print >> sys.stderr, 'The ~/.cheat directory does not exist or the CHEATPATH variable is not set.'
     exit()
 
-# assemble a keyphrase out of all params passed to the script
-keyphrase = ' '.join(sys.argv[1:])
+# list the files in the ~/.cheat directory
+cheatsheets = cheat_files(cheat_dirs)
 
 # print help if requested
 if keyphrase.lower() in ['', 'cheat', 'help', '-h', '-help', '--help']:
     print "Usage: cheat [keyphrase]\n"
     print "Available keyphrases:"
-    max_command = max([len(sheet[0]) for sheet in cheatsheets]) + 3
-    print '\n'.join(sorted([ '%s [%s]' % (sheet[0].ljust(max_command), sheet[1]) for sheet in cheatsheets]))
+    max_command = max([ len(x) for x in cheatsheets.keys() ]) + 3
+    print '\n'.join(sorted([ '%s [%s]' % (key.ljust(max_command), value) for key, value in cheatsheets.items() ]))
     exit()
 
-sheet_found = False
 # print the cheatsheet if it exists
-for sheet in cheatsheets:
-    if keyphrase == sheet[0]:
-        cheatsheet_filename = os.path.join(sheet[1], keyphrase)
-        with open(cheatsheet_filename, 'r') as cheatsheet:
-            print cheatsheet.read()
-            sheet_found = True
+if keyphrase in cheatsheets:
+    with open (os.path.join(cheatsheets[keyphrase], keyphrase), 'r') as cheatsheet:
+        print cheatsheet.read()
 
-    # if it does not, say so
-    else:
-        print 'No cheatsheet found for %s.' % keyphrase
+# if it does not, say so
+else:
+    print 'No cheatsheet found for %s.' % keyphrase
