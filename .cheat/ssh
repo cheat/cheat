@@ -7,5 +7,8 @@ ssh -X user@example.com
 To launch a specific x application over SSH:
 ssh -X -t user@example.com 'chromium-browser'
 
+To ssh via pem file (normally needs 0600 permissions):
+ssh -i /path/to/file.pem user@example.com
+
 For more information, see:
 http://unix.stackexchange.com/q/12755/44856
