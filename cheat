@@ -64,6 +64,6 @@ for sheet in cheatsheets:
             print cheatsheet.read()
             sheet_found = True
 
-# if it does not, say so
-else:
-    print 'No cheatsheet found for %s.' % keyphrase
+    # if it does not, say so
+    else:
+        print 'No cheatsheet found for %s.' % keyphrase
