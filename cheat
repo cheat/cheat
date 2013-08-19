@@ -27,6 +27,7 @@ if (len(sys.argv) > 1 and sys.argv[1] == 'add'):
   if (len(sys.argv) > 2):
     f = open(home + "/.cheat/" + sys.argv[2], 'a+')
     f.write(' '.join(sys.argv[2:]))
+    f.write('\n')
     f.close()
   else:
     print "Usage: cheat add [command with arguments]\n\n"
