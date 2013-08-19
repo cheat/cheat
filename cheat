@@ -4,16 +4,19 @@ import sys
 import cheatsheets
 
 def cheat_directories():
-    default = [ default_dir for default_dir in [os.path.expanduser('~/.cheat'), cheatsheets.cheat_dir] if os.path.isdir(default_dir) ]
+    default = [ default_dir for default_dir in [os.path.expanduser('~/.cheat'),
+            cheatsheets.cheat_dir] if os.path.isdir(default_dir) ]
     if 'CHEATPATH' in os.environ and os.environ['CHEATPATH']:
-        return [ path for path in os.environ['CHEATPATH'].split(os.pathsep) if os.path.isdir(path) ] + default
+        return [ path for path in os.environ['CHEATPATH'].split(os.pathsep)\
+                if os.path.isdir(path) ] + default
     else:
         return default
 
 def cheat_files(cheat_directories):
     cheats = {}
     for cheat_dir in reversed(cheat_directories):
-        cheats.update(dict([ (cheat, cheat_dir) for cheat in os.listdir(cheat_dir) if '.' not in cheat ]))
+        cheats.update(dict([ (cheat, cheat_dir)\
+                for cheat in os.listdir(cheat_dir) if '.' not in cheat ]))
     return cheats
 
 # assemble a keyphrase out of all params passed to the script
@@ -22,7 +25,8 @@ cheat_dirs = cheat_directories()
 
 # verify that we have at least one cheat directory
 if not cheat_dirs:
-    print >> sys.stderr, 'The ~/.cheat directory does not exist or the CHEATPATH variable is not set.'
+    print >> sys.stderr,\
+    'The ~/.cheat dir does not exist or the CHEATPATH var is not set.'
     exit()
 
 # list the files in the ~/.cheat directory
@@ -33,12 +37,14 @@ if keyphrase.lower() in ['', 'cheat', 'help', '-h', '-help', '--help']:
     print "Usage: cheat [keyphrase]\n"
     print "Available keyphrases:"
     max_command = max([ len(x) for x in cheatsheets.keys() ]) + 3
-    print '\n'.join(sorted([ '%s [%s]' % (key.ljust(max_command), value) for key, value in cheatsheets.items() ]))
+    print '\n'.join(sorted([ '%s [%s]' % (key.ljust(max_command), value)\
+            for key, value in cheatsheets.items() ]))
     exit()
 
 # print the cheatsheet if it exists
 if keyphrase in cheatsheets:
-    with open (os.path.join(cheatsheets[keyphrase], keyphrase), 'r') as cheatsheet:
+    with open (os.path.join(cheatsheets[keyphrase], keyphrase), 'r')\
+            as cheatsheet:
         print cheatsheet.read()
 
 # if it does not, say so
