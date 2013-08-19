@@ -1,0 +1,23 @@
+To install the latest version of a package:
+yum install <package name>
+
+To search for a package:
+yum search <package name>
+
+To find what package installs a program:
+yum whatprovides </path/to/program>
+
+To find the dependencies of a package:
+yum deplist <package name>
+
+To find information about an installed package:
+yum info <package name>
+
+List currently enabled repositories:
+yum repolist
+
+To download the source RPM for a package:
+yumdownloader --source <package name>
+
+(You have to install yumdownloader first, which is installed by the
+yum-utils package)
