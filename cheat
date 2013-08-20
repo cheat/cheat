@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 import os
 import sys
-import cheatsheets
 
 def cheat_directories():
-    default = [ default_dir for default_dir in [os.path.expanduser('~/.cheat'),
-            cheatsheets.cheat_dir] if os.path.isdir(default_dir) ]
+    default_directories = [os.path.expanduser('~/.cheat')]
+    try:
+        import cheatsheets
+        default_directories.append(cheatsheets.cheat_dir)
+    except ImportError:
+        pass
+
+    default = [ default_dir for default_dir in default_directories if os.path.isdir(default_dir) ]
     if 'CHEATPATH' in os.environ and os.environ['CHEATPATH']:
         return [ path for path in os.environ['CHEATPATH'].split(os.pathsep)\
                 if os.path.isdir(path) ] + default
