@@ -1,0 +1,10 @@
+To create a 2048-bit private key:
+openssl genrsa -out server.key 2048
+
+To create the Certificate Signing Request (CSR):
+openssl req -new -key server.key -out server.csr
+
+To sign a certificate using a private key and CSR:
+openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+
+(The above commands may be run in sequence to generate a self-signed SSL certificate.)
