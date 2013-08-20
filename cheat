@@ -2,6 +2,7 @@
 import os
 import sys
 
+# assembles a list of directories containing cheatsheets
 def cheat_directories():
     default_directories = [os.path.expanduser('~/.cheat')]
     try:
@@ -17,6 +18,7 @@ def cheat_directories():
     else:
         return default
 
+# assembles a dictionary of cheatsheets found in the above directories
 def cheat_files(cheat_directories):
     cheats = {}
     for cheat_dir in reversed(cheat_directories):
