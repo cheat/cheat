@@ -1,10 +1,16 @@
 #!/usr/bin/env python
+
 import os
+import pkg_resources
 import sys
 
 # assembles a list of directories containing cheatsheets
 def cheat_directories():
     paths = [os.path.expanduser('~/.cheat')]
+    try:
+      paths.append(pkg_resources.resource_filename('cheatlib', 'cheatsheets'))
+    except ImportError:
+      pass # cheatlib was not installed
     paths.extend(os.environ.get('CHEATPATH', '').split(os.pathsep))
     return [path for path in paths if os.path.isdir(path)]
 
