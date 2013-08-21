@@ -1,8 +1,8 @@
 To replace all occurrences of "day" with "night" and write to stdout:
-sed s/day/night file.txt
+sed 's/day/night/g' file.txt
 
 To replace all occurrences of "day" with "night" within file.txt:
-sed s/day/night file.txt > file.txt
+sed -i 's/day/night/g' file.txt
 
 To replace all occurrences of "day" with "night" on stdin:
-echo 'It is daytime' | sed s/day/night/
+echo 'It is daytime' | sed 's/day/night/g'
