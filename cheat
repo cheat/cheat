@@ -2,6 +2,11 @@
 import os
 import sys
 
+from pygments import highlight
+from pygments.util import ClassNotFound
+from pygments.lexers import get_lexer_for_filename, TextLexer
+from pygments.formatters import TerminalFormatter
+
 
 def cheat_directories():
     "Assembles a list of directories containing cheatsheets."
@@ -58,12 +63,29 @@ def main():
     # print the cheatsheet if it exists
     if keyphrase in cheatsheets:
         filename = os.path.join(cheatsheets[keyphrase], keyphrase)
-        with open(filename, 'r') as cheatsheet:
-            print cheatsheet.read()
+        pretty_print(filename)
 
     # if it does not, say so
     else:
         print 'No cheatsheet found for %s.' % keyphrase
+
+
+def pretty_print(filename):
+    try:
+        if os.path.splitext(filename)[1]:
+            lexer = get_lexer_for_filename(filename)
+        else:
+            # shell is a sensible default when there is no extension
+            lexer = get_lexer_for_filename(filename + '.sh')
+
+    except ClassNotFound:
+        lexer = TextLexer()
+
+    with open(filename) as istream:
+        code = istream.read()
+
+    fmt = TerminalFormatter()
+    highlight(code, lexer, fmt, sys.stdout)
 
 
 if __name__ == '__main__':
