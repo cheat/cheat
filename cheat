@@ -23,7 +23,7 @@ def cheat_files(cheat_directories):
     cheats = {}
     for cheat_dir in reversed(cheat_directories):
         cheats.update(dict([ (cheat, cheat_dir)\
-                for cheat in os.listdir(cheat_dir) if '.' not in cheat ]))
+                for cheat in os.listdir(cheat_dir) if not cheat.startswith('.')]))
     return cheats
 
 def main():
