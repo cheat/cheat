@@ -2,14 +2,18 @@
 import os
 import sys
 
-try:
-    from pygments import highlight
-    from pygments.util import ClassNotFound
-    from pygments.lexers import get_lexer_for_filename, TextLexer
-    from pygments.formatters import TerminalFormatter
-    USE_PYGMENTS = True
-except ImportError:
-    USE_PYGMENTS = False
+USE_PYGMENTS = False
+
+# NOTE remove this check if it is confirmed to work on windows
+if os.name == 'posix':
+    try:
+        from pygments import highlight
+        from pygments.util import ClassNotFound
+        from pygments.lexers import get_lexer_for_filename, TextLexer
+        from pygments.formatters import TerminalFormatter
+        USE_PYGMENTS = True
+    except ImportError:
+        pass
 
 
 def cheat_directories():
