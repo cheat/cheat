@@ -12,6 +12,5 @@ setup(name='cheat',
       packages=['cheatsheets'],
       package_data={'cheatsheets': [f for f in os.listdir('cheatsheets')
                                     if '.' not in f]},
-      install_requires=['Pygments>=1.6'],
       scripts=['cheat']
      )

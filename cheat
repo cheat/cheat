@@ -2,10 +2,14 @@
 import os
 import sys
 
-from pygments import highlight
-from pygments.util import ClassNotFound
-from pygments.lexers import get_lexer_for_filename, TextLexer
-from pygments.formatters import TerminalFormatter
+try:
+    from pygments import highlight
+    from pygments.util import ClassNotFound
+    from pygments.lexers import get_lexer_for_filename, TextLexer
+    from pygments.formatters import TerminalFormatter
+    USE_PYGMENTS = True
+except ImportError:
+    USE_PYGMENTS = False
 
 
 def cheat_directories():
@@ -63,7 +67,12 @@ def main():
     # print the cheatsheet if it exists
     if keyphrase in cheatsheets:
         filename = os.path.join(cheatsheets[keyphrase], keyphrase)
-        pretty_print(filename)
+        if USE_PYGMENTS:
+            pretty_print(filename)
+        else:
+            with open(filename) as istream:
+                for l in istream:
+                    sys.stdout.write(l)
 
     # if it does not, say so
     else:
