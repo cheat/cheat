@@ -41,7 +41,8 @@ def cheat_files(cheat_directories):
     for cheat_dir in reversed(cheat_directories):
         cheats.update(dict([(cheat, cheat_dir)
                             for cheat in os.listdir(cheat_dir)
-                            if '.' not in cheat]))
+                            if not cheat.startswith('.')
+                            and not cheat.startswith('__')]))
     return cheats
 
 
