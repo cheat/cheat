@@ -128,7 +128,12 @@ Related Projects
   cheatsheets to be created and `grep` searched from the command-line.
   ([jahendrie][] contributed key ideas to this project as well.)
 
+- [`cheat` RubyGem][3]: A clever gem from 2006 that clearly had similar
+  motivations. It is unclear whether or not it is currently maintained.
+
+
 [dotfiles]:  http://dotfiles.github.io/
 [jahendrie]: https://github.com/jahendrie
 [1]:         https://github.com/lucaswerkmeister/cheats   
 [2]:         https://github.com/jahendrie/cheat
+[3]:         http://errtheblog.com/posts/21-cheat
