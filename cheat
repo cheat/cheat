@@ -2,7 +2,7 @@
 import os
 import sys
 
-DEFAULT_CHEAT_DIR = os.path.join(os.path.expanduser('~'), '.cheats')
+DEFAULT_CHEAT_DIR = os.path.join(os.path.expanduser('~'), '.cheat')
 
 # assembles a list of directories containing cheatsheets
 def cheat_directories():
