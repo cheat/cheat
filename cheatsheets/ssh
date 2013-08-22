@@ -1,11 +1,11 @@
-To execute a command on a remote server:
+# To execute a command on a remote server:
 ssh -t user@example.com 'the-remote-command'
 
-To tunnel an x session over SSH:
+# To tunnel an x session over SSH:
 ssh -X user@example.com
 
-To launch a specific x application over SSH:
+# To launch a specific x application over SSH:
 ssh -X -t user@example.com 'chromium-browser'
 
-For more information, see:
-http://unix.stackexchange.com/q/12755/44856
+# For more information, see:
+# http://unix.stackexchange.com/q/12755/44856
