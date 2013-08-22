@@ -2,8 +2,22 @@
 import os
 import sys
 
-# assembles a list of directories containing cheatsheets
+USE_PYGMENTS = False
+
+# NOTE remove this check if it is confirmed to work on windows
+if os.name == 'posix':
+    try:
+        from pygments import highlight
+        from pygments.util import ClassNotFound
+        from pygments.lexers import get_lexer_for_filename, TextLexer
+        from pygments.formatters import TerminalFormatter
+        USE_PYGMENTS = True
+    except ImportError:
+        pass
+
+
 def cheat_directories():
+    "Assembles a list of directories containing cheatsheets."
     default_directories = [os.path.expanduser('~/.cheat')]
     try:
         import cheatsheets
@@ -11,32 +25,35 @@ def cheat_directories():
     except ImportError:
         pass
 
-    default = [ default_dir for default_dir in default_directories if os.path.isdir(default_dir) ]
+    default = [default_dir for default_dir in default_directories
+               if os.path.isdir(default_dir)]
+
     if 'CHEATPATH' in os.environ and os.environ['CHEATPATH']:
-        return [ path for path in os.environ['CHEATPATH'].split(os.pathsep)\
-                if os.path.isdir(path) ] + default
+        return [path for path in os.environ['CHEATPATH'].split(os.pathsep)
+                if os.path.isdir(path)] + default
     else:
         return default
 
-# assembles a dictionary of cheatsheets found in the above directories
+
 def cheat_files(cheat_directories):
+    "Assembles a dictionary of cheatsheets found in the above directories."
     cheats = {}
     for cheat_dir in reversed(cheat_directories):
-        cheats.update(dict([ (cheat, cheat_dir)\
-                for cheat in os.listdir(cheat_dir) if '.' not in cheat ]))
+        cheats.update(dict([(cheat, cheat_dir)
+                            for cheat in os.listdir(cheat_dir)
+                            if not cheat.startswith('.')]))
     return cheats
 
-def main():
-    """MAIN"""
 
+def main():
     # assemble a keyphrase out of all params passed to the script
-    keyphrase  = ' '.join(sys.argv[1:])
+    keyphrase = ' '.join(sys.argv[1:])
     cheat_dirs = cheat_directories()
 
     # verify that we have at least one cheat directory
     if not cheat_dirs:
-        print >> sys.stderr, \
-        'The ~/.cheat dir does not exist or the CHEATPATH var is not set.'
+        print >> sys.stderr, ('The ~/.cheat dir does not exist or the '
+                              'CHEATPATH var is not set.')
         exit()
 
     # list the files in the ~/.cheat directory
@@ -46,20 +63,43 @@ def main():
     if keyphrase.lower() in ['', 'cheat', 'help', '-h', '-help', '--help']:
         print "Usage: cheat [keyphrase]\n"
         print "Available keyphrases:"
-        max_command = max([ len(x) for x in cheatsheets.keys() ]) + 3
-        print '\n'.join(sorted([ '%s [%s]' % (key.ljust(max_command), value)\
-                for key, value in cheatsheets.items() ]))
+        max_command = max([len(x) for x in cheatsheets.keys()]) + 3
+        print '\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
+                                for key, value in cheatsheets.items()]))
         exit()
 
     # print the cheatsheet if it exists
     if keyphrase in cheatsheets:
-        with open (os.path.join(cheatsheets[keyphrase], keyphrase), 'r')\
-                as cheatsheet:
-            print cheatsheet.read()
+        filename = os.path.join(cheatsheets[keyphrase], keyphrase)
+        if USE_PYGMENTS:
+            pretty_print(filename)
+        else:
+            with open(filename) as istream:
+                for l in istream:
+                    sys.stdout.write(l)
 
     # if it does not, say so
     else:
         print 'No cheatsheet found for %s.' % keyphrase
+
+
+def pretty_print(filename):
+    try:
+        if os.path.splitext(filename)[1]:
+            lexer = get_lexer_for_filename(filename)
+        else:
+            # shell is a sensible default when there is no extension
+            lexer = get_lexer_for_filename(filename + '.sh')
+
+    except ClassNotFound:
+        lexer = TextLexer()
+
+    with open(filename) as istream:
+        code = istream.read()
+
+    fmt = TerminalFormatter()
+    highlight(code, lexer, fmt, sys.stdout)
+
 
 if __name__ == '__main__':
     main()

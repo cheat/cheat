@@ -1,10 +1,10 @@
-To implement a for loop:
+# To implement a for loop:
 for file in `ls .`;
     do echo 'file';
     echo 'found';
 done
 
-To implement a case command:
+# To implement a case command:
 case "$1"
 in
     0) echo "zero found";;

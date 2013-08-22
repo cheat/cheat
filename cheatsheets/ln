@@ -1,2 +1,2 @@
-To create a symlink:
+# To create a symlink:
 ln -s path/to/the/target/directory name-of-symlink
