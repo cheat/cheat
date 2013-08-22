@@ -1,7 +1,7 @@
-To release the current IP address:
+# To release the current IP address:
 sudo dhclient -r
 
-To obtain a new IP address:
+# To obtain a new IP address:
 sudo dhclient
 
-Running the above in sequence is a common way of refreshing an IP.
+# Running the above in sequence is a common way of refreshing an IP.
