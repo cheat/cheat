@@ -83,6 +83,9 @@ After you've customized your cheatsheets, I urge you to track `~/.cheat/` along
 with your [dotfiles][].
 
 
+Advanced Features
+=================
+
 Setting a CHEATPATH
 ----------------------
 By default, all cheatsheets are installed to `~/.cheat/`, but you can instruct
@@ -97,6 +100,15 @@ You may, of course, append multiple directories to your `CHEATPATH`:
 
 ```bash
 export CHEATPATH=$CHEATPATH:/path/to/more/cheats
+```
+
+Enabling Syntax Highlighting
+----------------------------
+`cheat` can provide syntax highlighting on your cheatsheets if so desired. To
+enable this feature, set a `$CHEATCOLORS` environment variable:
+
+```bash
+export CHEATCOLORS=true
 ```
 
 
