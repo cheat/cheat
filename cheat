@@ -6,7 +6,7 @@ DEFAULT_CHEAT_DIR = os.path.join(os.path.expanduser('~'), '.cheat')
 USE_PYGMENTS      = False
 
 # NOTE remove this check if it is confirmed to work on windows
-if os.name == 'posix':
+if os.name == 'posix' and 'CHEATCOLORS' in os.environ:
     try:
         from pygments import highlight
         from pygments.util import ClassNotFound
@@ -47,7 +47,7 @@ def cheat_files(cheat_directories):
 
 def main():
     # assemble a keyphrase out of all params passed to the script
-    keyphrase = ' '.join(sys.argv[1:])
+    keyphrase  = ' '.join(sys.argv[1:])
     cheat_dirs = cheat_directories()
 
     # verify that we have at least one cheat directory
