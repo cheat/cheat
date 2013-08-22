@@ -9,8 +9,7 @@ setup(name='cheat',
       author='Chris Lane',
       author_email='chris@chris-allen-lane.com',
       url='https://github.com/chrisallenlane/cheat',
-      packages=['cheatsheets'],
-      package_data={'cheatsheets': [f for f in os.listdir('cheatsheets')
-                                    if '.' not in f]},
-      scripts=['cheat']
+      packages=['cheatlib'],
+      package_data={'cheatlib': ['cheatsheets/*']},
+      scripts=['cheat'],
      )
