@@ -2,9 +2,11 @@
 import os
 import sys
 
+DEFAULT_CHEAT_DIR = os.path.join(os.path.expanduser('~'), '.cheats')
+
 # assembles a list of directories containing cheatsheets
 def cheat_directories():
-    default_directories = [os.path.expanduser('~/.cheat')]
+    default_directories = [DEFAULT_CHEAT_DIR]
     try:
         import cheatsheets
         default_directories.append(cheatsheets.cheat_dir)
@@ -35,8 +37,8 @@ def main():
 
     # verify that we have at least one cheat directory
     if not cheat_dirs:
-        print >> sys.stderr, \
-        'The ~/.cheat dir does not exist or the CHEATPATH var is not set.'
+        error_msg = 'The {default} dir does not exist or the CHEATPATH var is not set.'
+        print >> sys.stderr, error_msg.format(default=DEFAULT_CHEAT_DIR)
         exit()
 
     # list the files in the ~/.cheat directory
