@@ -104,7 +104,7 @@ export CHEATPATH=$CHEATPATH:/path/to/more/cheats
 
 Enabling Syntax Highlighting
 ----------------------------
-`cheat` can provide syntax highlighting on your cheatsheets if so desired. To
+`cheat` can apply syntax highlighting to your cheatsheets if so desired. To
 enable this feature, set a `$CHEATCOLORS` environment variable:
 
 ```bash
