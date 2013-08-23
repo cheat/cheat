@@ -1,17 +1,17 @@
-To view the php version:
+# To view the php version:
 php -v
 
-To view the installed php modules:
+# To view the installed php modules:
 php -m
 
-To enter an interactive shell:
+# To enter an interactive shell:
 php -a
 
-To view phpinfo() information:
+# To view phpinfo() information:
 php -i
 
-To locate the system's php.ini files:
+# To locate the system's php.ini files:
 php -i | grep "php.ini"
 
-To start a local webserver for the cwd on port 3000 (requires php >= 5.4):
+# To start a local webserver for the cwd on port 3000 (requires php >= 5.4):
 php -S localhost:3000
