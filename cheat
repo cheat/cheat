@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
+import subprocess
 
 DEFAULT_CHEAT_DIR = os.path.join(os.path.expanduser('~'), '.cheat')
 USE_PYGMENTS      = False
@@ -69,8 +70,28 @@ def main():
                                 for key, value in cheatsheets.items()]))
         exit()
 
+    # if the user wants to edit a cheatsheet
+    if sys.argv[1].lower() in ['-e', '--edit']:
+        if len(sys.argv) < 2:
+            print 'Must provide a cheatsheet to edit'
+            exit()
+
+        cheatsheet = ' '.join(sys.argv[2:])
+
+        if cheatsheet not in cheatsheets:
+            print 'No cheatsheet found for %s.' % cheatsheet
+            exit()
+
+        if 'EDITOR' not in os.environ:
+            print 'Must set your EDITOR environment variable to default editor path'
+            exit()
+
+        subprocess.call([os.environ['EDITOR'],
+                        os.path.join(cheatsheets[cheatsheet], cheatsheet)])
+
     # print the cheatsheet if it exists
     if keyphrase in cheatsheets:
+        print ''.join('*' for x in range(80)) + "\n"
         filename = os.path.join(cheatsheets[keyphrase], keyphrase)
         if USE_PYGMENTS:
             pretty_print(filename)
@@ -78,6 +99,7 @@ def main():
             with open(filename) as istream:
                 for l in istream:
                     sys.stdout.write(l)
+        print "\n" + ''.join('*' for x in range(80))
 
     # if it does not, say so
     else:
