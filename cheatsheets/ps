@@ -1,0 +1,8 @@
+# To list every process on the system:
+ps aux
+
+# To list every process owned by foouser:
+ps -aufoouser
+
+# To list every process with a user-defined format:
+ps -eo pid,user,command
