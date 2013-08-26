@@ -1,8 +1,14 @@
 # To dump a database to a file:
-mysqldump -uusername -ppassword the-database > db.sql
+mysqldump -uusername -p the-database > db.sql
 
 # To dump a database to a .tgz file:
-mysqldump -uusername -ppassword the-database | gzip -9 > db.sql
+mysqldump -uusername -p the-database | gzip -9 > db.sql
 
 # To dump all databases to a file:
-mysqldump -uusername -ppassword --all-databases > all-databases.sql
+mysqldump -uusername -p --all-databases > all-databases.sql
+
+# To export the database structure only:
+mysqldump --no-data -uusername -p the-database > dump_file
+
+# To export the database data only:
+mysqldump --no-create-info -uusername -p the-database > dump_file
