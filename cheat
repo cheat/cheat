@@ -41,9 +41,7 @@ def cheat_files(cheat_directories):
     for cheat_dir in reversed(cheat_directories):
         cheats.update(dict([(cheat, cheat_dir)
                             for cheat in os.listdir(cheat_dir)
-                            if not cheat.endswith('md') 
-                            and not cheat.startswith('.')
-                            and not cheat.startswith('LICENSE')
+                            if not cheat.startswith('.')
                             and not cheat.startswith('__')]))
     return cheats
 
@@ -84,7 +82,6 @@ def main():
     # if it does not, say so
     else:
         print 'No cheatsheet found for %s.' % keyphrase
-        
 
 
 def pretty_print(filename):
