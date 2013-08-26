@@ -62,11 +62,11 @@ def main():
 
     # print help if requested
     if keyphrase.lower() in ['', 'cheat', 'help', '-h', '-help', '--help']:
-        print "Usage: cheat [keyphrase]\n"
-        print "Available keyphrases:"
+        print ("Usage: cheat [keyphrase]\n")
+        print ("Available keyphrases:")
         max_command = max([len(x) for x in cheatsheets.keys()]) + 3
-        print '\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
-                                for key, value in cheatsheets.items()]))
+        print ('\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
+                                for key, value in cheatsheets.items()])))
         exit()
 
     # print the cheatsheet if it exists
@@ -81,7 +81,7 @@ def main():
 
     # if it does not, say so
     else:
-        print 'No cheatsheet found for %s.' % keyphrase
+        print ('No cheatsheet found for %s.' % keyphrase)
 
 
 def pretty_print(filename):
