@@ -6,3 +6,6 @@ sed -i 's/day/night/g' file.txt
 
 # To replace all occurrences of "day" with "night" on stdin:
 echo 'It is daytime' | sed 's/day/night/g'
+
+# To remove leading spaces
+sed -i -r 's/^\s+//g' file.txt
