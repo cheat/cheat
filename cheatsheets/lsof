@@ -1,0 +1,3 @@
+# To find listening ports 
+lsof -Pnl +M -i4
+
