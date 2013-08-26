@@ -117,7 +117,6 @@ def main():
 
     # print the cheatsheet if it exists
     if keyphrase in cheatsheets:
-        print ''.join('*' for x in range(80)) + "\n"
         filename = os.path.join(cheatsheets[keyphrase], keyphrase)
         if USE_PYGMENTS:
             pretty_print(filename)
@@ -125,7 +124,6 @@ def main():
             with open(filename) as istream:
                 for l in istream:
                     sys.stdout.write(l)
-        print "\n" + ''.join('*' for x in range(80))
 
     # if it does not, say so
     else:
