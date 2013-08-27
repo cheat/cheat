@@ -105,10 +105,30 @@ export CHEATPATH=$CHEATPATH:/path/to/more/cheats
 Enabling Syntax Highlighting
 ----------------------------
 `cheat` can apply syntax highlighting to your cheatsheets if so desired. To
-enable this feature, set a `$CHEATCOLORS` environment variable:
+enable this feature, set a `CHEATCOLORS` environment variable:
 
 ```bash
 export CHEATCOLORS=true
+```
+
+Creating/Editing Cheatsheets
+----------------------------
+Provided that you have an `EDITOR` environment variable set, you may create new
+cheatsheets via:
+
+```bash
+cheat -c foo
+```
+
+By default, `cheat` will attempt to write the new cheatsheet to `~/.cheat`,
+creating the `~/.cheat` directory if necessary. (If it is unable to do so, the
+new cheatsheet will be written to the default cheatsheet directory instead,
+though this will likely require `sudo`.)
+
+Likewise, an existing cheatsheet may be edited via:
+
+```bash
+cheat -e foo
 ```
 
 
