@@ -67,8 +67,19 @@ def create_cheatsheet(cheat, cheatsheets):
         exit()
 
     import cheatsheets as cs
-    subprocess.call([os.environ['EDITOR'],
-                    os.path.join(cs.cheat_dir, cheat)])
+
+    # Attempt to write the new cheatsheet to the user's ~/.cheat dir if it
+    # exists. If it does not exist, attempt to create it.
+    if os.access(DEFAULT_CHEAT_DIR, os.W_OK) or os.makedirs(DEFAULT_CHEAT_DIR):
+        subprocess.call([os.environ['EDITOR'],
+                        os.path.join(DEFAULT_CHEAT_DIR, cheat)])
+
+    # If the directory cannot be created, write to the python package
+    # directory, though that will likely require the use of sudo
+    else:
+        subprocess.call([os.environ['EDITOR'],
+                        os.path.join(cs.cheat_dir, cheat)])
+
     exit()
 
 def main():
