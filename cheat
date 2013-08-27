@@ -98,7 +98,21 @@ def main():
 
     # print help if requested
     if keyphrase.lower() in ['', 'cheat', 'help', '-h', '-help', '--help']:
-        print ("Usage: cheat [keyphrase]\n")
+        print ("Usage: cheat [OPTIONS] <keyphrase>")
+        print ("Examples:\n")
+
+        print ("To look up 'tar':")
+        print ("cheat tar\n")
+
+        print ("To look up 'git commit' (a subcommand):")
+        print ("cheat git commit\n")
+
+        print ("To create a cheatsheet for 'foo':")
+        print ("cheat -c foo\n")
+
+        print ("To edit the cheatsheet for 'foo':")
+        print ("cheat -e foo\n")
+
         print ("Available keyphrases:")
         max_command = max([len(x) for x in cheatsheets.keys()]) + 3
         print ('\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
