@@ -1,3 +1,6 @@
+# To ssh via pem file (which normally needs 0600 permissions):
+ssh -i /path/to/file.pem user@example.com
+
 # To execute a command on a remote server:
 ssh -t user@example.com 'the-remote-command'
 
@@ -9,3 +12,5 @@ ssh -X -t user@example.com 'chromium-browser'
 
 # For more information, see:
 # http://unix.stackexchange.com/q/12755/44856
+To execute a command on a remote server:
+ssh -t user@example.com 'the-remote-command'

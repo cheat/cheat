@@ -4,3 +4,15 @@ git config --global user.email johndoe@example.com
 
 # To enable color:
 git config --global color.ui true
+
+# To stage all changes for commit:
+git add --all
+
+# To commit staged changes
+git commit -m "Your commit message"
+
+# To push to the tracked master branch:
+git push origin master
+
+# To push to a specified repository:
+git push git@github.com:username/project.git
