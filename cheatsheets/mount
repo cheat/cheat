@@ -1,5 +1,5 @@
 # To mount / partition as read-write in repair mode:
 mount -o remount,rw /
 
-#To mount Usb disk as user writable:
+# To mount Usb disk as user writable:
 mount -o uid=username,gid=usergroup /dev/sdx /mnt/xxx
