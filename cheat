@@ -49,7 +49,7 @@ def cheat_files(cheat_directories):
 def edit_cheatsheet(cheat, cheatsheets):
     "Edit a pre-existing cheatsheet."
     if cheat not in cheatsheets:
-        print 'No cheatsheet found for "%s"' % cheat
+        print ('No cheatsheet found for "%s"' % cheat)
         ans = raw_input('Create cheatsheet for "%s" (Y/N)? ' % cheat)
         if ans.lower() in ['y', 'yes']:
             create_cheatsheet(cheat, cheatsheets)
@@ -63,7 +63,7 @@ def edit_cheatsheet(cheat, cheatsheets):
 def create_cheatsheet(cheat, cheatsheets):
     "Create a new cheatsheet."
     if cheat in cheatsheets:
-        print 'Cheatsheet "%s" already exists' % cheat
+        print ('Cheatsheet "%s" already exists' % cheat)
         exit()
 
     import cheatsheets as cs
@@ -115,7 +115,7 @@ def main():
                   'EDITOR environment variable to your favorite editor\'s path')
             exit()
         elif len(sys.argv) < 3:
-            print 'Must provide a cheatsheet to edit/create'
+            print ('Must provide a cheatsheet to edit/create')
             exit()
 
         # if the user wants to edit a cheatsheet
