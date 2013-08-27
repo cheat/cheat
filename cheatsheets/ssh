@@ -12,5 +12,3 @@ ssh -X -t user@example.com 'chromium-browser'
 
 # For more information, see:
 # http://unix.stackexchange.com/q/12755/44856
-To execute a command on a remote server:
-ssh -t user@example.com 'the-remote-command'
