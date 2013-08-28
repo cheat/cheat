@@ -14,7 +14,7 @@ find . -type f -perm 777
 find . -xdev \( -perm -4000 \) -type f -print0 | xargs -0 ls -l
 
 # To find files with extension '.txt' and remove them:
-find ./path/ -name '*.txt' -exec rm {} \;
+find ./path/ -name '*.txt' -exec rm '{}' \;
 
 # To find files with extension '.txt' and look for a string into them:
 find ./path/ -name '*.txt' | xargs grep 'string'
