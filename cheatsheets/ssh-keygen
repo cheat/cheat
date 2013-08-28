@@ -3,9 +3,3 @@ ssh-keygen -t rsa
 
 # To generate a 4096-bit SSH key:
 ssh-keygen -t rsa -b 4096
-
-# To copy a key to a remote host:
-ssh-copy-id username@host
-
-# To copy a key to a remote host on a non-standard port:
-ssh-copy-id username@host -p 2222
