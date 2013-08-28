@@ -22,6 +22,6 @@ git remote add upstream git@github.com:name/repo.git    # Set a new repo
 git remote -v                                           # Confirm new remote repo
 git fetch upstream                                      # Get branches
 git branch -va                                          # List local - remote branches
-git checkout master                                     # Checpkout local master branch
+git checkout master                                     # Checkout local master branch
 git merge upstream/master                               # Merge remote into local repo
 
