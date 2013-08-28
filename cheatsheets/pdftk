@@ -1,0 +1,6 @@
+# Concatenate all pdf files into one:
+pdftk *.pdf cat output all.pdf
+
+# Concatenate pages 1 to 5 of first.pdf with page 3 of second.pdf
+pdftk A=fist.pdf B=second.pdf cat A1-5 B3 output new.pdf
+
