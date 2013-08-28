@@ -1,0 +1,6 @@
+# Basic
+grep pattern file
+
+# Advanced
+grep -R pattern folder
+cat file | grep pattern

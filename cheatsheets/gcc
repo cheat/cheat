@@ -1,0 +1,8 @@
+# Compile a file
+gcc file.c
+
+# Compile a file with a custom output
+gcc -o file file.c
+
+# Debug symbols
+gcc -g
