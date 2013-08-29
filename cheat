@@ -121,7 +121,11 @@ def main():
 
     # create/edit option
     option = sys.argv[1].lower()
-    if option in ['-e', '--edit', '-c', '--create']:
+    if option in ['-e', '--edit', '-c', '--create', '-d', '--cheat_directories']:
+        # list cheat directories and exit
+        if option in ['-d', '--cheat_directories']:
+            print(' '.join(cheat_directories()))
+            exit()
         # make sure EDITOR environment variable is set and that at least 3 arguments
         # are given
         if 'EDITOR' not in os.environ:
