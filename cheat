@@ -141,7 +141,6 @@ def main():
         elif option in ['-c', '--create']:
             create_cheatsheet(' '.join(sys.argv[2:]), cheatsheets)
 
-
     # print the cheatsheet if it exists
     if keyphrase in cheatsheets:
         filename = os.path.join(cheatsheets[keyphrase], keyphrase)
