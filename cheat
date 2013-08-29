@@ -3,7 +3,8 @@ import os
 import sys
 import subprocess
 
-DEFAULT_CHEAT_DIR = os.path.join(os.path.expanduser('~'), '.cheat')
+DEFAULT_CHEAT_DIR = os.environ.get('DEFAULT_CHEAT_DIR') or \
+                    os.path.join(os.path.expanduser('~'), '.cheat')
 USE_PYGMENTS      = False
 
 # NOTE remove this check if it is confirmed to work on windows
@@ -139,6 +140,7 @@ def main():
         # if the user wants to create a cheatsheet
         elif option in ['-c', '--create']:
             create_cheatsheet(' '.join(sys.argv[2:]), cheatsheets)
+
 
     # print the cheatsheet if it exists
     if keyphrase in cheatsheets:
