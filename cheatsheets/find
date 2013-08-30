@@ -12,3 +12,7 @@ find . -type f -perm 777
 
 # To find files with setuid bit set:
 find . -xdev \( -perm -4000 \) -type f -print0 | xargs -0 ls -l
+
+# To find files bigger thank 2 MB and list them:
+find / -type f -size +20000k -exec ls -lh {} \; | awk '{ print $9 ": " $5 }' 
+
