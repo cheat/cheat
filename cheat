@@ -3,7 +3,8 @@ import os
 import sys
 import subprocess
 
-DEFAULT_CHEAT_DIR = os.path.join(os.path.expanduser('~'), '.cheat')
+DEFAULT_CHEAT_DIR = os.environ.get('DEFAULT_CHEAT_DIR') or \
+                    os.path.join(os.path.expanduser('~'), '.cheat')
 USE_PYGMENTS      = False
 
 # NOTE remove this check if it is confirmed to work on windows
