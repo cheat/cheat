@@ -16,5 +16,6 @@ setup(name='cheat',
       packages=['cheatsheets'],
       package_data={'cheatsheets': [f for f in os.listdir('cheatsheets')
                                     if '.' not in f]},
-      scripts=['cheat']
+      scripts=['cheat'],
+      data_files=[('/usr/share/zsh/site-functions', ['_cheat'])]
      )
