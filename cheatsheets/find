@@ -1,4 +1,4 @@
-# To find files by cas insensitive extension (ex: .jpg, .JPG, .jpG):
+# To find files by case-insensitive extension (ex: .jpg, .JPG, .jpG):
 find . -iname "*.jpg"
 
 # To find directories:
