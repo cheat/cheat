@@ -12,9 +12,3 @@ ssh-keygen -p -P old_passphrase -N '' -f /path/to/keyfile
 
 # To generate a 4048 bit RSA key with a passphase and comment containing the user and hostname
 ssh-keygen -t rsa -b 4048 -C "$USER@$HOSTNAME" -P passphrase
-
-# To copy a key to a remote host:
-ssh-copy-id username@host
-
-# To copy a key to a remote host on a non-standard port:
-ssh-copy-id username@host -p 2222
