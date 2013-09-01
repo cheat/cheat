@@ -1,6 +1,9 @@
 # To ssh via pem file (which normally needs 0600 permissions):
 ssh -i /path/to/file.pem user@example.com
 
+# To connect on an non-standard port:
+ssh -p 2222 user@example.com
+
 # To execute a command on a remote server:
 ssh -t user@example.com 'the-remote-command'
 
