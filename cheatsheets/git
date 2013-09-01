@@ -24,4 +24,4 @@ git fetch upstream                                      # Get branches
 git branch -va                                          # List local - remote branches
 git checkout master                                     # Checkout local master branch
 git merge upstream/master                               # Merge remote into local repo
-
+git show 83fb499                                        # Show what a commit did.
