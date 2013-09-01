@@ -86,19 +86,20 @@ with your [dotfiles][].
 Advanced Features
 =================
 
-Setting a CHEATPATH
-----------------------
-
-By default cheatsheets are stored in the `~/.cheat/` directory, you can
-override it by setting `DEFAULT_CHEAT_DIR` environment variable.
+Setting a DEFAULT_CHEAT_DIR
+---------------------------
+Personal cheatsheets are saved in the `~/.cheat` directory by default, but you
+can specify a different default by exporting a `DEFAULT_CHEAT_DIR` environment
+variable:
 
 ```bash
 export DEFAULT_CHEAT_DIR=/path/to/my/cheats
 ```
 
-By default, all cheatsheets are installed to `~/.cheat/`, but you can instruct
-`cheat` to look for cheatsheets in other directories by exporting a `CHEATPATH`
-environment variable:
+Setting a CHEATPATH
+-------------------
+You can additionally instruct `cheat` to look for cheatsheets in other
+directories by exporting a `CHEATPATH` environment variable:
 
 ```bash
 export CHEATPATH=/path/to/my/cheats
