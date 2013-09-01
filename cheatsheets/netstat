@@ -1,2 +1,5 @@
 # To view which users/processes are listening to which ports:
 sudo netstat -lnptu
+
+# To view routing table (use -n flag to disable DNS lookups):
+netstat -r
