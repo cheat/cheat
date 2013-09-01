@@ -1,0 +1,29 @@
+7z
+A file archiver with highest compression ratio
+
+Args:
+a       add
+d       delete
+e       extract
+l       list
+t       test
+u       update
+x       extract with full paths
+
+Example:
+7z a -t7z -m0-lzma -mx=9 -mfb=64 -md=32m -ms=on archive.7z dir1
+
+-t7z        7z archive
+-m0=lzma    lzma method
+-mx=9       level of compression = 9 (ultra)
+-mfb=64     number of fast bytes for lzma = 64
+-md=32m     dictionary size = 32 Mb
+-ms=on      solid archive = on
+
+7z exit codes:
+0       normal (no errors or warnings)
+1       warning (non-fatal errors)
+2       fatal error
+7       bad cli arguments
+8       not enough memory for operation
+255     process was interrupted
