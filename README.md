@@ -88,6 +88,14 @@ Advanced Features
 
 Setting a CHEATPATH
 ----------------------
+
+By default cheatsheets are stored in the `~/.cheat/` directory, you can
+override it by setting `DEFAULT_CHEAT_DIR` environment variable.
+
+```bash
+export DEFAULT_CHEAT_DIR=/path/to/my/cheats
+```
+
 By default, all cheatsheets are installed to `~/.cheat/`, but you can instruct
 `cheat` to look for cheatsheets in other directories by exporting a `CHEATPATH`
 environment variable:
