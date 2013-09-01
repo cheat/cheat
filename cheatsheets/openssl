@@ -8,3 +8,8 @@ openssl req -new -key server.key -out server.csr
 openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
 
 # (The above commands may be run in sequence to generate a self-signed SSL certificate.)
+
+To view certificate expiration:
++echo | openssl s_client -connect <hostname>:443 2> /dev/null | \
+awk '/-----BEGIN/,/END CERTIFICATE-----/' | \
+openssl x509 -noout -enddate
