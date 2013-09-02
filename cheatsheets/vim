@@ -5,4 +5,5 @@ i - enters append mode without character skip
 # File management
 :w - writes (saves) file
 :q - quits
-;q! - quits without saving changes
+:wq - writes file and quits
+:q! - quits without saving changes
