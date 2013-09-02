@@ -1,0 +1,8 @@
+# To show the 10 first line of file
+head file
+
+# To show the n first line of file
+head -l n file
+
+# To show the n first bytes of file
+head -b n file
