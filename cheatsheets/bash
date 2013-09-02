@@ -1,7 +1,7 @@
 # To implement a for loop:
 for file in `ls .`;
-    do echo 'file';
-    echo 'found';
+do 
+    echo $file found;
 done
 
 # To implement a case command:
