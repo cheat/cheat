@@ -22,7 +22,7 @@ pacman -Si <package name>
 pacman -U <file name/file url>
 
 # To list the commands provided by an installed package
-pacman -Ql nvidia-utils | sed -n -e 's/.*\/bin\///p' | tail -n +2
+pacman -Ql <package name> | sed -n -e 's/.*\/bin\///p' | tail -n +2
 
 # To list explicitly installed packages
 pacman -Qe
