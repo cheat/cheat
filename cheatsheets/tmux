@@ -1,0 +1,41 @@
+# Start tmux
+tmux
+
+# Detach from tmux
+Ctrl-B D
+
+# Restore tmux session
+tmux attach
+
+# Display session
+tmux ls
+
+# Start a shared session
+tmux -S /tmp/your_shared_session
+chmod 777 /tmp/your_shared_session
+
+# Help screen (Q to quit)
+Ctrl-B ?
+
+# Scroll in window
+Ctrl-B PageUp/Down
+
+# Window management
+# =================
+
+# Create window
+Ctrl-B C
+
+# Destroy window
+Ctrl-B X
+
+# Switch between windows
+Ctrl-B [0-9]
+or
+Ctrl-B Arrows
+
+# Split windows horizontally
+Ctrl-B %
+
+# Split windows vertically
+Ctrl-B "
