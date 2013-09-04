@@ -2,6 +2,9 @@
 git config --global user.name "John Doe"
 git config --global user.email johndoe@example.com
 
+# To set your editor:
+git config --global core.editor emacs
+
 # To enable color:
 git config --global color.ui true
 
