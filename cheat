@@ -141,8 +141,8 @@ def main():
     # create/edit option
     option = sys.argv[1].lower()
     if option in ['-e', '--edit', '-c', '--create']:
-        # make sure EDITOR environment variable is set and that at least 3 arguments
-        # are given
+        # make sure EDITOR env variable is set and that at least
+        # 3 arguments are given
         if 'EDITOR' not in os.environ:
             print('In order to use "create" or "edit" you must set your '
                   'EDITOR environment variable to your favorite editor\'s path')
