@@ -1,0 +1,43 @@
+# All the following command work as well with multiple package names
+
+# To search for a package
+pacman -Ss <package name>
+
+# To update the local package base and upgrade all out of date packages
+pacman -Suy
+
+# To install a package
+pacman -S <package name>
+
+# To uninstall a package
+pacman -R <package name>
+
+# To uninstall a package and his depedencies, removing all new orphans
+pacman -Rcs <package name>
+
+# To get informations about a package
+pacman -Si <package name>
+
+# To install a package from builded package file (.tar.xz)
+pacman -U <file name/file url>
+
+# To list the commands provided by an installed package
+pacman -Ql <package name> | sed -n -e 's/.*\/bin\///p' | tail -n +2
+
+# To list explicitly installed packages
+pacman -Qe
+
+# To list orphan packages (installed as dependencies and not required anymore)
+pacman -Qdt
+
+
+# You can't directly install packages from the Arch User Database (AUR) with pacman.
+# You need yaourt to perform that. But considering yaourt itself is in the AUR, here is how to 
+build a package from its tarball.
+# First, get the .tar.gz archive and unpack it
+wget <archive url>
+tar -xzf <archive file>
+cd <unpacked folder>
+# Then build the package and install it
+makepkg -s
+pacman -U <package file (.pkg.tar.xz)>
