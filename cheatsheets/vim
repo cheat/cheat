@@ -1,8 +1,14 @@
-# Appending
-a - drops vim into append mode
-i - enters append mode without character skip
+# Insertion
+a - enters insertion mode, append after the cursor.
+A - enters insertion mode, at the end of the line.
+i - enters insertion mode, insert before the cursor.
+I - enters insertion mode, at the beginning of the line.
+o - enters insertion mode, creating a new line under the cursor.
+O - enters insertion mode, creating a mew line above the cursor.
+C - enters insertion mode, cut the end of the line.
 
 # File management
 :w - writes (saves) file
+:x - writes (saves) file ans exit
 :q - quits
-;q! - quits without saving changes
+:q! - quits without saving changes
