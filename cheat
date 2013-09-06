@@ -19,6 +19,7 @@ cheat.py    -- Quick, abridged man pages with examples (main routines)
 
 import os
 import sys
+import argparse
 import subprocess
 
 DEFAULT_CHEAT_DIR = os.environ.get('DEFAULT_CHEAT_DIR') or \

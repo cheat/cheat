@@ -3,8 +3,7 @@
 from distutils.core import setup
 import os
 
-setup(
-      name='cheat',
+setup(name='cheat',
       version='1.0',
       summary='Create and view interactive cheatsheets on the command-line',
       homepage='',
