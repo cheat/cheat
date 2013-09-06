@@ -1,5 +1,11 @@
 # Basic:
 grep pattern file
 
+# case nonsensitive research:
+grep -i pattern file
+
 # Recursively grep for string <pattern> in folder:
 grep -R pattern folder
+
+# Getting pattern from file (one by line):
+grep -f pattern_file file
