@@ -63,6 +63,7 @@ Clone this repository and `cd` into it, then run
     mkdir ~/.cheat
     cp cheatsheets/* ~/.cheat
 
+
 Modifying Cheatsheets
 =====================
 The value of `cheat` is that it allows you to create your own cheatsheets - the
@@ -111,6 +112,8 @@ You may, of course, append multiple directories to your `CHEATPATH`:
 export CHEATPATH=$CHEATPATH:/path/to/more/cheats
 ```
 
+You may view which directories are on your `CHEATPATH` with `cheat -d`.
+
 Enabling Syntax Highlighting
 ----------------------------
 `cheat` can apply syntax highlighting to your cheatsheets if so desired. To
@@ -140,11 +143,17 @@ Likewise, an existing cheatsheet may be edited via:
 cheat -e foo
 ```
 
+Command Autocompletion in zsh
+-----------------------------
+`zsh` users may use `cheat -d` in coordination with the provided `\_cheat` file
+to implement autocompletion [as described here][4].
+
 
 Contributing
 ============
 If you would like to contribute cheetsheets or program functionality, please
 fork this repository, make your chanages, and send me a pull request.
+
 
 Related Projects
 ================
@@ -166,3 +175,4 @@ Related Projects
 [1]:         https://github.com/lucaswerkmeister/cheats   
 [2]:         https://github.com/jahendrie/cheat
 [3]:         http://errtheblog.com/posts/21-cheat
+[4]:         https://github.com/chrisallenlane/cheat/pull/77
