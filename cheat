@@ -64,8 +64,12 @@ def edit_cheatsheet(cheat, cheatsheets):
 def create_cheatsheet(cheat, cheatsheets):
     "Create a new cheatsheet."
     if cheat in cheatsheets:
-        print ('Cheatsheet "%s" already exists' % cheat)
-        exit()
+        print ('Cheatsheet "%s" already exists...' % cheat)
+        ans = raw_input('Would you like to edit cheatsheet for "%s" (Y/N)? ' % cheat)
+        if ans.lower() in ['y', 'yes']:
+          edit_cheatsheet(cheat, cheatsheets)
+        else:
+          exit()
 
     import cheatsheets as cs
 
