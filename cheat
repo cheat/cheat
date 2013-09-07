@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 """
-cheat.py    -- Quick, abridged man pages with examples (main routines)
-            Copyright (C) 2013, Chris Lane
+cheat.py -- cheat allows you to create and view interactive cheatsheets on the
+            command-line. It was designed to help remind *nix system
+            administrators of options for commands that they use frequently,
+            but not frequently enough to remember. 
+
+        Copyright (C) 2013, Chris Lane
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
