@@ -166,7 +166,7 @@ def main():
 
     # list cheat directories and exit
     if option in ['-d', '--cheat_directories']:
-        print(' '.join(cheat_directories()))
+        print('\n'.join(cheat_directories()))
         exit()
 
     # print the cheatsheet if it exists
