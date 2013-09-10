@@ -23,7 +23,6 @@ cheat.py -- cheat allows you to create and view interactive cheatsheets on the
 
 import os
 import sys
-import argparse
 import subprocess
 
 DEFAULT_CHEAT_DIR = os.environ.get('DEFAULT_CHEAT_DIR') or \
