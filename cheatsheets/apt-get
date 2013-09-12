@@ -1,0 +1,13 @@
+# Desc: Allows to update the operating system
+
+# To fetch package list
+apt-get update
+
+# To download and install updates without installing new package.
+apt-get update
+
+# To download and install the updates AND install new necessary packages
+apt-get dist-upgrade
+
+# Full command:
+apt-get update && apt-get dist-upgrade
