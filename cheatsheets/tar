@@ -10,8 +10,14 @@ tar -xzvf /path/to/foo.tgz
 # To create a .gz archive:
 tar -czvf /path/to/foo.tgz /path/to/foo/
 
+# To list the content of an .gz archive:
+tar -ztvf /path/to/foo.tgz
+
 # To extract a .bz2 archive:
 tar -xjvf /path/to/foo.tgz
 
 # To create a .bz2 archive:
 tar -cjvf /path/to/foo.tgz /path/to/foo/
+
+# To list the content of an .bz2 archive:
+tar -jtvf /path/to/foo.tgz
