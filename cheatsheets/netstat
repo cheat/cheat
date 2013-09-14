@@ -3,3 +3,9 @@ sudo netstat -lnptu
 
 # To view routing table (use -n flag to disable DNS lookups):
 netstat -r
+
+# Which process is listening to port <port>
+netstat -pln | grep <port> | awk '{print $NF}'
+
+Example output: 1507/python
+
