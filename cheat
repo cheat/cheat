@@ -3,7 +3,7 @@
 cheat.py -- cheat allows you to create and view interactive cheatsheets on the
             command-line. It was designed to help remind *nix system
             administrators of options for commands that they use frequently,
-            but not frequently enough to remember. 
+            but not frequently enough to remember.
 
         Copyright (C) 2013, Chris Lane
 
@@ -23,7 +23,6 @@ cheat.py -- cheat allows you to create and view interactive cheatsheets on the
 
 import os
 import sys
-import argparse
 import subprocess
 from textwrap import dedent
 
@@ -65,11 +64,19 @@ def cheat_directories():
 def cheat_files(cheat_directories):
     "Assembles a dictionary of cheatsheets found in the above directories."
     cheats = {}
-    for cheat_dir in reversed(cheat_directories):
-        cheats.update(dict([(cheat, cheat_dir)
-                            for cheat in os.listdir(cheat_dir)
-                            if not cheat.startswith('.')
-                            and not cheat.startswith('__')]))
+    queue = cheat_directories[:]
+    while queue:
+        cheat_dir = queue.pop()
+        for cheat in os.listdir(cheat_dir):
+            if not cheat.startswith('.') and not cheat.startswith('__'):
+                cheat_path = os.path.join(cheat_dir, cheat)
+                if os.path.isdir(cheat_path):
+                    # recurse subdirectory
+                    sub_dir = os.path.join(cheat_dir, cheat)
+                    queue.append(sub_dir)
+                else:
+                    cheats[cheat] = cheat_dir
+
     return cheats
 
 
