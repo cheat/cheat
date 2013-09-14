@@ -153,7 +153,7 @@ Related Projects
   that also allows not only for numerical indexing of subcomands but also
   supports running commands interactively.
 
-- [jahendrie/cheat][2]: A bash-only implmentation that additionally allows for
+- [jahendrie/cheat][2]: A bash-only implementation that additionally allows for
   cheatsheets to be created and `grep` searched from the command-line.
   ([jahendrie][] contributed key ideas to this project as well.)
 
