@@ -108,10 +108,14 @@ def help(cheatsheets):
         Available keyphrases:
     ''').strip()
 
-    max_command = max([len(x) for x in cheatsheets.keys()]) + 3
-    print ('\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
-                            for key, value in cheatsheets.items()])))
+    print list_cheatsheets(cheatsheets)
     exit()
+
+
+def list_cheatsheets(cheatsheets):
+    max_command = max([len(x) for x in cheatsheets.keys()]) + 3
+    return ('\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
+                            for key, value in cheatsheets.items()])))
 
 
 def pretty_print(filename):
@@ -175,6 +179,11 @@ def main():
     # list cheat directories and exit
     if option in ['-d', '--cheat-directories']:
         print("\n".join(cheat_directories()))
+        exit()
+
+    # list cheatsheets and exit
+    if option in ['-l', '--list']:
+        print list_cheatsheets(cheatsheets)
         exit()
 
     # print the cheatsheet if it exists
