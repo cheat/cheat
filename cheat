@@ -2,6 +2,7 @@
 import os
 import sys
 import subprocess
+from textwrap import dedent
 
 DEFAULT_CHEAT_DIR = os.environ.get('DEFAULT_CHEAT_DIR') or \
                     os.path.join(os.path.expanduser('~'), '.cheat')
@@ -50,7 +51,7 @@ def cheat_files(cheat_directories):
 
 
 def create_cheatsheet(cheat, cheatsheets):
-    "Create a new cheatsheet."
+    "Creates a new cheatsheet."
     if cheat in cheatsheets:
         print ('Cheatsheet "%s" already exists' % cheat)
         exit()
@@ -73,7 +74,7 @@ def create_cheatsheet(cheat, cheatsheets):
 
 
 def edit_cheatsheet(cheat, cheatsheets):
-    "Edit a pre-existing cheatsheet."
+    "Edits a pre-existing cheatsheet."
     if cheat not in cheatsheets:
         print ('No cheatsheet found for "%s"' % cheat)
         ans = raw_input('Create cheatsheet for "%s" (Y/N)? ' % cheat)
@@ -122,22 +123,25 @@ def main():
 
     # print help if requested
     if keyphrase.lower() in ['', 'cheat', 'help', '-h', '-help', '--help']:
-        print ("Usage: cheat [OPTIONS] <keyphrase>")
-        print ("Examples:\n")
+        print dedent('''
+            Usage: cheat [OPTIONS] <keyphrase>
+            Examples:
 
-        print ("To look up 'tar':")
-        print ("cheat tar\n")
+            To look up 'tar':
+            cheat tar
 
-        print ("To look up 'git commit' (a subcommand):")
-        print ("cheat git commit\n")
+            To look up 'git commit' (a subcommand):
+            cheat git commit
 
-        print ("To create a cheatsheet for 'foo':")
-        print ("cheat -c foo\n")
+            To create a cheatsheet for 'foo':
+            cheat -c foo
 
-        print ("To edit the cheatsheet for 'foo':")
-        print ("cheat -e foo\n")
+            To edit the cheatsheet for 'foo':
+            cheat -e foo
 
-        print ("Available keyphrases:")
+            Available keyphrases:
+        ''').strip()
+
         max_command = max([len(x) for x in cheatsheets.keys()]) + 3
         print ('\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
                                 for key, value in cheatsheets.items()])))
