@@ -53,19 +53,24 @@ def cheat_files(cheat_directories):
 def edit_cheatsheet(cheat, cheatsheets):
     "Creates or edits a cheatsheet"
 
-    # if the cheatsheet does not already exist, create it
-    if cheat not in cheatsheets:
-        # make sure EDITOR environment variable is set and that at least 3 arguments
-        # are given
-        if 'EDITOR' not in os.environ:
-            print('In order to use "create" or "edit" you must set your '
-                  'EDITOR environment variable to your favorite editor\'s path')
-            exit()
+    # Assert that the EDITOR environment variable is set and that at least 3
+    # arguments have been given
+    if 'EDITOR' not in os.environ:
+        print('In order to use "create" or "edit" you must set your '
+              'EDITOR environment variable to your favorite editor\'s path')
+        exit()
 
-        elif len(sys.argv) < 3:
-            print ('Must provide a cheatsheet to edit/create')
-            exit()
+    elif len(sys.argv) < 3:
+        print ('Must provide a cheatsheet to edit/create')
+        exit()
 
+    # if the cheatsheet already exists, open it for editing
+    if cheat in cheatsheets:
+        subprocess.call([os.environ['EDITOR'],
+                      os.path.join(cheatsheets[cheat], cheat)])
+
+    # otherwise, create it
+    else:
         import cheatsheets as cs
         # Attempt to write the new cheatsheet to the user's ~/.cheat dir if it
         # exists. If it does not exist, attempt to create it.
@@ -78,11 +83,6 @@ def edit_cheatsheet(cheat, cheatsheets):
         else:
             subprocess.call([os.environ['EDITOR'],
                             os.path.join(cs.cheat_dir, cheat)])
-
-    # if the cheatsheet does already exist, open it for editing
-    else:
-      subprocess.call([os.environ['EDITOR'],
-                      os.path.join(cheatsheets[cheat], cheat)])
 
 
 def help(cheatsheets):
