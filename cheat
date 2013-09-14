@@ -5,8 +5,6 @@ cheat.py -- cheat allows you to create and view interactive cheatsheets on the
             administrators of options for commands that they use frequently,
             but not frequently enough to remember. 
 
-        Copyright (C) 2013, Chris Lane
-
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
         the Free Software Foundation, either version 3 of the License, or
@@ -131,7 +129,6 @@ def help(cheatsheets):
     ''').strip()
 
     print list_cheatsheets(cheatsheets)
-    exit()
 
 
 def list_cheatsheets(cheatsheets):
