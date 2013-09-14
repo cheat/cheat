@@ -10,7 +10,7 @@ uname -n
 uname -r
 # 3.2.0-4-amd64
 
-# Print the kernel version
+# Print the kernel version, with more specific information
 uname -v
 # #1 SMP Debian 3.2.32-1
 
