@@ -18,6 +18,7 @@ if os.name == 'posix' and 'CHEATCOLORS' in os.environ:
     except ImportError:
         pass
 
+
 def cheat_directories():
     "Assembles a list of directories containing cheatsheets."
     default_directories = [DEFAULT_CHEAT_DIR]
@@ -47,19 +48,6 @@ def cheat_files(cheat_directories):
                             and not cheat.startswith('__')]))
     return cheats
 
-def edit_cheatsheet(cheat, cheatsheets):
-    "Edit a pre-existing cheatsheet."
-    if cheat not in cheatsheets:
-        print ('No cheatsheet found for "%s"' % cheat)
-        ans = raw_input('Create cheatsheet for "%s" (Y/N)? ' % cheat)
-        if ans.lower() in ['y', 'yes']:
-            create_cheatsheet(cheat, cheatsheets)
-        else:
-            exit()
-
-    subprocess.call([os.environ['EDITOR'],
-                    os.path.join(cheatsheets[cheat], cheat)])
-    exit()
 
 def create_cheatsheet(cheat, cheatsheets):
     "Create a new cheatsheet."
@@ -82,6 +70,41 @@ def create_cheatsheet(cheat, cheatsheets):
                         os.path.join(cs.cheat_dir, cheat)])
 
     exit()
+
+
+def edit_cheatsheet(cheat, cheatsheets):
+    "Edit a pre-existing cheatsheet."
+    if cheat not in cheatsheets:
+        print ('No cheatsheet found for "%s"' % cheat)
+        ans = raw_input('Create cheatsheet for "%s" (Y/N)? ' % cheat)
+        if ans.lower() in ['y', 'yes']:
+            create_cheatsheet(cheat, cheatsheets)
+        else:
+            exit()
+
+    subprocess.call([os.environ['EDITOR'],
+                    os.path.join(cheatsheets[cheat], cheat)])
+    exit()
+
+
+def pretty_print(filename):
+    "Applies syntax highlighting to a cheatsheet and writes it to stdout"
+    try:
+        if os.path.splitext(filename)[1]:
+            lexer = get_lexer_for_filename(filename)
+        else:
+            # shell is a sensible default when there is no extension
+            lexer = get_lexer_for_filename(filename + '.sh')
+
+    except ClassNotFound:
+        lexer = TextLexer()
+
+    with open(filename) as istream:
+        code = istream.read()
+
+    fmt = TerminalFormatter()
+    highlight(code, lexer, fmt, sys.stdout)
+
 
 def main():
     # assemble a keyphrase out of all params passed to the script
@@ -159,24 +182,6 @@ def main():
     # if it does not, say so
     else:
         print ('No cheatsheet found for %s.' % keyphrase)
-
-
-def pretty_print(filename):
-    try:
-        if os.path.splitext(filename)[1]:
-            lexer = get_lexer_for_filename(filename)
-        else:
-            # shell is a sensible default when there is no extension
-            lexer = get_lexer_for_filename(filename + '.sh')
-
-    except ClassNotFound:
-        lexer = TextLexer()
-
-    with open(filename) as istream:
-        code = istream.read()
-
-    fmt = TerminalFormatter()
-    highlight(code, lexer, fmt, sys.stdout)
 
 
 if __name__ == '__main__':
