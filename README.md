@@ -129,24 +129,15 @@ Provided that you have an `EDITOR` environment variable set, you may create new
 cheatsheets via:
 
 ```bash
-cheat -c foo
-```
-
-By default, `cheat` will attempt to write the new cheatsheet to `~/.cheat`,
-creating the `~/.cheat` directory if necessary. (If it is unable to do so, the
-new cheatsheet will be written to the default cheatsheet directory instead,
-though this will likely require `sudo`.)
-
-Likewise, an existing cheatsheet may be edited via:
-
-```bash
 cheat -e foo
 ```
 
-Command Autocompletion in zsh
------------------------------
-`zsh` users may use `cheat -d` in coordination with the provided `\_cheat` file
-to implement autocompletion [as described here][4].
+If the 'foo' cheatsheet already exists, it will be opened for editing.
+
+By default, `cheat` will attempt to write new cheatsheets to `~/.cheat`, and
+will create the `~/.cheat` directory if necessary. If it is unable to do so,
+the new cheatsheet will be written to the default cheatsheet directory instead,
+though this will likely require `sudo`.
 
 
 Contributing
