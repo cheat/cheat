@@ -88,6 +88,32 @@ def edit_cheatsheet(cheat, cheatsheets):
     exit()
 
 
+def help(cheatsheets):
+    print dedent('''
+        Usage: cheat [OPTIONS] <keyphrase>
+        Examples:
+
+        To look up 'tar':
+        cheat tar
+
+        To look up 'git commit' (a subcommand):
+        cheat git commit
+
+        To create a cheatsheet for 'foo':
+        cheat -c foo
+
+        To edit the cheatsheet for 'foo':
+        cheat -e foo
+
+        Available keyphrases:
+    ''').strip()
+
+    max_command = max([len(x) for x in cheatsheets.keys()]) + 3
+    print ('\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
+                            for key, value in cheatsheets.items()])))
+    exit()
+
+
 def pretty_print(filename):
     "Applies syntax highlighting to a cheatsheet and writes it to stdout"
     try:
@@ -123,29 +149,7 @@ def main():
 
     # print help if requested
     if keyphrase.lower() in ['', 'cheat', 'help', '-h', '-help', '--help']:
-        print dedent('''
-            Usage: cheat [OPTIONS] <keyphrase>
-            Examples:
-
-            To look up 'tar':
-            cheat tar
-
-            To look up 'git commit' (a subcommand):
-            cheat git commit
-
-            To create a cheatsheet for 'foo':
-            cheat -c foo
-
-            To edit the cheatsheet for 'foo':
-            cheat -e foo
-
-            Available keyphrases:
-        ''').strip()
-
-        max_command = max([len(x) for x in cheatsheets.keys()]) + 3
-        print ('\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
-                                for key, value in cheatsheets.items()])))
-        exit()
+        help(cheatsheets)
 
     # create/edit option
     option = sys.argv[1].lower()
@@ -169,8 +173,8 @@ def main():
             create_cheatsheet(' '.join(sys.argv[2:]), cheatsheets)
 
     # list cheat directories and exit
-    if option in ['-d', '--cheat_directories']:
-        print(' '.join(cheat_directories()))
+    if option in ['-d', '--cheat-directories']:
+        print("\n".join(cheat_directories()))
         exit()
 
     # print the cheatsheet if it exists
