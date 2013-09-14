@@ -1,0 +1,8 @@
+# Change file owner
+chown user file
+
+# Change file owner and group
+chown user:group file
+
+# Change owner recursively
+chown -R user directory
