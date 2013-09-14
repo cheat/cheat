@@ -95,11 +95,14 @@ def help(cheatsheets):
         To look up 'tar':
         cheat tar
 
-        To look up 'git commit' (a subcommand):
-        cheat git commit
-
-        To edit or edit the cheatsheet for 'foo':
+        To create or edit the cheatsheet for 'foo':
         cheat -e foo
+
+        To list the directories on the CHEATPATH
+        cheat -d
+
+        To list the available cheatsheets:
+        cheat -l
 
         Available keyphrases:
     ''').strip()
