@@ -82,7 +82,7 @@ def edit_cheatsheet(cheat, cheatsheets):
         exit()
 
     elif len(sys.argv) < 3:
-        print ('Must provide a cheatsheet to edit/create')
+        print('Must provide a cheatsheet to edit/create')
         exit()
 
     # if the cheatsheet already exists, open it for editing
@@ -109,7 +109,7 @@ def edit_cheatsheet(cheat, cheatsheets):
 def help(cheatsheets):
     "Displays the program help"
 
-    print dedent('''
+    print(dedent('''
         Usage: cheat [OPTIONS] <keyphrase>
         Examples:
 
@@ -126,9 +126,9 @@ def help(cheatsheets):
         cheat -l
 
         Available keyphrases:
-    ''').strip()
+    ''').strip())
 
-    print list_cheatsheets(cheatsheets)
+    print(list_cheatsheets(cheatsheets))
 
 
 def list_cheatsheets(cheatsheets):
@@ -185,7 +185,7 @@ def main():
 
     # list cheatsheets and exit
     if keyphrase in ['-l', '--list']:
-        print list_cheatsheets(cheatsheets)
+        print(list_cheatsheets(cheatsheets))
         exit()
 
     # if the user wants to edit a cheatsheet
@@ -205,7 +205,7 @@ def main():
 
     # if it does not, say so
     else:
-        print ('No cheatsheet found for %s.' % keyphrase)
+        print('No cheatsheet found for %s.' % keyphrase)
 
 
 if __name__ == '__main__':
