@@ -180,7 +180,7 @@ def main():
 
     # list cheat directories and exit
     if keyphrase in ['-d', '--cheat-directories']:
-        print("\n".join(cheat_directories()))
+        print("\n".join(cheat_dirs))
         exit()
 
     # list cheatsheets and exit
