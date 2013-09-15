@@ -2,7 +2,7 @@
 head file
 
 # To show the n first lines of file
-head -l n file
+head -n l file
 
 # To show the n first bytes of file
-head -b n file
+head -c b file
