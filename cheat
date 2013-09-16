@@ -158,26 +158,6 @@ def main():
             edit_cheatsheet(values[0], cheatsheets)
             parser.exit()
 
-    # print the cheatsheet if it exists
-    class PrintSheet(argparse.Action):
-        def __call__(self, parser, namespace, value, option_string=None):
-            if not value or value in ['help', 'cheat']:
-                parser.print_help()
-            elif value in cheatsheets:
-                filename = os.path.join(cheatsheets[value], value)
-                if USE_PYGMENTS:
-                    pretty_print(filename)
-                else:
-                    with open(filename) as istream:
-                        for l in istream:
-                            sys.stdout.write(l)
-
-            # if it does not, say so
-            else:
-                print >> sys.stderr, ('No cheatsheet found for %s.' % value)
-                parser.exit(1)
-            parser.exit()
-
     desc = dedent('''
     cheat allows you to create and view interactive cheatsheets on the
     command-line. It was designed to help remind *nix system
@@ -205,7 +185,7 @@ def main():
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser_group = parser.add_mutually_exclusive_group()
     parser_group.add_argument('sheet', metavar='cheatsheet',
-                              action=PrintSheet, type=str, nargs='?',
+                              action='store', type=str, nargs='?',
                               help='Look at <cheatseet>')
     parser_group.add_argument('-c', '--create', metavar='cheatsheet',
                               action=EditSheet, type=str, nargs=1,
@@ -220,6 +200,25 @@ def main():
                               action=ListDirectories, nargs=0,
                               help='List all current cheat dirs')
     args = parser.parse_args()
+    sheet = args.sheet
+
+    # Print the cheatsheet if it exists
+    if not sheet or sheet in ['help', 'cheat']:
+        parser.print_help()
+    elif sheet in cheatsheets:
+        filename = os.path.join(cheatsheets[sheet], sheet)
+        if USE_PYGMENTS:
+            pretty_print(filename)
+        else:
+            with open(filename) as istream:
+                for l in istream:
+                    sys.stdout.write(l)
+
+    # if it does not, say so
+    else:
+        print >> sys.stderr, ('No cheatsheet found for %s.' % sheet)
+        exit(1)
+    exit()
 
 if __name__ == '__main__':
     main()
