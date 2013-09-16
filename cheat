@@ -104,31 +104,6 @@ def edit_cheatsheet(cheat, cheatsheets):
             subprocess.call([os.environ['EDITOR'],
                             os.path.join(cs.cheat_dir, cheat)])
 
-
-def help(cheatsheets):
-    "Displays the program help"
-
-    print(dedent('''
-        Usage: cheat [OPTIONS] <keyphrase>
-        Examples:
-
-        To look up 'tar':
-        cheat tar
-
-        To create or edit the cheatsheet for 'foo':
-        cheat -e foo
-
-        To list the directories on the CHEATPATH
-        cheat -d
-
-        To list the available cheatsheets:
-        cheat -l
-
-        Available keyphrases:
-    ''').strip())
-
-    print list_cheatsheets(cheatsheets)
-
 def list_cheatsheets(cheatsheets):
     "Lists the cheatsheets that are currently available"
     max_command = max([len(x) for x in cheatsheets.keys()]) + 3
