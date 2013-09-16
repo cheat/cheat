@@ -40,7 +40,6 @@ if os.name == 'posix' and 'CHEATCOLORS' in os.environ:
     except ImportError:
         pass
 
-
 def cheat_directories():
     "Assembles a list of directories containing cheatsheets."
     default_directories = [DEFAULT_CHEAT_DIR]
@@ -128,15 +127,13 @@ def help(cheatsheets):
         Available keyphrases:
     ''').strip())
 
-    print(list_cheatsheets(cheatsheets))
-
+    print list_cheatsheets(cheatsheets)
 
 def list_cheatsheets(cheatsheets):
     "Lists the cheatsheets that are currently available"
     max_command = max([len(x) for x in cheatsheets.keys()]) + 3
     return ('\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
                             for key, value in cheatsheets.items()])))
-
 
 def pretty_print(filename):
     "Applies syntax highlighting to a cheatsheet and writes it to stdout"
@@ -156,10 +153,7 @@ def pretty_print(filename):
     fmt = TerminalFormatter()
     highlight(code, lexer, fmt, sys.stdout)
 
-
 def main():
-    # assemble a keyphrase out of all params passed to the script
-    keyphrase  = ' '.join(sys.argv[1:])
     cheat_dirs = cheat_directories()
 
     # verify that we have at least one cheat directory
@@ -171,42 +165,86 @@ def main():
     # list the files in the ~/.cheat directory
     cheatsheets = cheat_files(cheat_dirs)
 
-    # @TODO: refactor the below into argparse
-
-    # print help
-    if keyphrase in ['', 'cheat', 'help', '-h', '-help', '--help']:
-        help(cheatsheets)
-        exit()
-
     # list cheat directories and exit
-    if keyphrase in ['-d', '--cheat-directories']:
-        print("\n".join(cheat_directories()))
-        exit()
+    class ListDirectories(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            print cheat_directories()
+            parser.exit()
 
     # list cheatsheets and exit
-    if keyphrase in ['-l', '--list']:
-        print(list_cheatsheets(cheatsheets))
-        exit()
+    class ListCheatsheets(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            print list_cheatsheets(cheatsheets)
+            parser.exit()
 
     # if the user wants to edit a cheatsheet
-    if (sys.argv[1]) and (sys.argv[1] in ['-e', '--edit']):
-        edit_cheatsheet(' '.join(sys.argv[2:]), cheatsheets)
-        exit()
+    class EditSheet(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            edit_cheatsheet(values[0], cheatsheets)
+            parser.exit()
 
     # print the cheatsheet if it exists
-    if keyphrase in cheatsheets:
-        filename = os.path.join(cheatsheets[keyphrase], keyphrase)
-        if USE_PYGMENTS:
-            pretty_print(filename)
-        else:
-            with open(filename) as istream:
-                for l in istream:
-                    sys.stdout.write(l)
+    class PrintSheet(argparse.Action):
+        def __call__(self, parser, namespace, value, option_string=None):
+            if not value or value in ['help', 'cheat']:
+                parser.print_help()
+            elif value in cheatsheets:
+                filename = os.path.join(cheatsheets[value], value)
+                if USE_PYGMENTS:
+                    pretty_print(filename)
+                else:
+                    with open(filename) as istream:
+                        for l in istream:
+                            sys.stdout.write(l)
 
-    # if it does not, say so
-    else:
-        print('No cheatsheet found for %s.' % keyphrase)
+            # if it does not, say so
+            else:
+                print >> sys.stderr, ('No cheatsheet found for %s.' % value)
+                parser.exit(1)
+            parser.exit()
 
+    desc = dedent('''
+    cheat allows you to create and view interactive cheatsheets on the
+    command-line. It was designed to help remind *nix system
+    administrators of options for commands that they use frequently,
+    but not frequently enough to remember.''').strip()
+
+    epi = dedent('''
+    Examples:
+    
+    To look up 'tar':
+    cheat tar
+    
+    To create or edit the cheatsheet for 'foo':
+    cheat -e foo
+    
+    To list the directories on the CHEATPATH
+    cheat -d
+
+    To list the available cheatsheets:
+    cheat -l
+    ''').strip()
+
+    parser = argparse.ArgumentParser(prog='cheat',
+                                     description=desc, epilog=epi,
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser_group = parser.add_mutually_exclusive_group()
+    parser_group.add_argument('sheet', metavar='cheatsheet',
+                              action=PrintSheet, type=str, nargs='?',
+                              help='Look at <cheatseet>')
+    parser_group.add_argument('-c', '--create', metavar='cheatsheet',
+                              action=EditSheet, type=str, nargs=1,
+                              help='Create <cheatsheet>')
+    parser_group.add_argument('-e', '--edit', metavar='cheatsheet',
+                              action=EditSheet, type=str, nargs=1,
+                              help='Edit <cheatsheet>')
+    parser_group.add_argument('-l', '--list',
+                              action=ListCheatsheets, nargs=0,
+                              help='List all available cheatsheets')
+    parser_group.add_argument('-d', '--cheat-directories',
+                              action=ListDirectories, nargs=0,
+                              help='List all current cheat dirs')
+    args = parser.parse_args()
 
 if __name__ == '__main__':
     main()
