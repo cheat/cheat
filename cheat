@@ -137,11 +137,10 @@ class CheatSheets(object):
                                   for key, value in self.sheets.items()])))
 
 # Custom action for argparse
-
 class ListDirectories(argparse.Action):
     """List cheat directories and exit"""
     def __call__(self, parser, namespace, values, option_string=None):
-        print sheets.dirs
+        print("\n".join(sheets.dirs))
         parser.exit()
 
 class ListCheatsheets(argparse.Action):
@@ -149,7 +148,6 @@ class ListCheatsheets(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         print sheets.list()
         parser.exit()
-
 
 class EditSheet(argparse.Action):
     """If the user wants to edit a cheatsheet"""
@@ -159,7 +157,6 @@ class EditSheet(argparse.Action):
 
 def main():
 
-    # @todo: refactor out this global
     global sheets
     sheets = CheatSheets()
 
