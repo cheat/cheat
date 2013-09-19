@@ -159,6 +159,7 @@ class EditSheet(argparse.Action):
 
 def main():
 
+    # @todo: refactor out this global
     global sheets
     sheets = CheatSheets()
 
@@ -191,9 +192,6 @@ def main():
     parser_group.add_argument('sheet', metavar='cheatsheet',
                               action='store', type=str, nargs='?',
                               help='Look at <cheatseet>')
-    parser_group.add_argument('-c', '--create', metavar='cheatsheet',
-                              action=EditSheet, type=str, nargs=1,
-                              help='Create <cheatsheet>')
     parser_group.add_argument('-e', '--edit', metavar='cheatsheet',
                               action=EditSheet, type=str, nargs=1,
                               help='Edit <cheatsheet>')
