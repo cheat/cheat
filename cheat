@@ -1,0 +1,223 @@
+#!/usr/bin/env python
+"""
+cheat.py -- cheat allows you to create and view interactive cheatsheets on the
+            command-line. It was designed to help remind *nix system
+            administrators of options for commands that they use frequently,
+            but not frequently enough to remember. 
+
+        This program is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+
+        You should have received a copy of the GNU General Public License
+        along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+import os
+import sys
+import argparse
+import subprocess
+from textwrap import dedent
+
+DEFAULT_CHEAT_DIR = os.environ.get('DEFAULT_CHEAT_DIR') or \
+                    os.path.join(os.path.expanduser('~'), '.cheat')
+USE_PYGMENTS      = False
+
+# NOTE remove this check if it is confirmed to work on windows
+if os.name == 'posix' and 'CHEATCOLORS' in os.environ:
+    try:
+        from pygments import highlight
+        from pygments.util import ClassNotFound
+        from pygments.lexers import get_lexer_for_filename, TextLexer
+        from pygments.formatters import TerminalFormatter
+        USE_PYGMENTS = True
+    except ImportError:
+        pass
+
+def pretty_print(filename):
+    "Applies syntax highlighting to a cheatsheet and writes it to stdout"
+    try:
+        if os.path.splitext(filename)[1]:
+            lexer = get_lexer_for_filename(filename)
+        else:
+            # shell is a sensible default when there is no extension
+            lexer = get_lexer_for_filename(filename + '.sh')
+
+    except ClassNotFound:
+        lexer = TextLexer()
+
+    with open(filename) as istream:
+        code = istream.read()
+
+    fmt = TerminalFormatter()
+    highlight(code, lexer, fmt, sys.stdout)
+
+class CheatSheets(object):
+    
+    dirs = None
+    sheets = None
+
+    def __init__(self):
+        self.dirs = self.__cheat_directories()
+        # verify that we have at least one cheat directory
+        if not self.dirs:
+            error_msg = 'The {default} dir does not exist or the CHEATPATH var is not set.'
+            print >> sys.stderr, error_msg.format(default=DEFAULT_CHEAT_DIR)
+            exit()
+        self.sheets = self.__cheat_files()
+
+    def __cheat_directories(self):
+        """Assembles a list of directories containing cheatsheets."""
+        default_directories = [DEFAULT_CHEAT_DIR]
+        try:
+            import cheatsheets
+            default_directories.append(cheatsheets.cheat_dir)
+        except ImportError:
+            pass
+
+        default = [default_dir for default_dir in default_directories
+                   if os.path.isdir(default_dir)]
+
+        if 'CHEATPATH' in os.environ and os.environ['CHEATPATH']:
+            return [path for path in os.environ['CHEATPATH'].split(os.pathsep)
+                    if os.path.isdir(path)] + default
+        else:
+            return default
+
+    def __cheat_files(self):
+        """Assembles a dictionary of cheatsheets found in the above directories."""
+        cheats = {}
+        for cheat_dir in reversed(self.dirs):
+            cheats.update(dict([(cheat, cheat_dir)
+                                for cheat in os.listdir(cheat_dir)
+                                if not cheat.startswith('.')
+                                and not cheat.startswith('__')]))
+        return cheats
+
+    def edit(self, cheat):
+        """Creates or edits a cheatsheet"""
+
+        # Assert that the EDITOR environment variable is set and that at least 3
+        # arguments have been given
+        if 'EDITOR' not in os.environ:
+            print('In order to use "create" or "edit" you must set your '
+                  'EDITOR environment variable to your favorite editor\'s path')
+            exit()
+
+        # if the cheatsheet already exists, open it for editing
+        if cheat in sheets.sheets:
+            subprocess.call([os.environ['EDITOR'],
+                             os.path.join(self.sheets[cheat], cheat)])
+
+        # otherwise, create it
+        else:
+            import cheatsheets as cs
+            # Attempt to write the new cheatsheet to the user's ~/.cheat dir if it
+            # exists. If it does not exist, attempt to create it.
+            if os.access(DEFAULT_CHEAT_DIR, os.W_OK) or os.makedirs(DEFAULT_CHEAT_DIR):
+                subprocess.call([os.environ['EDITOR'],
+                                 os.path.join(DEFAULT_CHEAT_DIR, cheat)])
+
+            # If the directory cannot be created, write to the python package
+            # directory, though that will likely require the use of sudo
+            else:
+                subprocess.call([os.environ['EDITOR'],
+                                 os.path.join(cs.cheat_dir, cheat)])
+
+    def list(self):
+        """Lists the cheatsheets that are currently available"""
+        max_command = max([len(x) for x in self.sheets.keys()]) + 3
+        return ('\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
+                                  for key, value in self.sheets.items()])))
+
+# Custom action for argparse
+class ListDirectories(argparse.Action):
+    """List cheat directories and exit"""
+    def __call__(self, parser, namespace, values, option_string=None):
+        print("\n".join(sheets.dirs))
+        parser.exit()
+
+class ListCheatsheets(argparse.Action):
+    """List cheatsheets and exit"""
+    def __call__(self, parser, namespace, values, option_string=None):
+        print sheets.list()
+        parser.exit()
+
+class EditSheet(argparse.Action):
+    """If the user wants to edit a cheatsheet"""
+    def __call__(self, parser, namespace, values, option_string=None):
+        sheets.edit(values[0])
+        parser.exit()
+
+def main():
+
+    global sheets
+    sheets = CheatSheets()
+
+    desc = dedent('''
+    cheat allows you to create and view interactive cheatsheets on the
+    command-line. It was designed to help remind *nix system
+    administrators of options for commands that they use frequently,
+    but not frequently enough to remember.''').strip()
+
+    epi = dedent('''
+    Examples:
+    
+    To look up 'tar':
+    cheat tar
+    
+    To create or edit the cheatsheet for 'foo':
+    cheat -e foo
+    
+    To list the directories on the CHEATPATH
+    cheat -d
+
+    To list the available cheatsheets:
+    cheat -l
+    ''').strip()
+
+    parser = argparse.ArgumentParser(prog='cheat',
+                                     description=desc, epilog=epi,
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser_group = parser.add_mutually_exclusive_group()
+    parser_group.add_argument('sheet', metavar='cheatsheet',
+                              action='store', type=str, nargs='?',
+                              help='Look at <cheatseet>')
+    parser_group.add_argument('-e', '--edit', metavar='cheatsheet',
+                              action=EditSheet, type=str, nargs=1,
+                              help='Edit <cheatsheet>')
+    parser_group.add_argument('-l', '--list',
+                              action=ListCheatsheets, nargs=0,
+                              help='List all available cheatsheets')
+    parser_group.add_argument('-d', '--cheat-directories',
+                              action=ListDirectories, nargs=0,
+                              help='List all current cheat dirs')
+    args = parser.parse_args()
+    sheet = args.sheet
+
+    # Print the cheatsheet if it exists
+    if not sheet or sheet in ['help', 'cheat']:
+        parser.print_help()
+    elif sheet in sheets.sheets:
+        filename = os.path.join(sheets.sheets[sheet], sheet)
+        if USE_PYGMENTS:
+            pretty_print(filename)
+        else:
+            with open(filename) as istream:
+                for l in istream:
+                    sys.stdout.write(l)
+
+    # if it does not, say so
+    else:
+        print >> sys.stderr, ('No cheatsheet found for %s.' % sheet)
+        exit(1)
+    exit()
+
+if __name__ == '__main__':
+    main()
