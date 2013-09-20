@@ -109,11 +109,11 @@ class CheatSheets(object):
             print('In order to use "create" or "edit" you must set your '
                   'EDITOR environment variable to your favorite editor\'s path')
             exit()
-
+        else:
+            editor = os.environ['EDITOR'].split()
         # if the cheatsheet already exists, open it for editing
         if cheat in sheets.sheets:
-            subprocess.call([os.environ['EDITOR'],
-                             os.path.join(self.sheets[cheat], cheat)])
+            subprocess.call(editor + [os.path.join(self.sheets[cheat], cheat)])
 
         # otherwise, create it
         else:
@@ -121,14 +121,12 @@ class CheatSheets(object):
             # Attempt to write the new cheatsheet to the user's ~/.cheat dir if it
             # exists. If it does not exist, attempt to create it.
             if os.access(DEFAULT_CHEAT_DIR, os.W_OK) or os.makedirs(DEFAULT_CHEAT_DIR):
-                subprocess.call([os.environ['EDITOR'],
-                                 os.path.join(DEFAULT_CHEAT_DIR, cheat)])
+                subprocess.call(editor + [os.path.join(DEFAULT_CHEAT_DIR, cheat)])
 
             # If the directory cannot be created, write to the python package
             # directory, though that will likely require the use of sudo
             else:
-                subprocess.call([os.environ['EDITOR'],
-                                 os.path.join(cs.cheat_dir, cheat)])
+                subprocess.call(editor + [os.path.join(cs.cheat_dir, cheat)])
 
     def list(self):
         """Lists the cheatsheets that are currently available"""
