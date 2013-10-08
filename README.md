@@ -63,6 +63,22 @@ Clone this repository and `cd` into it, then run
     mkdir ~/.cheat
     cp cheatsheets/* ~/.cheat
 
+### Testing
+
+After installing for all users or in your home directory, try `cheat tar` for instance.
+
+### Troubleshooting
+
+In case you got an error such as:
+> ImportError: No module named argparse
+
+You're probably using python < 2.7 and you need to manually install the argparse module.
+You can do this easily with pip:
+```bash
+sudo apt-get python-pip
+sudo pip install argparse
+```
+Other methods: https://pypi.python.org/pypi/argparse
 
 Modifying Cheatsheets
 =====================
