@@ -9,3 +9,5 @@ netstat -pln | grep <port> | awk '{print $NF}'
 
 Example output: 1507/python
 
+# Fast display of ipv4 tcp listening programs
+sudo netstat -vtlnp --listening -4

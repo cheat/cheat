@@ -31,3 +31,6 @@ nmap -traceroute [target]
 # TCP ACK ping:   -PA
 # UDP ping:       -PU
 # ARP ping:       -PR
+
+# Example: Ping scan all machines on a class C network
+nmap -sP 192.168.0.0/24
