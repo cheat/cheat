@@ -1,5 +1,5 @@
 # Remove files and subdirs
-rm -r path/to/the/target/
+rm -rf path/to/the/target/
 
 # Ignore non existent files 
 rm -f path/to/the/target
