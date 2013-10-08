@@ -1,3 +1,6 @@
+# List all ipv4 network files
+sudo lsof -i4
+
 # To find listening ports:
 lsof -Pnl +M -i4
 
