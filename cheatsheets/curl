@@ -1,0 +1,20 @@
+# To download a single file
+curl http://path.to.the/file
+
+# To download a file and change its name
+curl -o newname http://path.to.the/file
+
+# To download multiple files
+curl -O URLOfFirstFile -O URLOfSecondFile
+
+# To limit the rate of a download
+curl --limit-rate 1000B -O http://path.to.the/file
+
+# To download a file and pass HTTP Authentication
+curl -u username:password URL 
+
+# To download a file from a FTP server
+curl -u ftpuser:ftppass -O ftp://ftp_server/public_html/xss.php
+
+# To download a file with a Proxy
+curl -x proxysever.server.com:PORT http://addressiwantto.access

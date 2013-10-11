@@ -1,0 +1,17 @@
+# To download a single file
+wget http://path.to.the/file
+
+# To download a file and change its name
+wget http://path.to.the/file -o newname
+
+# To download multiples files with multiple URLs
+wget URL1 URL2
+
+# To parse a file that contains a list of URLs to fetch each one 
+wget -i url_list.txt
+
+# To download files according to a pattern 
+wget http://www.myserver.com/files-{1..15}.tar.bz2
+
+# To download all the files in a directory with a specific extension if directory indexing is enabled
+wget -r -l1 -A.extension http://myserver.com/directory
