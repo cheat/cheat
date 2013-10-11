@@ -18,5 +18,7 @@ setup(name='cheat',
                                     if '.' not in f]},
       scripts=['cheat'],
       data_files=[('/usr/share/zsh/site-functions', ['autocompletion/cheat.zsh']),
-                  ('/etc/bash_completion.d'       , ['autocompletion/cheat.bash'])]
-     )
+                  ('/etc/bash_completion.d'       , ['autocompletion/cheat.bash']),
+                  ('/usr/share/fish/completions'  , ['autocompletion/cheat.fish'])
+              ]
+      )
