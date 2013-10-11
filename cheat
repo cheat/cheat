@@ -163,7 +163,8 @@ class CheatSheets(object):
                     if os.access(sheet_path, os.W_OK):
                         subprocess.call(editor + [os.path.join(cs.cheat_dir, cheat)])
                     else:
-                        print >> sys.stderr, ("Couldn't create '%s' cheatsheet."
+                        print >> sys.stderr, ("Couldn't create '%s' cheatsheet.\n"
+                                              "Please retry usig sudo."
                                               % cheat)
                         exit(1)
         except OSError, e:
