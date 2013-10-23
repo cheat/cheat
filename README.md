@@ -75,7 +75,7 @@ In case you got an error such as:
 You're probably using python < 2.7 and you need to manually install the argparse module.
 You can do this easily with pip:
 ```bash
-sudo apt-get python-pip
+sudo apt-get install python-pip
 sudo pip install argparse
 ```
 Other methods: https://pypi.python.org/pypi/argparse
