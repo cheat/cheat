@@ -14,7 +14,7 @@
     j
 
 w               next start of word
-w               next start of whitespace-delimited word
+W               next start of whitespace-delimited word
 e               next end of word
 E               next end of whitespace-delimited word
 b               previous start of word
