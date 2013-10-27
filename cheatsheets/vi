@@ -1,0 +1,37 @@
+# To edit text (enter "insert" mode)
+i
+
+# To disable editing
+Esc
+
+# To exit and save changes
+:x
+
+# To quit without saving
+:q!
+
+# The following commands only work when not in insert mode
+
+# To delete a line
+dd
+
+# To copy a line
+y
+
+# To paste a line
+p
+
+# To search for some text
+/searchtext
+
+# To search and replace
+:1,$s/searchtext/replacetext/
+
+# To move to the start of a line
+0
+
+# To move to the end of a line
+$
+
+# To move to the next word
+w
