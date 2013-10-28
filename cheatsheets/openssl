@@ -7,13 +7,13 @@ openssl req -new -key server.key -out server.csr
 # To sign a certificate using a private key and CSR:
 openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
 
+# (The above commands may be run in sequence to generate a self-signed SSL certificate.)
+
 # To show certificate information for a certificate signing request
 openssl req -text -noout -in server.csr
 
 # To show certificate information for generated certificate
 openssl x509 -text -noout -in server.crt 
-
-# (The above commands may be run in sequence to generate a self-signed SSL certificate.)
 
 # To view certificate expiration:
 echo | openssl s_client -connect <hostname>:443 2> /dev/null | \
