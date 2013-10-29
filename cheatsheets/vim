@@ -7,6 +7,11 @@
 :w {file}       write new file
 :x              write file and exit
 
+# Commandline Options
+
+-x        Use [weak] encryption when writing files.  Will prompt for a crypt key.
+
+
 # Movement
 
     k
