@@ -113,7 +113,7 @@ class CheatSheets(object):
                                   'must set your EDITOR environment variable '
                                   'to your favorite editor\'s path.')
             exit(1)
-        elif os.environ['EDITOR'] == "":
+        elif os.environ['EDITOR'] == '':
             print >> sys.stderr, ('Your EDITOR environment variable is set '
                                   'to nothing, in order to create/edit a '
                                   'cheatsheet your must set it to a valid '
@@ -139,7 +139,7 @@ class CheatSheets(object):
                 else:
                     subprocess.call(editor + [os.path.join(cs.cheat_dir, cheat)])
         except OSError, e:
-            print >> sys.stderr, ("Could not launch `%s` as your editor : %s"
+            print >> sys.stderr, ('Could not launch `%s` as your editor : %s'
                                   % (editor[0], e.strerror))
             exit(1)
 
@@ -226,7 +226,7 @@ def main():
     parser_group = parser.add_mutually_exclusive_group()
     parser_group.add_argument('sheet', metavar='cheatsheet',
                               action='store', type=str, nargs='?',
-                              help='Look at <cheatseet>')
+                              help='Look at <cheatsheet>')
     parser_group.add_argument('-e', '--edit', metavar='cheatsheet',
                               action=EditSheet, type=str, nargs=1,
                               help='Edit <cheatsheet>')
