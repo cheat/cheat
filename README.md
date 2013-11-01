@@ -163,11 +163,12 @@ fork this repository, make your changes, and send me a pull request.
 
 
 Testing
-=======
+-------
 
-Install the required testing tools (pip install -r tests/requirements.txt) and run the nose tests command::
+Install the required testing tools (pip install -r tests/requirements.txt) and run the nose tests command from the same directory as `cheat` and the `tests` directory:
 
-```nosetests
+```bash
+nosetests
 ```
 
 
