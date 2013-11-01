@@ -22,7 +22,7 @@ cheat tar
 You will be presented with a cheatsheet resembling:
 
 ```text
-# To extract an uncompressed archive: 
+# To extract an uncompressed archive:
 tar -xvf /path/to/foo.tar
 
 # To extract a .gz archive:
@@ -38,7 +38,7 @@ tar -xjvf /path/to/foo.tgz
 tar -cjvf /path/to/foo.tgz /path/to/foo/
 ```
 
-To see what cheatsheets are availble, run `cheat` with no arguments.
+To see what cheatsheets are available, run `cheat` with no arguments.
 
 Note that, while `cheat` was designed primarily for *nix system administrators,
 it is agnostic as to what content it stores. If you would like to use `cheat`
@@ -158,15 +158,24 @@ though this will likely require `sudo`.
 
 Contributing
 ============
-If you would like to contribute cheetsheets or program functionality, please
+If you would like to contribute cheatsheets or program functionality, please
 fork this repository, make your changes, and send me a pull request.
+
+
+Testing
+=======
+
+Install the required testing tools (pip install -r tests/requirements.txt) and run the nose tests command::
+
+```nosetests
+```
 
 
 Related Projects
 ================
 
 - [lucaswerkmeister/cheats][1]: An implementation of this concept in pure bash
-  that also allows not only for numerical indexing of subcomands but also
+  that also allows not only for numerical indexing of subcommands but also
   supports running commands interactively.
 
 - [jahendrie/cheat][2]: A bash-only implementation that additionally allows for
@@ -179,7 +188,7 @@ Related Projects
 
 [dotfiles]:  http://dotfiles.github.io/
 [jahendrie]: https://github.com/jahendrie
-[1]:         https://github.com/lucaswerkmeister/cheats   
+[1]:         https://github.com/lucaswerkmeister/cheats
 [2]:         https://github.com/jahendrie/cheat
 [3]:         http://errtheblog.com/posts/21-cheat
 [4]:         https://github.com/chrisallenlane/cheat/pull/77
