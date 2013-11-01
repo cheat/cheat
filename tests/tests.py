@@ -1,9 +1,10 @@
 import os
 import sys
 
-from nose.tools import assert_equals, assert_true, assert_false, assert_raises
 from StringIO import StringIO
+
 from mock import patch
+from nose.tools import assert_equals, assert_true, assert_false, assert_raises
 
 
 class TestCheatSheets(object):
@@ -61,6 +62,7 @@ class TestCheatSheets(object):
         clear_cheatfile = '-test-foobar'
         clear_cheatfile_path = os.path.join(self.cheatpath, clear_cheatfile)
         assert_false(self.cheatsheets.is_vim_crypted(clear_cheatfile_path))
+
         # This file is "Vim Encrypted" with the pass phrase "passphrase".
         vimcrypted_cheatfile = '-test-vim_crypted'
         vimcrypted_cheatfile_path = os.path.join(
