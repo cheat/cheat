@@ -10,5 +10,5 @@ in
     0) echo "zero found";;
     1) echo "one found";;
     2) echo "two found";;
-    3) echo "three found";;
+    3*) echo "something beginning with 3 found";;
 esac
