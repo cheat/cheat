@@ -4,6 +4,9 @@ wget http://path.to.the/file
 # To download a file and change its name
 wget http://path.to.the/file -o newname
 
+# To continue an aborted downloaded
+wget -c http://path.to.the/file
+
 # To download multiples files with multiple URLs
 wget URL1 URL2
 
