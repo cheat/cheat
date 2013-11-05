@@ -65,6 +65,7 @@ class CheatSheets(object):
     dirs = None
     sheets = None
 
+
     def __init__(self):
         self.dirs = self.__cheat_directories()
         # verify that we have at least one cheat directory
@@ -178,6 +179,13 @@ class CheatSheets(object):
         return ('\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
                                   for key, value in self.sheets.items()])))
 
+    def search(self, term):
+        for sheet, sheet_dir in self.sheets.iteritems():
+            path = os.path.join(sheet_dir, sheet)
+            with open(path) as f:
+                for line in f.readlines():
+                    if term in line:
+                        print sheet + ':', line,
 
 # Custom action for argparse
 class ListDirectories(argparse.Action):
@@ -198,6 +206,13 @@ class EditSheet(argparse.Action):
     """If the user wants to edit a cheatsheet"""
     def __call__(self, parser, namespace, values, option_string=None):
         sheets.edit(values[0])
+        parser.exit()
+
+
+class SearchSheet(argparse.Action):
+    """If the user wants to search a term inside all cheatsheets"""
+    def __call__(self, parser, namespace, values, option_string=None):
+        sheets.search(values[0])
         parser.exit()
 
 
@@ -239,6 +254,9 @@ def main():
     parser_group.add_argument('-e', '--edit', metavar='cheatsheet',
                               action=EditSheet, type=str, nargs=1,
                               help='Edit <cheatsheet>')
+    parser_group.add_argument('-s', '--search', metavar='term',
+                              action=SearchSheet, type=str, nargs=1,
+                              help='Search <term> inside all cheatsheets')
     parser_group.add_argument('-l', '--list',
                               action=ListCheatsheets, nargs=0,
                               help='List all available cheatsheets')
