@@ -179,13 +179,29 @@ class CheatSheets(object):
         return ('\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
                                   for key, value in self.sheets.items()])))
 
+    def __parse_cheat_command_block(self, cheat_fp):
+        block = ""
+        for line in cheat_fp.readlines():
+            if line == '\n' or line == '':
+                yield block
+                block = ""
+            else:
+                block += line
+
     def search(self, term):
         for sheet, sheet_dir in self.sheets.iteritems():
             path = os.path.join(sheet_dir, sheet)
             with open(path) as f:
-                for line in f.readlines():
-                    if term in line:
-                        print sheet + ':', line,
+                output = ''
+                for block in self.__parse_cheat_command_block(f):
+                    if term in block:
+                        if not output:
+                            output = sheet + ":\n"
+                        output += ''.join(["    " + line + '\n' for line
+                                           in block.split('\n')])
+                if output:
+                    print output,
+
 
 # Custom action for argparse
 class ListDirectories(argparse.Action):
