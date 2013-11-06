@@ -195,7 +195,6 @@ class CheatSheets(object):
     def search(self, term):
         """Search for a term in sheetcheats"""
         for cheat in self.sheets.keys():
-            print cheat
             output = ''
             for block in self.__parse_cheat_command_block(cheat):
                 if term in block:
