@@ -195,6 +195,7 @@ class CheatSheets(object):
     def search(self, term):
         """Search for a term in sheetcheats"""
         for cheat in self.sheets.keys():
+            print cheat
             output = ''
             for block in self.__parse_cheat_command_block(cheat):
                 if term in block:
@@ -202,8 +203,8 @@ class CheatSheets(object):
                         output = cheat + ":\n"
                     output += ''.join(["    " + line + '\n' for line
                                        in block.split('\n')])
-                if output:
-                    print output,
+            if output:
+                print output,
 
 
 # Custom action for argparse
