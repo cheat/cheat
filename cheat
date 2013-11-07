@@ -61,10 +61,9 @@ def pretty_print(filename):
 
 
 class CheatSheets(object):
-
+    """Cheatsheets database class."""
     dirs = None
     sheets = None
-
 
     def __init__(self):
         self.dirs = self.__cheat_directories()
@@ -155,22 +154,24 @@ class CheatSheets(object):
                 # Attempt to write the new cheatsheet to the user's ~/.cheat
                 # dir if it exists. If it does not exist, attempt to create it.
                 if os.access(DEFAULT_CHEAT_DIR, os.W_OK) or os.makedirs(DEFAULT_CHEAT_DIR):
-                    subprocess.call(editor + [os.path.join(DEFAULT_CHEAT_DIR, cheat)])
+                    subprocess.call(editor
+                                    + [os.path.join(DEFAULT_CHEAT_DIR, cheat)])
 
                 # If the directory cannot be created, write to the python
                 # package directory, though that will likely require the use
                 # of sudo
                 else:
                     if os.access(sheet_path, os.W_OK):
-                        subprocess.call(editor + [os.path.join(cs.cheat_dir, cheat)])
+                        subprocess.call(editor
+                                        + [os.path.join(cs.cheat_dir, cheat)])
                     else:
-                        print >> sys.stderr, ("Couldn't create '%s' cheatsheet.\n"
-                                              "Please retry usig sudo."
-                                              % cheat)
+                        error_msg = ("Couldn't create '%s' cheatsheet.\n"
+                                     "Please retry usig sudo." % cheat)
+                        print >> sys.stderr, error_msg
                         exit(1)
-        except OSError, e:
+        except OSError, errno:
             print >> sys.stderr, ("Could not launch `%s` as your editor : %s"
-                                  % (editor[0], e.strerror))
+                                  % (editor[0], errno.strerror))
             exit(1)
 
     def list(self):
@@ -183,14 +184,16 @@ class CheatSheets(object):
         """Parse text blocks inside specified sheet file"""
         block = ""
         path = os.path.join(self.sheets[cheat], cheat)
-        with open(path) as fp:
-            for line in fp.readlines():
+        with open(path) as cheat_fp:
+            for line in cheat_fp.readlines():
                 if line == '\n':
-                    yield block
+                    if block:
+                        yield block
                     block = ""
                 else:
                     block += line
-            yield block
+            if block:
+                yield block
 
     def search(self, term):
         """Search for a term in sheetcheats"""
@@ -236,7 +239,7 @@ class SearchSheet(argparse.Action):
 
 
 def main():
-
+    """Main execution function"""
     global sheets
     sheets = CheatSheets()
 
@@ -294,8 +297,8 @@ def main():
             pretty_print(filename)
         else:
             with open(filename) as istream:
-                for l in istream:
-                    sys.stdout.write(l)
+                for line in istream:
+                    sys.stdout.write(line)
 
     # if it does not, say so
     else:
