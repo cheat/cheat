@@ -21,6 +21,9 @@ b               previous start of word
 B               previous start of whitespace-delimited word
 0               start of line
 $               end of line
+gg              go to first line in file
+G		go to end of file
+
 
 # Insertion
 #   To exit from insert mode use Esc or Ctrl-C
@@ -53,3 +56,6 @@ d{motion}       delete text that {motion} moves over
     50k         moves 50 lines up
     2dw         deletes 2 words
     5yy         copies 5 lines
+    42G         go to line 42
+    
+    
