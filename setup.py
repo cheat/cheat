@@ -17,6 +17,8 @@ setup(name='cheat',
       package_data={'cheatsheets': [f for f in os.listdir('cheatsheets')
                                     if '.' not in f]},
       scripts=['cheat'],
-      data_files=[('/usr/share/zsh/site-functions', ['autocompletion/_cheat.zsh']),
-                  ('/etc/bash_completion.d'       , ['autocompletion/cheat.bash'])]
-     )
+      data_files=[('/usr/share/zsh/site-functions', ['autocompletion/cheat.zsh']),
+                  ('/etc/bash_completion.d'       , ['autocompletion/cheat.bash']),
+                  ('/usr/share/fish/completions'  , ['autocompletion/cheat.fish'])
+              ]
+      )

@@ -3,7 +3,7 @@
 cheat.py -- cheat allows you to create and view interactive cheatsheets on the
             command-line. It was designed to help remind *nix system
             administrators of options for commands that they use frequently,
-            but not frequently enough to remember. 
+            but not frequently enough to remember.
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -25,9 +25,9 @@ import argparse
 import subprocess
 from textwrap import dedent
 
-DEFAULT_CHEAT_DIR = os.environ.get('DEFAULT_CHEAT_DIR') or \
-                    os.path.join(os.path.expanduser('~'), '.cheat')
-USE_PYGMENTS      = False
+DEFAULT_CHEAT_DIR = (os.environ.get('DEFAULT_CHEAT_DIR') or
+                     os.path.join(os.path.expanduser('~'), '.cheat'))
+USE_PYGMENTS = False
 
 # NOTE remove this check if it is confirmed to work on windows
 if os.name == 'posix' and 'CHEATCOLORS' in os.environ:
@@ -40,8 +40,9 @@ if os.name == 'posix' and 'CHEATCOLORS' in os.environ:
     except ImportError:
         pass
 
+
 def pretty_print(filename):
-    "Applies syntax highlighting to a cheatsheet and writes it to stdout"
+    """Applies syntax highlighting to a cheatsheet and writes it to stdout"""
     try:
         if os.path.splitext(filename)[1]:
             lexer = get_lexer_for_filename(filename)
@@ -58,8 +59,9 @@ def pretty_print(filename):
     fmt = TerminalFormatter()
     highlight(code, lexer, fmt, sys.stdout)
 
+
 class CheatSheets(object):
-    
+    """Cheatsheets database class."""
     dirs = None
     sheets = None
 
@@ -67,7 +69,8 @@ class CheatSheets(object):
         self.dirs = self.__cheat_directories()
         # verify that we have at least one cheat directory
         if not self.dirs:
-            error_msg = 'The {default} dir does not exist or the CHEATPATH var is not set.'
+            error_msg = ('The {default} dir does not exist'
+                         ' or the CHEATPATH var is not set.')
             print >> sys.stderr, error_msg.format(default=DEFAULT_CHEAT_DIR)
             exit(1)
         self.sheets = self.__cheat_files()
@@ -91,7 +94,9 @@ class CheatSheets(object):
             return default
 
     def __cheat_files(self):
-        """Assembles a dictionary of cheatsheets found in the above directories."""
+        """
+        Assembles a dictionary of cheatsheets found in the above directories.
+        """
         cheats = {}
         for cheat_dir in reversed(self.dirs):
             cheats.update(dict([(cheat, cheat_dir)
@@ -103,40 +108,70 @@ class CheatSheets(object):
     def edit(self, cheat):
         """Creates or edits a cheatsheet"""
 
-        # Assert that the EDITOR environment variable is set and that at least 3
-        # arguments have been given
+        # Assert that the EDITOR environment variable is set and that at least
+        # 3 arguments have been given
         if 'EDITOR' not in os.environ:
             print >> sys.stderr, ('In order to create/edit a cheatsheet you '
-                'must set your EDITOR environment variable to your favorite '
-                'editor\'s path.')
+                                  'must set your EDITOR environment variable '
+                                  'to your favorite editor\'s path.')
             exit(1)
         elif os.environ['EDITOR'] == "":
             print >> sys.stderr, ('Your EDITOR environment variable is set '
-                'to nothing, in order to create/edit a cheatsheet your must '
-                'set it to a valid editor\'s path.')
+                                  'to nothing, in order to create/edit a '
+                                  'cheatsheet your must set it to a valid '
+                                  'editor\'s path.')
             exit(1)
         else:
             editor = os.environ['EDITOR'].split()
         # if the cheatsheet already exists, open it for editing
         try:
-            if cheat in sheets.sheets:
-                subprocess.call(editor + [os.path.join(self.sheets[cheat], cheat)])
+            if cheat in self.sheets:
+                sheet_path = os.path.join(self.sheets[cheat], cheat)
+                if os.access(sheet_path, os.W_OK):
+                    subprocess.call(editor + [sheet_path])
+                else:
+                    print >> sys.stderr, ("Sheet '%s' [%s] is not editable."
+                                          % (cheat, sheet_path))
+                    print ('Do you want to '
+                           'copy it to your user cheatsheets directory [%s] '
+                           'before editing ?\nKeep in mind that your sheet '
+                           'will always be used before system-wide one.'
+                           % DEFAULT_CHEAT_DIR)
+                    awn = raw_input('[y/n] ')
+                    if awn != 'y':
+                        print ('Ok, if you want to edit system-wide sheet, '
+                               'please try `cheat -e <cheatsheet>` '
+                               'again with sudo.')
+                        exit(1)
+                    import shutil
+                    new_sheet = os.path.join(DEFAULT_CHEAT_DIR, cheat)
+                    shutil.copy(sheet_path, new_sheet)
+                    subprocess.call(editor + [new_sheet])
 
             # otherwise, create it
             else:
                 import cheatsheets as cs
-                # Attempt to write the new cheatsheet to the user's ~/.cheat dir if it
-                # exists. If it does not exist, attempt to create it.
+                # Attempt to write the new cheatsheet to the user's ~/.cheat
+                # dir if it exists. If it does not exist, attempt to create it.
                 if os.access(DEFAULT_CHEAT_DIR, os.W_OK) or os.makedirs(DEFAULT_CHEAT_DIR):
-                    subprocess.call(editor + [os.path.join(DEFAULT_CHEAT_DIR, cheat)])
+                    subprocess.call(editor
+                                    + [os.path.join(DEFAULT_CHEAT_DIR, cheat)])
 
-                # If the directory cannot be created, write to the python package
-                # directory, though that will likely require the use of sudo
+                # If the directory cannot be created, write to the python
+                # package directory, though that will likely require the use
+                # of sudo
                 else:
-                    subprocess.call(editor + [os.path.join(cs.cheat_dir, cheat)])
-        except OSError, e:
+                    if os.access(sheet_path, os.W_OK):
+                        subprocess.call(editor
+                                        + [os.path.join(cs.cheat_dir, cheat)])
+                    else:
+                        error_msg = ("Couldn't create '%s' cheatsheet.\n"
+                                     "Please retry usig sudo." % cheat)
+                        print >> sys.stderr, error_msg
+                        exit(1)
+        except OSError, errno:
             print >> sys.stderr, ("Could not launch `%s` as your editor : %s"
-                                  % (editor[0], e.strerror))
+                                  % (editor[0], errno.strerror))
             exit(1)
 
     def list(self):
@@ -145,6 +180,35 @@ class CheatSheets(object):
         return ('\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
                                   for key, value in self.sheets.items()])))
 
+    def __parse_cheat_command_block(self, cheat):
+        """Parse text blocks inside specified sheet file"""
+        block = ""
+        path = os.path.join(self.sheets[cheat], cheat)
+        with open(path) as cheat_fp:
+            for line in cheat_fp.readlines():
+                if line == '\n':
+                    if block:
+                        yield block
+                    block = ""
+                else:
+                    block += line
+            if block:
+                yield block
+
+    def search(self, term):
+        """Search for a term in sheetcheats"""
+        for cheat in self.sheets.keys():
+            output = ''
+            for block in self.__parse_cheat_command_block(cheat):
+                if term in block:
+                    if not output:
+                        output = cheat + ":\n"
+                    output += ''.join(["    " + line + '\n' for line
+                                       in block.split('\n')])
+            if output:
+                print output,
+
+
 # Custom action for argparse
 class ListDirectories(argparse.Action):
     """List cheat directories and exit"""
@@ -152,11 +216,13 @@ class ListDirectories(argparse.Action):
         print("\n".join(sheets.dirs))
         parser.exit()
 
+
 class ListCheatsheets(argparse.Action):
     """List cheatsheets and exit"""
     def __call__(self, parser, namespace, values, option_string=None):
         print sheets.list()
         parser.exit()
+
 
 class EditSheet(argparse.Action):
     """If the user wants to edit a cheatsheet"""
@@ -164,8 +230,16 @@ class EditSheet(argparse.Action):
         sheets.edit(values[0])
         parser.exit()
 
-def main():
 
+class SearchSheet(argparse.Action):
+    """If the user wants to search a term inside all cheatsheets"""
+    def __call__(self, parser, namespace, values, option_string=None):
+        sheets.search(values[0])
+        parser.exit()
+
+
+def main():
+    """Main execution function"""
     global sheets
     sheets = CheatSheets()
 
@@ -177,13 +251,13 @@ def main():
 
     epi = dedent('''
     Examples:
-    
+
     To look up 'tar':
     cheat tar
-    
+
     To create or edit the cheatsheet for 'foo':
     cheat -e foo
-    
+
     To list the directories on the CHEATPATH
     cheat -d
 
@@ -193,7 +267,8 @@ def main():
 
     parser = argparse.ArgumentParser(prog='cheat',
                                      description=desc, epilog=epi,
-                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+                                     formatter_class=argparse.
+                                     RawDescriptionHelpFormatter)
     parser_group = parser.add_mutually_exclusive_group()
     parser_group.add_argument('sheet', metavar='cheatsheet',
                               action='store', type=str, nargs='?',
@@ -201,6 +276,9 @@ def main():
     parser_group.add_argument('-e', '--edit', metavar='cheatsheet',
                               action=EditSheet, type=str, nargs=1,
                               help='Edit <cheatsheet>')
+    parser_group.add_argument('-s', '--search', metavar='term',
+                              action=SearchSheet, type=str, nargs=1,
+                              help='Search <term> inside all cheatsheets')
     parser_group.add_argument('-l', '--list',
                               action=ListCheatsheets, nargs=0,
                               help='List all available cheatsheets')
@@ -219,8 +297,8 @@ def main():
             pretty_print(filename)
         else:
             with open(filename) as istream:
-                for l in istream:
-                    sys.stdout.write(l)
+                for line in istream:
+                    sys.stdout.write(line)
 
     # if it does not, say so
     else:
