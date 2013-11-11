@@ -123,6 +123,7 @@ class CheatSheets(object):
             exit(1)
         else:
             editor = os.environ['EDITOR'].split()
+
         # if the cheatsheet already exists, open it for editing
         try:
             if cheat in self.sheets:
@@ -134,7 +135,7 @@ class CheatSheets(object):
                                           % (cheat, sheet_path))
                     print ('Do you want to '
                            'copy it to your user cheatsheets directory [%s] '
-                           'before editing ?\nKeep in mind that your sheet '
+                           'before editing?\nKeep in mind that your sheet '
                            'will always be used before system-wide one.'
                            % DEFAULT_CHEAT_DIR)
                     awn = raw_input('[y/n] ')
@@ -144,9 +145,18 @@ class CheatSheets(object):
                                'again with sudo.')
                         exit(1)
                     import shutil
-                    new_sheet = os.path.join(DEFAULT_CHEAT_DIR, cheat)
-                    shutil.copy(sheet_path, new_sheet)
-                    subprocess.call(editor + [new_sheet])
+
+                    # attempt to copy the cheatsheet to DEFAULT_CHEAT_DIR
+                    try:
+                        new_sheet = os.path.join(DEFAULT_CHEAT_DIR, cheat)
+                        shutil.copy(sheet_path, new_sheet)
+                        subprocess.call(editor + [new_sheet])
+                  
+                    # fail gracefully if the cheatsheet cannot be copied. This
+                    # can happen if DEFAULT_CHEAT_DIR does not exist
+                    except IOError:
+                      print ('Could not copy cheatsheet for editing.')
+                      exit(1)
 
             # otherwise, create it
             else:
