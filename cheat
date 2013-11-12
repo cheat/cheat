@@ -43,7 +43,6 @@ if os.name == 'posix' and 'CHEATCOLORS' in os.environ:
 
 
 class CheatSheets(object):
-
     dirs = None
     sheets = None
 
@@ -75,7 +74,8 @@ class CheatSheets(object):
             return default
 
     def __cheat_files(self):
-        """Assembles a dictionary of cheatsheets found in the above directories."""
+        """Assembles a dictionary of cheatsheets found in the above
+        directories."""
         cheats = {}
         for cheat_dir in reversed(self.dirs):
             cheats.update(dict([(cheat, cheat_dir)
@@ -171,6 +171,7 @@ class CheatSheets(object):
         """Use Vim to read an Vim Encrypted file."""
         canonical_path = os.path.realpath(filepath)
         env_cmd = '/usr/bin/env'
+        # This should never happen.  (see first line of this file)
         if not os.path.isfile(env_cmd):
             sys.stderr.write('No environment command {0}\n'.format(env_cmd))
             exit(1)
@@ -231,9 +232,9 @@ def main():
     cheat -l
     ''').strip()
 
-    parser = argparse.ArgumentParser(prog='cheat',
-                                     description=desc, epilog=epi,
-                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        prog='cheat', description=desc, epilog=epi,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
     parser_group = parser.add_mutually_exclusive_group()
     parser_group.add_argument('sheet', metavar='cheatsheet',
                               action='store', type=str, nargs='?',

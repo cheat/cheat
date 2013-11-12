@@ -1,7 +1,6 @@
 import os
-import sys
-
 from StringIO import StringIO
+import sys
 
 from mock import patch
 from nose.tools import assert_equals, assert_true, assert_false, assert_raises
@@ -24,6 +23,8 @@ class TestCheatSheets(object):
         assert_true(self.cheatpath in self.cheatsheets.dirs)
 
     def test_display_foobar_cheat_sheet(self):
+        """The display_sheet method on a test cheatsheet should dump the known
+        content to stdout."""
         # There should be a testing cheatsheet called '-test-foobar'.
         cheatfile = '-test-foobar'
         expected = 'binbat'
@@ -38,6 +39,8 @@ class TestCheatSheets(object):
         assert_true(cheatfile in self.cheatsheets.sheets)
 
     def test_display_missing_cheat_sheet_file(self):
+        """Attempting to display a non-existant cheatsheet file directly with
+        display_sheet() raises a KeyError."""
         cheatfile = '-test-missing_file'
         cheatfile_path = os.path.join(self.cheatpath, cheatfile)
         # Verify that test file is indeed missing.
@@ -49,6 +52,8 @@ class TestCheatSheets(object):
 
     @patch('cheat.CheatSheets.vim_view', return_value=None)
     def test_vim_view_call(self, vim_view):
+        """The display_sheet() method will invoke a vim_view call when trying
+        to open a Vim Encrypted file."""
         cheatfile = '-test-vim_crypted'
         cheatfile_path = os.path.join(self.cheatpath, cheatfile)
         assert_true(os.path.exists(cheatfile_path))
@@ -58,6 +63,8 @@ class TestCheatSheets(object):
         vim_view.assert_called_with(cheatfile_path)
 
     def test_is_vim_crypted(self):
+        """is_vim_crypted() helper method detects a Vim Encrypted file, vs a
+        non-encrypted file."""
         # This test file is clear text.
         clear_cheatfile = '-test-foobar'
         clear_cheatfile_path = os.path.join(self.cheatpath, clear_cheatfile)
@@ -68,3 +75,17 @@ class TestCheatSheets(object):
         vimcrypted_cheatfile_path = os.path.join(
             self.cheatpath, vimcrypted_cheatfile)
         assert_true(self.cheatsheets.is_vim_crypted(vimcrypted_cheatfile_path))
+
+    @patch('subprocess.call', return_value=None)
+    def test_vim_view_cmd(self, subprocess_call):
+        """vim_view() uses subprocess.call() correctly."""
+        vimcrypted_cheatfile = '-test-vim_crypted'
+        vimcrypted_cheatfile_path = os.path.join(
+            self.cheatpath, vimcrypted_cheatfile)
+        assert_false(subprocess_call.called)
+        assert_true(self.cheatsheets.vim_view(vimcrypted_cheatfile_path))
+        assert_true(subprocess_call.called)
+        assert_equals(
+            ['/usr/bin/env', 'vim', '-R', vimcrypted_cheatfile_path],
+            subprocess_call.call_args[0][0]
+        )
