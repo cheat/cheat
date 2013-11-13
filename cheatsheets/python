@@ -1,0 +1,8 @@
+# Basic example of server with python
+# Will start a web server in the current dirrectory on port 8000
+# go to http://127.0.0.1:8000
+
+# Python v2.7
+python -m SimpleHTTPServer
+# Python 3
+python -m http.server 8000
