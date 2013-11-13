@@ -14,6 +14,9 @@ git add --all
 # To commit staged changes
 git commit -m "Your commit message"
 
+# To edit previous commit message
+git commit --amend
+
 # To push to the tracked master branch:
 git push origin master
 
@@ -32,5 +35,6 @@ git checkout master                                     # Checkout local master 
 git checkout -b new_branch                              # Create and checkout a new branch
 git merge upstream/master                               # Merge remote into local repo
 git show 83fb499                                        # Show what a commit did.
+git diff branch_1 branch_2                              # Check difference between branches
 git log                                                 # Show all the commits
 git status                                              # Show the changes from last commit
