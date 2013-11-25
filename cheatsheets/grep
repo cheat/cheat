@@ -9,3 +9,7 @@ grep -R pattern folder
 
 # Getting pattern from file (one by line):
 grep -f pattern_file file
+
+# Find all files who contain {pattern} in the directory {directory}.
+# This will show: "file:line my research"
+grep -rnw 'directory' -e "pattern"
