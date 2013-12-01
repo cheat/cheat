@@ -10,11 +10,14 @@ wget -c http://path.to.the/file
 # To download multiples files with multiple URLs
 wget URL1 URL2
 
-# To parse a file that contains a list of URLs to fetch each one 
+# To parse a file that contains a list of URLs to fetch each one
 wget -i url_list.txt
 
-# To download files according to a pattern 
+# To download files according to a pattern
 wget http://www.myserver.com/files-{1..15}.tar.bz2
 
 # To download all the files in a directory with a specific extension if directory indexing is enabled
 wget -r -l1 -A.extension http://myserver.com/directory
+
+# Allows you to download just the headers of responses (-S --spider) and display them on Stdout (-O -).
+wget -S --spider -O - http://google.com

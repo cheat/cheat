@@ -1,0 +1,4 @@
+# Read from {/dev/urandom} 2*512 Bytes and put it into {/tmp/test.txt}
+# Note: At the first iteration, we read 512 Bytes.
+# Note: At the second iteration, we read 512 Bytes.
+dd if=/dev/urandom of=/tmp/test.txt count=512 bs=2
