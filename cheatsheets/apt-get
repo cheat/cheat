@@ -11,3 +11,6 @@ apt-get dist-upgrade
 
 # Full command:
 apt-get update && apt-get dist-upgrade
+
+# To install a new package(s)
+apt-get install package(s)

@@ -3,3 +3,6 @@ mount -o remount,rw /
 
 # To mount Usb disk as user writable:
 mount -o uid=username,gid=usergroup /dev/sdx /mnt/xxx
+
+# To mount a remote NFS directory
+mount -t nfs example.com:/remote/example/dir /local/example/dir
