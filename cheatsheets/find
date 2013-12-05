@@ -36,3 +36,6 @@ find . -type d -empty -exec rmdir {} \;
 
 # To search for directories named build at a max depth of 2 directories
 find . -maxdepth 2 -name build -type d
+
+# To search all files who are not in .git directory
+find . ! -iwholename '*.git*' -type f
