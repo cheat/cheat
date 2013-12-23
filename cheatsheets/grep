@@ -10,6 +10,13 @@ grep -R pattern folder
 # Getting pattern from file (one by line):
 grep -f pattern_file file
 
+# Find lines NOT containing pattern
+grep -v pattern file
+
+# You can grep with regular expressions
+grep "^00" file  #Match lines starting with 00
+grep -E "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" file  #Find IP add
+
 # Find all files who contain {pattern} in the directory {directory}.
 # This will show: "file:line my research"
 grep -rnw 'directory' -e "pattern"
