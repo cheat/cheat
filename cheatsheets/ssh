@@ -13,5 +13,8 @@ ssh -X user@example.com
 # To launch a specific x application over SSH:
 ssh -X -t user@example.com 'chromium-browser'
 
+# To create a SOCKS proxy on localhost and port 9999
+ssh -D 9999 user@example.com
+
 # For more information, see:
 # http://unix.stackexchange.com/q/12755/44856

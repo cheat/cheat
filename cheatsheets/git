@@ -26,6 +26,9 @@ git push git@github.com:username/project.git
 # To delete the branch "branch_name"
 git branch -D branch_name
 
+# To see who commited which line in a file
+git blame filename
+
 # To sync a fork with the master repo:
 git remote add upstream git@github.com:name/repo.git    # Set a new repo
 git remote -v                                           # Confirm new remote repo
