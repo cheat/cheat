@@ -1,0 +1,21 @@
+# Actively follow log (like tail -f)
+journalctl -f
+
+# Display all errors since last boot
+journalctl -b -p err
+
+# Filter by time period
+journalctl --since=2012-10-15 --until="2011-10-16 23:59:59"
+
+# Show list of systemd units logged in journal
+journalctl -F _SYSTEMD_UNIT
+
+# Filter by specific unit
+journalctl -u dbus
+
+# Filter by executable name
+journalctl /usr/bin/dbus-daemon
+
+# Filter by PID
+journalctl _PID=123
+
