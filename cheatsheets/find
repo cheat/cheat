@@ -39,3 +39,6 @@ find . -maxdepth 2 -name build -type d
 
 # To search all files who are not in .git directory
 find . ! -iwholename '*.git*' -type f
+
+# Show number of inode used in current and sub directories
+sudo find . -xdev -type f | cut -d "/" -f 2 | sort | uniq -c | sort -n
