@@ -19,6 +19,12 @@ wget -i url_list.txt
 # To download files according to a pattern
 wget http://www.myserver.com/files-{1..15}.tar.bz2
 
+# To mirror a whole page locally
+wget -pk http://path.to.the/page.html
+
+# To mirror a whole site locally
+wget -mk http://path.to.the/page.html
+
 # To download all the files in a directory with a specific extension if directory indexing is enabled
 wget -r -l1 -A.extension http://myserver.com/directory
 
