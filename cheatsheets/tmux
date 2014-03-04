@@ -7,6 +7,9 @@ Ctrl-b d
 # Restore tmux session:
 tmux attach
 
+# Detach an already attached session (great if you are moving devices with different screen resolutions)
+tmux attach -d 
+
 # Display session:
 tmux ls
 
@@ -19,6 +22,9 @@ Ctrl-b ?
 
 # Scroll in window:
 Ctrl-b PageUp/PageDown
+
+# Reload configuation file
+Ctrl-b : source-file /path/to/file
 
 # Window management
 # =================
