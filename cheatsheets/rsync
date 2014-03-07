@@ -1,0 +1,6 @@
+# copy files from remote to local, maintaining file propertires and sym-links (-a), zipping for faster transfer (-z), verbose (-v).  
+rsync -avz host:file1 :file1 /dest/
+rsync -avz /source host:/dest
+
+# Copy files using checksum (-c), rather than time, to detect if the file has changed. (Useful for validating backups). 
+rsync -avc /source/ /dest/
