@@ -1,0 +1,5 @@
+# Show hit for rules with auto refresh
+watch --interval 0 'iptables -nvL | grep -v "0     0"'
+
+# Show hit for rule with auto refresh and highlight any changes since the last refresh
+watch -d -n 2 iptables -nvL
