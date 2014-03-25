@@ -1,0 +1,23 @@
+# TCPDump is a packet analyzer. It allows the user to intercept and display TCP/IP
+# and other packets being transmitted or received over a network. (cf Wikipedia).
+# Note: 173.194.40.120 => google.com
+
+# Intercepts all packets on eth0
+tcpdump -i eth0
+
+# Intercepts all packets from/to 173.194.40.120
+tcpdump host 173.194.40.120
+
+# Intercepts all packets on all interfaces from / to 173.194.40.120 port 80
+# -nn => Disables name resolution for IP addresses and port numbers.
+tcpdump -nn -i any host 173.194.40.120 and port 80
+
+# Make a grep on tcpdump (ASCII)
+# -A  => Show only ASCII in packets.
+# -s0 => By default, tcpdump only captures 68 bytes.
+tcpdump -i -A any host 173.194.40.120 and port 80 | grep 'User-Agent'
+
+# With ngrep
+# -d eth0 => To force eth0 (else ngrep work on all interfaces)
+# -s0 => force ngrep to look at the entire packet. (Default snaplen: 65536 bytes)
+ngrep 'User-Agent' host 173.194.40.120 and port 80
