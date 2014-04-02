@@ -33,7 +33,7 @@ nmap -traceroute [target]
 # ARP ping:       -PR
 
 # Example: Ping scan all machines on a class C network
-nmap -sP 192.168.0.0/24*
+nmap -sP 192.168.0.0/24
 
 # Use some script:
 nmap --script default,safe
