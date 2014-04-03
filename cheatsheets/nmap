@@ -34,3 +34,21 @@ nmap -traceroute [target]
 
 # Example: Ping scan all machines on a class C network
 nmap -sP 192.168.0.0/24
+
+# Use some script:
+nmap --script default,safe
+
+# Loads the script in the default category, the banner script, and all .nse files in the directory /home/user/customscripts.
+nmap --script default,banner,/home/user/customscripts
+
+# Loads all scripts whose name starts with http-, such as http-auth and http-open-proxy.
+nmap --script 'http-*'
+
+# Loads every script except for those in the intrusive category.
+nmap --script "not intrusive"
+
+# Loads those scripts that are in both the default and safe categories.
+nmap --script "default and safe"
+
+# Loads scripts in the default, safe, or intrusive categories, except for those whose names start with http-.
+nmap --script "(default or safe or intrusive) and not http-*"
