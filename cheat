@@ -29,6 +29,9 @@ DEFAULT_CHEAT_DIR = (os.environ.get('DEFAULT_CHEAT_DIR') or
                      os.path.join(os.path.expanduser('~'), '.cheat'))
 USE_PYGMENTS = False
 
+global gsheet
+gsheet=None
+
 # NOTE remove this check if it is confirmed to work on windows
 if os.name == 'posix' and 'CHEATCOLORS' in os.environ:
     try:
@@ -205,9 +208,19 @@ class CheatSheets(object):
             if block:
                 yield block
 
-    def search(self, term):
+    def search(self, term, searchFile):
         """Search for a term in sheetcheats"""
-        for cheat in self.sheets.keys():
+
+        # if no searchFile provided, search all cheatsheets
+        if searchFile ==  None:
+            searchList=self.sheets.keys()
+        elif searchFile in self.sheets.keys():
+            searchList=[searchFile]
+        else:
+            print "-- sorry, not such cheatsheet found. "
+            return
+
+        for cheat in searchList:
             output = ''
             for block in self.__parse_cheat_command_block(cheat):
                 if term in block:
@@ -247,10 +260,14 @@ class SearchSheet(argparse.Action):
         sheets.search(values[0])
         parser.exit()
 
+def search_sheet(searchTerm, searchFile):
+    # ixp: to replace the SearchSheet class, this is simpler
+    sheets.search(searchTerm, searchFile)
 
 def main():
     """Main execution function"""
     global sheets
+
     sheets = CheatSheets()
 
     desc = dedent('''
@@ -279,28 +296,52 @@ def main():
                                      description=desc, epilog=epi,
                                      formatter_class=argparse.
                                      RawDescriptionHelpFormatter)
-    parser_group = parser.add_mutually_exclusive_group()
-    parser_group.add_argument('sheet', metavar='cheatsheet',
+
+    # change sheet argument from mutually exclusive to more permissive
+    parser.add_argument('sheet', metavar='cheatsheet',
                               action='store', type=str, nargs='?',
                               help='Look at <cheatseet>')
+
+    # the followings are mutually exclusive options
+    parser_group = parser.add_mutually_exclusive_group()
     parser_group.add_argument('-e', '--edit', metavar='cheatsheet',
                               action=EditSheet, type=str, nargs=1,
                               help='Edit <cheatsheet>')
+
+    # -- commented out original codes
+    # parser_group.add_argument('-s', '--search', metavar='term',
+    #                           action=SearchSheet, type=str, nargs=1,
+    #                           help='Search <term> inside all cheatsheets')
+
     parser_group.add_argument('-s', '--search', metavar='term',
-                              action=SearchSheet, type=str, nargs=1,
+                              dest='searchTerm',
+                              action='store', type=str, nargs=1,
                               help='Search <term> inside all cheatsheets')
+
     parser_group.add_argument('-l', '--list',
                               action=ListCheatsheets, nargs=0,
                               help='List all available cheatsheets')
+
     parser_group.add_argument('-d', '--cheat-directories',
                               action=ListDirectories, nargs=0,
                               help='List all current cheat dirs')
+
     args = parser.parse_args()
     sheet = args.sheet
+    searchFile, searchTerm=sheet, None
+    if args.searchTerm:
+        searchTerm=args.searchTerm[0]
+
 
     # Print the cheatsheet if it exists
-    if not sheet or sheet in ['help', 'cheat']:
+    # Added additional logic for search: if search term is given or not
+    if sheet in ['help', 'cheat']:
         parser.print_help()
+    elif searchTerm:
+        if searchFile and (searchFile not in sheets.sheets):
+            print >> sys.stderr, ('No cheatsheet found for %s.' % sheet)
+            exit(1)
+        search_sheet(searchTerm, searchFile)
     elif sheet in sheets.sheets:
         filename = os.path.join(sheets.sheets[sheet], sheet)
         if USE_PYGMENTS:
