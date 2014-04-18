@@ -20,3 +20,6 @@ apt-get download modsecurity-crs
 
 # Change Cache dir and archive dir (where .deb are stored).
 apt-get -o Dir::Cache="/path/to/destination/dir/" -o Dir::Cache::archives="./" install ...
+
+# Show apt-get installed packages.
+cat /var/log/dpkg.log | grep 'install '
