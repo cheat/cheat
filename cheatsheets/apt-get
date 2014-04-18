@@ -14,3 +14,9 @@ apt-get update && apt-get dist-upgrade
 
 # To install a new package(s)
 apt-get install package(s)
+
+# Download a package without installing it. (The package will be downloaded in your current working dir)
+apt-get download modsecurity-crs
+
+# Change Cache dir and archive dir (where .deb are stored).
+apt-get -o Dir::Cache="/path/to/destination/dir/" -o Dir::Cache::archives="./" install ...
