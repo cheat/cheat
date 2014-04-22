@@ -151,7 +151,7 @@ class CheatSheets(object):
                         new_sheet = os.path.join(DEFAULT_CHEAT_DIR, cheat)
                         shutil.copy(sheet_path, new_sheet)
                         subprocess.call(editor + [new_sheet])
-                  
+
                     # fail gracefully if the cheatsheet cannot be copied. This
                     # can happen if DEFAULT_CHEAT_DIR does not exist
                     except IOError:
@@ -179,7 +179,7 @@ class CheatSheets(object):
                                      "Please retry usig sudo." % cheat)
                         print >> sys.stderr, error_msg
                         exit(1)
-        except OSError, errno:
+        except OSError as errno:
             print >> sys.stderr, ("Could not launch `%s` as your editor : %s"
                                   % (editor[0], errno.strerror))
             exit(1)
@@ -216,7 +216,7 @@ class CheatSheets(object):
                     output += ''.join(["    " + line + '\n' for line
                                        in block.split('\n')])
             if output:
-                print output,
+                sys.stdout.write(output);
 
 
 # Custom action for argparse
@@ -230,7 +230,7 @@ class ListDirectories(argparse.Action):
 class ListCheatsheets(argparse.Action):
     """List cheatsheets and exit"""
     def __call__(self, parser, namespace, values, option_string=None):
-        print sheets.list()
+        print(sheets.list());
         parser.exit()
 
 

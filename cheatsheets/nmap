@@ -8,7 +8,7 @@ nmap -iL [list.txt]
 nmap -6 [target]
 
 # OS detection:
-nmap -O [target]
+nmap -O --osscan_guess [target]
 
 # Save output to text file:
 nmap -oN [output.txt] [target]
@@ -21,6 +21,9 @@ nmap -source-port [port] [target]
 
 # Do an aggressive scan:
 nmap -A [target]
+
+# Speedup your scan:
+nmap -T5 --min-parallelism=50 [target]
 
 # Traceroute:
 nmap -traceroute [target]
