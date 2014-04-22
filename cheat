@@ -21,6 +21,7 @@ cheat.py -- cheat allows you to create and view interactive cheatsheets on the
 
 import os
 import sys
+import magic
 import argparse
 import subprocess
 from textwrap import dedent
@@ -41,25 +42,6 @@ if os.name == 'posix' and 'CHEATCOLORS' in os.environ:
         pass
 
 
-def pretty_print(filename):
-    """Applies syntax highlighting to a cheatsheet and writes it to stdout"""
-    try:
-        if os.path.splitext(filename)[1]:
-            lexer = get_lexer_for_filename(filename)
-        else:
-            # shell is a sensible default when there is no extension
-            lexer = get_lexer_for_filename(filename + '.sh')
-
-    except ClassNotFound:
-        lexer = TextLexer()
-
-    with open(filename) as istream:
-        code = istream.read()
-
-    fmt = TerminalFormatter()
-    highlight(code, lexer, fmt, sys.stdout)
-
-
 class CheatSheets(object):
     """Cheatsheets database class."""
     dirs = None
@@ -77,7 +59,7 @@ class CheatSheets(object):
 
     def __cheat_directories(self):
         """Assembles a list of directories containing cheatsheets."""
-        default_directories = [DEFAULT_CHEAT_DIR]
+        default_directories = [DEFAULT_CHEAT_DIR, ]
         try:
             import cheatsheets
             default_directories.append(cheatsheets.cheat_dir)
@@ -106,7 +88,7 @@ class CheatSheets(object):
         return cheats
 
     def edit(self, cheat):
-        """Creates or edits a cheatsheet"""
+        """Creates or edits a cheatsheet."""
 
         # Assert that the EDITOR environment variable is set and that at least
         # 3 arguments have been given
@@ -115,7 +97,7 @@ class CheatSheets(object):
                                   'must set your EDITOR environment variable '
                                   'to your favorite editor\'s path.')
             exit(1)
-        elif os.environ['EDITOR'] == "":
+        elif os.environ['EDITOR'] == '':
             print >> sys.stderr, ('Your EDITOR environment variable is set '
                                   'to nothing, in order to create/edit a '
                                   'cheatsheet your must set it to a valid '
@@ -155,9 +137,8 @@ class CheatSheets(object):
                     # fail gracefully if the cheatsheet cannot be copied. This
                     # can happen if DEFAULT_CHEAT_DIR does not exist
                     except IOError:
-                      print ('Could not copy cheatsheet for editing.')
-                      exit(1)
-
+                        print ('Could not copy cheatsheet for editing.')
+                        exit(1)
             # otherwise, create it
             else:
                 import cheatsheets as cs
@@ -185,10 +166,62 @@ class CheatSheets(object):
             exit(1)
 
     def list(self):
-        """Lists the cheatsheets that are currently available"""
+        """Lists the cheatsheets that are currently available."""
         max_command = max([len(x) for x in self.sheets.keys()]) + 3
         return ('\n'.join(sorted(['%s [%s]' % (key.ljust(max_command), value)
                                   for key, value in self.sheets.items()])))
+
+    def display_sheet(self, sheet):
+        """Display a single sheet."""
+        filepath = os.path.join(self.sheets[sheet], sheet)
+        if self.is_vim_crypted(filepath):
+            self.vim_view(filepath)
+        elif USE_PYGMENTS:
+            self.pretty_print(filepath)
+        else:
+            with open(filepath) as istream:
+                for l in istream:
+                    sys.stdout.write(l)
+
+    def pretty_print(self, filepath):
+        """Applies syntax highlighting to a cheatsheet and writes it to
+        stdout."""
+        try:
+            if os.path.splitext(filepath)[1]:
+                lexer = get_lexer_for_filename(filepath)
+            else:
+                # shell is a sensible default when there is no extension
+                lexer = get_lexer_for_filename(filepath + '.sh')
+
+        except ClassNotFound:
+            lexer = TextLexer()
+
+        with open(filepath) as istream:
+            code = istream.read()
+
+        fmt = TerminalFormatter()
+        highlight(code, lexer, fmt, sys.stdout)
+
+    def is_vim_crypted(self, filepath):
+        """Helper method that returns True if the canonical file path is a Vim
+        Encrypted file."""
+        canonical_path = os.path.realpath(filepath)
+        return 'vim encrypted' in magic.from_file(canonical_path).lower()
+
+    def vim_view(self, filepath):
+        """Use Vim to read an Vim Encrypted file."""
+        canonical_path = os.path.realpath(filepath)
+        env_cmd = '/usr/bin/env'
+        # This should never happen.  (see first line of this file)
+        if not os.path.isfile(env_cmd):
+            sys.stderr.write('No environment command {0}\n'.format(env_cmd))
+            exit(1)
+        try:
+            subprocess.call([env_cmd, 'vim', '-R', canonical_path, ])
+            return True
+        except Exception as e:
+            sys.stderr.write('Unknown exception: {0}\n'.format(unicode(e)))
+            exit(1)
 
     def __parse_cheat_command_block(self, cheat):
         """Parse text blocks inside specified sheet file"""
@@ -221,21 +254,21 @@ class CheatSheets(object):
 
 # Custom action for argparse
 class ListDirectories(argparse.Action):
-    """List cheat directories and exit"""
+    """List cheat directories and exit."""
     def __call__(self, parser, namespace, values, option_string=None):
-        print("\n".join(sheets.dirs))
+        print('\n'.join(sheets.dirs))
         parser.exit()
 
 
 class ListCheatsheets(argparse.Action):
-    """List cheatsheets and exit"""
+    """List cheatsheets and exit."""
     def __call__(self, parser, namespace, values, option_string=None):
         print(sheets.list());
         parser.exit()
 
 
 class EditSheet(argparse.Action):
-    """If the user wants to edit a cheatsheet"""
+    """If the user wants to edit a cheatsheet."""
     def __call__(self, parser, namespace, values, option_string=None):
         sheets.edit(values[0])
         parser.exit()
@@ -275,14 +308,13 @@ def main():
     cheat -l
     ''').strip()
 
-    parser = argparse.ArgumentParser(prog='cheat',
-                                     description=desc, epilog=epi,
-                                     formatter_class=argparse.
-                                     RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        prog='cheat', description=desc, epilog=epi,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
     parser_group = parser.add_mutually_exclusive_group()
     parser_group.add_argument('sheet', metavar='cheatsheet',
                               action='store', type=str, nargs='?',
-                              help='Look at <cheatseet>')
+                              help='Look at <cheatsheet>')
     parser_group.add_argument('-e', '--edit', metavar='cheatsheet',
                               action=EditSheet, type=str, nargs=1,
                               help='Edit <cheatsheet>')
@@ -302,14 +334,7 @@ def main():
     if not sheet or sheet in ['help', 'cheat']:
         parser.print_help()
     elif sheet in sheets.sheets:
-        filename = os.path.join(sheets.sheets[sheet], sheet)
-        if USE_PYGMENTS:
-            pretty_print(filename)
-        else:
-            with open(filename) as istream:
-                for line in istream:
-                    sys.stdout.write(line)
-
+        sheets.display_sheet(sheet)
     # if it does not, say so
     else:
         print >> sys.stderr, ('No cheatsheet found for %s.' % sheet)
