@@ -17,6 +17,15 @@ git commit -m "Your commit message"
 # To edit previous commit message
 git commit --amend
 
+# To removed staged and working directory changes
+git reset --hard
+
+# To remove untracked files
+git clean -f -d
+
+# To remove untracked and ignored files
+git clean -f -d -x
+
 # To push to the tracked master branch:
 git push origin master
 
