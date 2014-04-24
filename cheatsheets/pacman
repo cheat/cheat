@@ -32,12 +32,17 @@ pacman -Qdt
 
 
 # You can't directly install packages from the Arch User Database (AUR) with pacman.
-# You need yaourt to perform that. But considering yaourt itself is in the AUR, here is how to 
-build a package from its tarball.
-# First, get the .tar.gz archive and unpack it
-wget <archive url>
-tar -xzf <archive file>
-cd <unpacked folder>
-# Then build the package and install it
+# You need yaourt to perform that. But considering yaourt itself is in the AUR, here is how to build a package from its tarball.
+# Installing a package from AUR is a relatively simple process:
+# - Retrieve the archive corresponding to your package from AUR website
+# - Extract the archive (preferably in a folder for this purpose)
+# - Run makepkg in the extracted directory. (makepkg-s allows you to install any dependencies automatically from deposits.)
+# - Install the package created using pacman
+# Assuming $pkgname contains the package name.
+wget "https://aur.archlinux.org/packages/${pkgname::2}/$pkgname/$pkgname.tar.gz"
+tar zxvf "$pkgname.tar.gz"
+cd "$pkgname"
+# Build the package
 makepkg -s
-pacman -U <package file (.pkg.tar.xz)>
+# Install
+sudo pacman -U <package file (.pkg.tar.xz)>
