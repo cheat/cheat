@@ -10,8 +10,8 @@ remember.
 `cheat` depends only on `python` and `pip`.
 
 
-Examples
-========
+Example
+-------
 The next time you're forced to disarm a nuclear weapon without consulting
 Google, you may run:
 
@@ -19,7 +19,7 @@ Google, you may run:
 
 You will be presented with a cheatsheet resembling:
 
-```text
+```
 # To extract an uncompressed archive: 
 tar -xvf /path/to/foo.tar
 
@@ -44,7 +44,7 @@ to store notes on your favorite cookie recipes, feel free.
 
 
 Installing
-==========
+----------
 First install the required python dependencies with:
 
     sudo pip install docopt pygments
@@ -55,40 +55,38 @@ Then, clone this repository, `cd` into it, and run:
 
 
 Modifying Cheatsheets
-=====================
+---------------------
 The value of `cheat` is that it allows you to create your own cheatsheets - the
 defaults are meant to serve only as a starting point, and can and should be
 modified.
 
 Cheatsheets are stored in the `~/.cheat/` directory, and are named on a
 per-keyphrase basis. In other words, the content for the `tar` cheatsheet lives
-in the `~/.cheat/tar` file. To add a cheatsheet for a `foo` command, you would
-create file `~/.cheat/foo`, whereby that file contained the cheatsheet content.
+in the `~/.cheat/tar` file.
 
-Note that `cheat` supports "subcommands" simply by naming files appropriately.
-Thus, if you wanted to create a cheatsheet not only (for example) for `git` but
-also for `git commit`, you could do so be creating cheatsheet files of the
-appropriate names (`git` and `git commit`).
+Provided that you have an `EDITOR` environment variable set, you may edit
+cheatsheets with:
+
+    cheat -e foo
+
+If the 'foo' cheatsheet already exists, it will be opened for editing.
+Otherwise, it will be created automatically.
 
 After you've customized your cheatsheets, I urge you to track `~/.cheat/` along
 with your [dotfiles][].
 
 
-Advanced Features
-=================
+Configuring
+-----------
 
-Setting a DEFAULT_CHEAT_DIR
----------------------------
+### Setting a DEFAULT_CHEAT_DIR ###
 Personal cheatsheets are saved in the `~/.cheat` directory by default, but you
 can specify a different default by exporting a `DEFAULT_CHEAT_DIR` environment
 variable:
 
-```bash
-export DEFAULT_CHEAT_DIR=/path/to/my/cheats
-```
+    export DEFAULT_CHEAT_DIR=/path/to/my/cheats
 
-Setting a CHEATPATH
--------------------
+### Setting a CHEATPATH ###
 You can additionally instruct `cheat` to look for cheatsheets in other
 directories by exporting a `CHEATPATH` environment variable:
 
@@ -100,36 +98,21 @@ You may, of course, append multiple directories to your `CHEATPATH`:
 
 You may view which directories are on your `CHEATPATH` with `cheat -d`.
 
-Enabling Syntax Highlighting
-----------------------------
+### Enabling Syntax Highlighting ###
 `cheat` can apply syntax highlighting to your cheatsheets if so desired. To
 enable this feature, set a `CHEATCOLORS` environment variable:
 
     export CHEATCOLORS=true
 
-Creating/Editing Cheatsheets
-----------------------------
-Provided that you have an `EDITOR` environment variable set, you may create new
-cheatsheets via:
-
-    cheat -e foo
-
-If the 'foo' cheatsheet already exists, it will be opened for editing.
-
-By default, `cheat` will attempt to write new cheatsheets to `~/.cheat`, and
-will create the `~/.cheat` directory if necessary. If it is unable to do so,
-the new cheatsheet will be written to the default cheatsheet directory instead,
-though this will likely require `sudo`.
-
 
 Contributing
-============
+------------
 If you would like to contribute cheetsheets or program functionality, please
 fork this repository, make your changes, and send me a pull request.
 
 
 Related Projects
-================
+----------------
 
 - [lucaswerkmeister/cheats][1]: An implementation of this concept in pure bash
   that also allows not only for numerical indexing of subcomands but also
