@@ -7,7 +7,7 @@ remember.
 
 ![The obligatory xkcd](http://imgs.xkcd.com/comics/tar.png 'The obligatory xkcd')
 
-`cheat` depends only on python.
+`cheat` depends only on `python` and `pip`.
 
 
 Examples
@@ -15,9 +15,7 @@ Examples
 The next time you're forced to disarm a nuclear weapon without consulting
 Google, you may run:
 
-```sh
-cheat tar
-```
+    cheat tar
 
 You will be presented with a cheatsheet resembling:
 
@@ -38,7 +36,7 @@ tar -xjvf /path/to/foo.tgz
 tar -cjvf /path/to/foo.tgz /path/to/foo/
 ```
 
-To see what cheatsheets are availble, run `cheat` with no arguments.
+To see what cheatsheets are availble, run `cheat -l`.
 
 Note that, while `cheat` was designed primarily for *nix system administrators,
 it is agnostic as to what content it stores. If you would like to use `cheat`
@@ -47,38 +45,14 @@ to store notes on your favorite cookie recipes, feel free.
 
 Installing
 ==========
+First install the required python dependencies with:
 
-### Installing for all users (requires root)
+    sudo pip install docopt pygments
 
-Clone this repository and `cd` into it, then run
+Then, clone this repository, `cd` into it, and run:
 
     sudo python setup.py install
 
-### Installing in your home directory
-
-Clone this repository and `cd` into it, then run
-
-    mkdir -p ~/bin
-    cp cheat ~/bin
-    mkdir ~/.cheat
-    cp cheatsheets/* ~/.cheat
-
-### Testing
-
-After installing for all users or in your home directory, try `cheat tar` for instance.
-
-### Troubleshooting
-
-In case you got an error such as:
-> ImportError: No module named argparse
-
-You're probably using python < 2.7 and you need to manually install the argparse module.
-You can do this easily with pip:
-```bash
-sudo apt-get install python-pip
-sudo pip install argparse
-```
-Other methods: https://pypi.python.org/pypi/argparse
 
 Modifying Cheatsheets
 =====================
@@ -118,15 +92,11 @@ Setting a CHEATPATH
 You can additionally instruct `cheat` to look for cheatsheets in other
 directories by exporting a `CHEATPATH` environment variable:
 
-```bash
-export CHEATPATH=/path/to/my/cheats
-```
+    export CHEATPATH=/path/to/my/cheats
 
 You may, of course, append multiple directories to your `CHEATPATH`:
 
-```bash
-export CHEATPATH=$CHEATPATH:/path/to/more/cheats
-```
+    export CHEATPATH=$CHEATPATH:/path/to/more/cheats
 
 You may view which directories are on your `CHEATPATH` with `cheat -d`.
 
@@ -135,18 +105,14 @@ Enabling Syntax Highlighting
 `cheat` can apply syntax highlighting to your cheatsheets if so desired. To
 enable this feature, set a `CHEATCOLORS` environment variable:
 
-```bash
-export CHEATCOLORS=true
-```
+    export CHEATCOLORS=true
 
 Creating/Editing Cheatsheets
 ----------------------------
 Provided that you have an `EDITOR` environment variable set, you may create new
 cheatsheets via:
 
-```bash
-cheat -e foo
-```
+    cheat -e foo
 
 If the 'foo' cheatsheet already exists, it will be opened for editing.
 
