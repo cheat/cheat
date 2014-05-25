@@ -12,7 +12,7 @@ if os.name == 'nt':
 
 setup(
     name         = 'cheat',
-    version      = '2.0.2',
+    version      = '2.0.3',
     author       = 'Chris Lane',
     author_email = 'chris@chris-allen-lane.com',
     license      = 'GPL3',
