@@ -47,7 +47,7 @@ def get():
     # if we've already reached out to the filesystem, just return the result
     # from memory
     if cheats:
-      return cheats
+        return cheats
 
     # otherwise, scan the filesystem
     for cheat_dir in reversed(paths()):
