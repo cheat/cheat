@@ -23,7 +23,7 @@ def colorize(sheet_content):
 
 def die(message):
     """ Prints a message to stderr and then terminates """
-    warn (message)
+    warn(message)
     exit(1)
 
 
