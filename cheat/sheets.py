@@ -2,6 +2,12 @@ from cheat import cheatsheets
 from cheat.utils import *
 import os
 
+# @kludge: it breaks the functional paradigm to a degree, but declaring this
+# var here (versus within get()) gives us a "poor man's" memoization on the
+# call to get(). This, in turn, spares us from having to call out to the
+# filesystem more than once.
+cheats = {}
+
 
 def default_path():
     """ Returns the default cheatsheet path """
@@ -35,10 +41,15 @@ def default_path():
     return default_sheets_dir
 
 
-# @todo: memoize result
 def get():
     """ Assembles a dictionary of cheatsheets as name => file-path """
-    cheats = {}
+
+    # if we've already reached out to the filesystem, just return the result
+    # from memory
+    if cheats:
+      return cheats
+
+    # otherwise, scan the filesystem
     for cheat_dir in reversed(paths()):
         cheats.update(
             dict([
