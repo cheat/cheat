@@ -9,6 +9,10 @@ remember.
 
 `cheat` depends only on `python` and `pip`.
 
+PyPI status:
+
+[![Latest Version](https://pypip.in/version/cheat/badge.png)](https://pypi.python.org/pypi/cheat/)
+[![Downloads](https://pypip.in/download/cheat/badge.png)](https://pypi.python.org/pypi/cheat/)
 
 Example
 -------
