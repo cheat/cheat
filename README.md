@@ -49,6 +49,13 @@ to store notes on your favorite cookie recipes, feel free.
 
 Installing
 ----------
+
+The easy way
+
+    sudo pip install cheat
+    
+The old way
+
 First install the required python dependencies with:
 
     sudo pip install docopt pygments
