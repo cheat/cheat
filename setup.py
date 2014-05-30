@@ -46,7 +46,7 @@ class my_install_scripts(install_scripts):
 
 setup(
     name         = 'cheat',
-    version      = '2.0.7',
+    version      = '2.0.8',
     author       = 'Chris Lane',
     author_email = 'chris@chris-allen-lane.com',
     license      = 'GPL3',
