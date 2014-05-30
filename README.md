@@ -104,6 +104,13 @@ enable this feature, set a `CHEATCOLORS` environment variable:
 
     export CHEATCOLORS=true
 
+### Enabling Command-line Autocompletion ###
+The `cheat/autocompletion` directory contains scripts to enable command-line
+autocompletion for various shells. To activate autocompletion, simply copy the
+appropriate script to the appropriate path on your system. (The "appropriate
+path" will vary on a per-platform basis, so this documentation shall not
+speculate as to where that may be.)
+
 
 Related Projects
 ----------------
