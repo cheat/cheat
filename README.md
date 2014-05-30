@@ -9,6 +9,10 @@ remember.
 
 `cheat` depends only on `python` and `pip`.
 
+PyPI status:
+
+[![Latest Version](https://pypip.in/version/cheat/badge.png)](https://pypi.python.org/pypi/cheat/)
+[![Downloads](https://pypip.in/download/cheat/badge.png)](https://pypi.python.org/pypi/cheat/)
 
 Example
 -------
@@ -45,6 +49,13 @@ to store notes on your favorite cookie recipes, feel free.
 
 Installing
 ----------
+
+The easy way
+
+    sudo pip install cheat
+    
+The old way
+
 First install the required python dependencies with:
 
     sudo pip install docopt pygments
