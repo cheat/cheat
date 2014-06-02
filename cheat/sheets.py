@@ -1,5 +1,6 @@
 from cheat import cheatsheets
 from cheat.utils import *
+from xdg.BaseDirectory import save_data_path
 import os
 
 # @kludge: it breaks the functional paradigm to a degree, but declaring this
@@ -19,7 +20,16 @@ def default_path():
         die('Please do not run this application as root.');
 
     # determine the default cheatsheet dir
-    default_sheets_dir = os.environ.get('DEFAULT_CHEAT_DIR') or os.path.join(os.path.expanduser('~'), '.cheat')
+    if os.environ.get('DEFAULT_CHEAT_DIR'):
+        # if the environment variable is set, use it in any case
+        default_sheets_dir = os.environ.get('DEFAULT_CHEAT_DIR')
+    else:
+        # use `.cheat` in the users HOME *if* it exists
+        default_sheets_dir = os.path.join(os.path.expanduser('~'), '.cheat')
+        if not os.path.isdir(default_sheets_dir):
+            # or else use `cheat` in the systems prefered data-directory
+            # the directory is created if it doesn't already exists
+            default_sheets_dir = save_data_path('cheat')
 
     # create the DEFAULT_CHEAT_DIR if it does not exist
     if not os.path.isdir(default_sheets_dir):
