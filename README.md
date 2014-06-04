@@ -50,11 +50,12 @@ to store notes on your favorite cookie recipes, feel free.
 Installing
 ----------
 
-The easy way
+### Using pip ###
 
     sudo pip install cheat
     
-The old way
+
+### Manually ###
 
 First install the required python dependencies with:
 
