@@ -50,6 +50,11 @@ to store notes on your favorite cookie recipes, feel free.
 Installing
 ----------
 
+### Using homebrew ###
+
+    brew install cheat
+    
+    
 ### Using pip ###
 
     sudo pip install cheat
