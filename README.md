@@ -49,17 +49,15 @@ to store notes on your favorite cookie recipes, feel free.
 
 Installing
 ----------
+    
+### Using pip ###
+
+    sudo pip install cheat
 
 ### Using homebrew ###
 
     brew install cheat
     
-    
-### Using pip ###
-
-    sudo pip install cheat
-    
-
 ### Manually ###
 
 First install the required python dependencies with:
