@@ -25,7 +25,7 @@ def create_or_edit(sheet):
     # if the cheatsheet does not exist
     if not exists(sheet):
         create(sheet)
-    
+
     # if the cheatsheet exists and is writeable...
     elif exists(sheet) and is_writable(sheet):
         edit(sheet)
@@ -41,8 +41,14 @@ def create_or_edit(sheet):
 
         # if yes, copy the cheatsheet to the home directory before editing
         if yes:
-            copy(path(sheet), os.path.join(sheets.default_path(), sheet))
-            edit(sheet)
+            new_sheet_path = os.path.join(sheets.default_path(), sheet)
+            copy(path(sheet), new_sheet_path)
+            # don't call edit() since the cheatsheets cache would return the previous location of the sheet
+            try:
+                subprocess.call([editor(), new_sheet_path])
+
+            except OSError:
+                die('Could not launch ' + editor())
 
         # if no, just abort
         else:
