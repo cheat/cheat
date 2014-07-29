@@ -30,3 +30,6 @@ wget -r -l1 -A.extension http://myserver.com/directory
 
 # Allows you to download just the headers of responses (-S --spider) and display them on Stdout (-O -).
 wget -S --spider -O - http://google.com
+
+# Change the User-Agent to 'User-Agent: toto'
+wget -U 'toto' http://google.com
