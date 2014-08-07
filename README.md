@@ -141,6 +141,8 @@ Related Projects
 - [`cheat` RubyGem][3]: A clever gem from 2006 that clearly had similar
   motivations. It is unclear whether or not it is currently maintained.
 
+- [`tldr`][tldr]: "Simplified and community-driven man pages".
+
 
 [dotfiles]:  http://dotfiles.github.io/
 [jahendrie]: https://github.com/jahendrie
@@ -148,3 +150,4 @@ Related Projects
 [2]:         https://github.com/jahendrie/cheat
 [3]:         http://errtheblog.com/posts/21-cheat
 [4]:         https://github.com/chrisallenlane/cheat/pull/77
+[tldr]:      https://github.com/tldr-pages/tldr
