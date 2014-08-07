@@ -1,0 +1,14 @@
+# To install a package:
+rpm -ivh <rpm>
+
+# To remove a package:
+rpm -e <package>
+
+# To find what package installs a file:
+rpm -qf </path/to/file>
+
+# To find what files are installed by a package:
+rpm -qpl <rpm>
+
+# To list all installed packages:
+rpm -qa
