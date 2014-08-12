@@ -1,5 +1,5 @@
 # To implement a for loop:
-for file in `ls .`;
+for file in *;
 do 
     echo $file found;
 done
