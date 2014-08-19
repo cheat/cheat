@@ -1,6 +1,8 @@
 import os
 import sys
 
+from xdg.BaseDirectory import save_data_path
+
 
 def colorize(sheet_content):
     """ Colorizes cheatsheet content if so configured """
@@ -54,3 +56,35 @@ def prompt_yes_or_no(question):
 def warn(message):
     """ Prints a message to stderr """
     print >> sys.stderr, (message)
+
+
+def get_default_data_dir():
+    """
+    Returns the full path to the directory containing the users data.
+
+    Which directory is used, is determined the following way:
+
+    1. If the `DEFAULT_CHEAT_DIR` environment variable is set, use it.
+
+    2. If a `.cheat` directory exists in the home directory, use it.
+
+    3. Use a `cheat` directory in the systems default directory for user data.
+
+    """
+    user_dir = os.environ.get("DEFAULT_CHEAT_DIR")
+    if not user_dir:
+        user_dir = os.path.expanduser(os.path.join("~", ".cheat"))
+        if not os.path.exists(user_dir):
+            user_dir = get_userdata_dir()
+    return user_dir
+
+
+def get_userdata_dir():
+    """
+    Returns the full path to a `cheat` directory in the platform specific
+    default data directory for the current user.
+
+    .. note:: The directory is created, if it's not already present.
+
+    """
+    return save_data_path('cheat')

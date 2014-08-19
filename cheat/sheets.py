@@ -10,16 +10,16 @@ cheats = {}
 
 
 def default_path():
-    """ Returns the default cheatsheet path """
+    """ Returns the full path to the default cheatsheet directory """
 
     # the default path becomes confused when cheat is run as root, so fail
     # under those circumstances. (There is no good reason to need to run cheat
     # as root.)
     if os.name != 'nt' and os.geteuid() == 0:
-        die('Please do not run this application as root.');
+        die('Please do not run this application as root.')
 
     # determine the default cheatsheet dir
-    default_sheets_dir = os.environ.get('DEFAULT_CHEAT_DIR') or os.path.join(os.path.expanduser('~'), '.cheat')
+    default_sheets_dir = get_default_data_dir()
 
     # create the DEFAULT_CHEAT_DIR if it does not exist
     if not os.path.isdir(default_sheets_dir):
