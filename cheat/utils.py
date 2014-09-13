@@ -48,8 +48,16 @@ def editor():
 
 def prompt_yes_or_no(question):
     """ Prompts the user with a yes-or-no question """
+    # Support Python 2 and 3 input
+    # Default to Python 2's input()
+    get_input = raw_input
+ 
+    # If this is Python 3, use input()
+    if sys.version_info[:2] >= (3, 0):
+        get_input = input
+
     print(question)
-    return raw_input('[y/n] ') == 'y'
+    return get_input('[y/n] ') == 'y'
 
 
 def warn(message):
