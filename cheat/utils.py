@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import sys
 
@@ -53,4 +54,4 @@ def prompt_yes_or_no(question):
 
 def warn(message):
     """ Prints a message to stderr """
-    print >> sys.stderr, (message)
+    print((message), file=sys.stderr)
