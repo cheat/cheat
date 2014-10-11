@@ -1,0 +1,5 @@
+#retrieve all of the variables under system
+snmpwalk -Os -c public -v 1 zeus system
+
+#retrieve the scalar values, but omit the sysORTable
+snmpwalk -Os -c public -v 1 -CE sysORTable zeus system
