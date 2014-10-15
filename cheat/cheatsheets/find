@@ -20,7 +20,7 @@ find ./path/ -name '*.txt' -exec rm '{}' \;
 find ./path/ -name '*.txt' | xargs grep 'string'
 
 # To find files with size bigger than 5 Mb and sort them by size:
-find ./ -size +5M -type f -print0 | xargs -0 ls -Ssh
+find /var -size +5M -type f -ls |sort -rn -k7,7|head
 
 # To find files bigger thank 2 MB and list them:
 find / -type f -size +20000k -exec ls -lh {} \; | awk '{ print $9 ": " $5 }'
