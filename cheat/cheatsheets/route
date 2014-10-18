@@ -1,0 +1,5 @@
+# Add a default gateway:
+route add default gateway 192.168.0.1
+
+# Display routing table IP addresses instead of host names:
+route -n

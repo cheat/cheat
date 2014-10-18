@@ -12,3 +12,9 @@ in
     2) echo "two found";;
     3*) echo "something beginning with 3 found";;
 esac
+
+# Turn on debugging:
+set -x
+
+# Turn off debugging:
+set +x
