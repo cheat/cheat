@@ -20,10 +20,10 @@ find ./path/ -name '*.txt' -exec rm '{}' \;
 find ./path/ -name '*.txt' | xargs grep 'string'
 
 # To find files with size bigger than 5 Mb and sort them by size:
-find ./ -size +5M -type f -print0 | xargs -0 ls -Ssh
+find . -size +5M -type f -print0 | xargs -0 ls -Ssh | sort -z
 
 # To find files bigger thank 2 MB and list them:
-find / -type f -size +20000k -exec ls -lh {} \; | awk '{ print $9 ": " $5 }'
+find . -type f -size +20000k -exec ls -lh {} \; | awk '{ print $9 ": " $5 }'
 
 # To find files modified more than 7 days ago and list file information
 find . -type f -mtime +7d -ls
@@ -41,4 +41,4 @@ find . -maxdepth 2 -name build -type d
 find . ! -iwholename '*.git*' -type f
 
 # Find all files that have the same node (hard link) as MY_FILE_HERE
-find / -type f -samefile MY_FILE_HERE 2>/dev/null
+find . -type f -samefile MY_FILE_HERE 2>/dev/null
