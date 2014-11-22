@@ -10,6 +10,9 @@ ssh -t user@example.com 'the-remote-command'
 # To tunnel an x session over SSH:
 ssh -X user@example.com
 
+# Redirect traffic with a tunnel between local host (port 8080) and a remote host (remote.example.com:5000) through a proxy (personal.server.com):
+ssh -f -L 8080:remote.example.com:5000 user@personal.server.com -N
+
 # To launch a specific x application over SSH:
 ssh -X -t user@example.com 'chromium-browser'
 
