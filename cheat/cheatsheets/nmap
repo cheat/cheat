@@ -24,7 +24,7 @@ nmap -A [target]
 
 # Speedup your scan:
 # -n => disable ReverseDNS
-# --min-rate=X => min 300 packets / sec
+# --min-rate=X => min X packets / sec
 nmap -T5 --min-parallelism=50 -n --min-rate=300 [target]
 
 # Traceroute:
