@@ -1,2 +1,4 @@
 *.pyc
+MANIFEST
 build
+dist
