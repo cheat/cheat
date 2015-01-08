@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-import os
 
 setup(
     name         = 'cheat',
@@ -14,7 +13,7 @@ setup(
     url          = 'https://github.com/chrisallenlane/cheat',
     packages     = find_packages(),
     package_data = {
-        'cheat.cheatsheets': [f for f in os.listdir('cheat/cheatsheets') if '.' not in f]
+        'cheat.cheatsheets': ['*'],
     },
     scripts          = ['bin/cheat'],
     install_requires = [
