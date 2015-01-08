@@ -1,3 +1,13 @@
+"""cheat
+    ~~~~~~~~
+
+    cheat allows you to create and view interactive cheatsheets on the
+    command-line. It was designed to help remind *nix system administrators of
+    options for commands that they use frequently, but not frequently enough
+    to remember.
+    :license: GPL3
+"""
+
 from setuptools import setup, find_packages
 
 setup(
@@ -6,10 +16,8 @@ setup(
     author       = 'Chris Lane',
     author_email = 'chris@chris-allen-lane.com',
     license      = 'GPL3',
-    description  = 'cheat allows you to create and view interactive cheatsheets '
-    'on the command-line. It was designed to help remind *nix system '
-    'administrators of options for commands that they use frequently, but not '
-    'frequently enough to remember.',
+    description  = 'cheat allows you to create and view interactive cheatsheets on the command-line',
+    long_description = __doc__,
     url          = 'https://github.com/chrisallenlane/cheat',
     packages     = find_packages(),
     package_data = {
