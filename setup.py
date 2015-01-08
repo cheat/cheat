@@ -23,7 +23,11 @@ setup(
     package_data = {
         'cheat.cheatsheets': ['*'],
     },
-    scripts          = ['bin/cheat'],
+    entry_points = {
+        'console_scripts': [
+            'cheat = cheat.app:main',
+        ],
+    },
     install_requires = [
         'docopt >= 0.6.1',
         'pygments >= 1.6.0',
