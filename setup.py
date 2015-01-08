@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 
 setup(
@@ -12,11 +12,7 @@ setup(
     'administrators of options for commands that they use frequently, but not '
     'frequently enough to remember.',
     url          = 'https://github.com/chrisallenlane/cheat',
-    packages     = [
-        'cheat',
-        'cheat.cheatsheets',
-        'cheat.test',
-    ],
+    packages     = find_packages(),
     package_data = {
         'cheat.cheatsheets': [f for f in os.listdir('cheat/cheatsheets') if '.' not in f]
     },
