@@ -1,4 +1,5 @@
 # show all lines without duplication
+# "sort -u" and "uniq" is the same effect.
 sort file | uniq
 # show not duplicated lines
 sort file | uniq -u
