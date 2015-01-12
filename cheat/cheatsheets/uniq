@@ -9,4 +9,4 @@ sort file | uniq -c
 # count not duplicated lines
 sort file | uniq -uc
 # count only duplicated lines
-sort file | uniq -c
+sort file | uniq -dc
