@@ -8,4 +8,4 @@ dpkg -P test.deb
 dpkg -I
 
 # Find out if a Debian package is installed or not
-dpkg -s test.deb | grepStatus
+dpkg -s test.deb | grep Status
