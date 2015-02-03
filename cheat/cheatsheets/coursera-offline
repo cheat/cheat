@@ -1,0 +1,17 @@
+# Cheatsheet for coursera-offline available at https://pypi.python.org/pypi/coursera_offline
+
+# To download videos for the first time
+coursera_offline.py -d <download-directory> -s <course-shortname> -e <email> -p <password>
+
+# To synch the videos in coursera with your local videos
+coursera_offline.py -d <download-directory> -S -e <email> -p <password>
+
+# To auto synch the videos
+coursera_offline.py -a <Day of the week> -s <course-shortname> -e <email> -p <password>
+
+# Fetch using file
+coursera_offline.py -d <download-directory> -f -e <email> -p <password>
+
+# To avoid giving email and password everytime simply don't provide them to force the script
+# to use session cookies
+coursera_offline [options] [args]
