@@ -1,4 +1,5 @@
 *.pyc
 MANIFEST
 build
+cheat.egg-info
 dist
