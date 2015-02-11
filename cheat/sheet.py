@@ -32,21 +32,9 @@ def create_or_edit(sheet):
 
     # if the cheatsheet exists but is not writable...
     elif exists(sheet) and not is_writable(sheet):
-        # ... ask the user if we should copy the cheatsheet to her home directory for editing
-        yes = prompt_yes_or_no(
-          'The ' + sheet + ' sheet is not editable. Do you want to copy it to '
-          'your user cheatsheets directory before editing? Keep in mind that '
-          'your sheet will always be used before system-wide one.'
-        )
-
-        # if yes, copy the cheatsheet to the home directory before editing
-        if yes:
-            copy(path(sheet), os.path.join(sheets.default_path(), sheet))
-            edit(sheet)
-
-        # if no, just abort
-        else:
-            die('Aborting.')
+        # copy the cheatsheet to the home directory before editing
+        copy(path(sheet), os.path.join(sheets.default_path(), sheet))
+        edit(sheet)
 
 
 def create(sheet):
