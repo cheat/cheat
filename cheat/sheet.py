@@ -32,6 +32,10 @@ def create_or_edit(sheet):
         copy(path(sheet), os.path.join(sheets.default_path(), sheet))
         edit(sheet)
 
+    # if it exists and is in the default path, then just open it
+    else:
+        edit(sheet)
+
 
 def create(sheet):
     """ Creates a cheatsheet """
