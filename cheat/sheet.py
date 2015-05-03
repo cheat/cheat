@@ -4,7 +4,7 @@ from cheat.utils import *
 import os
 import shutil
 import subprocess
-
+import codecs
 
 def copy(current_sheet_path, new_sheet_path):
     """ Copies a sheet to a new path """
@@ -84,5 +84,5 @@ def read(sheet):
     if not exists(sheet):
         die('No cheatsheet found for ' + sheet)
 
-    with open (path(sheet)) as cheatfile:
+    with codecs.open(path(sheet),encoding="UTF-8") as cheatfile:
           return cheatfile.read()
