@@ -2,7 +2,7 @@
 wget http://path.to.the/file
 
 # To download a file and change its name
-wget http://path.to.the/file -o newname
+wget http://path.to.the/file -O newname
 
 # To download a file into a directory
 wget -P path/to/directory http://path.to.the/file
