@@ -51,3 +51,9 @@ git show 83fb499:path/fo/file.ext                       # Shows the file as it a
 git diff branch_1 branch_2                              # Check difference between branches
 git log                                                 # Show all the commits
 git status                                              # Show the changes from last commit
+
+# Commit history of a set of files
+git log --pretty=email --patch-with-stat --reverse --full-index -- Admin\*.py > Sripts.patch
+
+# Import commits from another repo
+git --git-dir=../some_other_repo/.git format-patch -k -1 --stdout <commit SHA> | git am -3 -k
