@@ -4,6 +4,10 @@ pip search SomePackage
 # Install some packages
 pip install SomePackage
 
+# Output and install packages in a requirement file
+pip freeze > requirements.txt
+pip install -r requirements.txt
+
 # Show details of a package
 pip show SomePackage
 
