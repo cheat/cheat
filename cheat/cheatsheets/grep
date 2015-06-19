@@ -1,13 +1,13 @@
-# Basic:
+# Search a file for a pattern
 grep pattern file
 
-# case nonsensitive research:
-grep -i pattern file
+# Case insensitive search (with line numbers)
+grep -in pattern file
 
 # Recursively grep for string <pattern> in folder:
 grep -R pattern folder
 
-# Getting pattern from file (one by line):
+# Read search patterns from a file (one per line)
 grep -f pattern_file file
 
 # Find lines NOT containing pattern
@@ -17,7 +17,7 @@ grep -v pattern file
 grep "^00" file  #Match lines starting with 00
 grep -E "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" file  #Find IP add
 
-# Find all files who contain {pattern} in the directory {directory}.
+# Find all files which match {pattern} in {directory}
 # This will show: "file:line my research"
 grep -rnw 'directory' -e "pattern"
 
