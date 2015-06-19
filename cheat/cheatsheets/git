@@ -1,4 +1,4 @@
-# To set your identify:
+# To set your identity:
 git config --global user.name "John Doe"
 git config --global user.email johndoe@example.com
 
@@ -17,8 +17,15 @@ git commit -m "Your commit message"
 # To edit previous commit message
 git commit --amend
 
+# Git commit in the past
+git commit --date="`date --date='2 day ago'`"
+git commit --date="Jun 13 18:30:25 IST 2015"
+
 # To removed staged and working directory changes
 git reset --hard
+
+# To go 2 commits back
+git reset --hard HEAD~2
 
 # To remove untracked files
 git clean -f -d
@@ -34,6 +41,9 @@ git push git@github.com:username/project.git
 
 # To delete the branch "branch_name"
 git branch -D branch_name
+
+# To make an exisiting branch track a remote branch
+git branch -u upstream/foo
 
 # To see who commited which line in a file
 git blame filename
@@ -57,3 +67,21 @@ git log --pretty=email --patch-with-stat --reverse --full-index -- Admin\*.py > 
 
 # Import commits from another repo
 git --git-dir=../some_other_repo/.git format-patch -k -1 --stdout <commit SHA> | git am -3 -k
+
+# View commits that will be pushed
+git log @{u}..
+
+# View changes that are new on a feature branch
+git log -p feature --not master
+git diff master...feature
+
+# Interactive rebase for the last 7 commits
+git rebase -i @~7
+
+# Diff files WITHOUT considering them a part of git
+# This can be used to diff files that are not in a git repo!
+git diff --no-index path/to/file/A path/to/file/B
+
+# To pull changes while overwriting any local commits
+git fetch --all
+git reset --hard origin/master
