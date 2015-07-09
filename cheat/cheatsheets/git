@@ -20,6 +20,7 @@ git commit --amend
 # Git commit in the past
 git commit --date="`date --date='2 day ago'`"
 git commit --date="Jun 13 18:30:25 IST 2015"
+# more recent versions of Git also support --date="2 days ago" directly
 
 # To removed staged and working directory changes
 git reset --hard
