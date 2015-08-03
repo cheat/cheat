@@ -94,3 +94,13 @@ git diff --no-index path/to/file/A path/to/file/B
 # To pull changes while overwriting any local commits
 git fetch --all
 git reset --hard origin/master
+
+# Update all your submodules
+git submodule update --init --recursive
+
+# Perform a shallow clone to only get latest commits
+# (helps save data when cloning large repos)
+git clone --depth 1 <remote-url>
+
+# To unshallow a clone
+git pull --unshallow
