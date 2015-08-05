@@ -22,6 +22,14 @@ git commit --date="`date --date='2 day ago'`"
 git commit --date="Jun 13 18:30:25 IST 2015"
 # more recent versions of Git also support --date="2 days ago" directly
 
+# To change the date of an existing commit
+git filter-branch --env-filter \
+    'if [ $GIT_COMMIT = 119f9ecf58069b265ab22f1f97d2b648faf932e0 ]
+     then
+         export GIT_AUTHOR_DATE="Fri Jan 2 21:38:53 2009 -0800"
+         export GIT_COMMITTER_DATE="Sat May 19 01:01:01 2007 -0700"
+     fi'
+
 # To removed staged and working directory changes
 git reset --hard
 
@@ -86,3 +94,13 @@ git diff --no-index path/to/file/A path/to/file/B
 # To pull changes while overwriting any local commits
 git fetch --all
 git reset --hard origin/master
+
+# Update all your submodules
+git submodule update --init --recursive
+
+# Perform a shallow clone to only get latest commits
+# (helps save data when cloning large repos)
+git clone --depth 1 <remote-url>
+
+# To unshallow a clone
+git pull --unshallow
