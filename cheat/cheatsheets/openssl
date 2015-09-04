@@ -21,4 +21,4 @@ awk '/-----BEGIN/,/END CERTIFICATE-----/' | \
 openssl x509 -noout -enddate
 
 # Generate Diffie-Hellman parameters:
-openssl dhparamm -outform PEM -out dhparams.pem 2048
+openssl dhparam -outform PEM -out dhparams.pem 2048
