@@ -23,3 +23,6 @@ apt-get -o Dir::Cache="/path/to/destination/dir/" -o Dir::Cache::archives="./" i
 
 # Show apt-get installed packages.
 grep 'install ' /var/log/dpkg.log
+
+# Silently keep old configuration during batch updates
+apt-get update -o DPkg::Options::='--force-confold' ...

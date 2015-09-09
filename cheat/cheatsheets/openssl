@@ -19,3 +19,6 @@ openssl x509 -text -noout -in server.crt
 echo | openssl s_client -connect <hostname>:443 2> /dev/null | \
 awk '/-----BEGIN/,/END CERTIFICATE-----/' | \
 openssl x509 -noout -enddate
+
+# Generate Diffie-Hellman parameters:
+openssl dhparam -outform PEM -out dhparams.pem 2048
