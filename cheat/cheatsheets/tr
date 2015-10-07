@@ -4,6 +4,7 @@ echo $PATH|tr -t ":" \n
 
 #remove all occurance of "ab"
 echo aabbcc |tr -d "ab"
+#ouput: cc
 
 #complement "aa"
 echo aabbccd |tr -c "aa" 1
