@@ -1,0 +1,21 @@
+#replace : with new line
+echo $PATH|tr ":" "\n" #equivalent to:
+echo $PATH|tr -t ":" \n 
+
+#complement "aa"
+echo aabbccd |tr -c "aa" 1
+#output: aa11111%
+#tip: Complement meaning keep aa,all other is replace with 1
+
+#complement "ab\n"
+echo aabbccd |tr -c "ab\n" 1
+#output: aabb111 with new line
+
+#preserve all alpha(-c),sequeeze mode instead of character mode
+echo $PATH|tr -cs "[:alpha:]" "\n" 
+
+#ordered list to unordered list
+echo "1 /usr/bin\n2 /bin" |tr -cs "/\n[:alpha:]" "+"
+
+#remove all occurance of "ab"
+echo aabbcc |tr -d "ab"
