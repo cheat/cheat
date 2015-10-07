@@ -1,5 +1,5 @@
 #replace : with new line
-echo $PATH|tr ":" "\n" #equivalent to:
+echo $PATH|tr ":" "\n" #equivalent with:
 echo $PATH|tr -t ":" \n 
 
 #complement "aa"
@@ -11,7 +11,7 @@ echo aabbccd |tr -c "aa" 1
 echo aabbccd |tr -c "ab\n" 1
 #output: aabb111 with new line
 
-#preserve all alpha(-c),sequeeze mode instead of character mode
+#Preserve all alpha(-c). ":-[:digit:] etc" will translate to "\n". sequeeze mode.
 echo $PATH|tr -cs "[:alpha:]" "\n" 
 
 #ordered list to unordered list
