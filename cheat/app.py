@@ -31,12 +31,13 @@ Options:
 """
 
 # require the dependencies
-from cheat import *
-from cheat.utils import *
+import sheet
+import sheets
+from utils import *
 from docopt import docopt
 
 
-if __name__ == '__main__':
+def main():
     # parse the command-line options
     options = docopt(__doc__, version='cheat 2.1.16')
 
@@ -59,3 +60,6 @@ if __name__ == '__main__':
     # print the cheatsheet
     else:
         print(colorize(sheet.read(options['<cheatsheet>'])))
+
+if __name__ == '__main__':
+    main()
