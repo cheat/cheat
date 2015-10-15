@@ -11,7 +11,7 @@ from setuptools import setup, find_packages
 
 setup(
     name             = 'cheat',
-    version          = '2.1.16',
+    version          = '2.1.17',
     author           = 'Chris Lane',
     author_email     = 'chris@chris-allen-lane.com',
     license          = 'GPL3',

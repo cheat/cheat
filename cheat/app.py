@@ -39,7 +39,7 @@ from docopt import docopt
 
 def main():
     # parse the command-line options
-    options = docopt(__doc__, version='cheat 2.1.16')
+    options = docopt(__doc__, version='cheat 2.1.17')
 
     # list directories
     if options['--directories']:
