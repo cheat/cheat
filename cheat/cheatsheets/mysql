@@ -12,3 +12,8 @@ CREATE DATABASE owa CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 # To add a user and give rights on the given database
 GRANT ALL PRIVILEGES ON database.* TO 'user'@'localhost'IDENTIFIED BY 'password' WITH GRANT OPTION;
+
+# To list the privileges granted to the account that you are using to connect to the server. Any of the 3 statements will work. 
+SHOW GRANTS FOR CURRENT_USER();
+SHOW GRANTS;
+SHOW GRANTS FOR CURRENT_USER;
