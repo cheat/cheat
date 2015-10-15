@@ -31,15 +31,14 @@ Options:
 """
 
 # require the dependencies
-import sheet
-import sheets
-from utils import *
+from cheat import *
+from cheat.utils import *
 from docopt import docopt
 
 
-def main():
+if __name__ == '__main__':
     # parse the command-line options
-    options = docopt(__doc__, version='cheat 2.1.17')
+    options = docopt(__doc__, version='cheat 2.1.16')
 
     # list directories
     if options['--directories']:
@@ -60,6 +59,3 @@ def main():
     # print the cheatsheet
     else:
         print(colorize(sheet.read(options['<cheatsheet>'])))
-
-if __name__ == '__main__':
-    main()
