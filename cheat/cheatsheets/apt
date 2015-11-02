@@ -1,5 +1,11 @@
 # Desc: Allows to update the operating system
 
+# To search a package:
+apt search package
+
+# To show package informations:
+apt show package
+
 # To fetch package list:
 apt update
 
@@ -14,3 +20,6 @@ apt update && apt dist-upgrade
 
 # To install a new package(s):
 apt install package(s)
+
+# To uninstall package(s)
+apt remove package(s)
