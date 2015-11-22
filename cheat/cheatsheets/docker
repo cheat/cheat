@@ -19,6 +19,9 @@ docker inspect --format {{.State.Pid}} <container_name_or_ID>
 # http://nathanleclaire.com/blog/2014/07/12/10-docker-tips-and-tricks-that-will-make-you-sing-a-whale-song-of-joy/
 docker inspect --format='{{json .Volumes}}' <container_id> | python -mjson.tool
 
+# Copy files/folders between a container and your host
+docker cp foo.txt mycontainer:/foo.txt
+
 # list currently running containers
 docker ps
 
