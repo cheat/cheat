@@ -1,5 +1,3 @@
-# Desc: Allows to update the operating system
-
 # To search a package:
 apt search package
 
