@@ -12,14 +12,23 @@ def colorize(sheet_content):
 
     try:
         from pygments import highlight
-        from pygments.lexers import BashLexer
+        from pygments.lexers import get_lexer_by_name
         from pygments.formatters import TerminalFormatter
 
     # if pygments can't load, just return the uncolorized text
     except ImportError:
         return sheet_content
 
-    return highlight(sheet_content, BashLexer(), TerminalFormatter())
+    first_line = sheet_content.splitlines()[0]
+    lexer = get_lexer_by_name('bash')
+    if first_line.startswith('```'):
+        sheet_content = '\n'.join(sheet_content.split('\n')[1:])
+        try:
+            lexer = get_lexer_by_name(first_line[3:])
+        except Exception:
+            pass
+
+    return highlight(sheet_content, lexer, TerminalFormatter())
 
 
 def die(message):
