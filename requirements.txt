@@ -1,3 +1,2 @@
 docopt>=0.6.2
 Pygments>=1.6
-pyxdg>=0.25

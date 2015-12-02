@@ -10,5 +10,8 @@ echo 'It is daytime' | sed 's/day/night/g'
 # To remove leading spaces
 sed -i -r 's/^\s+//g' file.txt
 
-# Remove empty lines and print results to stdout:
+# To remove empty lines and print results to stdout:
 sed '/^$/d' file.txt
+
+# To replace newlines in multiple lines
+sed ':a;N;$!ba;s/\n//g'  file.txt

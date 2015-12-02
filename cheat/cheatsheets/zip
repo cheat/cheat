@@ -1,0 +1,5 @@
+# Create zip file
+zip archive.zip file1 directory/
+
+# To list, test and extract zip archives, see unzip
+cheat unzip

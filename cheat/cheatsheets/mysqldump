@@ -1,16 +1,16 @@
- # To dump a database to a file (Note that your password will appear in your command history!):
+# To dump a database to a file (Note that your password will appear in your command history!):
 mysqldump -uusername -ppassword the-database > db.sql
 
 # To dump a database to a file:
 mysqldump -uusername -p the-database > db.sql
 
- # To dump a database to a .tgz file (Note that your password will appear in your command history!):
+# To dump a database to a .tgz file (Note that your password will appear in your command history!):
 mysqldump -uusername -ppassword the-database | gzip -9 > db.sql
 
 # To dump a database to a .tgz file:
 mysqldump -uusername -p the-database | gzip -9 > db.sql
 
- # To dump all databases to a file (Note that your password will appear in your command history!):
+# To dump all databases to a file (Note that your password will appear in your command history!):
 mysqldump -uusername -ppassword --all-databases > all-databases.sql
 
 # To dump all databases to a file:

@@ -22,6 +22,9 @@ yum info <package name>
 # List currently enabled repositories:
 yum repolist
 
+# List packages containing a certain keyword:
+yum list <package_name_or_word_to_search>
+ 
 # To download the source RPM for a package:
 yumdownloader --source <package name>
 

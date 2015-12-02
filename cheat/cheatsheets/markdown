@@ -35,6 +35,9 @@ ___
 # links
 This is [an example](http://example.com "Title") inline link.
 
+# image
+![Alt Text](/path/to/file.png)
+
 # emphasis
 *em* _em_
 

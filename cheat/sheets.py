@@ -2,24 +2,11 @@ from cheat import cheatsheets
 from cheat.utils import *
 import os
 
-# @kludge: it breaks the functional paradigm to a degree, but declaring this
-# var here (versus within get()) gives us a "poor man's" memoization on the
-# call to get(). This, in turn, spares us from having to call out to the
-# filesystem more than once.
-cheats = {}
-
-
 def default_path():
     """ Returns the full path to the default cheatsheet directory """
 
-    # the default path becomes confused when cheat is run as root, so fail
-    # under those circumstances. (There is no good reason to need to run cheat
-    # as root.)
-    if os.name != 'nt' and os.geteuid() == 0:
-        die('Please do not run this application as root.')
-
     # determine the default cheatsheet dir
-    default_sheets_dir = get_default_data_dir()
+    default_sheets_dir = os.environ.get('DEFAULT_CHEAT_DIR') or os.path.join(os.path.expanduser('~'), '.cheat')
 
     # create the DEFAULT_CHEAT_DIR if it does not exist
     if not os.path.isdir(default_sheets_dir):
@@ -43,11 +30,7 @@ def default_path():
 
 def get():
     """ Assembles a dictionary of cheatsheets as name => file-path """
-
-    # if we've already reached out to the filesystem, just return the result
-    # from memory
-    if cheats:
-        return cheats
+    cheats = {}
 
     # otherwise, scan the filesystem
     for cheat_dir in reversed(paths()):

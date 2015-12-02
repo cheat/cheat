@@ -3,7 +3,7 @@ import os
 
 setup(
     name         = 'cheat',
-    version      = '2.0.7',
+    version      = '2.1.19',
     author       = 'Chris Lane',
     author_email = 'chris@chris-allen-lane.com',
     license      = 'GPL3',
@@ -24,6 +24,5 @@ setup(
     install_requires = [
         'docopt >= 0.6.1',
         'pygments >= 1.6.0',
-        'pyxdg  >= 0.25'
     ]
 )

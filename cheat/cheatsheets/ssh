@@ -4,11 +4,18 @@ ssh -i /path/to/file.pem user@example.com
 # To connect on an non-standard port:
 ssh -p 2222 user@example.com
 
+# To connect and forward the authentication agent
+ssh -A user@example.com
+
 # To execute a command on a remote server:
 ssh -t user@example.com 'the-remote-command'
 
 # To tunnel an x session over SSH:
 ssh -X user@example.com
+
+# Redirect traffic with a tunnel between local host (port 8080) and a remote
+# host (remote.example.com:5000) through a proxy (personal.server.com):
+ssh -f -L 8080:remote.example.com:5000 user@personal.server.com -N
 
 # To launch a specific x application over SSH:
 ssh -X -t user@example.com 'chromium-browser'
@@ -21,3 +28,7 @@ ssh user@example.com -C -c blowfish -X
 
 # For more information, see:
 # http://unix.stackexchange.com/q/12755/44856
+
+# Copy files and folders through ssh from remote host to pwd with tar.gz compression
+# when there is no rsync command available
+ssh user@example.com "cd /var/www/Shared/; tar zcf - asset1 asset2" | tar zxf -

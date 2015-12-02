@@ -25,28 +25,16 @@ def create_or_edit(sheet):
     # if the cheatsheet does not exist
     if not exists(sheet):
         create(sheet)
-    
-    # if the cheatsheet exists and is writeable...
-    elif exists(sheet) and is_writable(sheet):
+
+    # if the cheatsheet exists but not in the default_path, copy it to the
+    # default path before editing
+    elif exists(sheet) and not exists_in_default_path(sheet):
+        copy(path(sheet), os.path.join(sheets.default_path(), sheet))
         edit(sheet)
 
-    # if the cheatsheet exists but is not writable...
-    elif exists(sheet) and not is_writable(sheet):
-        # ... ask the user if we should copy the cheatsheet to her home directory for editing
-        yes = prompt_yes_or_no(
-          'The ' + sheet + ' sheet is not editable. Do you want to copy it to '
-          'your user cheatsheets directory before editing? Keep in mind that '
-          'your sheet will always be used before system-wide one.'
-        )
-
-        # if yes, copy the cheatsheet to the home directory before editing
-        if yes:
-            copy(path(sheet), os.path.join(sheets.default_path(), sheet))
-            edit(sheet)
-
-        # if no, just abort
-        else:
-            die('Aborting.')
+    # if it exists and is in the default path, then just open it
+    else:
+        edit(sheet)
 
 
 def create(sheet):
@@ -73,6 +61,12 @@ def edit(sheet):
 def exists(sheet):
     """ Predicate that returns true if the sheet exists """
     return sheet in sheets.get() and os.access(path(sheet), os.R_OK)
+
+
+def exists_in_default_path(sheet):
+    """ Predicate that returns true if the sheet exists in default_path"""
+    default_path_sheet = os.path.join(sheets.default_path(), sheet)
+    return sheet in sheets.get() and os.access(default_path_sheet, os.R_OK)
 
 
 def is_writable(sheet):
