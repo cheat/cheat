@@ -1,12 +1,16 @@
 from cheat import cheatsheets
-from cheat.utils import *
+from cheat.utils import (
+    get_default_data_dir,
+    die,
+)
 import os
+
 
 def default_path():
     """ Returns the full path to the default cheatsheet directory """
 
     # determine the default cheatsheet dir
-    default_sheets_dir = os.environ.get('DEFAULT_CHEAT_DIR') or os.path.join(os.path.expanduser('~'), '.cheat')
+    default_sheets_dir = get_default_data_dir()
 
     # create the DEFAULT_CHEAT_DIR if it does not exist
     if not os.path.isdir(default_sheets_dir):
