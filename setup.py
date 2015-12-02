@@ -24,5 +24,6 @@ setup(
     install_requires = [
         'docopt >= 0.6.1',
         'pygments >= 1.6.0',
+        'appdirs >= 1.4.0',
     ]
 )
