@@ -143,6 +143,7 @@ Related Projects
 
 - [`tldr`][tldr]: "Simplified and community-driven man pages".
 
+- [dufferzafar/cheat][5]: An implementation in golang that has syntax highlighting and allows to copy cheats directly to clipboard.
 
 [dotfiles]:  http://dotfiles.github.io/
 [jahendrie]: https://github.com/jahendrie
@@ -150,4 +151,5 @@ Related Projects
 [2]:         https://github.com/jahendrie/cheat
 [3]:         http://errtheblog.com/posts/21-cheat
 [4]:         https://github.com/chrisallenlane/cheat/pull/77
+[5]:         https://github.com/dufferzafar/cheat
 [tldr]:      https://github.com/tldr-pages/tldr
