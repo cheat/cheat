@@ -12,6 +12,9 @@ dd if=/dev/zero of=/dev/null bs=4KB &; export dd_pid=`pgrep '^dd'`; while [[ -d 
 # Watch the progress of 'dd' with `pv` and `zenity` (apt-get install pv zenity)
 (pv -n /dev/zero | dd of=/dev/null bs=128M conv=notrunc,noerror) 2>&1 | zenity --title 'Running dd command (cloning), please wait...' --progress
 
+# Watch the progress of 'dd' with the built-in `progress` functionality (introduced in coreutils v8.24)
+dd if=/dev/zero of=/dev/null bs=128M status=progress
+
 # DD with "graphical" return
 dcfldd if=/dev/zero of=/dev/null bs=500K
 
