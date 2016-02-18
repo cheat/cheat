@@ -104,7 +104,7 @@ export CHEATPATH='/path/to/my/cheats'
 You may, of course, append multiple directories to your `CHEATPATH`:
 
 ```sh
-export CHEATPATH=$CHEATPATH:/path/to/more/cheats
+export CHEATPATH="$CHEATPATH:/path/to/more/cheats"
 ```
 
 You may view which directories are on your `CHEATPATH` with `cheat -d`.
