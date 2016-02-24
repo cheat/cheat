@@ -1,12 +1,17 @@
-from cheat import cheatsheets
-from cheat.utils import *
 import os
+
+from cheat import cheatsheets
+from cheat.utils import (
+    die,
+    get_default_data_dir,
+)
+
 
 def default_path():
     """ Returns the default cheatsheet path """
 
     # determine the default cheatsheet dir
-    default_sheets_dir = os.environ.get('DEFAULT_CHEAT_DIR') or os.path.join(os.path.expanduser('~'), '.cheat')
+    default_sheets_dir = get_default_data_dir()
 
     # create the DEFAULT_CHEAT_DIR if it does not exist
     if not os.path.isdir(default_sheets_dir):
@@ -20,9 +25,9 @@ def default_path():
 
     # assert that the DEFAULT_CHEAT_DIR is readable and writable
     if not os.access(default_sheets_dir, os.R_OK):
-        die('The DEFAULT_CHEAT_DIR (' + default_sheets_dir +') is not readable.')
+        die('The DEFAULT_CHEAT_DIR (' + default_sheets_dir + ') is not readable.')
     if not os.access(default_sheets_dir, os.W_OK):
-        die('The DEFAULT_CHEAT_DIR (' + default_sheets_dir +') is not writeable.')
+        die('The DEFAULT_CHEAT_DIR (' + default_sheets_dir + ') is not writeable.')
 
     # return the default dir
     return default_sheets_dir
