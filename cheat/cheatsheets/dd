@@ -17,4 +17,3 @@ dd if=/dev/zero of=/dev/null bs=128M status=progress
 
 # DD with "graphical" return
 dcfldd if=/dev/zero of=/dev/null bs=500K
-

@@ -16,11 +16,18 @@
 # To switch between channel windows
 ALT+<number>, eg. ALT+1, ALT+2
 
-# To list the nicknames within a channel
+# To list the nicknames within the active channel
 /names
 
-# To change the topic
+# To change the channel topic
 /topic <description>
 
-# To quit irssi
+# To limit channel background noise (joins, parts, quits, etc.)
+/ignore #foo,#bar JOINS PARTS QUITS NICKS   # Quieten only channels `#foo`, `#bar`
+/ignore * JOINS PARTS QUITS NICKS           # Quieten all channels
+
+# To save the current Irssi session config into the configuration file
+/save
+
+# To quit Irssi
 /exit

@@ -23,7 +23,8 @@ B               previous start of whitespace-delimited word
 $               end of line
 gg              go to first line in file
 G               go to end of file
-
+gk		move down one displayed line
+gj		move up one displayed line
 
 # Insertion
 #   To exit from insert mode use Esc or Ctrl-C
@@ -49,8 +50,14 @@ P               paste before cursor
 dd              delete a line
 d{motion}       delete text that {motion} moves over
 
+# Search and replace with the `:substitute` (aka `:s`) command
 
-# Preceding a motion or edition with a number repeats it n times
+:s/foo/bar/	replace the first match of 'foo' with 'bar' on the current line only
+:s/foo/bar/g	replace all matches (`g` flag) of 'foo' with 'bar' on the current line only
+:%s/foo/bar/g	replace all matches of 'foo' with 'bar' in the entire file (`:%s`)
+:%s/foo/bar/gc	ask to manually confirm (`c` flag) each replacement 
+
+# Preceding a motion or edition with a number repeats it 'n' times
 # Examples:
 50k         moves 50 lines up
 2dw         deletes 2 words
