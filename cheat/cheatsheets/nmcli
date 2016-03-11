@@ -10,6 +10,18 @@ nmcli d wifi connect <ssid> password <pass> iface <wiface>
 #	<wiface> -- the name of your wireless interface
 nmcli d wifi disconnect iface <wiface>
 
+# Get WiFi status (enabled / disabled)
+nmcli radio wifi
+
+# Enable / Disable WiFi
+nmcli radio wifi <on|off>
+
+# Show all available WiFi access points
+nmcli dev wifi list
+
+# Refresh the available WiFi connection list
+nmcli dev wifi rescan
+
 # Show all available connections
 nmcli con
 
