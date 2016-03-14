@@ -40,5 +40,8 @@ find . -maxdepth 2 -name build -type d
 # To search all files who are not in .git directory
 find . ! -iwholename '*.git*' -type f
 
-# Find all files that have the same node (hard link) as MY_FILE_HERE
+# To find all files that have the same node (hard link) as MY_FILE_HERE
 find . -type f -samefile MY_FILE_HERE 2>/dev/null
+
+# To find all files in the current directory and modify their permissions
+find . -type f -exec chmod 644 {} \;
