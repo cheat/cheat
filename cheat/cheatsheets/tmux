@@ -13,6 +13,12 @@ tmux attach -d
 # Display session:
 tmux ls
 
+# Rename session:
+Ctrl-b $
+
+# Switch session:
+Ctrl-b s
+
 # Start a shared session:
 tmux -S /tmp/your_shared_session
 chmod 777 /tmp/your_shared_session
