@@ -4,6 +4,12 @@ pip search SomePackage
 # Install some packages
 pip install SomePackage
 
+# Install some package in user space
+pip install --user SomePackage
+
+# Upgrade some package
+pip install --upgrade SomePackage
+
 # Output and install packages in a requirement file
 pip freeze > requirements.txt
 pip install -r requirements.txt
