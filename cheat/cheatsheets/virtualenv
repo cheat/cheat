@@ -1,0 +1,15 @@
+# Create new environment
+virtualenv /path/to/project/env_name
+
+# Create new environment and inherit already installed Python libraries
+virtualenv --system-site-package /path/to/project/env_name
+
+# Create new environment with a given Python interpreter
+virtualenv /path/to/project/env_name -p /usr/bin/python/3.4
+
+# Activate environnment
+source /path/to/project/env_name/bin/activate
+
+# Quit environment
+deactivate
+
