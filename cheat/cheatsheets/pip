@@ -17,7 +17,7 @@ pip list --outdated
 # Upgrade all outdated packages, thanks to http://stackoverflow.com/a/3452888
 pip freeze --local | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
 
-# UPgrade all outdated packages (shorter command)
+# Upgrade all outdated packages (shorter command)
 pip3 install -U $( pip3 list -o | cut -d" " -f1 )
 
 # Install specific version of a package
