@@ -39,7 +39,7 @@ tar -xjvf '/path/to/foo.tgz'
 tar -cjvf '/path/to/foo.tgz' '/path/to/foo/'
 ```
 
-To see what cheatsheets are availble, run `cheat -l`.
+To see what cheatsheets are available, run `cheat -l`.
 
 Note that, while `cheat` was designed primarily for \*nix system administrators,
 it is agnostic as to what content it stores. If you would like to use `cheat`
