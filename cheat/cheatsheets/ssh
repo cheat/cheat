@@ -32,3 +32,8 @@ ssh user@example.com -C -c blowfish -X
 # Copy files and folders through ssh from remote host to pwd with tar.gz compression
 # when there is no rsync command available
 ssh user@example.com "cd /var/www/Shared/; tar zcf - asset1 asset2" | tar zxf -
+
+# Mount folder/filesystem through SSH
+# Install SSHFS from http://fuse.sourceforge.net/sshfs.html
+# Will allow you to mount a folder security over a network.
+sshfs name@server:/path/to/folder /path/to/mount/point
