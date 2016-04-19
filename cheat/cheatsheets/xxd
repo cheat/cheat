@@ -1,0 +1,8 @@
+# Convert bin/string to hex.
+# Result: 34322069732074686520736f6c7574696f6e0a
+echo '42 is the solution' | xxd -p
+
+# Convert hex to bin/string.
+# Result: 42 is the solution
+echo '34322069732074686520736f6c7574696f6e0a' | xxd -r -p
+
