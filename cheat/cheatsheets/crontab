@@ -14,7 +14,9 @@ SHELL=/bin/bash
 # example entries
 # every 15 min
 */15 * * * * /home/user/command.sh
+
 # every midnight
-0 * * * * /home/user/command.sh
+* 0 * * * /home/user/command.sh
+
 # every Saturday at 8:05 AM
 5 8 * * 6 /home/user/command.sh
