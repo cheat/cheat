@@ -121,3 +121,6 @@ git remote prune $(git remote | tr '\n' ' ')
 # Revisions can also be identified with :/text
 # So, this will show the first commit that has "cool" in their message body
 git show :/cool
+
+# Undo parts of last commit in a specific file
+git checkout -p HEAD^ -- /path/to/file
