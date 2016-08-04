@@ -3,7 +3,7 @@ from cheat.utils import *
 import os
 
 def default_path():
-    """ Returns the default cheatsheet path """
+    """ Returns the full path to the default cheatsheet directory """
 
     # determine the default cheatsheet dir
     default_sheets_dir = os.environ.get('DEFAULT_CHEAT_DIR') or os.path.join(os.path.expanduser('~'), '.cheat')
