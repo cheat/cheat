@@ -104,3 +104,23 @@ git clone --depth 1 <remote-url>
 
 # To unshallow a clone
 git pull --unshallow
+
+# Create a bare branch (one that has no commits on it)
+git checkout --orphan branch_name
+
+# Checkout a new branch from a different starting point
+git checkout -b master upstream/master
+
+# Remove all stale branches (ones that have been deleted on remote)
+# So if you have a lot of useless branches, delete them on Github and then run this
+git remote prune origin
+
+# The following can be used to prune all remotes at once
+git remote prune $(git remote | tr '\n' ' ')
+
+# Revisions can also be identified with :/text
+# So, this will show the first commit that has "cool" in their message body
+git show :/cool
+
+# Undo parts of last commit in a specific file
+git checkout -p HEAD^ -- /path/to/file
