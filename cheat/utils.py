@@ -38,13 +38,12 @@ def editor():
 
     elif os.environ['EDITOR'] == "":
         die(
-          'Your EDITOR environment variable is set to an empty string. It must '
-          'be set to your editor\'s path.'
+            'Your EDITOR environment variable is set to an empty string. It must '
+            'be set to your editor\'s path.'
         )
 
     else:
         return os.environ['EDITOR']
-
 
 def warn(message):
     """ Prints a message to stderr """

@@ -31,8 +31,8 @@ Options:
 """
 
 # require the dependencies
-from cheat import *
-from cheat.utils import *
+from cheat import sheets, sheet
+from cheat.utils import colorize
 from docopt import docopt
 
 
