@@ -32,3 +32,12 @@ ssh user@example.com -C -c blowfish -X
 # Copy files and folders through ssh from remote host to pwd with tar.gz compression
 # when there is no rsync command available
 ssh user@example.com "cd /var/www/Shared/; tar zcf - asset1 asset2" | tar zxf -
+
+# Mount folder/filesystem through SSH
+# Install SSHFS from https://github.com/libfuse/sshfs
+# Will allow you to mount a folder securely over a network.
+sshfs name@server:/path/to/folder /path/to/mount/point
+
+# Emacs can read file through SSH
+# Doc: http://www.gnu.org/software/emacs/manual/html_node/emacs/Remote-Files.html
+emacs /ssh:name@server:/path/to/file

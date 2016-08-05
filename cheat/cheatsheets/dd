@@ -17,3 +17,6 @@ dd if=/dev/zero of=/dev/null bs=128M status=progress
 
 # DD with "graphical" return
 dcfldd if=/dev/zero of=/dev/null bs=500K
+
+# This will output the sound from your microphone port to the ssh target computer's speaker port. The sound quality is very bad, so you will hear a lot of hissing.
+dd if=/dev/dsp | ssh -c arcfour -C username@host dd of=/dev/dsp
