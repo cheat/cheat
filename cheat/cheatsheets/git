@@ -145,3 +145,7 @@ git checkout -p HEAD^ -- /path/to/file
 
 # Revert a commit and keep the history of the reverted change as a separate revert commit
 git revert <commit SHA>
+
+# Pich a commit from a branch to current branch. This is different than merge as
+# this just applies a single commit from a branch to current branch
+git cherry-pick <commit SHA1>
