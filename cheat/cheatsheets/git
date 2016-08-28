@@ -11,6 +11,24 @@ git config --global color.ui true
 # To stage all changes for commit:
 git add --all
 
+# To stash changes locally, this will keep the changes in a separate changelist
+# called stash and the working directory is cleaned. You can apply changes
+# from the stash anytime
+git stash
+
+# To stash changes with a message
+git stash save "message"
+
+# To list all the stashed changes
+git stash list
+
+# To apply the most recent change and remove the stash from the stash list
+git stash pop
+
+# To apply any stash from the list of stashes. This does not remove the stash
+# from the stash list
+git stash apply stash@{6}
+
 # To commit staged changes
 git commit -m "Your commit message"
 
