@@ -142,3 +142,6 @@ git show :/cool
 
 # Undo parts of last commit in a specific file
 git checkout -p HEAD^ -- /path/to/file
+
+# Revert a commit and keep the history of the reverted change as a separate revert commit
+git revert <commit SHA>
