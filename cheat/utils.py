@@ -30,20 +30,21 @@ def die(message):
 
 def editor():
     """ Determines the user's preferred editor """
-    if 'EDITOR' not in os.environ:
+
+    # determine which editor to use
+    editor = os.environ.get('CHEAT_EDITOR') \
+        or os.environ.get('VISUAL')         \
+        or os.environ.get('EDITOR')         \
+        or False
+
+    # assert that the editor is set
+    if editor == False:
         die(
-            'In order to create/edit a cheatsheet you must set your EDITOR '
-            'environment variable to your editor\'s path.'
+            'You must set a CHEAT_EDITOR, VISUAL, or EDITOR environment '
+            'variable in order to create/edit a cheatsheet.'
         )
 
-    elif os.environ['EDITOR'] == "":
-        die(
-            'Your EDITOR environment variable is set to an empty string. It must '
-            'be set to your editor\'s path.'
-        )
-
-    else:
-        return os.environ['EDITOR']
+    return editor
 
 def warn(message):
     """ Prints a message to stderr """
