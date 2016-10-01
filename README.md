@@ -67,8 +67,8 @@ Cheatsheets are stored in the `~/.cheat/` directory, and are named on a
 per-keyphrase basis. In other words, the content for the `tar` cheatsheet lives
 in the `~/.cheat/tar` file.
 
-Provided that you have an `EDITOR` environment variable set, you may edit
-cheatsheets with:
+Provided that you have a `CHEAT_EDITOR`, `VISUAL`, or `EDITOR` environment
+variable set, you may edit cheatsheets with:
 
 ```sh
 cheat -e foo
