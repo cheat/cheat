@@ -11,6 +11,24 @@ git config --global color.ui true
 # To stage all changes for commit:
 git add --all
 
+# To stash changes locally, this will keep the changes in a separate changelist
+# called stash and the working directory is cleaned. You can apply changes
+# from the stash anytime
+git stash
+
+# To stash changes with a message
+git stash save "message"
+
+# To list all the stashed changes
+git stash list
+
+# To apply the most recent change and remove the stash from the stash list
+git stash pop
+
+# To apply any stash from the list of stashes. This does not remove the stash
+# from the stash list
+git stash apply stash@{6}
+
 # To commit staged changes
 git commit -m "Your commit message"
 
@@ -124,3 +142,10 @@ git show :/cool
 
 # Undo parts of last commit in a specific file
 git checkout -p HEAD^ -- /path/to/file
+
+# Revert a commit and keep the history of the reverted change as a separate revert commit
+git revert <commit SHA>
+
+# Pich a commit from a branch to current branch. This is different than merge as
+# this just applies a single commit from a branch to current branch
+git cherry-pick <commit SHA1>
