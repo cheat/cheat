@@ -1,9 +1,8 @@
 import os
 import shutil
-import subprocess
 
 from cheat import sheets
-from cheat.utils import die, editor
+from cheat.utils import die, open_with_editor
 
 def copy(current_sheet_path, new_sheet_path):
     """ Copies a sheet to a new path """
@@ -39,22 +38,12 @@ def create_or_edit(sheet):
 def create(sheet):
     """ Creates a cheatsheet """
     new_sheet_path = os.path.join(sheets.default_path(), sheet)
-
-    try:
-        subprocess.call([editor(), new_sheet_path])
-
-    except OSError:
-        die('Could not launch ' + editor())
+    open_with_editor(new_sheet_path)
 
 
 def edit(sheet):
     """ Opens a cheatsheet for editing """
-
-    try:
-        subprocess.call([editor(), path(sheet)])
-
-    except OSError:
-        die('Could not launch ' + editor())
+    open_with_editor(path(sheet))
 
 
 def exists(sheet):
