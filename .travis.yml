@@ -1,0 +1,10 @@
+language: python
+python:
+  - "2.7"
+  - "3.5"
+install:
+  - pip install flake8
+before_script: flake8 cheat/
+script: true
+notifications:
+  email: false

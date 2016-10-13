@@ -7,7 +7,7 @@ def colorize(sheet_content):
     """ Colorizes cheatsheet content if so configured """
 
     # only colorize if so configured
-    if not 'CHEATCOLORS' in os.environ:
+    if 'CHEATCOLORS' not in os.environ:
         return sheet_content
 
     try:
@@ -38,13 +38,14 @@ def editor():
         or False
 
     # assert that the editor is set
-    if editor == False:
+    if editor is False:
         die(
             'You must set a CHEAT_EDITOR, VISUAL, or EDITOR environment '
             'variable in order to create/edit a cheatsheet.'
         )
 
     return editor
+
 
 def warn(message):
     """ Prints a message to stderr """

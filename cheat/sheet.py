@@ -5,6 +5,7 @@ import subprocess
 from cheat import sheets
 from cheat.utils import die, editor
 
+
 def copy(current_sheet_path, new_sheet_path):
     """ Copies a sheet to a new path """
 
