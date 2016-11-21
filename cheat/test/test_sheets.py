@@ -5,8 +5,9 @@ from unittest import TestCase
 
 from cheat import cheatsheets
 from cheat.sheets import (
-    default_path, paths, get,
+    default_path, paths, get, search,
 )
+from cheat.sheets import list as sheets_list
 
 
 class TestSheets(TestCase):
@@ -186,4 +187,62 @@ class TestSheets(TestCase):
                 'tar': os.path.join(self.tmp_dir, 'cheatdir2', 'tar'),
                 'zip': os.path.join(self.tmp_dir, 'cheatdir2', 'zip'),
             }
+        )
+
+    @patch('cheat.sheets.get')
+    def test_list(self, mock_get):
+        mock_get.return_value = {
+            'curl': os.path.join(self.tmp_dir, 'cheatdir1', 'curl'),
+            'http': os.path.join(self.tmp_dir, 'cheatdir1', 'http'),
+            'tar': os.path.join(self.tmp_dir, 'cheatdir2', 'tar'),
+            'zip': os.path.join(self.tmp_dir, 'cheatdir2', 'zip'),
+            'telnet': os.path.join(self.tmp_dir, 'cheatdir2', 'telnet'),
+        }
+
+        sheet_list = sheets_list()
+        self.assertEqual(
+            sheet_list,
+            '\n'.join([
+                'curl'.ljust(10) + os.path.join(
+                    self.tmp_dir, 'cheatdir1', 'curl'),
+                'http'.ljust(10) + os.path.join(
+                    self.tmp_dir, 'cheatdir1', 'http'),
+                'tar'.ljust(10) + os.path.join(
+                    self.tmp_dir, 'cheatdir2', 'tar'),
+                'telnet'.ljust(10) + os.path.join(
+                    self.tmp_dir, 'cheatdir2', 'telnet'),
+                'zip'.ljust(10) + os.path.join(
+                    self.tmp_dir, 'cheatdir2', 'zip'),
+            ]) + '\n'
+        )
+
+    @patch('cheat.sheets.get')
+    def test_search(self, mock_get):
+        cheat_curl = os.path.join(self.tmp_dir, 'cheatdir1', 'curl')
+        cheat_http = os.path.join(self.tmp_dir, 'cheatdir1', 'http')
+        self._make_sheets([
+            cheat_curl, cheat_http,
+        ])
+        with open(cheat_curl, 'w') as f:
+            f.write((
+                '# This line match the KEYWORD\n'
+                '# This line not\n'
+                'cheat KEYWORD\n'
+            ))
+        with open(cheat_http, 'w') as f:
+            f.write((
+                '# This sheet not match anything\n'
+                'cheat sorry\n'
+            ))
+        mock_get.return_value = {
+            'curl': cheat_curl,
+            'http': cheat_http
+        }
+
+        search_result = search('KEYWORD')
+        self.assertEqual(
+            search_result,
+            ('curl:\n'
+             '  # This line match the KEYWORD\n'
+             '  cheat KEYWORD\n\n')
         )
