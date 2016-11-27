@@ -12,4 +12,3 @@ xmlto -m ulink.xsl pdf mydoc.xml
 
 # use non-default xsl
 xmlto -x mystylesheet.xsl pdf mydoc.xml
-

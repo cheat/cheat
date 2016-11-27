@@ -30,7 +30,7 @@
 
 # Other stuff
 
-  Open a shell         ALT-x shell
+  Open a shell         ALT-x eshell
   Goto a line number   ALT-x goto-line
   Word wrap            ALT-x toggle-word-wrap
   Spell checking       ALT-x flyspell-mode
