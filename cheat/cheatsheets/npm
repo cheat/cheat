@@ -19,4 +19,4 @@ npm update
 npm install -g npm
 
 # Uninstall a package
-npm unintall <package>
+npm uninstall <package>
