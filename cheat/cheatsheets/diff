@@ -21,3 +21,6 @@ diff -s version1 version2
 
 # To diff the output of two commands or scripts:
 diff <(command1) <(command2)
+
+# Generate a patch file from two files
+diff -Naur version1 version2 > version.patch

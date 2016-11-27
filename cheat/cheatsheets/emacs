@@ -3,7 +3,7 @@
   Indent              Select text then press TAB
   Cut                 CTRL-w
   Copy                ALT-w
-  Paste               CTRL-y
+  Paste ("yank")      CTRL-y
   Search/Find         CTRL-s
   Replace             ALT-% (ALT-SHIFT-5)
   Save                CTRL-x CTRL-s
@@ -11,7 +11,7 @@
   Undo                CTRL-x u
   Highlight all text  CTRL-x h
   Directory listing   CTRL-x d
-  Cancel a command    ESC ESC ESC
+  Cancel a command    CTRL-g
   Font size bigger    CTRL-x CTRL-+
   Font size smaller   CTRL-x CTRL--
 
@@ -30,7 +30,7 @@
 
 # Other stuff
 
-  Open a shell         ALT-x eshell
+  Open a shell         ALT-x shell
   Goto a line number   ALT-x goto-line
   Word wrap            ALT-x toggle-word-wrap
   Spell checking       ALT-x flyspell-mode
@@ -39,32 +39,9 @@
   Compile some code    ALT-x compile
   List packages        ALT-x package-list-packages
 
-#  Sudoing within eshell
-
-  By default when using the sudo command within eshell you'll just
-  get "permission denied" messages. To overcome that type:
-
-    alias sudo '*sudo $*'
-
 # Line numbers
 
   To add line numbers and enable moving to a line with CTRL-l:
 
     (global-set-key "\C-l" 'goto-line)
     (add-hook 'find-file-hook (lambda () (linum-mode 1)))
-
-# Org-mode
-
-  To begin org-mode                            ALT-x org-mode
-  Table column separator                       Vertical/pipe character
-  Reorganize table                             TAB
-  Section heading                              *
-  Open/collapse section                        TAB
-  Open/collapse All                            CTRL-TAB
-  Export in other file formats (eg HTML,PDF)   CTRL-c CTRL-e
-
-  To make org-mode automatically wrap lines:
-
-    (add-hook 'org-mode-hook
-              '(lambda ()
-                 (visual-line-mode 1)))

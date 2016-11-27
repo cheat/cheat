@@ -2,7 +2,17 @@
 ffmpeg -i path/to/file.ext
 
 # Convert all m4a files to mp3
-for f in *.m4a; do ffmpeg -i "$f" -acodec libmp3lame -ab 320k "${f%.m4a}.mp3"; done
+for f in *.m4a; do ffmpeg -i "$f" -acodec libmp3lame -vn -b:a 320k "${f%.m4a}.mp3"; done
+
+# Convert video from .foo to .bar
+# -g : GOP, for searchability
+ffmpeg -i input.foo -vcodec bar -acodec baz -b:v 21000k -b:a 320k -g 150 -threads 4 output.bar
+
+# Convert image sequence to video
+ffmpeg -r 18 -pattern_type glob -i '*.png' -b:v 21000k -s hd1080 -vcodec vp9 -an -pix_fmt yuv420p -deinterlace output.ext
+
+# Combine video and audio into one file
+ffmpeg -i video.ext -i audio.ext -c:v copy -c:a copy output.ext
 
 # Listen to 10 seconds of audio from a video file
 #
@@ -10,3 +20,4 @@ for f in *.m4a; do ffmpeg -i "$f" -acodec libmp3lame -ab 320k "${f%.m4a}.mp3"; d
 # -t  : seconds to cut
 # -autoexit : closes ffplay as soon as the audio finishes
 ffmpeg -ss 00:34:24.85 -t 10 -i path/to/file.mp4 -f mp3 pipe:play | ffplay -i pipe:play -autoexit
+
