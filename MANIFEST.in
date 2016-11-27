@@ -1,0 +1,6 @@
+include CHANGELOG
+include CONTRIBUTING.md
+include LICENSE
+include README.md
+include licenses/gpl-3.txt
+include licenses/mit.txt
