@@ -82,11 +82,24 @@ def search(term):
 
     for cheatsheet in sorted(get().items()):
         match = ''
+        alsoMatchNextLine = False
+        lastMatchedLine = ''
+
         for line in open(cheatsheet[1]):
-            if term in line:
-                match += '  ' + line
+            if alsoMatchNextLine:
+                if line != lastMatchedLine and line.strip() != '':
+                    match += '  ' + line
+                alsoMatchNextLine = False
+            else:
+                if term in line and line != lastMatchedLine:
+                    match += '  ' + line
+                    lastMatchedLine = line
+                    alsoMatchNextLine = True
 
         if match != '':
-            result += cheatsheet[0] + ":\n" + match + "\n"
+            result += cheatsheet[0] + ":\n" + match
+
+    if result == '':
+        result += "No matches for {}".format(term)
 
     return result
