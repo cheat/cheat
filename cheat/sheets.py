@@ -80,6 +80,9 @@ def search(term):
     """ Searches all cheatsheets for the specified term """
     result = ''
 
+    if term.strip() == '':
+        return 'No search term'
+
     for cheatsheet in sorted(get().items()):
         match = ''
         alsoMatchNextLine = False
