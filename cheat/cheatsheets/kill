@@ -1,0 +1,7 @@
+# kill - Kills a process
+
+# Kill gracefully
+kill -15 [PID]
+
+# Force kill (*Only use if -15 does not work first, this is dirty*)
+kill -9 [PID]

@@ -1,0 +1,10 @@
+# cat - concatenate and print files
+cat [-benstuv] [filename]
+
+-b : Number non blank lines (1 indexed)
+-e : Display non printing chars
+-n : Number output (1 indexed)
+-s : Single spaced output
+-t : Display non printing chars (Tab as `^I')
+-u : Disable output buffering
+-v : Display all non printing chars no matter what

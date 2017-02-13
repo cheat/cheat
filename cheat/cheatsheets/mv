@@ -1,0 +1,7 @@
+# mv - move. Moves a file or directory
+mv [-f, -i, -n] [-v] [source] [target]
+
+-f : No prompt before overwriting something in target destination. Overrides any previous -i or -n args.
+-i : Prompt before overwriting something. Overrides any previous -f or -n args.
+-n : Do not overwrite anything. Overrides any previous -f or -i args.
+-v : Verbose

@@ -1,0 +1,5 @@
+# Export makes a variable something that will be included in child process environments
+export VARNAME="value"
+
+# Calling export with no arguments will show current shell attributes
+export

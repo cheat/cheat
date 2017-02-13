@@ -1,0 +1,11 @@
+# alias - Creates an alias of a command
+*Stick these in your .bashrc/.bash_profile for permenant use, otherwise lost on re-entry
+
+alias ll='ls -l'
+alias lll='ls -al'
+alias vi='vim'
+alias ..='cd ..'
+alias c='clear'
+alias rkhunter='rkhunter --versioncheck --update --autox --skip-keypress --check'
+
+Running just `alias' will show your current aliases.

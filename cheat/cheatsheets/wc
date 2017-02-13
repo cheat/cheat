@@ -1,0 +1,7 @@
+# wc - word count (or lines, characters, or bytes)
+wc [-clmw] [output]
+
+-c : Number of bytes (cancels -m opt)
+-l : Number of lines
+-m : Number of characters (cancels -c opt)
+-w : Number of words
