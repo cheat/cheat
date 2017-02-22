@@ -1,8 +1,9 @@
+cheat
+=====
 [![PyPI](https://img.shields.io/pypi/v/cheat.svg)](https://pypi.python.org/pypi/cheat/)
 [![PyPI](https://img.shields.io/pypi/dm/cheat.svg)](https://pypi.python.org/pypi/cheat/)
 
-cheat
-=====
+
 `cheat` allows you to create and view interactive cheatsheets on the
 command-line. It was designed to help remind \*nix system administrators of
 options for commands that they use frequently, but not frequently enough to
