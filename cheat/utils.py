@@ -21,9 +21,9 @@ def colorize(sheet_content):
         return sheet_content
 
     first_line = sheet_content.splitlines()[0]
-    lexer = get_lexer_by_name('bash')
+    lexer      = get_lexer_by_name('bash')
     if first_line.startswith('```'):
-        sheet_content = '\n'.join(sheet_content.split('\n')[1:])
+        sheet_content = '\n'.join(sheet_content.split('\n')[1:-2])
         try:
             lexer = get_lexer_by_name(first_line[3:])
         except Exception:

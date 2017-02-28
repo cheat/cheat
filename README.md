@@ -73,7 +73,7 @@ variable set, you may edit cheatsheets with:
 cheat -e foo
 ```
 
-If the 'foo' cheatsheet already exists, it will be opened for editing.
+If the `foo` cheatsheet already exists, it will be opened for editing.
 Otherwise, it will be created automatically.
 
 After you've customized your cheatsheets, I urge you to track `~/.cheat/` along
@@ -109,12 +109,31 @@ export CHEATPATH="$CHEATPATH:/path/to/more/cheats"
 You may view which directories are on your `CHEATPATH` with `cheat -d`.
 
 ### Enabling Syntax Highlighting ###
-`cheat` can apply syntax highlighting to your cheatsheets if so desired. To
-enable this feature, set a `CHEATCOLORS` environment variable:
+`cheat` can optionally apply syntax highlighting to your cheatsheets. To enable
+syntax highlighting, export a `CHEATCOLORS` environment variable:
 
 ```sh
 export CHEATCOLORS=true
 ```
+
+#### Specifying a Syntax Highlighter ####
+You may manually specify which syntax highlighter to use for each cheatsheet by
+wrapping the sheet's contents in a [Github-Flavored Markdown code-fence][gfm].
+
+Example:
+
+<pre>
+```sql
+-- to select a user by ID
+SELECT *
+FROM Users
+WHERE id = 100
+```
+</pre>
+
+If no syntax highlighter is specified, the `bash` highlighter will be used by
+default.
+
 
 See Also:
 ---------
@@ -124,5 +143,6 @@ See Also:
 
 [autocompletion]:   https://github.com/chrisallenlane/cheat/wiki/Enabling-Command-line-Autocompletion
 [dotfiles]:         http://dotfiles.github.io/
+[gfm]:              https://help.github.com/articles/creating-and-highlighting-code-blocks/
 [installing]:       https://github.com/chrisallenlane/cheat/wiki/Installing
 [related-projects]: https://github.com/chrisallenlane/cheat/wiki/Related-Projects
