@@ -2,6 +2,8 @@
 
 """cheat
 
+Create and view cheatsheets on the command line.
+
 Usage:
   cheat <cheatsheet>
   cheat -e <cheatsheet>
@@ -10,24 +12,26 @@ Usage:
   cheat -d
   cheat -v
 
-cheat allows you to create and view interactive cheatsheets on the
-command-line. It was designed to help remind *nix system
-administrators of options for commands that they use frequently,
-but not frequently enough to remember.
-
-Examples:
-  To look up 'tar':
-  cheat tar
-
-  To create or edit the cheatsheet for 'foo':
-  cheat -e foo
-
 Options:
   -d --directories  List directories on CHEATPATH
   -e --edit         Edit cheatsheet
   -l --list         List cheatsheets
   -s --search       Search cheatsheets for <keyword>
   -v --version      Print the version number
+
+Examples:
+
+  To view the `tar` cheatsheet:
+    cheat tar
+
+  To edit (or create) the `foo` cheatsheet:
+    cheat -e foo
+
+  To list all available cheatsheets:
+    cheat -l
+
+  To search for "ssh" among all cheatsheets:
+    cheat -s ssh
 """
 
 # require the dependencies
