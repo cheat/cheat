@@ -1,0 +1,8 @@
+# Reboot the system immediately
+shutdown -r now
+
+# Shut system down immediately
+shutdown -h now
+
+# Reboot system after 5 minutes
+shutdown -r +5
