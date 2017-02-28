@@ -1,0 +1,14 @@
+# Trash foo and bar
+trash foo bar
+
+# Trash "foo bar"
+trash foo\ bar
+
+# List files in trash
+trash -v --list
+
+# Restore foo from trash
+trash --restore foo
+
+# Empty trash
+trash --empty

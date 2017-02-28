@@ -1,0 +1,14 @@
+# search (fuzzy) for package foo
+urpmq -Y foo
+
+# check if foo is installed
+rpm -q foo
+
+# install package foo
+urpmi foo
+
+# download but don't install foo
+urpmi --no-install foo
+
+# uninstall package foo
+urpme foo

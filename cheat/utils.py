@@ -1,6 +1,7 @@
 from __future__ import print_function
 import os
 import sys
+import subprocess
 
 
 def colorize(sheet_content):
@@ -45,6 +46,16 @@ def editor():
         )
 
     return editor
+
+
+def open_with_editor(filepath):
+    """ Open `filepath` using the EDITOR specified by the environment variables """
+    editor_cmd = editor().split()
+    try:
+        subprocess.call(editor_cmd + [filepath])
+    except OSError:
+        die('Could not launch ' + editor())
+
 
 def warn(message):
     """ Prints a message to stderr """

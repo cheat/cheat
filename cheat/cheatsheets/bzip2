@@ -1,0 +1,11 @@
+# compress foo -> foo.bz2
+bzip2 -z foo
+
+# decompress foo.bz2 -> foo
+bzip2 -d foo.bz2
+
+# compress foo to stdout
+bzip2 -zc foo > foo.bz2
+
+# decompress foo.bz2 to stdout
+bzip2 -dc foo.bz2

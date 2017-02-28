@@ -1,0 +1,14 @@
+# DocBook XML to PDF
+xmlto pdf mydoc.xml
+
+# DocBook XML to HTML
+xmlto -o html-dir html mydoc.xml
+
+# DocBook XML to single HTML file
+xmlto html-nochunks mydoc.xml
+
+# modify output with XSL override
+xmlto -m ulink.xsl pdf mydoc.xml
+
+# use non-default xsl
+xmlto -x mystylesheet.xsl pdf mydoc.xml
