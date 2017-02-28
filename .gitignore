@@ -3,3 +3,4 @@ MANIFEST
 build
 cheat.egg-info
 dist
+venv

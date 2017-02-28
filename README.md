@@ -23,7 +23,7 @@ cheat tar
 You will be presented with a cheatsheet resembling:
 
 ```sh
-# To extract an uncompressed archive: 
+# To extract an uncompressed archive:
 tar -xvf '/path/to/foo.tar'
 
 # To extract a .gz archive:
@@ -116,6 +116,27 @@ enable this feature, set a `CHEATCOLORS` environment variable:
 ```sh
 export CHEATCOLORS=true
 ```
+
+Development
+-----------
+
+Virtual environments and `setuptools` can be used to develop `cheat`:
+
+Create a virtual environment with [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/):
+
+    $ virtualenv venv
+
+Activate it:
+
+    $ source venv/bin/activate
+
+Install `cheat` in the venv in [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode):
+
+    $ python setup.py develop
+
+Now `cheat` can be run from inside the venv:
+
+    $ venv/bin/cheat
 
 See Also:
 ---------
