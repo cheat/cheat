@@ -56,8 +56,8 @@ def paths():
     ]
 
     # merge the CHEATPATH paths into the sheet_paths
-    if 'CHEATPATH' in os.environ and os.environ['CHEATPATH']:
-        for path in os.environ['CHEATPATH'].split(os.pathsep):
+    if os.environ.get('CHEATPATH'):
+        for path in os.environ.get('CHEATPATH').split(os.pathsep):
             if os.path.isdir(path):
                 sheet_paths.append(path)
 

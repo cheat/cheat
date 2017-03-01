@@ -24,5 +24,10 @@ setup(
     install_requires = [
         'docopt >= 0.6.1',
         'pygments >= 1.6.0',
-    ]
+    ],
+    extras_require   = {
+        'dev': [
+            'mock == 2.0.0',
+        ]
+    }
 )
