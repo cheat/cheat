@@ -1,0 +1,12 @@
+#!/usr/bin/env python
+from os.path import expanduser
+import shutil
+import sys
+
+try:
+  shutil.rmtree(expanduser('~') + '/.cheat')
+  shutil.copytree('./.cheat', expanduser('~') + '/.cheat')
+  print "cheats have been updated successfully."
+except IOError as e:
+   print >> sys.stderr, "This updater must be run as root."
+   sys.exit(1)
