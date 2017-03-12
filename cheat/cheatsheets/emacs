@@ -4,9 +4,11 @@
   Cut                 CTRL-w
   Copy                ALT-w
   Paste ("yank")      CTRL-y
+  Begin selection     CTRL-SPACE
   Search/Find         CTRL-s
   Replace             ALT-% (ALT-SHIFT-5)
   Save                CTRL-x CTRL-s
+  Save as	      CTRL-x CTRL-w
   Load/Open           CTRL-x CTRL-f
   Undo                CTRL-x u
   Highlight all text  CTRL-x h
@@ -23,8 +25,8 @@
   Split screen horizontally with 24 column width  CTRL-u 24 CTRL-x 3
   Revert to single screen                         CTRL-x 1
   Hide the current screen                         CTRL-x 0
-  Kill the current screen                         CTRL-x k
-  Move to the next buffer                         CTRL-x O
+  Move to the next screen			  CTRL-x o
+  Kill a buffer	   				  CTRL-x k
   Select a buffer                                 CTRL-x b
   Run command in the scratch buffer               CTRL-x CTRL-e
 
