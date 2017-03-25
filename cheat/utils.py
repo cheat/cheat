@@ -6,9 +6,10 @@ import subprocess
 
 def colorize(sheet_content):
     """ Colorizes cheatsheet content if so configured """
+    should_color = os.getenv('CHEATCOLORS', None)
 
     # only colorize if so configured
-    if not 'CHEATCOLORS' in os.environ:
+    if not should_color or should_color == 'false':
         return sheet_content
 
     try:
@@ -19,7 +20,7 @@ def colorize(sheet_content):
     # if pygments can't load, just return the uncolorized text
     except ImportError:
         return sheet_content
-
+    
     first_line = sheet_content.splitlines()[0]
     lexer      = get_lexer_by_name('bash')
     if first_line.startswith('```'):
@@ -28,7 +29,7 @@ def colorize(sheet_content):
             lexer = get_lexer_by_name(first_line[3:])
         except Exception:
             pass
-
+    
     return highlight(sheet_content, lexer, TerminalFormatter())
 
 

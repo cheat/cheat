@@ -44,6 +44,12 @@ Note that, while `cheat` was designed primarily for \*nix system administrators,
 it is agnostic as to what content it stores. If you would like to use `cheat`
 to store notes on your favorite cookie recipes, feel free.
 
+Another note, to pipe the output to `less` or `more`, you need to use `-R` option ([info](http://stackoverflow.com/a/14573778/401544)):
+
+```
+cheat find | less -R
+```
+
 
 Installing
 ----------

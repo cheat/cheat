@@ -32,6 +32,10 @@ Examples:
 
   To search for "ssh" among all cheatsheets:
     cheat -s ssh
+
+  To pipe the output to less or more
+    cheat <cheatsheet> | less -R
+    cheat <cheatsheet> | more -R
 """
 
 # require the dependencies
@@ -39,6 +43,21 @@ from cheat import sheets, sheet
 from cheat.utils import colorize
 from docopt import docopt
 
+def set_output_encoding(encoding='utf-8'):
+    import os
+    should_color = os.getenv('CHEATCOLORS', None)
+
+    if not should_color or should_color == 'false':
+        return
+
+    import sys
+    import codecs
+    current = sys.stdout.encoding
+    if current is None :
+        sys.stdout = codecs.getwriter(encoding)(sys.stdout)
+    current = sys.stderr.encoding
+    if current is None :
+        sys.stderr = codecs.getwriter(encoding)(sys.stderr)
 
 if __name__ == '__main__':
     # parse the command-line options
@@ -62,4 +81,5 @@ if __name__ == '__main__':
 
     # print the cheatsheet
     else:
+        set_output_encoding()
         print(colorize(sheet.read(options['<cheatsheet>'])))
