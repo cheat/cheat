@@ -1,0 +1,2 @@
+# Kill all PIDs matching the pattern
+pkill -f example
