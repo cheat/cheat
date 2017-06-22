@@ -76,15 +76,19 @@ def list():
     return sheet_list
 
 
-def search(term):
+def search(term, match_case):
     """ Searches all cheatsheets for the specified term """
     result = ''
 
     for cheatsheet in sorted(get().items()):
         match = ''
         for line in open(cheatsheet[1]):
-            if term in line:
-                match += '  ' + line
+            if match_case:
+                if term in line:
+                    match += '  ' + line
+            else:
+                if term.lower() in line.lower():
+                    match += '  ' + line
 
         if match != '':
             result += cheatsheet[0] + ":\n" + match + "\n"

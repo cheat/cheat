@@ -8,6 +8,7 @@ Usage:
   cheat <cheatsheet>
   cheat -e <cheatsheet>
   cheat -s <keyword>
+  cheat -S <keyword>
   cheat -l
   cheat -d
   cheat -v
@@ -17,6 +18,7 @@ Options:
   -e --edit         Edit cheatsheet
   -l --list         List cheatsheets
   -s --search       Search cheatsheets for <keyword>
+  -S --search-ignore-case       Search cheatsheets for <keyword>, ignoring case
   -v --version      Print the version number
 
 Examples:
@@ -58,7 +60,11 @@ if __name__ == '__main__':
 
     # search among the cheatsheets
     elif options['--search']:
-        print(colorize(sheets.search(options['<keyword>'])))
+        print(colorize(sheets.search(options['<keyword>'], True)))
+
+    # search among the cheatsheets, ignoring case
+    elif options['--search-ignore-case']:
+        print(colorize(sheets.search(options['<keyword>'], False)))
 
     # print the cheatsheet
     else:
