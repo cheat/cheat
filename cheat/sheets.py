@@ -36,7 +36,11 @@ def get():
 
     # otherwise, scan the filesystem
     for cheat_dir in reversed(paths()):
-        subdirs = [x[0] for x in os.walk(cheat_dir)]
+        subdirs = []
+        for root, dirs, files in os.walk(cheat_dir, topdown=True):
+            dirs[:] = [d for d in dirs if not d.startswith('.')]
+            subdirs.append(root)
+            
         for subdir in subdirs:
             cheats.update(
                 dict([
@@ -49,6 +53,7 @@ def get():
             )
 
     return cheats
+
 
 def paths():
     """ Assembles a list of directories containing cheatsheets """
