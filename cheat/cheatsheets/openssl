@@ -15,6 +15,9 @@ openssl req -text -noout -in server.csr
 # To show certificate information for generated certificate
 openssl x509 -text -noout -in server.crt 
 
+# To get the sha256 fingerprint of a certificate
+openssl x509 -in server.crt -noout -sha256 -fingerprint
+
 # To view certificate expiration:
 echo | openssl s_client -connect <hostname>:443 2> /dev/null | \
 awk '/-----BEGIN/,/END CERTIFICATE-----/' | \
