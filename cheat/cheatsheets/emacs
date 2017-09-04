@@ -28,6 +28,16 @@
   Select a buffer                                 CTRL-x b
   Run command in the scratch buffer               CTRL-x CTRL-e
 
+# Navigation ( backward / forward )
+  
+  Character-wise                                  CTRL-b , CTRL-f
+  Word-wise                                       ALT-b  , ALT-f
+  Line-wise                                       CTRL-p , CTRL-n
+  Sentence-wise                                   ALT-a  , ALT-e
+  Paragraph-wise                                  ALT-{ , ALT-}
+  Function-wise                                   CTRL-ALT-a , CTRL-ALT-e
+  Line beginning / end                            CTRL-a , CTRL-e
+
 # Other stuff
 
   Open a shell         ALT-x eshell
