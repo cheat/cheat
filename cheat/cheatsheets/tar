@@ -19,6 +19,9 @@ tar -xjvf /path/to/foo.tgz
 # To create a .bz2 archive:
 tar -cjvf /path/to/foo.tgz /path/to/foo/
 
+# To extract a .tar in specified Directory:
+tar -xvf /path/to/foo.tar -C /path/to/destination/
+
 # To list the content of an .bz2 archive:
 tar -jtvf /path/to/foo.tgz
 
