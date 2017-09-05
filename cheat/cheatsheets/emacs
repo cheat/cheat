@@ -8,7 +8,7 @@
   Search/Find         CTRL-s
   Replace             ALT-% (ALT-SHIFT-5)
   Save                CTRL-x CTRL-s
-  Save as	      CTRL-x CTRL-w
+  Save as             CTRL-x CTRL-w
   Load/Open           CTRL-x CTRL-f
   Undo                CTRL-x u
   Highlight all text  CTRL-x h
@@ -25,8 +25,8 @@
   Split screen horizontally with 24 column width  CTRL-u 24 CTRL-x 3
   Revert to single screen                         CTRL-x 1
   Hide the current screen                         CTRL-x 0
-  Move to the next screen			  CTRL-x o
-  Kill a buffer	   				  CTRL-x k
+  Move to the next screen                         CTRL-x o
+  Kill the current buffer                         CTRL-x k
   Select a buffer                                 CTRL-x b
   Run command in the scratch buffer               CTRL-x CTRL-e
 
