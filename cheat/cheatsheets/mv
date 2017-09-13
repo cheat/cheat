@@ -1,7 +1,14 @@
-# mv - move. Moves a file or directory
-mv [-f, -i, -n] [-v] [source] [target]
+# Move a file from one place to another
+mv ~/Desktop/foo.txt ~/Documents/foo.txt
 
--f : No prompt before overwriting something in target destination. Overrides any previous -i or -n args.
--i : Prompt before overwriting something. Overrides any previous -f or -n args.
--n : Do not overwrite anything. Overrides any previous -f or -i args.
--v : Verbose
+# Move a file from one place to another and automatically overwrite if the destination file exists
+# (This will override any previous -i or -n args)
+mv -f ~/Desktop/foo.txt ~/Documents/foo.txt
+
+# Move a file from one place to another but ask before overwriting an existing file
+# (This will override any previous -f or -n args)
+mv -i ~/Desktop/foo.txt ~/Documents/foo.txt
+
+# Move a file from one place to another but never overwrite anything
+# (This will override any previous -f or -i args)
+mv -n ~/Desktop/foo.txt ~/Documents/foo.txt

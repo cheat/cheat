@@ -1,3 +1,2 @@
-# Print Working Directory
-# The `pwd' command will show you the absolute path of your current directory on the filesystem
+# Show the absolute path of your current working directory on the filesystem
 pwd

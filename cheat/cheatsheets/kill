@@ -1,7 +1,5 @@
-# kill - Kills a process
+# Kill a process gracefully
+kill -15 <process id>
 
-# Kill gracefully
-kill -15 [PID]
-
-# Force kill (*Only use if -15 does not work first, this is dirty*)
-kill -9 [PID]
+# Kill a process forcefully
+kill -9 <process id>

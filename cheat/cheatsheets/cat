@@ -1,10 +1,8 @@
-# cat - concatenate and print files
-cat [-benstuv] [filename]
+# Display the contents of a file
+cat /path/to/foo
 
--b : Number non blank lines (1 indexed)
--e : Display non printing chars
--n : Number output (1 indexed)
--s : Single spaced output
--t : Display non printing chars (Tab as `^I')
--u : Disable output buffering
--v : Display all non printing chars no matter what
+# Display contents with line numbers
+cat -n /path/to/foo
+
+# Display contents with line numbers (blank lines excluded)
+cat -b /path/to/foo

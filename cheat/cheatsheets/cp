@@ -1,14 +1,8 @@
-# cp - copy. Copies a file or directory
-cp [-a, -f, -H, -i, -L, -n, -p, -P, -R, -X] [-v] [source] [target]
+# Create a copy of a file
+cp ~/Desktop/foo.txt ~/Downloads/foo.txt
 
--a : Same as -pPR
--f : Force
--H : Follow sym links
--i : Prompt before overwrite
--L : If -R, follow sym links
--n : Do not overwrite
--P : If -R, Do not follow sym links (Default)
--p : Preserve meta data
--R : Recursive (cp directories)
--X : Do not copy extended attributes or resource forks
--v : Verbose
+# Create a copy of a directory
+cp -r ~/Desktop/cruise_pics/ ~/Pictures/
+
+# Create a copy but ask to overwrite if the destination file already exists
+cp -i ~/Desktop/foo.txt ~/Documents/foo.txt
