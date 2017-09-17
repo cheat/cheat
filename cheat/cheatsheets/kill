@@ -1,0 +1,5 @@
+# Kill a process gracefully
+kill -15 <process id>
+
+# Kill a process forcefully
+kill -9 <process id>

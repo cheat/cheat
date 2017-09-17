@@ -1,0 +1,2 @@
+# Show the absolute path of your current working directory on the filesystem
+pwd
