@@ -84,6 +84,8 @@ def search(term):
         match = ''
         for line in open(cheatsheet[1]):
             if term in line:
+                if 'CHEATCOLORS' in os.environ:
+                    line = line.replace(term, '\033[1;31m' + term + '\033[0m');
                 match += '  ' + line
 
         if match != '':
