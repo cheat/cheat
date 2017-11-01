@@ -1,3 +1,8 @@
+# Running emacs
+
+  GUI mode            $ emacs
+  Terminal mode       $ emacs -nw
+
 # Basic usage
 
   Indent              Select text then press TAB
@@ -17,7 +22,7 @@
   Font size bigger    CTRL-x CTRL-+
   Font size smaller   CTRL-x CTRL--
 
-#  Buffers
+# Buffers
 
   Split screen vertically                         CTRL-x 2
   Split screen vertically with 5 row height       CTRL-u 5 CTRL-x 2
