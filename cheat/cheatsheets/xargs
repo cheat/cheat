@@ -10,3 +10,7 @@ find -name *.pdf | xargs -I{} rm -rf '{}'
 # -n1 => One file by one file. ( -n2 => 2 files by 2 files )
 
 find -name *.pdf | xargs -I{} -n1 echo '&{}='
+
+# If find returns no result, do not run rm
+# This option is a GNU extension.
+find -name "*.pdf" | xargs --no-run-if-empty rm
