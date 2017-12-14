@@ -1,7 +1,7 @@
 # Read from {/dev/urandom} 2*512 Bytes and put it into {/tmp/test.txt}
 # Note: At the first iteration, we read 512 Bytes.
 # Note: At the second iteration, we read 512 Bytes.
-dd if=/dev/urandom of=/tmp/test.txt count=512 bs=2
+dd if=/dev/urandom of=/tmp/test.txt count=2 bs=512
 
 # Watch the progress of 'dd'
 dd if=/dev/zero of=/dev/null bs=4KB &; export dd_pid=`pgrep '^dd'`; while [[ -d /proc/$dd_pid ]]; do kill -USR1 $dd_pid && sleep 1 && clear; done

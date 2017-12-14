@@ -1,0 +1,8 @@
+# Display the contents of a file
+cat /path/to/foo
+
+# Display contents with line numbers
+cat -n /path/to/foo
+
+# Display contents with line numbers (blank lines excluded)
+cat -b /path/to/foo

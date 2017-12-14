@@ -1,0 +1,5 @@
+# Calling export with no arguments will show current shell attributes
+export
+
+# Create new environment variable
+export VARNAME="value"
