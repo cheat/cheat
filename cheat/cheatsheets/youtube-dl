@@ -16,5 +16,8 @@ youtube-dl --playlist-start 5 example.com/watch?v=id&list=listid
 # To simulate a download with youtube-dl:
 youtube-dl -s example.com/watch?v=id
 
+# To download audio in mp3 format with best quality available
+youtube-dl --extract-audio --audio-format mp3 --audio-quality 0 example.com/watch?v=id
+
 # For all video formats see
 # http://en.wikipedia.org/wiki/YouTube#Quality_and_codecs
