@@ -23,7 +23,7 @@ def colorize(sheet_content):
     # GMFTBY add 
     if sheet_content == '' :
         # can not find the content about the term
-        die('Can not find the content about the term!')
+        die('Can not find the content !')
         return 
 
     first_line = sheet_content.splitlines()[0]
