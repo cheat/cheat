@@ -20,6 +20,12 @@ def colorize(sheet_content):
     except ImportError:
         return sheet_content
 
+    # GMFTBY add 
+    if sheet_content == '' :
+        # can not find the content about the term
+        die('Can not find the content about the term!')
+        return 
+
     first_line = sheet_content.splitlines()[0]
     lexer      = get_lexer_by_name('bash')
     if first_line.startswith('```'):

@@ -47,6 +47,23 @@ def get():
 
     return cheats
 
+# GMFTBY add : 
+# try to return the subdir(s) under the sheet_paths created by the `paths` function below
+def get_subdir(current_dir):
+    '''
+        Input  : the path of the current_dir
+        Output : the list contain the subdirs
+
+        P.S : maybe need to add the limitation about the search depth ?
+    '''
+    result = []
+    for f_name in os.listdir(current_dir):
+        if f_name.startswith('__') or f_name.startswith('.') : continue 
+        whole_path = os.path.join(current_dir, f_name)
+        if os.path.isdir(whole_path):
+            result.append(whole_path)
+            result.extend(get_subdir(whole_path))    # GMFTBY add : recursion, function
+    return result
 
 def paths():
     """ Assembles a list of directories containing cheatsheets """
@@ -60,6 +77,14 @@ def paths():
         for path in os.environ['CHEATPATH'].split(os.pathsep):
             if os.path.isdir(path):
                 sheet_paths.append(path)
+
+    # GMFTBY add : add the subdir under the current_dir into the sheet_paths
+    for_extend = []
+    for path in sheet_paths:
+        subdirs = get_subdir(path)
+        if subdirs:
+            for_extend.extend(subdirs)
+    sheet_paths.extend(for_extend)
 
     if not sheet_paths:
         die('The DEFAULT_CHEAT_DIR dir does not exist or the CHEATPATH is not set.')
@@ -81,10 +106,14 @@ def search(term):
     result = ''
 
     for cheatsheet in sorted(get().items()):
+        # GMFTBY add : decide not to open the dir or the illegal file
+        if os.path.isdir(cheatsheet[1]) == True \
+                or os.access(cheatsheet[1], os.R_OK) == False: continue
         match = ''
-        for line in open(cheatsheet[1]):
+        # GMFTBY add : add the line number into the match message
+        for index, line in enumerate(open(cheatsheet[1])):
             if term in line:
-                match += '  ' + line
+                match += '[%d]\t\t' % index + line.strip() + '\n'
 
         if match != '':
             result += cheatsheet[0] + ":\n" + match + "\n"
