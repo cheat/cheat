@@ -109,8 +109,8 @@ export CHEATPATH="$CHEATPATH:/path/to/more/cheats"
 You may view which directories are on your `CHEATPATH` with `cheat -d`.
 
 ### Enabling Syntax Highlighting ###
-`cheat` can optionally apply syntax highlighting to your cheatsheets. To enable
-syntax highlighting, export a `CHEATCOLORS` environment variable:
+`cheat` can optionally apply syntax highlighting to your cheatsheets. To can use this feature is
+neccessary to install the package [Pygments](http://pygments.org/). To enable syntax highlighting, export a `CHEATCOLORS` environment variable:
 
 ```sh
 export CHEATCOLORS=true
