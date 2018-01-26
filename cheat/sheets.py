@@ -76,11 +76,13 @@ def list():
     return sheet_list
 
 
-def search(term):
-    """ Searches all cheatsheets for the specified term """
+def search(term, target_sheet):
+    """ Searches all cheatsheets for the specified term.
+        Restrict search to target_sheet if given """
     result = ''
-
     for cheatsheet in sorted(get().items()):
+        if target_sheet and target_sheet != cheatsheet[0]:
+            continue
         match = ''
         for line in open(cheatsheet[1]):
             if term in line:

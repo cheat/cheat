@@ -7,7 +7,7 @@ Create and view cheatsheets on the command line.
 Usage:
   cheat <cheatsheet>
   cheat -e <cheatsheet>
-  cheat -s <keyword>
+  cheat -s <keyword> [<cheatsheet>]
   cheat -l
   cheat -d
   cheat -v
@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
     # search among the cheatsheets
     elif options['--search']:
-        print(colorize(sheets.search(options['<keyword>'])))
+        print(colorize(sheets.search(options['<keyword>'], options['<cheatsheet>'])))
 
     # print the cheatsheet
     else:
