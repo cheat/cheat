@@ -1,0 +1,8 @@
+# Create new mailbox in IMAP
+	+ When located in mailbox list (c)
+		shift + C 
+
+# Move multiple messages to folder (bulk operations)
+	
+	1. Select/tag them with alt+'t'
+	2. ;s in mail inbox overview for bulk operation
