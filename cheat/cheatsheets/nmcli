@@ -34,7 +34,10 @@ nmcli dev status
 # Add a dynamic ethernet connection - parameters:
 #	<name> -- the name of the connection
 #	<iface_name> -- the name of the interface
-ncmli con add type ethernet con-name <name> ifname <iface_name>
+nmcli con add type ethernet con-name <name> ifname <iface_name>
+
+# Import OpenVPN connection settings from file:
+ncmli con import type openvpn file <path_to_ovpn_file>
 
 # Bring up the ethernet connection
 nmcli con up <name>
