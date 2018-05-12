@@ -53,7 +53,7 @@ def paths():
     """ Assembles a list of directories containing cheatsheets """
     sheet_paths = [
         default_path(),
-        cheatsheets.sheets_dir()[0],
+        '/usr/share/cheat',
     ]
 
     # merge the CHEATPATH paths into the sheet_paths
