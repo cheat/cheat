@@ -340,6 +340,11 @@
 
 	fs flagspace: Change to the specified flag space
 
+	fe loop and create numbered flags:
+		
+		1. fs demo_flagspace
+		2. fe demo_flagspace @@=`pdf~jne[1]`
+
 # Yank & Paste
 
 	y n: Copies n bytes from current position
