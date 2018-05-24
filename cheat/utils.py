@@ -3,6 +3,8 @@ import os
 import subprocess
 import sys
 
+from cheat.configuration import Configuration
+
 def highlight(needle, haystack):
     """ Highlights a search term matched within a line """
 
@@ -26,7 +28,7 @@ def colorize(sheet_content):
     """ Colorizes cheatsheet content if so configured """
 
     # only colorize if configured to do so, and if stdout is a tty
-    if os.environ.get('CHEATCOLORS') != 'true' or not sys.stdout.isatty():
+    if not Configuration().get_cheatcolors() or not sys.stdout.isatty():
         return sheet_content
 
     # don't attempt to colorize an empty cheatsheet
@@ -68,16 +70,13 @@ def editor():
     """ Determines the user's preferred editor """
 
     # determine which editor to use
-    editor = os.environ.get('CHEAT_EDITOR') \
-        or os.environ.get('VISUAL')         \
-        or os.environ.get('EDITOR')         \
-        or False
+    editor = Configuration().get_editor()
 
     # assert that the editor is set
-    if editor == False:
+    if (not editor):
         die(
             'You must set a CHEAT_EDITOR, VISUAL, or EDITOR environment '
-            'variable in order to create/edit a cheatsheet.'
+            'variable or setting in order to create/edit a cheatsheet.'
         )
 
     return editor

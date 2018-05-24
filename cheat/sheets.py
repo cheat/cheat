@@ -1,14 +1,14 @@
 import os
 
-from cheat import cheatsheets
 from cheat.utils import die
 from cheat.utils import highlight
+from cheat.configuration import Configuration
 
 def default_path():
     """ Returns the default cheatsheet path """
 
     # determine the default cheatsheet dir
-    default_sheets_dir = os.environ.get('DEFAULT_CHEAT_DIR') or os.path.join('~', '.cheat')
+    default_sheets_dir = Configuration().get_default_cheat_dir() or os.path.join('~', '.cheat')
     default_sheets_dir = os.path.expanduser(os.path.expandvars(default_sheets_dir))
 
     # create the DEFAULT_CHEAT_DIR if it does not exist
@@ -57,8 +57,8 @@ def paths():
     ]
 
     # merge the CHEATPATH paths into the sheet_paths
-    if 'CHEATPATH' in os.environ and os.environ['CHEATPATH']:
-        for path in os.environ['CHEATPATH'].split(os.pathsep):
+    if Configuration().get_cheatpath():
+        for path in Configuration().get_cheatpath().split(os.pathsep):
             if os.path.isdir(path):
                 sheet_paths.append(path)
 

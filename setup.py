@@ -1,5 +1,4 @@
 from distutils.core import setup
-import glob
 import os
 
 cheat_files = []
@@ -28,5 +27,6 @@ setup(
     ],
     data_files = [
         ('/usr/share/cheat', cheat_files),
+        ('/etc', ['config/cheat']),
     ],
 )
