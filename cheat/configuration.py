@@ -1,5 +1,5 @@
 import os
-from cheat.utils import warn
+from cheat.utils import Utils
 import json
 
 class Configuration:
@@ -15,12 +15,12 @@ class Configuration:
         try:    
             merged_config.update(self._read_configuration_file('/etc/cheat'))
         except Exception:
-            warn('error while parsing global configuration')
+            Utils.warn('error while parsing global configuration')
 
         try:
             merged_config.update(self._read_configuration_file(os.path.expanduser(os.path.join('~','.config','cheat','cheat'))))
         except Exception:
-            warn('error while parsing user configuration')
+            Utils.warn('error while parsing user configuration')
 
         merged_config.update(self._read_env_vars_config())
 

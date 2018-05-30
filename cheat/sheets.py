@@ -1,94 +1,100 @@
 import os
 
-from cheat.utils import die
-from cheat.utils import highlight
 from cheat.configuration import Configuration
+from cheat.utils import Utils
 
-def default_path():
-    """ Returns the default cheatsheet path """
-
-    # determine the default cheatsheet dir
-    default_sheets_dir = Configuration().get_default_cheat_dir() or os.path.join('~', '.cheat')
-    default_sheets_dir = os.path.expanduser(os.path.expandvars(default_sheets_dir))
-
-    # create the DEFAULT_CHEAT_DIR if it does not exist
-    if not os.path.isdir(default_sheets_dir):
-        try:
-            # @kludge: unclear on why this is necessary
-            os.umask(0000)
-            os.mkdir(default_sheets_dir)
-
-        except OSError:
-            die('Could not create DEFAULT_CHEAT_DIR')
-
-    # assert that the DEFAULT_CHEAT_DIR is readable and writable
-    if not os.access(default_sheets_dir, os.R_OK):
-        die('The DEFAULT_CHEAT_DIR (' + default_sheets_dir +') is not readable.')
-    if not os.access(default_sheets_dir, os.W_OK):
-        die('The DEFAULT_CHEAT_DIR (' + default_sheets_dir +') is not writable.')
-
-    # return the default dir
-    return default_sheets_dir
+class Sheets:
 
 
-def get():
-    """ Assembles a dictionary of cheatsheets as name => file-path """
-    cheats = {}
-
-    # otherwise, scan the filesystem
-    for cheat_dir in reversed(paths()):
-        cheats.update(
-            dict([
-                (cheat, os.path.join(cheat_dir, cheat))
-                for cheat in os.listdir(cheat_dir)
-                if not cheat.startswith('.')
-                and not cheat.startswith('__')
-            ])
-        )
-
-    return cheats
+    def __init__(self,default_cheat_dir,cheatpath):
+        self.default_cheat_dir = default_cheat_dir
+        self.cheatpath = cheatpath
 
 
-def paths():
-    """ Assembles a list of directories containing cheatsheets """
-    sheet_paths = [
-        default_path(),
-        '/usr/share/cheat',
-    ]
+    def default_path(self):
+        """ Returns the default cheatsheet path """
 
-    # merge the CHEATPATH paths into the sheet_paths
-    if Configuration().get_cheatpath():
-        for path in Configuration().get_cheatpath().split(os.pathsep):
-            if os.path.isdir(path):
-                sheet_paths.append(path)
+        # determine the default cheatsheet dir
+        default_sheets_dir = self.default_cheat_dir or os.path.join('~', '.cheat')
+        default_sheets_dir = os.path.expanduser(os.path.expandvars(default_sheets_dir))
 
-    if not sheet_paths:
-        die('The DEFAULT_CHEAT_DIR dir does not exist or the CHEATPATH is not set.')
+        # create the DEFAULT_CHEAT_DIR if it does not exist
+        if not os.path.isdir(default_sheets_dir):
+            try:
+                # @kludge: unclear on why this is necessary
+                os.umask(0000)
+                os.mkdir(default_sheets_dir)
 
-    return sheet_paths
+            except OSError:
+                Utils.die('Could not create DEFAULT_CHEAT_DIR')
+
+        # assert that the DEFAULT_CHEAT_DIR is readable and writable
+        if not os.access(default_sheets_dir, os.R_OK):
+            Utils.die('The DEFAULT_CHEAT_DIR (' + default_sheets_dir +') is not readable.')
+        if not os.access(default_sheets_dir, os.W_OK):
+            Utils.die('The DEFAULT_CHEAT_DIR (' + default_sheets_dir +') is not writable.')
+
+        # return the default dir
+        return default_sheets_dir
 
 
-def list():
-    """ Lists the available cheatsheets """
-    sheet_list = ''
-    pad_length = max([len(x) for x in get().keys()]) + 4
-    for sheet in sorted(get().items()):
-        sheet_list += sheet[0].ljust(pad_length) + sheet[1] + "\n"
-    return sheet_list
+    def get(self):
+        """ Assembles a dictionary of cheatsheets as name => file-path """
+        cheats = {}
+
+        # otherwise, scan the filesystem
+        for cheat_dir in reversed(self.paths()):
+            cheats.update(
+                dict([
+                    (cheat, os.path.join(cheat_dir, cheat))
+                    for cheat in os.listdir(cheat_dir)
+                    if not cheat.startswith('.')
+                    and not cheat.startswith('__')
+                ])
+            )
+
+        return cheats
 
 
-def search(term):
-    """ Searches all cheatsheets for the specified term """
-    result = ''
-    lowered_term = term.lower()
+    def paths(self):
+        """ Assembles a list of directories containing cheatsheets """
+        sheet_paths = [
+            self.default_path(),
+            '/usr/share/cheat',
+        ]
 
-    for cheatsheet in sorted(get().items()):
-        match = ''
-        for line in open(cheatsheet[1]):
-            if term in line:
-                match += '  ' + highlight(term, line)
+        # merge the CHEATPATH paths into the sheet_paths
+        if self.cheatpath:
+            for path in self.cheatpath.split(os.pathsep):
+                if os.path.isdir(path):
+                    sheet_paths.append(path)
 
-        if match != '':
-            result += cheatsheet[0] + ":\n" + match + "\n"
+        if not sheet_paths:
+            Utils.die('The DEFAULT_CHEAT_DIR dir does not exist or the CHEATPATH is not set.')
 
-    return result
+        return sheet_paths
+
+
+    def list(self):
+        """ Lists the available cheatsheets """
+        sheet_list = ''
+        pad_length = max([len(x) for x in self.get().keys()]) + 4
+        for sheet in sorted(self.get().items()):
+            sheet_list += sheet[0].ljust(pad_length) + sheet[1] + "\n"
+        return sheet_list
+
+
+    def search(self,term):
+        """ Searches all cheatsheets for the specified term """
+        result = ''
+
+        for cheatsheet in sorted(self.get().items()):
+            match = ''
+            for line in open(cheatsheet[1]):
+                if term in line:
+                    match += '  ' + line
+
+            if match != '':
+                result += cheatsheet[0] + ":\n" + match + "\n"
+
+        return result

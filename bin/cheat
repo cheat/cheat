@@ -36,9 +36,10 @@ Examples:
 
 # require the dependencies
 from __future__ import print_function
-from cheat import sheets, sheet
-from cheat.utils import colorize
-from cheat.utils import die
+from cheat.sheets import Sheets
+from cheat.sheet import Sheet
+from cheat.utils import Utils
+from cheat.configuration import Configuration
 from docopt import docopt
 import os
 
@@ -59,6 +60,11 @@ if __name__ == '__main__':
     # parse the command-line options
     options = docopt(__doc__, version='cheat 2.3.1')
 
+    config = Configuration()
+    sheets = Sheets(config.get_default_cheat_dir(),config.get_cheatpath())
+    sheet = Sheet(config.get_default_cheat_dir(),config.get_cheatpath(),config.get_editor())
+    utils = Utils(config.get_cheatcolors(),config.get_editor())
+
     # list directories
     if options['--directories']:
         print("\n".join(sheets.paths()))
@@ -73,8 +79,8 @@ if __name__ == '__main__':
 
     # search among the cheatsheets
     elif options['--search']:
-        print(colorize(sheets.search(options['<keyword>'])), end="")
+        print(utils.colorize(sheets.search(options['<keyword>'])), end="")
 
     # print the cheatsheet
     else:
-        print(colorize(sheet.read(options['<cheatsheet>'])), end="")
+        print(utils.colorize(sheet.read(options['<cheatsheet>'])), end="")
