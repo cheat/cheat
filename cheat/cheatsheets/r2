@@ -785,6 +785,12 @@
 
 	+ Toggle IL representation via O in Visual Mode
 
+# ESIL Linear emulation
+
+	Find all references to curr. address using linear esil emulation on all imports.
+		
+		/re$$@@ sym.imp.*
+
 # ESIL IL Representation
 
 	op 	esil
