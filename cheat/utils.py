@@ -10,6 +10,9 @@ def colorize(sheet_content):
     # only colorize if so configured
     if not 'CHEATCOLORS' in os.environ:
         return sheet_content
+    # only colorize if stdout is tty
+    if not sys.stdout.isatty():
+        return sheet_content
 
     try:
         from pygments import highlight
@@ -20,8 +23,11 @@ def colorize(sheet_content):
     except ImportError:
         return sheet_content
 
-    first_line = sheet_content.splitlines()[0]
-    lexer      = get_lexer_by_name('bash')
+    lines = sheet_content.splitlines()
+    if len(lines) == 0:
+        return ""
+    first_line = lines[0]
+    lexer = get_lexer_by_name('bash')
     if first_line.startswith('```'):
         sheet_content = '\n'.join(sheet_content.split('\n')[1:-2])
         try:

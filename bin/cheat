@@ -34,6 +34,7 @@ Examples:
     cheat -s ssh
 """
 
+from __future__ import print_function
 # require the dependencies
 from cheat import sheets, sheet
 from cheat.utils import colorize
@@ -50,7 +51,7 @@ if __name__ == '__main__':
 
     # list cheatsheets
     elif options['--list']:
-        print(sheets.list())
+        print(sheets.list(), end="")
 
     # create/edit cheatsheet
     elif options['--edit']:
@@ -58,8 +59,8 @@ if __name__ == '__main__':
 
     # search among the cheatsheets
     elif options['--search']:
-        print(colorize(sheets.search(options['<keyword>'])))
+        print(colorize(sheets.search(options['<keyword>'])), end="")
 
     # print the cheatsheet
     else:
-        print(colorize(sheet.read(options['<cheatsheet>'])))
+        print(colorize(sheet.read(options['<cheatsheet>'])), end="")
