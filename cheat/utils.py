@@ -2,7 +2,7 @@ from __future__ import print_function
 import os
 import sys
 import subprocess
-
+import re
 
 def colorize(sheet_content):
     """ Colorizes cheatsheet content if so configured """
@@ -20,16 +20,28 @@ def colorize(sheet_content):
     except ImportError:
         return sheet_content
 
-    first_line = sheet_content.splitlines()[0]
-    lexer      = get_lexer_by_name('bash')
-    if first_line.startswith('```'):
-        sheet_content = '\n'.join(sheet_content.split('\n')[1:-2])
-        try:
-            lexer = get_lexer_by_name(first_line[3:])
-        except Exception:
-            pass
+    results = re.finditer(r"^(([ \t]*`{3})([^\n]*)([\s\S]+?)(^[ \t]*\2))", sheet_content, re.M)
 
-    return highlight(sheet_content, lexer, TerminalFormatter())
+    sheet_no_code = []  # list of slices of sheet_content without code blocks
+    sheet_code = []  # list of slices of sheet_content with code blocks
+
+    current = 0
+    for result in results:
+        try:
+            lexer = get_lexer_by_name(result.group(3))
+            code = result.group(4)
+            sheet_code.append(highlight(code, lexer, TerminalFormatter()).strip())
+        except Exception:
+            sheet_code.append(sheet_content[result.start():result.end()])
+
+        sheet_no_code.append(sheet_content[current:result.start()])
+        current = result.end()
+
+    if current < len(sheet_content):
+        sheet_no_code.append(sheet_content[current:])
+
+    # Interleave the two list of slices together to rebuild the original document, but this time highlighted
+    return "".join([val for pair in zip(sheet_no_code, sheet_code) for val in pair])
 
 
 def die(message):
