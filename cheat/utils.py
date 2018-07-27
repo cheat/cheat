@@ -37,6 +37,10 @@ def colorize(sheet_content):
         sheet_no_code.append(sheet_content[current:result.start()])
         current = result.end()
 
+    # Edge case, there aren't any blocks of code
+    if current == 0:
+        return sheet_content
+
     if current < len(sheet_content):
         sheet_no_code.append(sheet_content[current:])
 
