@@ -20,7 +20,7 @@ def colorize(sheet_content):
     except ImportError:
         return sheet_content
 
-    results = re.finditer(r"^(([ \t]*`{3})([^\n]*)([\s\S]+?)(^[ \t]*\2))", sheet_content, re.M)
+    results = re.finditer(r"^(([ \t]*`{3})(?P<lexer>[^\n]*)(?P<code>[\s\S]+?)(^[ \t]*\2))", sheet_content, re.M)
 
     sheet_no_code = []  # list of slices of sheet_content without code blocks
     sheet_code = []  # list of slices of sheet_content with code blocks
@@ -28,8 +28,8 @@ def colorize(sheet_content):
     current = 0
     for result in results:
         try:
-            lexer = get_lexer_by_name(result.group(3))
-            code = result.group(4)
+            lexer = get_lexer_by_name(result.group('lexer'))
+            code = result.group('code')
             sheet_code.append(highlight(code, lexer, TerminalFormatter()).strip())
         except Exception:
             sheet_code.append(sheet_content[result.start():result.end()])
