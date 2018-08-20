@@ -36,5 +36,8 @@ nmcli dev status
 #	<iface_name> -- the name of the interface
 nmcli con add type ethernet con-name <name> ifname <iface_name>
 
+# Import OpenVPN connection settings from file:
+nmcli con import type openvpn file <path_to_ovpn_file>
+
 # Bring up the ethernet connection
 nmcli con up <name>
