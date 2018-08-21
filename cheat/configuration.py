@@ -2,9 +2,13 @@ import os
 from cheat.utils import Utils
 import json
 
+
 class Configuration:
 
+
     def __init__(self):
+        self._get_global_conf_file_path()
+        self._get_local_conf_file_path()
         self._saved_configuration = self._get_configuration()
 
 
@@ -12,15 +16,15 @@ class Configuration:
         # get options from config files and environment vairables
         merged_config = {}
 
-        try:    
-            merged_config.update(self._read_configuration_file('/etc/cheat'))
-        except Exception:
-            Utils.warn('error while parsing global configuration')
+        try:
+            merged_config.update(self._read_configuration_file(self.glob_config_path))
+        except Exception as e:
+            Utils.warn('error while parsing global configuration Reason: ' + e.message)
 
         try:
-            merged_config.update(self._read_configuration_file(os.path.expanduser(os.path.join('~','.config','cheat','cheat'))))
-        except Exception:
-            Utils.warn('error while parsing user configuration')
+            merged_config.update(self._read_configuration_file(self.local_config_path))
+        except Exception as e:
+            Utils.warn('error while parsing user configuration Reason: ' + e.message)
 
         merged_config.update(self._read_env_vars_config())
 
@@ -51,13 +55,23 @@ class Configuration:
 
         for k in keys:
             self._read_env_var(read_config,k)
-        
+
         return read_config
 
 
     def _read_env_var(self,current_config,key):
         if (os.environ.get(key)):
             current_config[key] = os.environ.get(key)
+
+
+    def _get_global_conf_file_path(self):
+        self.glob_config_path = os.environ.get('CHEAT_GLOBAL_CONF_PATH') \
+        or '/etc/cheat'
+
+
+    def _get_local_conf_file_path(self):
+        self.local_config_path = os.environ.get('CHEAT_LOCAL_CONF_PATH') \
+        or os.path.expanduser('~/.config/cheat/cheat')
 
 
     def get_default_cheat_dir(self):
@@ -70,7 +84,7 @@ class Configuration:
 
     def get_cheatcolors(self):
         return self._saved_configuration.get('CHEATCOLORS')
-    
+
 
     def get_editor(self):
         return self._saved_configuration.get('EDITOR')
