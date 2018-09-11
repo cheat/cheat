@@ -15,3 +15,9 @@ sed '/^$/d' file.txt
 
 # To replace newlines in multiple lines
 sed ':a;N;$!ba;s/\n//g'  file.txt
+
+# Insert a line before a matching pattern:
+sed '/Once upon a time/i\Chapter 1'
+
+# Add a line after a matching pattern:
+sed '/happily ever after/a\The end.'
