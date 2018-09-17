@@ -90,3 +90,13 @@ def search(term):
             result += cheatsheet[0] + ":\n" + match + "\n"
 
     return result
+
+def list_default_path():
+    """ Lists cheatsheets available in default_path """
+    sheet_list = ''
+    pad_length = max([len(x) for x in get().keys()]) + 4
+
+    for sheet,path in get().items():
+        if default_path() in path:
+            sheet_list += sheet.ljust(pad_length) + path + "\n"
+    return sheet_list
