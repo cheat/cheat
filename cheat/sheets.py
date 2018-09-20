@@ -79,11 +79,12 @@ def list():
 def search(term):
     """ Searches all cheatsheets for the specified term """
     result = ''
+    lowered_term = term.lower()
 
     for cheatsheet in sorted(get().items()):
         match = ''
         for line in open(cheatsheet[1]):
-            if term in line:
+            if lowered_term in line:
                 match += '  ' + line
 
         if match != '':
