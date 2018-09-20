@@ -33,3 +33,9 @@ curl http://ifconfig.me/all/json
 
 # Limit the rate of a download
 curl --limit-rate 1000B -O http://path.to.the/file
+
+# Get your global IP
+curl httpbin.org/ip 
+
+# Get only the HTTP status code
+curl -o /dev/null -w '%{http_code}\n' -s -I URL

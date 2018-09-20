@@ -12,3 +12,6 @@ rsync -auv /src/foo /dest
 
 # Explicitly copy /src/foo to /dest/foo
 rsync -auv /src/foo/ /dest/foo
+
+# Copy file from local to remote over ssh with non standard port 1234 to destination folder in remoteuser's home directory
+rsync -avz -e "ssh -p1234" /source/file1 remoteuser@X.X.X.X:~/destination/

@@ -29,3 +29,9 @@ UPDATE tbl_name SET col1 = "example";
 
 # Basic DELETE Statement
 DELETE FROM tbl_name WHERE user = 'jcole';
+
+# To check stored procedure
+SHOW PROCEDURE STATUS;
+
+# To check stored function
+SHOW FUNCTION STATUS;
