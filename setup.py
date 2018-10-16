@@ -3,7 +3,7 @@ import os
 
 setup(
     name         = 'cheat',
-    version      = '2.3.0',
+    version      = '2.3.1',
     author       = 'Chris Lane',
     author_email = 'chris@chris-allen-lane.com',
     license      = 'GPL3',
