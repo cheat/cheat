@@ -1,20 +1,20 @@
-# Index recursively some paths for the very first run
+# To index recursively some paths for the very first run:
 scd -ar ~/Documents/
 
-# Change to a directory path matching "doc"
+# To change to a directory path matching "doc":
 scd doc
 
-# Change to a path matching all of "a", "b" and "c"
+# To change to a path matching all of "a", "b" and "c":
 scd a b c
 
-# Change to a directory path that ends with "ts"
+# To change to a directory path that ends with "ts":
 scd "ts$"
 
-# Show selection menu and ranking of 20 most likely directories
+# To show selection menu and ranking of 20 most likely directories:
 scd -v
 
-# Alias current directory as "xray"
+# To alias current directory as "xray":
 scd --alias=xray
 
-# Jump to a previously defined aliased directory
+# To jump to a previously defined aliased directory:
 scd xray
