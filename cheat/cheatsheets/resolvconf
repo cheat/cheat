@@ -1,0 +1,6 @@
+# For Parrot/Debian
+1. Edit /etc/resolvconf/resolv.conf.d/head
+ -- Now your servers will be used from top (otherwise use base)
+2. Type namerver <IP> and save
+3. Enable updates with sudo resolvconf --enable-updates
+4. Restart daemon with sudo resolvconf -u
