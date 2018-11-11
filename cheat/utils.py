@@ -8,7 +8,7 @@ def colorize(sheet_content):
     """ Colorizes cheatsheet content if so configured """
 
     # only colorize if so configured
-    if not 'CHEATCOLORS' in os.environ:
+    if not 'CHEATCOLORS' in os.environ or os.environ.get('CHEATCOLORS') != 'true':
         return sheet_content
 
     try:
