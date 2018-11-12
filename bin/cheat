@@ -19,7 +19,7 @@ Options:
   -l --list         List cheatsheets
   -s --search       Search cheatsheets for <keyword>
   -v --version      Print the version number
-  -L --list-custom  Print costum cheatsheets
+  -L --list-custom  Print custom cheatsheets
 
 Examples:
 
