@@ -35,6 +35,7 @@ Examples:
 """
 
 # require the dependencies
+from __future__ import print_function
 from cheat import sheets, sheet
 from cheat.utils import colorize
 from cheat.utils import die
@@ -64,7 +65,7 @@ if __name__ == '__main__':
 
     # list cheatsheets
     elif options['--list']:
-        print(sheets.list())
+        print(sheets.list(), end="")
 
     # create/edit cheatsheet
     elif options['--edit']:
@@ -72,8 +73,8 @@ if __name__ == '__main__':
 
     # search among the cheatsheets
     elif options['--search']:
-        print(colorize(sheets.search(options['<keyword>'])))
+        print(colorize(sheets.search(options['<keyword>'])), end="")
 
     # print the cheatsheet
     else:
-        print(colorize(sheet.read(options['<cheatsheet>'])))
+        print(colorize(sheet.read(options['<cheatsheet>'])), end="")

@@ -21,12 +21,17 @@ def highlight(needle, haystack):
     # if the import succeeds, colorize the needle in haystack
     return haystack.replace(needle, colored(needle, os.environ.get('CHEAT_HIGHLIGHT')));
 
+
 def colorize(sheet_content):
     """ Colorizes cheatsheet content if so configured """
 
-    # if colorization is not configured, exit early
-    if os.environ.get('CHEATCOLORS') != 'true':
+    # only colorize if configured to do so, and if stdout is a tty
+    if os.environ.get('CHEATCOLORS') != 'true' or not sys.stdout.isatty():
         return sheet_content
+
+    # don't attempt to colorize an empty cheatsheet
+    if not sheet_content.strip():
+        return ""
 
     # otherwise, attempt to import the pygments library
     try:
@@ -41,6 +46,8 @@ def colorize(sheet_content):
     # otherwise, attempt to colorize
     first_line = sheet_content.splitlines()[0]
     lexer      = get_lexer_by_name('bash')
+
+    # apply syntax-highlighting if the first line is a code-fence
     if first_line.startswith('```'):
         sheet_content = '\n'.join(sheet_content.split('\n')[1:-2])
         try:
