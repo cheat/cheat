@@ -11,6 +11,10 @@ def colorize(sheet_content):
     if not 'CHEATCOLORS' in os.environ:
         return sheet_content
 
+    # don't attempt to colorize an empty cheatsheet
+    if not sheet_content.strip():
+        return ""
+
     try:
         from pygments import highlight
         from pygments.lexers import get_lexer_by_name
