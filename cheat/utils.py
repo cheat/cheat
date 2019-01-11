@@ -8,7 +8,7 @@ def highlight(needle, haystack):
 
     # if colorization is not configured, exit early
     if os.environ.get('CHEATCOLORS') != 'true':
-        return sheet_content
+        return haystack
 
     # otherwise, attempt to import the termcolor library
     try:
