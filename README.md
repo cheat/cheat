@@ -109,12 +109,15 @@ export CHEATPATH="$CHEATPATH:/path/to/more/cheats"
 You may view which directories are on your `CHEATPATH` with `cheat -d`.
 
 ### Enabling Syntax Highlighting ###
-`cheat` can optionally apply syntax highlighting to your cheatsheets. To can use this feature is
-neccessary to install the package [Pygments](http://pygments.org/). To enable syntax highlighting, export a `CHEATCOLORS` environment variable:
+`cheat` can optionally apply syntax highlighting to your cheatsheets. To
+enable syntax highlighting, export a `CHEATCOLORS` environment variable:
 
 ```sh
 export CHEATCOLORS=true
 ```
+
+Note that [pygments][] must be installed on your system for this to work.
+
 
 #### Specifying a Syntax Highlighter ####
 You may manually specify which syntax highlighter to use for each cheatsheet by
@@ -145,4 +148,5 @@ See Also:
 [dotfiles]:         http://dotfiles.github.io/
 [gfm]:              https://help.github.com/articles/creating-and-highlighting-code-blocks/
 [installing]:       https://github.com/chrisallenlane/cheat/wiki/Installing
+[pygments]:         http://pygments.org/
 [related-projects]: https://github.com/chrisallenlane/cheat/wiki/Related-Projects
