@@ -137,6 +137,23 @@ WHERE id = 100
 If no syntax highlighter is specified, the `bash` highlighter will be used by
 default.
 
+### Enabling Search Match Highlighting ###
+`cheat` can optionally be configured to highlight search term matches in search
+results. To do so, export a `CHEAT_HIGHLIGHT` environment variable with a value
+of one of the following:
+
+- blue
+- cyan
+- green
+- grey
+- magenta
+- red
+- white
+- yellow
+
+Note that the `termcolor` module must be installed on your system for this to
+work.
+
 
 See Also:
 ---------
