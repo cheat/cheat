@@ -4,38 +4,41 @@ import subprocess
 import sys
 
 def highlight(needle, haystack):
-    """ Highlights a search term matched in a line """
+    """ Highlights a search term matched within a line """
 
-    # only colorize if so configured
-    if not 'CHEATCOLORS' in os.environ or os.environ.get('CHEATCOLORS') != 'true':
+    # if colorization is not configured, exit early
+    if os.environ.get('CHEATCOLORS') != 'true':
         return sheet_content
 
+    # otherwise, attempt to import the termcolor library
     try:
         from termcolor import colored
 
-    # if pygments can't load, just return the uncolorized text
+    # if the import fails, return uncolored text
     except ImportError:
         return haystack
 
-    # colorize the search term, and replace it within the surrounding line
+    # if the import succeeds, colorize the needle in haystack
     return haystack.replace(needle, colored(needle, 'blue'));
 
 def colorize(sheet_content):
     """ Colorizes cheatsheet content if so configured """
 
-    # only colorize if so configured
-    if not 'CHEATCOLORS' in os.environ or os.environ.get('CHEATCOLORS') != 'true':
+    # if colorization is not configured, exit early
+    if os.environ.get('CHEATCOLORS') != 'true':
         return sheet_content
 
+    # otherwise, attempt to import the pygments library
     try:
         from pygments import highlight
         from pygments.lexers import get_lexer_by_name
         from pygments.formatters import TerminalFormatter
 
-    # if pygments can't load, just return the uncolorized text
+    # if the import fails, return uncolored text
     except ImportError:
         return sheet_content
 
+    # otherwise, attempt to colorize
     first_line = sheet_content.splitlines()[0]
     lexer      = get_lexer_by_name('bash')
     if first_line.startswith('```'):
