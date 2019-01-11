@@ -86,12 +86,7 @@ def search(term):
         match = ''
         for line in open(cheatsheet[1]):
             if term in line:
-
-                # highlight the search term if CHEATCOLORS equals true
-                if 'CHEATCOLORS' in os.environ:
-                    line = highlight(term, line);
-
-                match += '  ' + line
+                match += '  ' + highlight(term, line)
 
         if match != '':
             result += cheatsheet[0] + ":\n" + match + "\n"

@@ -6,8 +6,8 @@ import sys
 def highlight(needle, haystack):
     """ Highlights a search term matched within a line """
 
-    # if colorization is not configured, exit early
-    if os.environ.get('CHEATCOLORS') != 'true':
+    # if a highlight color is not configured, exit early
+    if not 'CHEAT_HIGHLIGHT' in os.environ:
         return haystack
 
     # otherwise, attempt to import the termcolor library
@@ -19,7 +19,7 @@ def highlight(needle, haystack):
         return haystack
 
     # if the import succeeds, colorize the needle in haystack
-    return haystack.replace(needle, colored(needle, 'blue'));
+    return haystack.replace(needle, colored(needle, os.environ.get('CHEAT_HIGHLIGHT')));
 
 def colorize(sheet_content):
     """ Colorizes cheatsheet content if so configured """
