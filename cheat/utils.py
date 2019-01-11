@@ -1,8 +1,24 @@
 from __future__ import print_function
 import os
-import sys
 import subprocess
+import sys
 
+def highlight(needle, haystack):
+    """ Highlights a search term matched in a line """
+
+    # only colorize if so configured
+    if not 'CHEATCOLORS' in os.environ or os.environ.get('CHEATCOLORS') != 'true':
+        return sheet_content
+
+    try:
+        from termcolor import colored
+
+    # if pygments can't load, just return the uncolorized text
+    except ImportError:
+        return haystack
+
+    # colorize the search term, and replace it within the surrounding line
+    return haystack.replace(needle, colored(needle, 'blue'));
 
 def colorize(sheet_content):
     """ Colorizes cheatsheet content if so configured """

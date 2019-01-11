@@ -2,6 +2,7 @@ import os
 
 from cheat import cheatsheets
 from cheat.utils import die
+from cheat.utils import highlight
 
 def default_path():
     """ Returns the default cheatsheet path """
@@ -84,7 +85,12 @@ def search(term):
     for cheatsheet in sorted(get().items()):
         match = ''
         for line in open(cheatsheet[1]):
-            if lowered_term in line.lower():
+            if term in line:
+
+                # highlight the search term if CHEATCOLORS equals true
+                if 'CHEATCOLORS' in os.environ:
+                    line = highlight(term, line);
+
                 match += '  ' + line
 
         if match != '':
