@@ -1,5 +1,5 @@
 *.pyc
-.env
+.env*
 MANIFEST
 build
 cheat.egg-info
