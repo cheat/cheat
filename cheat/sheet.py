@@ -72,5 +72,5 @@ def read(sheet):
     if not exists(sheet):
         die('No cheatsheet found for ' + sheet)
 
-    with open(path(sheet), encoding='ascii', errors='ignore') as cheatfile:
+    with open(path(sheet), encoding='utf-8', errors='ignore') as cheatfile:
         return cheatfile.read()
