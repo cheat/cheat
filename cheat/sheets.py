@@ -84,7 +84,7 @@ def search(term):
 
     for cheatsheet in sorted(get().items()):
         match = ''
-        for line in open(cheatsheet[1], encoding='utf-8', errors='ignore'):
+        for line in open(cheatsheet[1], encoding='utf-8'):
             if term in line:
                 match += '  ' + highlight(term, line)
 
