@@ -1,0 +1,6 @@
+# set encoding for files in top-level directory only
+. encoding=utf-8
+
+# recursively set encoding for all files in these directories
+cheat/** encoding=utf-8
+licenses/** encoding=utf-8
