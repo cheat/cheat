@@ -46,7 +46,6 @@ import os
 
 if __name__ == '__main__':
 
-
     # parse the command-line options
     options = docopt(__doc__, version='cheat 2.3.1')
 

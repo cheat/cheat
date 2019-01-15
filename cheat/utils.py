@@ -3,10 +3,10 @@ import os
 import subprocess
 import sys
 
+
 class Utils:
 
-
-    def __init__(self,config):
+    def __init__(self, config):
         self._displaycolors = config.get_cheatcolors()
         self._editor_executable = config.get_editor()
         self._highlight_color = config.get_highlight()
@@ -29,8 +29,7 @@ class Utils:
         # if the import succeeds, colorize the needle in haystack
         return haystack.replace(needle, colored(needle, self._highlight_color))
 
-
-    def colorize(self,sheet_content):
+    def colorize(self, sheet_content):
         """ Colorizes cheatsheet content if so configured """
 
         # only colorize if configured to do so, and if stdout is a tty
@@ -53,7 +52,7 @@ class Utils:
 
         # otherwise, attempt to colorize
         first_line = sheet_content.splitlines()[0]
-        lexer      = get_lexer_by_name('bash')
+        lexer = get_lexer_by_name('bash')
 
         # apply syntax-highlighting if the first line is a code-fence
         if first_line.startswith('```'):
@@ -65,13 +64,11 @@ class Utils:
 
         return highlight(sheet_content, lexer, TerminalFormatter())
 
-
     @staticmethod
     def die(message):
         """ Prints a message to stderr and then terminates """
         Utils.warn(message)
         exit(1)
-
 
     def editor(self):
         """ Determines the user's preferred editor """
@@ -85,15 +82,13 @@ class Utils:
 
         return self._editor_executable
 
-
-    def open_with_editor(self,filepath):
-        """ Open `filepath` using the EDITOR specified by the environment variables """
+    def open_with_editor(self, filepath):
+        """ Open `filepath` using the EDITOR specified by the env variables """
         editor_cmd = self.editor().split()
         try:
             subprocess.call(editor_cmd + [filepath])
         except OSError:
             Utils.die('Could not launch ' + self.editor())
-
 
     @staticmethod
     def warn(message):
