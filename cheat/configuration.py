@@ -28,7 +28,7 @@ class Configuration:
 
         merged_config.update(self._read_env_vars_config())
 
-
+        self._check_configuration(merged_config)
 
         return merged_config
 
@@ -65,6 +65,19 @@ class Configuration:
 
         return read_config
 
+    def _check_configuration(self, config):
+        """ Check values in config and warn user or die """
+
+        # validate CHEAT_HIGHLIGHT values if set
+        colors = [
+            'grey' , 'red'     , 'green' , 'yellow' ,
+            'blue' , 'magenta' , 'cyan'  , 'white'  ,
+        ]
+        if (
+            config.get('CHEAT_HIGHLIGHT') and
+            config.get('CHEAT_HIGHLIGHT') not in colors
+        ):
+            Utils.die("%s %s" %('CHEAT_HIGHLIGHT must be one of:', colors))
 
     def _read_env_var(self,current_config,key):
         if (os.environ.get(key)):

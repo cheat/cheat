@@ -46,16 +46,6 @@ import os
 
 if __name__ == '__main__':
 
-    # validate CHEAT_HIGHLIGHT values if set
-    colors = [
-        'grey' , 'red'     , 'green' , 'yellow' ,
-        'blue' , 'magenta' , 'cyan'  , 'white'  ,
-    ]
-    if (
-        os.environ.get('CHEAT_HIGHLIGHT') and
-        os.environ.get('CHEAT_HIGHLIGHT') not in colors
-    ):
-        die("%s %s" %('CHEAT_HIGHLIGHT must be one of:', colors))
 
     # parse the command-line options
     options = docopt(__doc__, version='cheat 2.3.1')
