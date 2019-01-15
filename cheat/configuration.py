@@ -28,6 +28,8 @@ class Configuration:
 
         merged_config.update(self._read_env_vars_config())
 
+
+
         return merged_config
 
 
@@ -51,7 +53,12 @@ class Configuration:
         if (os.environ.get('VISUAL')):
             read_config['EDITOR'] = os.environ.get('VISUAL')
 
-        keys = ['DEFAULT_CHEAT_DIR','CHEATPATH','CHEATCOLORS','EDITOR']
+        keys = ['DEFAULT_CHEAT_DIR',
+                'CHEATPATH',
+                'CHEATCOLORS',
+                'EDITOR',
+                'CHEAT_HIGHLIGHT'
+               ]
 
         for k in keys:
             self._read_env_var(read_config,k)
@@ -88,3 +95,6 @@ class Configuration:
 
     def get_editor(self):
         return self._saved_configuration.get('EDITOR')
+
+    def get_highlight(self):
+        return self._saved_configuration.get('CHEAT_HIGHLIGHT')

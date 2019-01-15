@@ -61,9 +61,9 @@ if __name__ == '__main__':
     options = docopt(__doc__, version='cheat 2.3.1')
 
     config = Configuration()
-    sheets = Sheets(config.get_default_cheat_dir(),config.get_cheatpath())
-    sheet = Sheet(config.get_default_cheat_dir(),config.get_cheatpath(),config.get_editor())
-    utils = Utils(config.get_cheatcolors(),config.get_editor())
+    sheets = Sheets(config)
+    utils = Utils(config)
+    sheet = Sheet(sheets, utils)
 
     # list directories
     if options['--directories']:

@@ -1,21 +1,20 @@
 import os
 
-from cheat.configuration import Configuration
 from cheat.utils import Utils
 
 class Sheets:
 
 
-    def __init__(self,default_cheat_dir,cheatpath):
-        self.default_cheat_dir = default_cheat_dir
-        self.cheatpath = cheatpath
-
+    def __init__(self, config):
+        self._default_cheat_dir = config.get_default_cheat_dir()
+        self._cheatpath = config.get_cheatpath()
+        self._utils = Utils(config)
 
     def default_path(self):
         """ Returns the default cheatsheet path """
 
         # determine the default cheatsheet dir
-        default_sheets_dir = self.default_cheat_dir or os.path.join('~', '.cheat')
+        default_sheets_dir = self._default_cheat_dir or os.path.join('~', '.cheat')
         default_sheets_dir = os.path.expanduser(os.path.expandvars(default_sheets_dir))
 
         # create the DEFAULT_CHEAT_DIR if it does not exist
@@ -64,8 +63,8 @@ class Sheets:
         ]
 
         # merge the CHEATPATH paths into the sheet_paths
-        if self.cheatpath:
-            for path in self.cheatpath.split(os.pathsep):
+        if self._cheatpath:
+            for path in self._cheatpath.split(os.pathsep):
                 if os.path.isdir(path):
                     sheet_paths.append(path)
 
@@ -92,7 +91,7 @@ class Sheets:
             match = ''
             for line in open(cheatsheet[1]):
                 if term in line:
-                    match += '  ' + line
+                    match += '  ' + self._utils.highlight(term, line)
 
             if match != '':
                 result += cheatsheet[0] + ":\n" + match + "\n"

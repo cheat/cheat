@@ -6,16 +6,16 @@ import sys
 class Utils:
 
 
-    def __init__(self,cheatcolors,editor_executable):
-        self.displaycolors = cheatcolors
-        self.editor_executable = editor_executable
-
+    def __init__(self,config):
+        self._displaycolors = config.get_cheatcolors()
+        self._editor_executable = config.get_editor()
+        self._highlight_color = config.get_highlight()
 
     def highlight(self, needle, haystack):
         """ Highlights a search term matched within a line """
 
         # if a highlight color is not configured, exit early
-        if not 'CHEAT_HIGHLIGHT' in os.environ:
+        if not self._highlight_color:
             return haystack
 
         # otherwise, attempt to import the termcolor library
@@ -27,14 +27,14 @@ class Utils:
             return haystack
 
         # if the import succeeds, colorize the needle in haystack
-        return haystack.replace(needle, colored(needle, os.environ.get('CHEAT_HIGHLIGHT')))
+        return haystack.replace(needle, colored(needle, self._highlight_color))
 
 
     def colorize(self,sheet_content):
         """ Colorizes cheatsheet content if so configured """
 
         # only colorize if configured to do so, and if stdout is a tty
-        if not self.displaycolors or not sys.stdout.isatty():
+        if not self._displaycolors or not sys.stdout.isatty():
             return sheet_content
 
         # don't attempt to colorize an empty cheatsheet
@@ -77,13 +77,13 @@ class Utils:
         """ Determines the user's preferred editor """
 
         # assert that the editor is set
-        if (not self.editor_executable):
+        if (not self._editor_executable):
             Utils.die(
                 'You must set a CHEAT_EDITOR, VISUAL, or EDITOR environment '
                 'variable or setting in order to create/edit a cheatsheet.'
             )
 
-        return self.editor_executable
+        return self._editor_executable
 
 
     def open_with_editor(self,filepath):
