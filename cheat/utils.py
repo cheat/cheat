@@ -33,7 +33,8 @@ class Utils:
         """ Colorizes cheatsheet content if so configured """
 
         # only colorize if configured to do so, and if stdout is a tty
-        if not self._displaycolors or not sys.stdout.isatty():
+        if (self._displaycolors not in ["True", "true", "1", 1] or
+                not sys.stdout.isatty()):
             return sheet_content
 
         # don't attempt to colorize an empty cheatsheet
