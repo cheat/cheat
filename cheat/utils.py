@@ -32,8 +32,11 @@ class Utils:
     def colorize(self, sheet_content):
         """ Colorizes cheatsheet content if so configured """
 
+        # cover all possible positive values to be safe
+        positive_values = ["True", "true", "1", 1, True]
+
         # only colorize if configured to do so, and if stdout is a tty
-        if (self._displaycolors not in ["True", "true", "1", 1] or
+        if (self._displaycolors not in positive_values or
                 not sys.stdout.isatty()):
             return sheet_content
 
