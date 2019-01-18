@@ -36,28 +36,23 @@ Examples:
 
 # require the dependencies
 from __future__ import print_function
-from cheat import sheets, sheet
-from cheat.utils import colorize
-from cheat.utils import die
+from cheat.sheets import Sheets
+from cheat.sheet import Sheet
+from cheat.utils import Utils
+from cheat.configuration import Configuration
 from docopt import docopt
 import os
 
 
 if __name__ == '__main__':
 
-    # validate CHEAT_HIGHLIGHT values if set
-    colors = [
-        'grey' , 'red'     , 'green' , 'yellow' ,
-        'blue' , 'magenta' , 'cyan'  , 'white'  ,
-    ]
-    if (
-        os.environ.get('CHEAT_HIGHLIGHT') and
-        os.environ.get('CHEAT_HIGHLIGHT') not in colors
-    ):
-        die("%s %s" %('CHEAT_HIGHLIGHT must be one of:', colors))
-
     # parse the command-line options
     options = docopt(__doc__, version='cheat 2.3.1')
+
+    config = Configuration()
+    sheets = Sheets(config)
+    utils = Utils(config)
+    sheet = Sheet(sheets, utils)
 
     # list directories
     if options['--directories']:
@@ -73,8 +68,8 @@ if __name__ == '__main__':
 
     # search among the cheatsheets
     elif options['--search']:
-        print(colorize(sheets.search(options['<keyword>'])), end="")
+        print(utils.colorize(sheets.search(options['<keyword>'])), end="")
 
     # print the cheatsheet
     else:
-        print(colorize(sheet.read(options['<cheatsheet>'])), end="")
+        print(utils.colorize(sheet.read(options['<cheatsheet>'])), end="")

@@ -1,6 +1,10 @@
 from distutils.core import setup
 import os
 
+cheat_files = []
+for f in os.listdir('cheat/cheatsheets/'):
+    cheat_files.append(os.path.join('cheat/cheatsheets/',f))
+
 setup(
     name         = 'cheat',
     version      = '2.3.1',
@@ -14,15 +18,15 @@ setup(
     url          = 'https://github.com/chrisallenlane/cheat',
     packages     = [
         'cheat',
-        'cheat.cheatsheets',
         'cheat.test',
     ],
-    package_data = {
-        'cheat.cheatsheets': [f for f in os.listdir('cheat/cheatsheets') if '.' not in f]
-    },
     scripts          = ['bin/cheat'],
     install_requires = [
         'docopt >= 0.6.1',
         'pygments >= 1.6.0',
-    ]
+    ],
+    data_files = [
+        ('/usr/share/cheat', cheat_files),
+        ('/etc', ['config/cheat']),
+    ],
 )
