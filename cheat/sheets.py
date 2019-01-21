@@ -63,7 +63,6 @@ class Sheets:
         """ Assembles a list of directories containing cheatsheets """
         sheet_paths = [
             self.default_path(),
-            '/usr/share/cheat',
         ]
 
         # merge the CHEATPATH paths into the sheet_paths
