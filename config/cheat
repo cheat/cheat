@@ -1,1 +1,5 @@
-{"CHEAT_COLORS":true,"CHEAT_EDITOR":"vi"}
+{
+  "CHEAT_COLORS": true,
+  "CHEAT_EDITOR":"vi",
+  "CHEAT_PATH":"/usr/share/cheat"
+}
