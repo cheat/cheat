@@ -1,3 +1,4 @@
+import io
 import os
 
 from cheat.utils import Utils
@@ -92,7 +93,7 @@ class Sheets:
 
         for cheatsheet in sorted(self.get().items()):
             match = ''
-            for line in open(cheatsheet[1]):
+            for line in io.open(cheatsheet[1], encoding='utf-8'):
                 if term in line:
                     match += '  ' + self._utils.highlight(term, line)
 

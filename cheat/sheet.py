@@ -1,3 +1,4 @@
+import io
 import os
 import shutil
 
@@ -74,5 +75,5 @@ class Sheet:
         if not self.exists(sheet):
             Utils.die('No cheatsheet found for ' + sheet)
 
-        with open(self.path(sheet)) as cheatfile:
+        with io.open(self.path(sheet), encoding='utf-8') as cheatfile:
             return cheatfile.read()
