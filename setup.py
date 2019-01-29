@@ -31,6 +31,7 @@ setup(
     install_requires = [
         'docopt >= 0.6.1',
         'pygments >= 1.6.0',
+        'termcolor >= 1.1.0',
     ],
     data_files = [
         (cheat_path, cheat_files),
