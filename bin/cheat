@@ -47,7 +47,7 @@ import os
 if __name__ == '__main__':
 
     # parse the command-line options
-    options = docopt(__doc__, version='cheat 2.4.1')
+    options = docopt(__doc__, version='cheat 2.4.2')
 
     config = Configuration()
     sheets = Sheets(config)
