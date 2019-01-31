@@ -6,9 +6,9 @@ from cheat.utils import Utils
 
 class Sheets:
 
-    def __init__(self, config):
+    def __init__(self, config, colorize):
         self._config = config
-        self._utils = Utils(config)
+        self._colorize = colorize;
 
     def default_path(self):
         """ Returns the default cheatsheet path """
@@ -95,7 +95,7 @@ class Sheets:
             match = ''
             for line in io.open(cheatsheet[1], encoding='utf-8'):
                 if term in line:
-                    match += '  ' + self._utils.highlight(term, line)
+                    match += '  ' + self._colorize.search(term, line)
 
             if match != '':
                 result += cheatsheet[0] + ":\n" + match + "\n"

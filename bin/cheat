@@ -36,11 +36,11 @@ Examples:
 
 # require the dependencies
 from __future__ import print_function
+from cheat.colorize import Colorize
 from cheat.configuration import Configuration
 from cheat.editor import Editor
 from cheat.sheet import Sheet
 from cheat.sheets import Sheets
-from cheat.utils import Utils
 from docopt import docopt
 
 if __name__ == '__main__':
@@ -54,8 +54,9 @@ if __name__ == '__main__':
 
     # bootsrap
     editor = Editor(config)
-    sheets = Sheets(config)
-    utils = Utils(config)
+    colorize = Colorize(config)
+
+    sheets = Sheets(config, colorize)
     sheet = Sheet(sheets, editor)
 
     # list directories
@@ -72,8 +73,8 @@ if __name__ == '__main__':
 
     # search among the cheatsheets
     elif options['--search']:
-        print(utils.colorize(sheets.search(options['<keyword>'])), end="")
+        print(colorize.syntax(sheets.search(options['<keyword>'])), end="")
 
     # print the cheatsheet
     else:
-        print(utils.colorize(sheet.read(options['<cheatsheet>'])), end="")
+        print(colorize.syntax(sheet.read(options['<cheatsheet>'])), end="")
