@@ -36,10 +36,11 @@ Examples:
 
 # require the dependencies
 from __future__ import print_function
-from cheat.sheets import Sheets
-from cheat.sheet import Sheet
-from cheat.utils import Utils
 from cheat.configuration import Configuration
+from cheat.editor import Editor
+from cheat.sheet import Sheet
+from cheat.sheets import Sheets
+from cheat.utils import Utils
 from docopt import docopt
 import os
 
@@ -53,9 +54,10 @@ if __name__ == '__main__':
     config.validate()
 
     # bootsrap
+    editor = Editor(config)
     sheets = Sheets(config)
     utils = Utils(config)
-    sheet = Sheet(sheets, utils)
+    sheet = Sheet(sheets, utils, editor)
 
     # list directories
     if options['--directories']:
