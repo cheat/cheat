@@ -43,13 +43,16 @@ from cheat.configuration import Configuration
 from docopt import docopt
 import os
 
-
 if __name__ == '__main__':
 
     # parse the command-line options
     options = docopt(__doc__, version='cheat 2.4.2')
 
+    # initialize and validate configs
     config = Configuration()
+    config.validate()
+
+    # bootsrap
     sheets = Sheets(config)
     utils = Utils(config)
     sheet = Sheet(sheets, utils)

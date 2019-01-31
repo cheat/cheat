@@ -7,15 +7,13 @@ import sys
 class Utils:
 
     def __init__(self, config):
-        self._displaycolors = config.get_cheatcolors()
-        self._editor_executable = config.get_editor()
-        self._highlight_color = config.get_highlight()
+        self._config = config
 
     def highlight(self, needle, haystack):
         """ Highlights a search term matched within a line """
 
         # if a highlight color is not configured, exit early
-        if not self._highlight_color:
+        if not self._config.cheat_highlight:
             return haystack
 
         # otherwise, attempt to import the termcolor library
@@ -27,18 +25,14 @@ class Utils:
             return haystack
 
         # if the import succeeds, colorize the needle in haystack
-        return haystack.replace(needle, colored(needle, self._highlight_color))
+        return haystack.replace(needle, colored(needle, self._config.cheat_highlight))
 
     def colorize(self, sheet_content):
         """ Colorizes cheatsheet content if so configured """
 
-        # cover all possible positive values to be safe
-        positive_values = ["True", "true", "1", 1, True]
-
-        # only colorize if configured to do so, and if stdout is a tty
-        if (self._displaycolors not in positive_values or
-                not sys.stdout.isatty()):
-            return sheet_content
+        # only colorize if cheat_colors is true, and stdout is a tty
+        if (self._config.cheat_colors is False or not sys.stdout.isatty()):
+             return sheet_content
 
         # don't attempt to colorize an empty cheatsheet
         if not sheet_content.strip():
@@ -78,13 +72,13 @@ class Utils:
         """ Determines the user's preferred editor """
 
         # assert that the editor is set
-        if (not self._editor_executable):
+        if (not self._config.cheat_editor):
             Utils.die(
                 'You must set a CHEAT_EDITOR, VISUAL, or EDITOR environment '
                 'variable or setting in order to create/edit a cheatsheet.'
             )
 
-        return self._editor_executable
+        return self._config.cheat_editor
 
     def open_with_editor(self, filepath):
         """ Open `filepath` using the EDITOR specified by the env variables """

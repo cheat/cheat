@@ -7,20 +7,21 @@ from cheat.utils import Utils
 class Sheets:
 
     def __init__(self, config):
-        self._default_cheat_dir = config.get_default_cheat_dir()
-        self._cheatpath = config.get_cheatpath()
+        self._config = config
         self._utils = Utils(config)
 
     def default_path(self):
         """ Returns the default cheatsheet path """
 
         # determine the default cheatsheet dir
-        default_sheets_dir = (self._default_cheat_dir or
+        # TODO: should probably rename `CHEAT_DEFAULT_DIR` to
+        # `CHEAT_USER_DIR` or something for clarity.
+        default_sheets_dir = (self._config.cheat_default_dir or
                               os.path.join('~', '.cheat'))
         default_sheets_dir = os.path.expanduser(
             os.path.expandvars(default_sheets_dir))
 
-        # create the DEFAULT_CHEAT_DIR if it does not exist
+        # create the CHEAT_DEFAULT_DIR if it does not exist
         if not os.path.isdir(default_sheets_dir):
             try:
                 # @kludge: unclear on why this is necessary
@@ -28,15 +29,15 @@ class Sheets:
                 os.mkdir(default_sheets_dir)
 
             except OSError:
-                Utils.die('Could not create DEFAULT_CHEAT_DIR')
+                Utils.die('Could not create CHEAT_DEFAULT_DIR')
 
-        # assert that the DEFAULT_CHEAT_DIR is readable and writable
+        # assert that the CHEAT_DEFAULT_DIR is readable and writable
         if not os.access(default_sheets_dir, os.R_OK):
-            Utils.die('The DEFAULT_CHEAT_DIR ('
+            Utils.die('The CHEAT_DEFAULT_DIR ('
                       + default_sheets_dir
                       + ') is not readable.')
         if not os.access(default_sheets_dir, os.W_OK):
-            Utils.die('The DEFAULT_CHEAT_DIR ('
+            Utils.die('The CHEAT_DEFAULT_DIR ('
                       + default_sheets_dir
                       + ') is not writable.')
 
@@ -67,8 +68,8 @@ class Sheets:
         ]
 
         # merge the CHEATPATH paths into the sheet_paths
-        if self._cheatpath:
-            for path in self._cheatpath.split(os.pathsep):
+        if self._config.cheat_path:
+            for path in self._config.cheat_path.split(os.pathsep):
                 if os.path.isdir(path):
                     sheet_paths.append(path)
 

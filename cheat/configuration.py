@@ -2,133 +2,98 @@ import os
 from cheat.utils import Utils
 import json
 
-
 class Configuration:
 
     def __init__(self):
-        self._get_global_conf_file_path()
-        self._get_local_conf_file_path()
-        self._saved_configuration = self._get_configuration()
+        # compute the location of the config files
+        config_file_path_global = os.environ.get('CHEAT_GLOBAL_CONF_PATH') \
+            or '/etc/cheat'
+        config_file_path_local = (os.environ.get('CHEAT_LOCAL_CONF_PATH')  \
+            or os.path.expanduser('~/.config/cheat/cheat'))
 
-    def _get_configuration(self):
-        # get options from config files and environment vairables
-        merged_config = {}
-
+        # attempt to read the global config file
+        config = {}
         try:
-            merged_config.update(
-                self._read_configuration_file(self.glob_config_path)
-            )
+            config.update(self._read_config_file(config_file_path_global))
         except Exception as e:
-            Utils.warn('error while parsing global configuration Reason: '
-                       + e.message
-                       )
+            Utils.warn('Error while parsing global configuration: ' + e.message)
 
+        # attempt to read the local config file
         try:
-            merged_config.update(
-                self._read_configuration_file(self.local_config_path)
-            )
+            config.update(self._read_config_file(config_file_path_local))
         except Exception as e:
-            Utils.warn('error while parsing user configuration Reason: '
-                       + e.message
-                       )
+            Utils.warn('Error while parsing local configuration: ' + e.message)
 
-        merged_config.update(self._read_env_vars_config())
+        # With config files read, now begin to apply envvar overrides and
+        # default values
 
-        self._check_configuration(merged_config)
+        # self.cheat_colors
+        self.cheat_colors = self._select([
+            os.environ.get('CHEAT_COLORS'),
+            os.environ.get('CHEATCOLORS'),
+            config.get('CHEAT_COLORS'),
+            True,
+        ])
+        # convert strings to bool as necessary
+        if (isinstance(self.cheat_colors, str)):
+            self.cheat_colors = True                           \
+                if self.cheat_colors.strip().lower() == 'true' \
+                else False
 
-        return merged_config
+        # self.cheat_default_dir
+        self.cheat_default_dir = self._select([
+            os.environ.get('CHEAT_DEFAULT_DIR'),
+            os.environ.get('DEFAULT_CHEAT_DIR'),
+            '~/.cheat',
+        ])
 
-    def _read_configuration_file(self, path):
+        # self.cheat_editor
+        self.cheat_editor = self._select([
+            os.environ.get('CHEAT_EDITOR'),
+            os.environ.get('EDITOR'),
+            os.environ.get('VISUAL'),
+            config.get('CHEAT_EDITOR'),
+            'vi',
+        ])
+
+        # self.cheat_highlight
+        self.cheat_highlight = self._select([
+            os.environ.get('CHEAT_HIGHLIGHT'),
+            config.get('CHEAT_HIGHLIGHT'),
+            False,
+        ])
+
+        # self.cheat_path
+        self.cheat_path = self._select([
+            os.environ.get('CHEAT_PATH'),
+            os.environ.get('CHEATPATH'),
+            config.get('CHEAT_PATH'),
+            '/usr/share/cheat',
+        ])
+
+    def _read_config_file(self, path):
         # Reads configuration file and returns list of set variables
-        read_config = {}
+        config = {}
         if (os.path.isfile(path)):
             with open(path) as config_file:
-                read_config.update(json.load(config_file))
-        return read_config
+                config.update(json.load(config_file))
+        return config
 
-    def _read_env_vars_config(self):
-        read_config = {}
+    def _select(self, values):
+        for v in values:
+            if v is not None:
+                return v
 
-        # NOTE: These variables are left here because of backwards
-        # compatibility and are supported only as env vars but not in
-        # configuration file
+    def validate(self):
+        """ Validate configuration parameters """
 
-        if (os.environ.get('VISUAL')):
-            read_config['EDITOR'] = os.environ.get('VISUAL')
-
-        # variables supported both in environment and configuration file
-        # NOTE: Variables without CHEAT_ prefix are legacy
-        # key is variable name and value is its legacy_alias
-        # if variable has no legacy alias then set to None
-        variables = {'CHEAT_DEFAULT_DIR': 'DEFAULT_CHEAT_DIR',
-                     'CHEAT_PATH': 'CHEATPATH',
-                     'CHEAT_COLORS': 'CHEATCOLORS',
-                     'CHEAT_EDITOR': 'EDITOR',
-                     'CHEAT_HIGHLIGHT': None
-                     }
-
-        for (k, v) in variables.items():
-            self._read_env_var(read_config, k, v)
-
-        return read_config
-
-    def _check_configuration(self, config):
-        """ Check values in config and warn user or die """
-
-        # validate CHEAT_HIGHLIGHT values if set
-        colors = [
+        # assert that cheat_highlight contains a valid value
+        highlights = [
             'grey', 'red', 'green', 'yellow',
-            'blue', 'magenta', 'cyan', 'white'
+            'blue', 'magenta', 'cyan', 'white',
+            False
         ]
-        if (
-            config.get('CHEAT_HIGHLIGHT') and
-            config.get('CHEAT_HIGHLIGHT') not in colors
-        ):
-            Utils.die("%s %s" % ('CHEAT_HIGHLIGHT must be one of:', colors))
+        if (self.cheat_highlight not in highlights):
+            Utils.die("%s %s" % ('CHEAT_HIGHLIGHT must be one of:', highlights))
 
-    def _read_env_var(self, current_config, key, alias=None):
-        if os.environ.get(key) is not None:
-            current_config[key] = os.environ.get(key)
-            return
-        elif alias is not None and os.environ.get(alias) is not None:
-            current_config[key] = os.environ.get(alias)
-            return
-
-    def _get_global_conf_file_path(self):
-        self.glob_config_path = (os.environ.get('CHEAT_GLOBAL_CONF_PATH')
-                                 or '/etc/cheat')
-
-    def _get_local_conf_file_path(self):
-        path = (os.environ.get('CHEAT_LOCAL_CONF_PATH')
-                or os.path.expanduser('~/.config/cheat/cheat'))
-        self.local_config_path = path
-
-    def _choose_value(self, primary_value_name, secondary_value_name):
-        """ Return primary or secondary value in saved_configuration
-
-        If primary value is in configuration then return it. If it is not
-        then return secondary. In the absence of both values return None
-        """
-
-        primary_value = self._saved_configuration.get(primary_value_name)
-        secondary_value = self._saved_configuration.get(secondary_value_name)
-
-        if primary_value is not None:
-            return primary_value
-        else:
-            return secondary_value
-
-    def get_default_cheat_dir(self):
-        return self._choose_value('CHEAT_DEFAULT_DIR', 'DEFAULT_CHEAT_DIR')
-
-    def get_cheatpath(self):
-        return self._choose_value('CHEAT_PATH', 'CHEATPATH')
-
-    def get_cheatcolors(self):
-        return self._choose_value('CHEAT_COLORS', 'CHEATCOLORS')
-
-    def get_editor(self):
-        return self._choose_value('CHEAT_EDITOR', 'EDITOR')
-
-    def get_highlight(self):
-        return self._saved_configuration.get('CHEAT_HIGHLIGHT')
+        return True
