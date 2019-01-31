@@ -13,7 +13,7 @@ Usage:
   cheat -v
 
 Options:
-  -d --directories  List directories on CHEATPATH
+  -d --directories  List directories on $CHEAT_PATH
   -e --edit         Edit cheatsheet
   -l --list         List cheatsheets
   -s --search       Search cheatsheets for <keyword>

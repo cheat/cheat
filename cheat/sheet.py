@@ -13,12 +13,12 @@ class Sheet:
     def copy(self, current_sheet_path, new_sheet_path):
         """ Copies a sheet to a new path """
 
-        # attempt to copy the sheet to DEFAULT_CHEAT_DIR
+        # attempt to copy the sheet to CHEAT_DEFAULT_DIR
         try:
             shutil.copy(current_sheet_path, new_sheet_path)
 
         # fail gracefully if the cheatsheet cannot be copied. This can happen
-        # if DEFAULT_CHEAT_DIR does not exist
+        # if CHEAT_DEFAULT_DIR does not exist
         except IOError:
             Utils.die('Could not copy cheatsheet for editing.')
 

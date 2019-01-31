@@ -67,15 +67,15 @@ class Sheets:
             self.default_path(),
         ]
 
-        # merge the CHEATPATH paths into the sheet_paths
+        # merge the CHEAT_PATH paths into the sheet_paths
         if self._config.cheat_path:
             for path in self._config.cheat_path.split(os.pathsep):
                 if os.path.isdir(path):
                     sheet_paths.append(path)
 
         if not sheet_paths:
-            Utils.die('The DEFAULT_CHEAT_DIR dir does not exist '
-                      + 'or the CHEATPATH is not set.')
+            Utils.die('The CHEAT_DEFAULT_DIR dir does not exist '
+                      + 'or the CHEAT_PATH is not set.')
 
         return sheet_paths
 
