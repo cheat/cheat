@@ -1,6 +1,6 @@
-import os
 from cheat.utils import Utils
 import json
+import os
 
 class Configuration:
 
@@ -29,16 +29,11 @@ class Configuration:
 
         # self.cheat_colors
         self.cheat_colors = self._select([
-            os.environ.get('CHEAT_COLORS'),
-            os.environ.get('CHEATCOLORS'),
-            config.get('CHEAT_COLORS'),
+            self._boolify(os.environ.get('CHEAT_COLORS')),
+            self._boolify(os.environ.get('CHEATCOLORS')),
+            self._boolify(config.get('CHEAT_COLORS')),
             True,
         ])
-        # convert strings to bool as necessary
-        if (isinstance(self.cheat_colors, str)):
-            self.cheat_colors = True                           \
-                if self.cheat_colors.strip().lower() == 'true' \
-                else False
 
         # self.cheat_default_dir
         self.cheat_default_dir = self._select([
@@ -62,6 +57,8 @@ class Configuration:
             config.get('CHEAT_HIGHLIGHT'),
             False,
         ])
+        if (self.cheat_highlight.strip().lower() == "false"):
+            self.cheat_highlight = False
 
         # self.cheat_path
         self.cheat_path = self._select([
@@ -70,6 +67,14 @@ class Configuration:
             config.get('CHEAT_PATH'),
             '/usr/share/cheat',
         ])
+
+    def _boolify(self, value):
+        # if `value` is not a string, return it as-is
+        if not isinstance(value, str):
+            return value
+
+        # otherwise, convert "true" and "false" to Boolean counterparts
+        return value.strip().lower() == "true"
 
     def _read_config_file(self, path):
         # Reads configuration file and returns list of set variables
