@@ -42,7 +42,6 @@ from cheat.sheet import Sheet
 from cheat.sheets import Sheets
 from cheat.utils import Utils
 from docopt import docopt
-import os
 
 if __name__ == '__main__':
 
@@ -57,7 +56,7 @@ if __name__ == '__main__':
     editor = Editor(config)
     sheets = Sheets(config)
     utils = Utils(config)
-    sheet = Sheet(sheets, utils, editor)
+    sheet = Sheet(sheets, editor)
 
     # list directories
     if options['--directories']:

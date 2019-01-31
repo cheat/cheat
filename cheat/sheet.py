@@ -2,15 +2,11 @@ import io
 import os
 import shutil
 
-from cheat.editor import Editor
-from cheat.utils import Utils
-
 
 class Sheet:
 
-    def __init__(self, sheets, utils, editor):
+    def __init__(self, sheets, editor):
         self._sheets = sheets
-        self._utils = utils
         self._editor = editor
 
     def copy(self, current_sheet_path, new_sheet_path):
