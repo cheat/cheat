@@ -1,14 +1,14 @@
+from cheat.colorize import Colorize
+from cheat.utils import Utils
 import io
 import os
-
-from cheat.utils import Utils
 
 
 class Sheets:
 
-    def __init__(self, config, colorize):
+    def __init__(self, config):
         self._config = config
-        self._colorize = colorize;
+        self._colorize = Colorize(config);
 
     def default_path(self):
         """ Returns the default cheatsheet path """

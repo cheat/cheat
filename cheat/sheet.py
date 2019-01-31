@@ -1,3 +1,4 @@
+from cheat.editor import Editor
 from cheat.utils import Utils
 import io
 import os
@@ -6,9 +7,9 @@ import shutil
 
 class Sheet:
 
-    def __init__(self, sheets, editor):
+    def __init__(self, config, sheets):
         self._sheets = sheets
-        self._editor = editor
+        self._editor = Editor(config)
 
     def copy(self, current_sheet_path, new_sheet_path):
         """ Copies a sheet to a new path """

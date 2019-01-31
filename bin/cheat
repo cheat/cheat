@@ -38,7 +38,6 @@ Examples:
 from __future__ import print_function
 from cheat.colorize import Colorize
 from cheat.configuration import Configuration
-from cheat.editor import Editor
 from cheat.sheet import Sheet
 from cheat.sheets import Sheets
 from docopt import docopt
@@ -53,11 +52,9 @@ if __name__ == '__main__':
     config.validate()
 
     # bootsrap
-    editor = Editor(config)
+    sheets = Sheets(config)
+    sheet = Sheet(config, sheets)
     colorize = Colorize(config)
-
-    sheets = Sheets(config, colorize)
-    sheet = Sheet(sheets, editor)
 
     # list directories
     if options['--directories']:
