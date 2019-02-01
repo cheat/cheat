@@ -17,7 +17,7 @@ class Utils:
 
     @staticmethod
     def boolify(value):
-        """ Type-converts 'true' and 'false' (strings) to Boolean equivalents """
+        """ Type-converts 'true' and 'false' to Booleans """
         # if `value` is not a string, return it as-is
         if not isinstance(value, str):
             return value

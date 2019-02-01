@@ -23,14 +23,15 @@ class Colorize:
             return haystack
 
         # if the import succeeds, colorize the needle in haystack
-        return haystack.replace(needle, colored(needle, self._config.cheat_highlight))
+        return haystack.replace(needle,
+                                colored(needle, self._config.cheat_highlight))
 
     def syntax(self, sheet_content):
         """ Applies syntax highlighting """
 
         # only colorize if cheat_colors is true, and stdout is a tty
         if self._config.cheat_colors is False or not sys.stdout.isatty():
-             return sheet_content
+            return sheet_content
 
         # don't attempt to colorize an empty cheatsheet
         if not sheet_content.strip():

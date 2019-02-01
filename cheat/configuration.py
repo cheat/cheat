@@ -2,6 +2,7 @@ from cheat.utils import Utils
 import json
 import os
 
+
 class Configuration:
 
     def __init__(self):
@@ -20,7 +21,8 @@ class Configuration:
         try:
             config.update(self._read_config_file(config_file_path_global))
         except Exception as e:
-            Utils.warn('Error while parsing global configuration: ' + e.message)
+            Utils.warn('Error while parsing global configuration: '
+                       + e.message)
 
         # attempt to read the local config file
         try:
@@ -98,6 +100,7 @@ class Configuration:
             False
         ]
         if self.cheat_highlight not in highlights:
-            Utils.die("%s %s" % ('CHEAT_HIGHLIGHT must be one of:', highlights))
+            Utils.die("%s %s" %
+                      ('CHEAT_HIGHLIGHT must be one of:', highlights))
 
         return True

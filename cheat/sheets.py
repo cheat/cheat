@@ -8,7 +8,7 @@ class Sheets:
 
     def __init__(self, config):
         self._config = config
-        self._colorize = Colorize(config);
+        self._colorize = Colorize(config)
 
         # Assembles a dictionary of cheatsheets as name => file-path
         self._sheets = {}
