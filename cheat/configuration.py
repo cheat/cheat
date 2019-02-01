@@ -79,7 +79,7 @@ class Configuration:
         ])
 
     def _read_config_file(self, path):
-        # Reads configuration file and returns list of set variables
+        """ Reads configuration file and returns list of set variables """
         config = {}
         if os.path.isfile(path):
             with open(path) as config_file:
@@ -92,7 +92,7 @@ class Configuration:
                 return v
 
     def validate(self):
-        """ Validate configuration parameters """
+        """ Validates configuration parameters """
 
         # assert that cheat_highlight contains a valid value
         highlights = [
