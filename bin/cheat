@@ -41,6 +41,7 @@ from cheat.configuration import Configuration
 from cheat.sheet import Sheet
 from cheat.sheets import Sheets
 from docopt import docopt
+import os
 
 if __name__ == '__main__':
 
@@ -51,6 +52,32 @@ if __name__ == '__main__':
     config = Configuration()
     config.validate()
 
+    # create the CHEAT_DEFAULT_DIR if it does not exist
+    if not os.path.isdir(config.cheat_default_dir):
+        try:
+            os.mkdir(config.cheat_default_dir)
+
+        except OSError:
+            Utils.die("%s %s %s" % (
+                'Could not create CHEAT_DEFAULT_DIR (',
+                config.cheat_default_dir,
+                ')')
+            )
+
+    # assert that the CHEAT_DEFAULT_DIR is readable and writable
+    if not os.access(config.cheat_default_dir, os.R_OK):
+        Utils.die("%s %s %s" % (
+            'The CHEAT_DEFAULT_DIR (',
+            config.cheat_default_dir,
+            ') is not readable')
+        )
+    if not os.access(config.cheat_default_dir, os.W_OK):
+        Utils.die("%s %s %s" % (
+            'The CHEAT_DEFAULT_DIR (',
+            config.cheat_default_dir,
+            ') is not writeable')
+        )
+
     # bootsrap
     sheets = Sheets(config)
     sheet = Sheet(config, sheets)
@@ -58,7 +85,7 @@ if __name__ == '__main__':
 
     # list directories
     if options['--directories']:
-        print("\n".join(sheets.paths()))
+        print("\n".join(sheets.directories()))
 
     # list cheatsheets
     elif options['--list']:

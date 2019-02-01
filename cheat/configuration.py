@@ -6,10 +6,14 @@ class Configuration:
 
     def __init__(self):
         # compute the location of the config files
-        config_file_path_global = os.environ.get('CHEAT_GLOBAL_CONF_PATH') \
-            or '/etc/cheat'
-        config_file_path_local = (os.environ.get('CHEAT_LOCAL_CONF_PATH')  \
-            or os.path.expanduser('~/.config/cheat/cheat'))
+        config_file_path_global = self._select([
+            os.environ.get('CHEAT_GLOBAL_CONF_PATH'),
+            '/etc/cheat',
+        ])
+        config_file_path_local = self._select([
+            os.environ.get('CHEAT_LOCAL_CONF_PATH'),
+            os.path.expanduser('~/.config/cheat/cheat'),
+        ])
 
         # attempt to read the global config file
         config = {}
@@ -39,7 +43,10 @@ class Configuration:
         self.cheat_default_dir = self._select([
             os.environ.get('CHEAT_DEFAULT_DIR'),
             os.environ.get('DEFAULT_CHEAT_DIR'),
-            '~/.cheat',
+            # TODO: XDG home?
+            os.path.expanduser(
+                os.path.expandvars(os.path.join('~', '.cheat'))
+                ),
         ])
 
         # self.cheat_editor

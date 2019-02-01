@@ -8,8 +8,9 @@ import shutil
 class Sheet:
 
     def __init__(self, config, sheets):
-        self._sheets = sheets
+        self._config = config
         self._editor = Editor(config)
+        self._sheets = sheets
 
     def copy(self, current_sheet_path, new_sheet_path):
         """ Copies a sheet to a new path """
@@ -34,7 +35,7 @@ class Sheet:
         # default path before editing
         elif self.exists(sheet) and not self.exists_in_default_path(sheet):
             self.copy(self.path(sheet),
-                      os.path.join(self._sheets.default_path(), sheet))
+                      os.path.join(self._config.cheat_default_dir, sheet))
             self.edit(sheet)
 
         # if it exists and is in the default path, then just open it
@@ -43,7 +44,7 @@ class Sheet:
 
     def create(self, sheet):
         """ Creates a cheatsheet """
-        new_sheet_path = os.path.join(self._sheets.default_path(), sheet)
+        new_sheet_path = os.path.join(self._config.cheat_default_dir, sheet)
         self._editor.open(new_sheet_path)
 
     def edit(self, sheet):
@@ -57,7 +58,7 @@ class Sheet:
 
     def exists_in_default_path(self, sheet):
         """ Predicate that returns true if the sheet exists in default_path"""
-        default_path_sheet = os.path.join(self._sheets.default_path(), sheet)
+        default_path_sheet = os.path.join(self._config.cheat_default_dir, sheet)
         return (sheet in self._sheets.get() and
                 os.access(default_path_sheet, os.R_OK))
 
