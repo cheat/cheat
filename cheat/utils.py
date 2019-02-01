@@ -14,3 +14,13 @@ class Utils:
     def warn(message):
         """ Prints a message to stderr """
         print((message), file=sys.stderr)
+
+    @staticmethod
+    def boolify(value):
+        """ Type-converts 'true' and 'false' (strings) to Boolean equivalents """
+        # if `value` is not a string, return it as-is
+        if not isinstance(value, str):
+            return value
+
+        # otherwise, convert "true" and "false" to Boolean counterparts
+        return value.strip().lower() == "true"

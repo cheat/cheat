@@ -33,9 +33,9 @@ class Configuration:
 
         # self.cheat_colors
         self.cheat_colors = self._select([
-            self._boolify(os.environ.get('CHEAT_COLORS')),
-            self._boolify(os.environ.get('CHEATCOLORS')),
-            self._boolify(config.get('CHEAT_COLORS')),
+            Utils.boolify(os.environ.get('CHEAT_COLORS')),
+            Utils.boolify(os.environ.get('CHEATCOLORS')),
+            Utils.boolify(config.get('CHEAT_COLORS')),
             True,
         ])
 
@@ -64,8 +64,8 @@ class Configuration:
             config.get('CHEAT_HIGHLIGHT'),
             False,
         ])
-        if (self.cheat_highlight.strip().lower() == "false"):
-            self.cheat_highlight = False
+        if isinstance(self.cheat_highlight, str):
+            Utils.boolify(self.cheat_highlight)
 
         # self.cheat_path
         self.cheat_path = self._select([
@@ -75,18 +75,10 @@ class Configuration:
             '/usr/share/cheat',
         ])
 
-    def _boolify(self, value):
-        # if `value` is not a string, return it as-is
-        if not isinstance(value, str):
-            return value
-
-        # otherwise, convert "true" and "false" to Boolean counterparts
-        return value.strip().lower() == "true"
-
     def _read_config_file(self, path):
         # Reads configuration file and returns list of set variables
         config = {}
-        if (os.path.isfile(path)):
+        if os.path.isfile(path):
             with open(path) as config_file:
                 config.update(json.load(config_file))
         return config
@@ -105,7 +97,7 @@ class Configuration:
             'blue', 'magenta', 'cyan', 'white',
             False
         ]
-        if (self.cheat_highlight not in highlights):
+        if self.cheat_highlight not in highlights:
             Utils.die("%s %s" % ('CHEAT_HIGHLIGHT must be one of:', highlights))
 
         return True
