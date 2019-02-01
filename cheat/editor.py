@@ -12,7 +12,7 @@ class Editor:
         """ Determines the user's preferred editor """
 
         # assert that the editor is set
-        if (not self._config.cheat_editor):
+        if not self._config.cheat_editor:
             Utils.die(
                 'You must set a CHEAT_EDITOR, VISUAL, or EDITOR environment '
                 'variable or setting in order to create/edit a cheatsheet.'

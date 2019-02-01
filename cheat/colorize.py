@@ -29,7 +29,7 @@ class Colorize:
         """ Applies syntax highlighting """
 
         # only colorize if cheat_colors is true, and stdout is a tty
-        if (self._config.cheat_colors is False or not sys.stdout.isatty()):
+        if self._config.cheat_colors is False or not sys.stdout.isatty():
              return sheet_content
 
         # don't attempt to colorize an empty cheatsheet
