@@ -41,8 +41,9 @@ class Configuration:
             True,
         ])
 
-        # self.cheat_default_dir
-        self.cheat_default_dir = self._select([
+        # self.cheat_user_dir
+        self.cheat_user_dir = self._select([
+            os.environ.get('CHEAT_USER_DIR'),
             os.environ.get('CHEAT_DEFAULT_DIR'),
             os.environ.get('DEFAULT_CHEAT_DIR'),
             # TODO: XDG home?

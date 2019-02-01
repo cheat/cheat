@@ -53,29 +53,29 @@ if __name__ == '__main__':
     config = Configuration()
     config.validate()
 
-    # create the CHEAT_DEFAULT_DIR if it does not exist
-    if not os.path.isdir(config.cheat_default_dir):
+    # create the CHEAT_USER_DIR if it does not exist
+    if not os.path.isdir(config.cheat_user_dir):
         try:
-            os.mkdir(config.cheat_default_dir)
+            os.mkdir(config.cheat_user_dir)
 
         except OSError:
             Utils.die("%s %s %s" % (
-                'Could not create CHEAT_DEFAULT_DIR (',
-                config.cheat_default_dir,
+                'Could not create CHEAT_USER_DIR (',
+                config.cheat_user_dir,
                 ')')
             )
 
-    # assert that the CHEAT_DEFAULT_DIR is readable and writable
-    if not os.access(config.cheat_default_dir, os.R_OK):
+    # assert that the CHEAT_USER_DIR is readable and writable
+    if not os.access(config.cheat_user_dir, os.R_OK):
         Utils.die("%s %s %s" % (
-            'The CHEAT_DEFAULT_DIR (',
-            config.cheat_default_dir,
+            'The CHEAT_USER_DIR (',
+            config.cheat_user_dir,
             ') is not readable')
         )
-    if not os.access(config.cheat_default_dir, os.W_OK):
+    if not os.access(config.cheat_user_dir, os.W_OK):
         Utils.die("%s %s %s" % (
-            'The CHEAT_DEFAULT_DIR (',
-            config.cheat_default_dir,
+            'The CHEAT_USER_DIR (',
+            config.cheat_user_dir,
             ') is not writeable')
         )
 

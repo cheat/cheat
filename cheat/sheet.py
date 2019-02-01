@@ -19,7 +19,7 @@ class Sheet:
 
     def _exists_in_default_path(self, sheet):
         """ Predicate that returns true if the sheet exists in default_path"""
-        default_path = os.path.join(self._config.cheat_default_dir, sheet)
+        default_path = os.path.join(self._config.cheat_user_dir, sheet)
         return (sheet in self._sheets.get() and
                 os.access(default_path, os.R_OK))
 
@@ -32,7 +32,7 @@ class Sheet:
 
         # if the cheatsheet does not exist
         if not self._exists(sheet):
-            new_path = os.path.join(self._config.cheat_default_dir, sheet)
+            new_path = os.path.join(self._config.cheat_user_dir, sheet)
             self._editor.open(new_path)
 
         # if the cheatsheet exists but not in the default_path, copy it to the
@@ -41,11 +41,11 @@ class Sheet:
             try:
                 shutil.copy(
                             self._path(sheet),
-                            os.path.join(self._config.cheat_default_dir, sheet)
+                            os.path.join(self._config.cheat_user_dir, sheet)
                            )
 
             # fail gracefully if the cheatsheet cannot be copied. This can
-            # happen if CHEAT_DEFAULT_DIR does not exist
+            # happen if CHEAT_USER_DIR does not exist
             except IOError:
                 Utils.die('Could not copy cheatsheet for editing.')
 

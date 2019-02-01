@@ -13,7 +13,7 @@ class Sheets:
         # Assembles a dictionary of cheatsheets as name => file-path
         self._sheets = {}
         sheet_paths = [
-            config.cheat_default_dir
+            config.cheat_user_dir
         ]
 
         # merge the CHEAT_PATH paths into the sheet_paths
@@ -23,7 +23,7 @@ class Sheets:
                     sheet_paths.append(path)
 
         if not sheet_paths:
-            Utils.die('The CHEAT_DEFAULT_DIR dir does not exist '
+            Utils.die('The CHEAT_USER_DIR dir does not exist '
                       + 'or the CHEAT_PATH is not set.')
 
         # otherwise, scan the filesystem
@@ -40,7 +40,7 @@ class Sheets:
     def directories(self):
         """ Assembles a list of directories containing cheatsheets """
         sheet_paths = [
-            self._config.cheat_default_dir,
+            self._config.cheat_user_dir,
         ]
 
         # merge the CHEATPATH paths into the sheet_paths
