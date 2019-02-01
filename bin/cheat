@@ -93,7 +93,7 @@ if __name__ == '__main__':
 
     # create/edit cheatsheet
     elif options['--edit']:
-        sheet.create_or_edit(options['<cheatsheet>'])
+        sheet.edit(options['<cheatsheet>'])
 
     # search among the cheatsheets
     elif options['--search']:
