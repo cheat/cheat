@@ -1,0 +1,46 @@
+# Inserting
+
+    $ pass insert google.com/gmail/example@gmail.com
+
+    Usually you'll find password store directory in $HOME/.password-store
+
+    Notice that pass(1) creates a directory structure for us automatically. We can get a nice view of the password store with pass with no arguments:
+
+    $ pass
+    Password Store
+    └── google.com
+        └── gmail
+                    └── example@gmail.com
+
+# Generating
+
+    $ pass generate google.com/gmail/example@gmail.com 16
+
+    pass(1) uses pwgen(1) for this password generation. In each case, the password is automatically inserted into the password store for you.
+
+# Editing
+
+    $ pass edit google.com/gmail/example@gmail.com
+
+    If you do this, you may like to be careful that your editor is not configured to keep backups or swap files in plain text of documents 
+    it edits in temporary directories or memory filesystems. If you’re using Vim, I wrote some configuration in an attempt to solve this problem.
+
+# Retrieval
+
+
+    $ pass google.com/gmail/example@gmail.com
+
+# Removal
+
+    $ pass rm google.com/gmail/example@gmail.com
+
+# Git Integration
+
+    $ pass git init
+
+
+# Backups
+
+    $ tar -cz .password-store | gpg --sign --encrypt -r 0x77BB8872  > password-store-backup.tar.gz.gpg
+
+    $ gpg --decrypt < password-store-backup.tar.gz.gpg | tar -xz 
