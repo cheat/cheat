@@ -59,4 +59,7 @@ class Colorize:
             except Exception:
                 pass
 
-        return highlight(sheet_content, lexer, TerminalFormatter())
+        return highlight(
+               sheet_content,
+               lexer,
+               TerminalFormatter(bg=self._config.cheat_colorscheme))

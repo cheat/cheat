@@ -41,6 +41,13 @@ class Configuration:
             True,
         ])
 
+        # self.cheat_colorscheme
+        self.cheat_colorscheme = self._select([
+            os.environ.get('CHEAT_COLORSCHEME'),
+            config.get('CHEAT_COLORSCHEME'),
+            'light',
+        ]).strip().lower()
+
         # self.cheat_user_dir
         self.cheat_user_dir = self._select([
             os.environ.get('CHEAT_USER_DIR'),
@@ -103,5 +110,11 @@ class Configuration:
         if self.cheat_highlight not in highlights:
             Utils.die("%s %s" %
                       ('CHEAT_HIGHLIGHT must be one of:', highlights))
+
+        # assert that the color scheme is valid
+        colorschemes = ['light', 'dark']
+        if self.cheat_colorscheme not in colorschemes:
+            Utils.die("%s %s" %
+                      ('CHEAT_COLORSCHEME must be one of:', colorschemes))
 
         return True
