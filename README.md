@@ -118,6 +118,13 @@ export CHEAT_COLORS=true
 
 Note that [pygments][] must be installed on your system for this to work.
 
+`cheat` ships with both light and dark colorschemes to support terminals with
+different background colors. A colorscheme may be selected via the
+`CHEAT_COLORSCHEME` envvar:
+
+```sh
+export CHEAT_COLORSCHEME=light # must be 'light' (default) or 'dark'
+```
 
 #### Specifying a Syntax Highlighter ####
 You may manually specify which syntax highlighter to use for each cheatsheet by
