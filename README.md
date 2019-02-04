@@ -161,9 +161,9 @@ See Also:
 - [Related Projects][related-projects]
 
 
-[autocompletion]:   https://github.com/chrisallenlane/cheat/wiki/Enabling-Command-line-Autocompletion
+[autocompletion]:   https://github.com/cheat/cheat/wiki/Enabling-Command-line-Autocompletion
 [dotfiles]:         http://dotfiles.github.io/
 [gfm]:              https://help.github.com/articles/creating-and-highlighting-code-blocks/
-[installing]:       https://github.com/chrisallenlane/cheat/wiki/Installing
+[installing]:       https://github.com/cheat/cheat/wiki/Installing
 [pygments]:         http://pygments.org/
-[related-projects]: https://github.com/chrisallenlane/cheat/wiki/Related-Projects
+[related-projects]: https://github.com/cheat/cheat/wiki/Related-Projects
