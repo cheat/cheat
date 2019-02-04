@@ -2,15 +2,15 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "alpine/alpine64"
+  config.vm.box = "ubuntu/bionic64"
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "256"
+    vb.memory = "512"
   end
 
   config.vm.provision "shell", inline: <<-SHELL
-     sudo apk update
-     sudo apk add py-pip
+     sudo apt-get update
+     sudo apt-get install -y python-pip
      su vagrant && sudo -H pip install docopt pygments termcolor flake8
      cd /vagrant && sudo python setup.py install
   SHELL
