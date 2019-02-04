@@ -83,13 +83,13 @@ with your [dotfiles][].
 Configuring
 -----------
 
-### Setting a CHEAT_DEFAULT_DIR ###
+### Setting a CHEAT_USER_DIR ###
 Personal cheatsheets are saved in the `~/.cheat` directory by default, but you
-can specify a different default by exporting a `CHEAT_DEFAULT_DIR` environment
+can specify a different default by exporting a `CHEAT_USER_DIR` environment
 variable:
 
 ```sh
-export CHEAT_DEFAULT_DIR='/path/to/my/cheats'
+export CHEAT_USER_DIR='/path/to/my/cheats'
 ```
 
 ### Setting a CHEAT_PATH ###

@@ -13,7 +13,7 @@ Usage:
   cheat -v
 
 Options:
-  -d --directories  List directories on CHEATPATH
+  -d --directories  List directories on $CHEAT_PATH
   -e --edit         Edit cheatsheet
   -l --list         List cheatsheets
   -s --search       Search cheatsheets for <keyword>
@@ -36,27 +36,57 @@ Examples:
 
 # require the dependencies
 from __future__ import print_function
-from cheat.sheets import Sheets
-from cheat.sheet import Sheet
-from cheat.utils import Utils
+from cheat.colorize import Colorize
 from cheat.configuration import Configuration
+from cheat.sheet import Sheet
+from cheat.sheets import Sheets
+from cheat.utils import Utils
 from docopt import docopt
 import os
-
 
 if __name__ == '__main__':
 
     # parse the command-line options
     options = docopt(__doc__, version='cheat 2.4.2')
 
+    # initialize and validate configs
     config = Configuration()
+    config.validate()
+
+    # create the CHEAT_USER_DIR if it does not exist
+    if not os.path.isdir(config.cheat_user_dir):
+        try:
+            os.mkdir(config.cheat_user_dir)
+
+        except OSError:
+            Utils.die("%s %s %s" % (
+                'Could not create CHEAT_USER_DIR (',
+                config.cheat_user_dir,
+                ')')
+            )
+
+    # assert that the CHEAT_USER_DIR is readable and writable
+    if not os.access(config.cheat_user_dir, os.R_OK):
+        Utils.die("%s %s %s" % (
+            'The CHEAT_USER_DIR (',
+            config.cheat_user_dir,
+            ') is not readable')
+        )
+    if not os.access(config.cheat_user_dir, os.W_OK):
+        Utils.die("%s %s %s" % (
+            'The CHEAT_USER_DIR (',
+            config.cheat_user_dir,
+            ') is not writeable')
+        )
+
+    # bootsrap
     sheets = Sheets(config)
-    utils = Utils(config)
-    sheet = Sheet(sheets, utils)
+    sheet = Sheet(config, sheets)
+    colorize = Colorize(config)
 
     # list directories
     if options['--directories']:
-        print("\n".join(sheets.paths()))
+        print("\n".join(sheets.directories()))
 
     # list cheatsheets
     elif options['--list']:
@@ -64,12 +94,12 @@ if __name__ == '__main__':
 
     # create/edit cheatsheet
     elif options['--edit']:
-        sheet.create_or_edit(options['<cheatsheet>'])
+        sheet.edit(options['<cheatsheet>'])
 
     # search among the cheatsheets
     elif options['--search']:
-        print(utils.colorize(sheets.search(options['<keyword>'])), end="")
+        print(colorize.syntax(sheets.search(options['<keyword>'])), end="")
 
     # print the cheatsheet
     else:
-        print(utils.colorize(sheet.read(options['<cheatsheet>'])), end="")
+        print(colorize.syntax(sheet.read(options['<cheatsheet>'])), end="")

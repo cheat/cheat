@@ -1,55 +1,34 @@
+from cheat.colorize import Colorize
+from cheat.utils import Utils
 import io
 import os
-
-from cheat.utils import Utils
 
 
 class Sheets:
 
     def __init__(self, config):
-        self._default_cheat_dir = config.get_default_cheat_dir()
-        self._cheatpath = config.get_cheatpath()
-        self._utils = Utils(config)
+        self._config = config
+        self._colorize = Colorize(config)
 
-    def default_path(self):
-        """ Returns the default cheatsheet path """
+        # Assembles a dictionary of cheatsheets as name => file-path
+        self._sheets = {}
+        sheet_paths = [
+            config.cheat_user_dir
+        ]
 
-        # determine the default cheatsheet dir
-        default_sheets_dir = (self._default_cheat_dir or
-                              os.path.join('~', '.cheat'))
-        default_sheets_dir = os.path.expanduser(
-            os.path.expandvars(default_sheets_dir))
+        # merge the CHEAT_PATH paths into the sheet_paths
+        if config.cheat_path:
+            for path in config.cheat_path.split(os.pathsep):
+                if os.path.isdir(path):
+                    sheet_paths.append(path)
 
-        # create the DEFAULT_CHEAT_DIR if it does not exist
-        if not os.path.isdir(default_sheets_dir):
-            try:
-                # @kludge: unclear on why this is necessary
-                os.umask(0000)
-                os.mkdir(default_sheets_dir)
-
-            except OSError:
-                Utils.die('Could not create DEFAULT_CHEAT_DIR')
-
-        # assert that the DEFAULT_CHEAT_DIR is readable and writable
-        if not os.access(default_sheets_dir, os.R_OK):
-            Utils.die('The DEFAULT_CHEAT_DIR ('
-                      + default_sheets_dir
-                      + ') is not readable.')
-        if not os.access(default_sheets_dir, os.W_OK):
-            Utils.die('The DEFAULT_CHEAT_DIR ('
-                      + default_sheets_dir
-                      + ') is not writable.')
-
-        # return the default dir
-        return default_sheets_dir
-
-    def get(self):
-        """ Assembles a dictionary of cheatsheets as name => file-path """
-        cheats = {}
+        if not sheet_paths:
+            Utils.die('The CHEAT_USER_DIR dir does not exist '
+                      + 'or the CHEAT_PATH is not set.')
 
         # otherwise, scan the filesystem
-        for cheat_dir in reversed(self.paths()):
-            cheats.update(
+        for cheat_dir in reversed(sheet_paths):
+            self._sheets.update(
                 dict([
                     (cheat, os.path.join(cheat_dir, cheat))
                     for cheat in os.listdir(cheat_dir)
@@ -58,25 +37,21 @@ class Sheets:
                 ])
             )
 
-        return cheats
-
-    def paths(self):
+    def directories(self):
         """ Assembles a list of directories containing cheatsheets """
         sheet_paths = [
-            self.default_path(),
+            self._config.cheat_user_dir,
         ]
 
         # merge the CHEATPATH paths into the sheet_paths
-        if self._cheatpath:
-            for path in self._cheatpath.split(os.pathsep):
-                if os.path.isdir(path):
-                    sheet_paths.append(path)
-
-        if not sheet_paths:
-            Utils.die('The DEFAULT_CHEAT_DIR dir does not exist '
-                      + 'or the CHEATPATH is not set.')
+        for path in self._config.cheat_path.split(os.pathsep):
+            sheet_paths.append(path)
 
         return sheet_paths
+
+    def get(self):
+        """ Returns a dictionary of cheatsheets as name => file-path """
+        return self._sheets
 
     def list(self):
         """ Lists the available cheatsheets """
@@ -94,7 +69,7 @@ class Sheets:
             match = ''
             for line in io.open(cheatsheet[1], encoding='utf-8'):
                 if term in line:
-                    match += '  ' + self._utils.highlight(term, line)
+                    match += '  ' + self._colorize.search(term, line)
 
             if match != '':
                 result += cheatsheet[0] + ":\n" + match + "\n"
