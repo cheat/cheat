@@ -14,7 +14,7 @@ for f in os.listdir('cheat/cheatsheets/'):
 # specify build params
 setup(
     name='cheat',
-    version='2.4.2',
+    version='2.5.0',
     author='Chris Lane',
     author_email='chris@chris-allen-lane.com',
     license='GPL3',
