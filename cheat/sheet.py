@@ -1,76 +1,64 @@
+from cheat.editor import Editor
+from cheat.utils import Utils
+import io
 import os
 import shutil
 
-from cheat import sheets
-from cheat.utils import die, open_with_editor
 
-def copy(current_sheet_path, new_sheet_path):
-    """ Copies a sheet to a new path """
+class Sheet:
 
-    # attempt to copy the sheet to DEFAULT_CHEAT_DIR
-    try:
-        shutil.copy(current_sheet_path, new_sheet_path)
+    def __init__(self, config, sheets):
+        self._config = config
+        self._editor = Editor(config)
+        self._sheets = sheets
 
-    # fail gracefully if the cheatsheet cannot be copied. This can happen if
-    # DEFAULT_CHEAT_DIR does not exist
-    except IOError:
-        die('Could not copy cheatsheet for editing.')
+    def _exists(self, sheet):
+        """ Predicate that returns true if the sheet exists """
+        return (sheet in self._sheets.get() and
+                os.access(self._path(sheet), os.R_OK))
 
+    def _exists_in_default_path(self, sheet):
+        """ Predicate that returns true if the sheet exists in default_path"""
+        default_path = os.path.join(self._config.cheat_user_dir, sheet)
+        return (sheet in self._sheets.get() and
+                os.access(default_path, os.R_OK))
 
-def create_or_edit(sheet):
-    """ Creates or edits a cheatsheet """
+    def _path(self, sheet):
+        """ Returns a sheet's filesystem path """
+        return self._sheets.get()[sheet]
 
-    # if the cheatsheet does not exist
-    if not exists(sheet):
-        create(sheet)
+    def edit(self, sheet):
+        """ Creates or edits a cheatsheet """
 
-    # if the cheatsheet exists but not in the default_path, copy it to the
-    # default path before editing
-    elif exists(sheet) and not exists_in_default_path(sheet):
-        copy(path(sheet), os.path.join(sheets.default_path(), sheet))
-        edit(sheet)
+        # if the cheatsheet does not exist
+        if not self._exists(sheet):
+            new_path = os.path.join(self._config.cheat_user_dir, sheet)
+            self._editor.open(new_path)
 
-    # if it exists and is in the default path, then just open it
-    else:
-        edit(sheet)
+        # if the cheatsheet exists but not in the default_path, copy it to the
+        # default path before editing
+        elif self._exists(sheet) and not self._exists_in_default_path(sheet):
+            try:
+                shutil.copy(
+                            self._path(sheet),
+                            os.path.join(self._config.cheat_user_dir, sheet)
+                           )
 
+            # fail gracefully if the cheatsheet cannot be copied. This can
+            # happen if CHEAT_USER_DIR does not exist
+            except IOError:
+                Utils.die('Could not copy cheatsheet for editing.')
 
-def create(sheet):
-    """ Creates a cheatsheet """
-    new_sheet_path = os.path.join(sheets.default_path(), sheet)
-    open_with_editor(new_sheet_path)
+            self._editor.open(self._path(sheet))
 
+        # if it exists and is in the default path, then just open it
+        else:
+            self._editor.open(self._path(sheet))
 
-def edit(sheet):
-    """ Opens a cheatsheet for editing """
-    open_with_editor(path(sheet))
+    def read(self, sheet):
+        """ Returns the contents of the cheatsheet as a String """
+        if not self._exists(sheet):
+            Utils.die('No cheatsheet found for ' + sheet)
 
-
-def exists(sheet):
-    """ Predicate that returns true if the sheet exists """
-    return sheet in sheets.get() and os.access(path(sheet), os.R_OK)
-
-
-def exists_in_default_path(sheet):
-    """ Predicate that returns true if the sheet exists in default_path"""
-    default_path_sheet = os.path.join(sheets.default_path(), sheet)
-    return sheet in sheets.get() and os.access(default_path_sheet, os.R_OK)
-
-
-def is_writable(sheet):
-    """ Predicate that returns true if the sheet is writeable """
-    return sheet in sheets.get() and os.access(path(sheet), os.W_OK)
-
-
-def path(sheet):
-    """ Returns a sheet's filesystem path """
-    return sheets.get()[sheet]
-
-
-def read(sheet):
-    """ Returns the contents of the cheatsheet as a String """
-    if not exists(sheet):
-        die('No cheatsheet found for ' + sheet)
-
-    with open(path(sheet)) as cheatfile:
-        return cheatfile.read()
+        with io.open(self._path(sheet), encoding='utf-8') as cheatfile:
+            return cheatfile.read()
