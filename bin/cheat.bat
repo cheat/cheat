@@ -1,10 +1,8 @@
-@echo off
+@echo OFF
 
-if not defined EDITOR (set EDITOR=write)
+if not defined CHEAT_EDITOR if not defined EDITOR if not defined VISUAL (
+    set CHEAT_EDITOR=write
+)
 
-:: Retrieve the path to python executable.
-for /f "delims=" %%A in ('where python') do set "PATHOFPYTHON=%%A"
-%PATHOFPYTHON% %PATHOFPYTHON%\..\Scripts\cheat %*
-
-:: Remove this variable to avoid polluting the environment.
-set PATHOFPYTHON=
+REM %~dp0 is black magic for getting directory of script
+python %~dp0cheat %*
