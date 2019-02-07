@@ -50,8 +50,11 @@ Installing
 It is recommended to install `cheat` with `pip`:
 
 ```sh
-[sudo] pip install cheat
+pip install cheat --user
 ```
+
+(You must ensure that the `Location` identified by `pip show cheat` exists on
+your `PATH`.)
 
 [Other installation methods are available][installing].
 
