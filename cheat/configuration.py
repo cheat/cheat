@@ -1,4 +1,5 @@
 from cheat.utils import Utils
+import appdirs
 import json
 import os
 
@@ -9,10 +10,12 @@ class Configuration:
         # compute the location of the config files
         config_file_path_global = self._select([
             os.environ.get('CHEAT_GLOBAL_CONF_PATH'),
+            appdirs.site_config_dir('cheat', 'cheat'),
             '/etc/cheat',
         ])
         config_file_path_local = self._select([
             os.environ.get('CHEAT_LOCAL_CONF_PATH'),
+            appdirs.user_config_dir('cheat', 'cheat'),
             os.path.expanduser('~/.config/cheat/cheat'),
         ])
 
@@ -82,6 +85,8 @@ class Configuration:
             os.environ.get('CHEAT_PATH'),
             os.environ.get('CHEATPATH'),
             config.get('CHEAT_PATH'),
+            appdirs.user_data_dir('cheat', 'cheat'),
+            appdirs.site_data_dir('cheat', 'cheat'),
             '/usr/share/cheat',
         ])
 
