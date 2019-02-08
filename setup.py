@@ -1,23 +1,11 @@
+from cheat.appdirs import user_data_dir
 from distutils.core import setup
 import os
-
-# install appdirs if it cannot be imported
-try:
-    import appdirs
-except ImportError:
-    import pip
-    pip.main(['install', 'appdirs'])
-    import appdirs
 
 # determine the path in which to install the cheatsheets included with the
 # package
 cheat_path = os.environ.get('CHEAT_PATH') or \
-                appdirs.user_data_dir('cheat', 'cheat')
-
-# determine the path in which to install the config file
-config_path = os.environ.get('CHEAT_GLOBAL_CONF_PATH') or \
-                os.environ.get('CHEAT_LOCAL_CONF_PATH') or \
-                appdirs.user_config_dir('cheat', 'cheat')
+                user_data_dir('cheat', 'cheat')
 
 # aggregate the systme-wide cheatsheets
 cheat_files = []
@@ -42,13 +30,11 @@ setup(
     ],
     scripts=['bin/cheat'],
     install_requires=[
-        'appdirs >= 1.4.3',
         'docopt >= 0.6.1',
         'pygments >= 1.6.0',
         'termcolor >= 1.1.0',
     ],
     data_files=[
         (cheat_path, cheat_files),
-        (config_path, ['config/cheat']),
     ],
 )
