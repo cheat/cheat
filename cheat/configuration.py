@@ -11,12 +11,10 @@ class Configuration:
         config_file_path_global = self._select([
             os.environ.get('CHEAT_GLOBAL_CONF_PATH'),
             appdirs.site_config_dir('cheat', 'cheat'),
-            '/etc/cheat',
         ])
         config_file_path_local = self._select([
             os.environ.get('CHEAT_LOCAL_CONF_PATH'),
             appdirs.user_config_dir('cheat', 'cheat'),
-            os.path.expanduser('~/.config/cheat/cheat'),
         ])
 
         # attempt to read the global config file
@@ -56,7 +54,6 @@ class Configuration:
             os.environ.get('CHEAT_USER_DIR'),
             os.environ.get('CHEAT_DEFAULT_DIR'),
             os.environ.get('DEFAULT_CHEAT_DIR'),
-            # TODO: XDG home?
             os.path.expanduser(
                 os.path.expandvars(os.path.join('~', '.cheat'))
                 ),
@@ -86,8 +83,6 @@ class Configuration:
             os.environ.get('CHEATPATH'),
             config.get('CHEAT_PATH'),
             appdirs.user_data_dir('cheat', 'cheat'),
-            appdirs.site_data_dir('cheat', 'cheat'),
-            '/usr/share/cheat',
         ])
 
     def _read_config_file(self, path):

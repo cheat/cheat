@@ -1,4 +1,4 @@
-from cheat.appdirs import user_config_dir, user_data_dir
+from cheat.appdirs import user_data_dir
 from distutils.core import setup
 import os
 
@@ -6,11 +6,6 @@ import os
 # package
 cheat_path = os.environ.get('CHEAT_PATH') or \
                 user_data_dir('cheat', 'cheat')
-
-# determine the path in which to install the config file
-config_path = os.environ.get('CHEAT_GLOBAL_CONF_PATH') or \
-                os.environ.get('CHEAT_LOCAL_CONF_PATH') or \
-                user_config_dir('cheat', 'cheat')
 
 # aggregate the systme-wide cheatsheets
 cheat_files = []
@@ -41,6 +36,5 @@ setup(
     ],
     data_files=[
         (cheat_path, cheat_files),
-        (config_path, ['config/cheat']),
     ],
 )
