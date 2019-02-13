@@ -10,7 +10,7 @@ gcc -g
 # Debug with all symbols.
 gcc -ggdb3
 
-# Build for 64 bytes
+# Build for 64 bits
 gcc -m64
 
 # Include the directory {/usr/include/myPersonnal/lib/} to the list of path for #include <....>
