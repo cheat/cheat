@@ -6,10 +6,15 @@ import os
 # rather than hard-coding it here
 cheat_path = os.environ.get('CHEAT_PATH') or '/usr/share/cheat'
 
-# aggregate the systme-wide cheatsheets
+# aggregate the system-wide cheatsheets
 cheat_files = []
 for f in os.listdir('cheat/cheatsheets/'):
     cheat_files.append(os.path.join('cheat/cheatsheets/', f))
+
+# pull in contents of README for the long_description
+here = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 # specify build params
 setup(
@@ -22,6 +27,8 @@ setup(
     'on the command-line. It was designed to help remind *nix system '
     'administrators of options for commands that they use frequently, but not '
     'frequently enough to remember.',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://github.com/chrisallenlane/cheat',
     packages=[
         'cheat',
