@@ -49,15 +49,14 @@ class Configuration:
         ]).strip().lower()
 
         # self.cheat_user_dir
-        self.cheat_user_dir = self._select([
-            os.environ.get('CHEAT_USER_DIR'),
-            os.environ.get('CHEAT_DEFAULT_DIR'),
-            os.environ.get('DEFAULT_CHEAT_DIR'),
-            # TODO: XDG home?
-            os.path.expanduser(
-                os.path.expandvars(os.path.join('~', '.cheat'))
-                ),
-        ])
+        self.cheat_user_dir = self._select(
+            map(os.path.expanduser,
+                filter(None,
+                    [os.environ.get('CHEAT_USER_DIR'),
+                     os.environ.get('CHEAT_DEFAULT_DIR'),
+                     os.environ.get('DEFAULT_CHEAT_DIR'),
+                     # TODO: XDG home?
+                     os.path.join('~', '.cheat')])))
 
         # self.cheat_editor
         self.cheat_editor = self._select([
