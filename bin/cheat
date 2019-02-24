@@ -102,4 +102,4 @@ if __name__ == '__main__':
 
     # print the cheatsheet
     else:
-        print(colorize.syntax(sheet.read(options['<cheatsheet>'])), end="")
+        print(colorize.syntax(sheet.read(options['<cheatsheet>']),options['<cheatsheet>']), end="")

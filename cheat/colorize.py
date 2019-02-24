@@ -26,7 +26,7 @@ class Colorize:
         return haystack.replace(needle,
                                 colored(needle, self._config.cheat_highlight))
 
-    def syntax(self, sheet_content):
+    def syntax(self, sheet_content, *sheet_filename):
         """ Applies syntax highlighting """
 
         # only colorize if cheat_colors is true, and stdout is a tty
@@ -41,6 +41,7 @@ class Colorize:
         try:
             from pygments import highlight
             from pygments.lexers import get_lexer_by_name
+            from pygments.lexers import get_lexer_for_filename
             from pygments.formatters import TerminalFormatter
 
         # if the import fails, return uncolored text
@@ -50,6 +51,13 @@ class Colorize:
         # otherwise, attempt to colorize
         first_line = sheet_content.splitlines()[0]
         lexer = get_lexer_by_name('bash')
+
+        # apply syntax-highlighting based on filename
+        if sheet_filename:
+            try:
+                lexer = get_lexer_for_filename(sheet_filename[0])
+            except Exception:
+                pass
 
         # apply syntax-highlighting if the first line is a code-fence
         if first_line.startswith('```'):
