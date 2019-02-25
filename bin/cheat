@@ -7,6 +7,8 @@ Create and view cheatsheets on the command line.
 Usage:
   cheat <cheatsheet>
   cheat -e <cheatsheet>
+  cheat -p <cheatsheet>
+  cheat -ps <keyword>
   cheat -s <keyword>
   cheat -l
   cheat -d
@@ -18,6 +20,7 @@ Options:
   -l --list         List cheatsheets
   -s --search       Search cheatsheets for <keyword>
   -v --version      Print the version number
+  -p --pager        Pages through output instead of going directly to terminal
 
 Examples:
 
@@ -38,6 +41,7 @@ Examples:
 from __future__ import print_function
 from cheat.colorize import Colorize
 from cheat.configuration import Configuration
+from cheat.output import outPager
 from cheat.sheet import Sheet
 from cheat.sheets import Sheets
 from cheat.utils import Utils
@@ -95,6 +99,13 @@ if __name__ == '__main__':
     # create/edit cheatsheet
     elif options['--edit']:
         sheet.edit(options['<cheatsheet>'])
+
+    # use pager with other options
+    elif options['--pager']:
+        if options['--search']:
+            outPager(sheets.search(options['<keyword>']), colorize)
+        else:
+            outPager(sheet.read(options['<cheatsheet>']), colorize)
 
     # search among the cheatsheets
     elif options['--search']:
