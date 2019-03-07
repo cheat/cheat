@@ -55,6 +55,9 @@ class Configuration:
                     [os.environ.get('CHEAT_USER_DIR'),
                      os.environ.get('CHEAT_DEFAULT_DIR'),
                      os.environ.get('DEFAULT_CHEAT_DIR'),
+                     config.get('CHEAT_USER_DIR'),
+                     config.get('CHEAT_DEFAULT_DIR'),
+                     config.get('DEFAULT_CHEAT_DIR'),
                      # TODO: XDG home?
                      os.path.join('~', '.cheat')])))
 
