@@ -1,0 +1,19 @@
+Default key mappings
+Item editing mode
+
+    j - go to next item
+    k - go to previous item
+    o - create new item above the cursor
+    O - create new item below the cursor
+    <Space> - toggle current item
+    <CR> - create new item in insert mode
+    <Tab> - increases the indent of current (or selected) line(s)
+    <Shift-Tab> - decreases the indent of current (or selected) line(s)
+    <leader>e - switch to normal editing mode
+
+Normal editing mode
+
+    j, k, o, O, <CR> - no special behavior
+    <Space> - toggle current item
+    <leader>e - switch to item editing mode
+
