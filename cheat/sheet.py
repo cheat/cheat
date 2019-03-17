@@ -38,18 +38,16 @@ class Sheet:
         # if the cheatsheet exists but not in the default_path, copy it to the
         # default path before editing
         elif self._exists(sheet) and not self._exists_in_default_path(sheet):
+            default_path = os.path.join(self._config.cheat_user_dir, sheet)
             try:
-                shutil.copy(
-                            self._path(sheet),
-                            os.path.join(self._config.cheat_user_dir, sheet)
-                           )
+                shutil.copy(self._path(sheet), default_path)
 
             # fail gracefully if the cheatsheet cannot be copied. This can
             # happen if CHEAT_USER_DIR does not exist
             except IOError:
                 Utils.die('Could not copy cheatsheet for editing.')
 
-            self._editor.open(self._path(sheet))
+            self._editor.open(default_path)
 
         # if it exists and is in the default path, then just open it
         else:
