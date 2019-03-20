@@ -37,4 +37,9 @@ setup(
         (cheat_path, cheat_files),
         ('/etc', ['config/cheat']),
     ],
+    entry_points = {
+        'pygments.styles': [
+            'schStyle = cheat:styles',
+        ],
+    }
 )

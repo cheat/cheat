@@ -41,7 +41,7 @@ class Colorize:
         try:
             from pygments import highlight
             from pygments.lexers import get_lexer_by_name
-            from pygments.formatters import TerminalFormatter
+            from pygments.formatters import Terminal256Formatter
 
         # if the import fails, return uncolored text
         except ImportError:
@@ -62,4 +62,4 @@ class Colorize:
         return highlight(
                sheet_content,
                lexer,
-               TerminalFormatter(bg=self._config.cheat_colorscheme))
+               Terminal256Formatter(style=self._config.cheat_colorscheme))
