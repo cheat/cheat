@@ -1,5 +1,5 @@
 from cheat.utils import Utils
-import appdirs
+import cheat.appdirs as appdirs
 import json
 import os
 
