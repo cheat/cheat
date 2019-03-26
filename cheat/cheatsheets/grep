@@ -1,6 +1,9 @@
 # Search a file for a pattern
 grep pattern file
 
+# Search more than one pattern in a file
+grep 'pattern\|pattern' file
+
 # Case insensitive search (with line numbers)
 grep -in pattern file
 
