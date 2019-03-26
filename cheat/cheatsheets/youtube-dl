@@ -1,6 +1,9 @@
 # To download a video in 720p MP4:
 youtube-dl -f 22 example.com/watch?v=id
 
+# To download best video format:
+youtube-dl -f best example.com/watch?v=id
+
 # To download a video in 720p MP4 or WebM or FLV:
 youtube-dl -f 22/45/120
 
