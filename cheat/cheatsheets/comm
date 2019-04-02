@@ -1,0 +1,5 @@
+# Print lines appearing in both `file1` and `file2`:
+comm -12 file1 file2
+
+# Print lines appearing only in `file1`:
+comm -23 file1 file2
