@@ -55,6 +55,8 @@ class Sheets:
 
     def list(self):
         """ Lists the available cheatsheets """
+        if not len(self.get()):
+            return 'No cheatsheets yet. Create and edit by `cheat -e <your-cheatsheet>`.'
         sheet_list = ''
         pad_length = max([len(x) for x in self.get().keys()]) + 4
         for sheet in sorted(self.get().items()):
