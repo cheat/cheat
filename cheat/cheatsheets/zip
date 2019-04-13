@@ -1,6 +1,9 @@
 # Create zip file
 zip archive.zip file1 directory/
 
+# Create zip file from directory
+zip -r archive.zip directory/
+
 # Create zip file with password
 zip -P password archive.zip file1
 
