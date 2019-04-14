@@ -61,6 +61,16 @@ class Sheets:
             sheet_list += sheet[0].ljust(pad_length) + sheet[1] + "\n"
         return sheet_list
 
+    def list_default_path(self):
+        """ Lists cheatsheets available in default_path """
+        sheet_list = ''
+        pad_length = max([len(x) for x in self.get().keys()]) + 4
+
+        for sheet, path in sorted(self.get().items()):
+            if self._config.cheat_user_dir in path:
+                sheet_list += sheet.ljust(pad_length) + path + "\n"
+        return sheet_list
+
     def search(self, term):
         """ Searches all cheatsheets for the specified term """
         result = ''

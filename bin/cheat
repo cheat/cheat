@@ -9,6 +9,7 @@ Usage:
   cheat -e <cheatsheet>
   cheat -s <keyword>
   cheat -l
+  cheat -L
   cheat -d
   cheat -v
 
@@ -16,6 +17,7 @@ Options:
   -d --directories  List directories on $CHEAT_PATH
   -e --edit         Edit cheatsheet
   -l --list         List cheatsheets
+  -L --list-custom  List custom cheatsheets
   -s --search       Search cheatsheets for <keyword>
   -v --version      Print the version number
 
@@ -91,6 +93,10 @@ if __name__ == '__main__':
     # list cheatsheets
     elif options['--list']:
         print(sheets.list(), end="")
+
+    # list custom cheatsheets
+    elif options["--list-custom"]:
+        print(sheets.list_default_path(), end="")
 
     # create/edit cheatsheet
     elif options['--edit']:
