@@ -158,6 +158,7 @@
 	wx ff @@10 20 30      Writes ff at offsets 10, 20 and 30
 	wx ff @@`?s  1 10 2`  Writes ff at offsets 1, 2 and 3
 	wx 90 @@ sym.*        Writes a nop on every symbol
+    wx 90 @@=`?s $$ $$+16 1`    Writes 16 nops to curr addr upto curr addr +16
 
 	+-------------------------------------------------------------------
 
@@ -628,6 +629,36 @@
 		single-step with F7 (s)
 		step-over with F8 (S)
 		continue with F9
+
+    + Conditional beakpoints
+         
+
+         1. ignore breakpoint at address 0x4000ce for five times:
+
+             f times=5
+             (dec_times,f times=`?vi times-1`,?= times)
+             db 0x4000ce
+             dbC 0x4000ce .(dec_times)
+             dc
+
+         2. execute until rax==0x31c0 at address 0x4000ce
+
+             e cmd.hitinfo=0
+             (break_rax,f reg_rax=`dr rax`,f test=`?vi reg_rax-0x31c0`,?= test)
+             db 0x4000ce
+             dbC 0x4000ce .(break_rax)
+             dc
+         
+         3. perform a register tracing dump at address 0x4000ce
+
+             e cmd.hitinfo=0
+             (trace_rax,dr rax,?= 1)
+             db 0x4000ce
+             dbC 0x4000ce .(trace_rax)
+             dc > trace.txt
+
+
+
 
 # WebGUI
 	
