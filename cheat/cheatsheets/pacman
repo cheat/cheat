@@ -27,6 +27,9 @@ pacman -Ql <package name> | sed -n -e 's/.*\/bin\///p' | tail -n +2
 # To list explicitly installed packages
 pacman -Qe
 
+# To list the top-most recent explicitly installed packages (not in the base groups)
+expac --timefmt='%Y-%m-%d %T' '%l\t%n' $(comm -23 <(pacman -Qeq|sort) <(pacman -Qqg base base-devel|sort)) | sort -r | head -20
+
 # To list orphan packages (installed as dependencies and not required anymore)
 pacman -Qdt
 

