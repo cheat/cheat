@@ -7,3 +7,50 @@ s <filename>
 
 # Method 2 - This should work whether input is a pipe or an ordinary file.
 Type g or < (g or less-than) | $ (pipe then dollar) then cat > <filename> and Enter.
+
+# Searching
+
+	##Forward Search
+
+		- / – search for a pattern which will take you to the next occurrence.
+		- n – for next match in forward
+		- N – for previous match in backward
+
+	## Backward Search
+
+		- ? – search for a pattern which will take you to the previous occurrence.
+		- n – for next match in backward direction
+		- N – for previous match in forward direction
+
+# Navigation
+	## Navigating screens
+
+		- CTRL+F – forward one window
+		- CTRL+B – backward one window
+		- CTRL+D – forward half window
+		- CTRL+U – backward half window
+
+	## Navigating lines
+
+		- j – navigate forward by one line
+		- k – navigate backward by one line
+		- 10j – 10 lines forward.
+		- 10k – 10 lines backward.
+
+	## Navigating to beginning or end of file
+
+		- G – go to the end of file
+		- g – go to the start of file
+
+	## Marked navigation
+
+		- ma – mark the current position with the letter ‘a’,
+		- 'a – go to the marked position ‘a’.
+
+# Other commands
+
+	- q or ZZ – exit the less pager
+	- v – using the configured editor edit the current file.
+	- h – summary of less commands
+	- &pattern – display only the matching lines, not all.
+	- CTRL+G – show the current file name along with line, byte and percentage statistics.
