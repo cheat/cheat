@@ -67,3 +67,21 @@ nmap -T5 --min-parallelism=50 -n --script "ssl-heartbleed" -pT:443 127.0.0.1
 
 # Show all informations (debug mode)
 nmap -d ...
+
+## Port Status Information
+- Open: This indicates that an application is listening for connections on this port.
+- Closed: This indicates that the probes were received but there is no application listening on this port.
+- Filtered: This indicates that the probes were not received and the state could not be established. It also indicates that the probes are being dropped by some kind of filtering.
+- Unfiltered: This indicates that the probes were received but a state could not be established.
+- Open/Filtered: This indicates that the port was filtered or open but Nmap couldn’t establish the state.
+- Closed/Filtered: This indicates that the port was filtered or closed but Nmap couldn’t establish the state.
+
+## Additional Scan Types
+
+nmap -sn: Probe only (host discovery, not port scan)
+nmap -sS: SYN Scan
+nmap -sT: TCP Connect Scan
+nmap -sU: UDP Scan
+nmap -sV: Version Scan
+nmap -O: Used for OS Detection/fingerprinting
+nmap --scanflags: Sets custom list of TCP using `URG ACK PSH RST SYN FIN` in any order
