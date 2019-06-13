@@ -51,3 +51,6 @@ Ctrl-b %
 
 # Split windows vertically:
 Ctrl-b "
+
+# Swap windows
+Ctrl-b :swap-window -s [0-9] -t [0-9]
