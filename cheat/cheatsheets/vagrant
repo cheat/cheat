@@ -30,4 +30,4 @@ vagrant suspend
 vagrant destroy
 
 # Restart vm with new provision script
-vagran reload --provision
+vagrant reload --provision
