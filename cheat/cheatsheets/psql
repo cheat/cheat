@@ -16,8 +16,9 @@ psql -U postgres -d dbName -c 'select * from tableName;' -o fileName
 # Execute query and get tabular html output:
 psql -U postgres -d dbName -H -c 'select * from tableName;'
 
-# Execute query and save resulting rows to csv file:
-psql -U postgres -d dbName -t -A -P fieldsep=',' -c 'select * from tableName;' -o fileName.csv
+# Execute query and save resulting rows to csv file
+# (if column names in the first row are not needed, remove the word 'header'):
+psql -U postgres -d dbName -c 'copy (select * from tableName) to stdout with csv header;' -o fileName.csv
 
 # Read commands from file:
 psql -f fileName
