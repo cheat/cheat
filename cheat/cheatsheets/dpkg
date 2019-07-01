@@ -5,7 +5,7 @@ dpkg -i test.deb
 dpkg -P test.deb
 
 # List all installed packages with versions and details
-dpkg -I
+dpkg -l
 
 # Find out if a Debian package is installed or not
 dpkg -s test.deb | grep Status
