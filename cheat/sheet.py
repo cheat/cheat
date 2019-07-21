@@ -53,6 +53,23 @@ class Sheet:
         else:
             self._editor.open(self._path(sheet))
 
+    def delete(self, sheet):
+        """ Delete a cheatsheet """
+
+        # if the cheatsheet does not exist
+        if not self._exists(sheet):
+            Utils.die('Delete failed as no cheatsheet found for ' + sheet)
+        elif self._exists(sheet) and not self._exists_in_default_path(sheet):
+            Utils.die('Delete failed as the cheatsheet ' + sheet + 'belongs to cheat.')
+        else:
+            cheat_path = os.path.join(self._config.cheat_user_dir, sheet)
+            reply = input("Delete cheatsheet " + cheat_path + "? (y/n) ")
+            if reply in ('y', 'Y', 'yes'):
+                os.remove(cheat_path)
+            else:
+                print("Delete cheatsheet aborted.")
+                exit(0)
+
     def read(self, sheet):
         """ Returns the contents of the cheatsheet as a String """
         if not self._exists(sheet):

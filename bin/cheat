@@ -11,13 +11,15 @@ Usage:
   cheat -l
   cheat -L
   cheat -d
+  cheat -D <cheatsheet>
   cheat -v
 
 Options:
   -d --directories  List directories on $CHEAT_PATH
   -e --edit         Edit cheatsheet
+  -D --delete       Delete cheatsheet on $CHEAT_USER_DIR
   -l --list         List cheatsheets
-  -L --list-custom  List custom cheatsheets
+  -L --list-custom  List cheatsheets on $CHEAT_USER_DIR
   -s --search       Search cheatsheets for <keyword>
   -v --version      Print the version number
 
@@ -101,6 +103,10 @@ if __name__ == '__main__':
     # create/edit cheatsheet
     elif options['--edit']:
         sheet.edit(options['<cheatsheet>'])
+
+    # delete cheatsheet on $CHEAT_USER_DIR
+    elif options['--delete']:
+        sheet.delete(options['<cheatsheet>'])
 
     # search among the cheatsheets
     elif options['--search']:
