@@ -245,6 +245,8 @@ def site_config_dir(appname=None, appauthor=None, version=None, multipath=False)
         path = os.path.expanduser('/Library/Preferences')
         if appname:
             path = os.path.join(path, appname)
+    elif system == 'linux':
+        path = os.path.join('/etc/', appname)
     else:
         # XDG default for $XDG_CONFIG_DIRS
         # only first, if multipath is False
