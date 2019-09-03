@@ -1,4 +1,5 @@
 from distutils.core import setup
+from io import open
 import os
 
 # determine the directory in which to install system-wide cheatsheets
