@@ -7,4 +7,4 @@ APPROOT=`realpath "$SCRIPTPATH/.."`
 
 flake8 $APPROOT/setup.py
 flake8 $APPROOT/bin/cheat
-flake8 $APPROOT/cheat/*.py
+flake8 $APPROOT/cheat/*.py --exclude=appdirs.py

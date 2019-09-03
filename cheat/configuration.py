@@ -1,4 +1,5 @@
 from cheat.utils import Utils
+import cheat.appdirs as appdirs
 import json
 import os
 
@@ -9,11 +10,11 @@ class Configuration:
         # compute the location of the config files
         config_file_path_global = self._select([
             os.environ.get('CHEAT_GLOBAL_CONF_PATH'),
-            '/etc/cheat',
+            appdirs.site_config_dir('cheat', 'cheat'),
         ])
         config_file_path_local = self._select([
             os.environ.get('CHEAT_LOCAL_CONF_PATH'),
-            os.path.expanduser('~/.config/cheat/cheat'),
+            appdirs.user_config_dir('cheat', 'cheat'),
         ])
 
         # attempt to read the global config file
@@ -55,7 +56,6 @@ class Configuration:
                     [os.environ.get('CHEAT_USER_DIR'),
                      os.environ.get('CHEAT_DEFAULT_DIR'),
                      os.environ.get('DEFAULT_CHEAT_DIR'),
-                     # TODO: XDG home?
                      os.path.join('~', '.cheat')])))
 
         # self.cheat_editor
@@ -81,7 +81,7 @@ class Configuration:
             os.environ.get('CHEAT_PATH'),
             os.environ.get('CHEATPATH'),
             config.get('CHEAT_PATH'),
-            '/usr/share/cheat',
+            appdirs.user_data_dir('cheat', 'cheat'),
         ])
 
     def _read_config_file(self, path):
