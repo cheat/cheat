@@ -10,6 +10,9 @@ sqlite3 example.db "INSERT INTO 'Os' VALUES(1,'Linux',1991);"
 # list tables
 sqlite3 example.db ".tables"
 
+# describe table
+sqlite3 example.db ".schema 'Os'"
+
 # view records in table
 sqlite3 example.db "SELECT * FROM 'Os';"
 
