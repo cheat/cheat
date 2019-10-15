@@ -18,11 +18,11 @@ sudo netstat -vtlnp --listening -4
 # Replace it by:
 ss
 
-# For netstat-r
+# For netstat -r
 ip route
 
 # For netstat -i
 ip -s link
 
-# For netstat-g
+# For netstat -g
 ip maddr
