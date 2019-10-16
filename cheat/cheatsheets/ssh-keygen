@@ -12,3 +12,9 @@ ssh-keygen -p -P old_passphrase -N '' -f /path/to/keyfile
 
 # To generate a 4096 bit RSA key with a passphase and comment containing the user and hostname
 ssh-keygen -t rsa -b 4096 -C "$USER@$HOSTNAME" -P passphrase
+
+# To print the fingerprint of a public key
+ssh-keygen -lf /path/to/keyfile
+
+# To print the Github-style (MD5) fingerprint of a public key
+ssh-keygen -E md5 -lf /path/to/keyfile
