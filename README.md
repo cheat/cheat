@@ -1,5 +1,3 @@
-[![PyPI](https://img.shields.io/pypi/v/cheat.svg)](https://pypi.python.org/pypi/cheat/)
-
 cheat
 =====
 `cheat` allows you to create and view interactive cheatsheets on the
@@ -8,6 +6,8 @@ options for commands that they use frequently, but not frequently enough to
 remember.
 
 ![The obligatory xkcd](http://imgs.xkcd.com/comics/tar.png 'The obligatory xkcd')
+
+Use `cheat` with [cheatsheets][].
 
 
 Example
@@ -19,7 +19,7 @@ Google, you may run:
 cheat tar
 ```
 
-You will be presented with a cheatsheet resembling:
+You will be presented with a cheatsheet resembling the following:
 
 ```sh
 # To extract an uncompressed archive: 
@@ -38,142 +38,158 @@ tar -xjvf '/path/to/foo.tgz'
 tar -cjvf '/path/to/foo.tgz' '/path/to/foo/'
 ```
 
-To see what cheatsheets are available, run `cheat -l`.
-
-Note that, while `cheat` was designed primarily for \*nix system administrators,
-it is agnostic as to what content it stores. If you would like to use `cheat`
-to store notes on your favorite cookie recipes, feel free.
-
 
 Installing
 ----------
-It is recommended to install `cheat` with `pip`:
-
-```sh
-pip install cheat --user
-```
-
-(You must ensure that the `Location` identified by `pip show cheat` exists on
-your `PATH`.)
-
-[Other installation methods are available][installing].
-
-
-Modifying Cheatsheets
----------------------
-The value of `cheat` is that it allows you to create your own cheatsheets - the
-defaults are meant to serve only as a starting point, and can and should be
-modified.
-
-Cheatsheets are stored in the `~/.cheat/` directory, and are named on a
-per-keyphrase basis. In other words, the content for the `tar` cheatsheet lives
-in the `~/.cheat/tar` file.
-
-Provided that you have a `CHEAT_EDITOR`, `VISUAL`, or `EDITOR` environment
-variable set, you may edit cheatsheets with:
-
-```sh
-cheat -e foo
-```
-
-If the `foo` cheatsheet already exists, it will be opened for editing.
-Otherwise, it will be created automatically.
-
-After you've customized your cheatsheets, I urge you to track `~/.cheat/` along
-with your [dotfiles][].
+`cheat` has no dependencies. To install it, download the executable from the
+[releases][] page and place it on your `PATH`.
 
 
 Configuring
 -----------
-
-### Setting a CHEAT_USER_DIR ###
-Personal cheatsheets are saved in the `~/.cheat` directory by default, but you
-can specify a different default by exporting a `CHEAT_USER_DIR` environment
-variable:
+### conf.yml ###
+`cheat` is configured by a YAML file that can be generated with `cheat --init`:
 
 ```sh
-export CHEAT_USER_DIR='/path/to/my/cheats'
+mkdir -p ~/.config/cheat && cheat --init > ~/.config/cheat/conf.yml
 ```
 
-### Setting a CHEAT_PATH ###
-You can additionally instruct `cheat` to look for cheatsheets in other
-directories by exporting a `CHEAT_PATH` environment variable:
+By default, the config file is assumed to exist on an XDG-compliant
+configuration path like `~/.config/cheat/conf.yml`. If you would like to store
+it elsewhere, you may export a `CHEAT_CONFIG_PATH` environment variable that
+specifies its path:
 
 ```sh
-export CHEAT_PATH='/path/to/my/cheats'
+export CHEAT_CONFIG_PATH="~/.dotfiles/cheat/conf.yml"
 ```
 
-You may, of course, append multiple directories to your `CHEAT_PATH`:
+Cheatsheets
+-----------
+Cheatsheets are plain-text files with no file extension, and are named
+according to the command used to view them:
 
 ```sh
-export CHEAT_PATH="$CHEAT_PATH:/path/to/more/cheats"
+cheat tar     # file is named "tar"
+cheat foo/bar # file is named "bar", in a "foo" subdirectory
 ```
 
-You may view which directories are on your `CHEAT_PATH` with `cheat -d`.
+Cheatsheet text may optionally be preceeded by a YAML frontmatter header that
+assigns tags and specifies syntax:
 
-### Enabling Syntax Highlighting ###
-`cheat` can optionally apply syntax highlighting to your cheatsheets. To
-enable syntax highlighting, export a `CHEAT_COLORS` environment variable:
+```
+---
+syntax: javascript
+tags: [ array, map ]
+---
+// To map over an array:
+const squares = [1, 2, 3, 4].map(x => x * x);
+```
+
+The `cheat` executable includes no cheatsheets, but [community-sourced
+cheatsheets are available][cheatsheets].
+
+
+Cheatpaths
+----------
+Cheatsheets are stored on "cheatpaths", which are directories that contain
+cheetsheets. Cheatpaths are specified in the `conf.yml` file.
+
+It can be useful to configure `cheat` against multiple cheatpaths. A common
+pattern is to store cheatsheets from multiple repositories on individual
+cheatpaths:
+
+```yaml
+# conf.yml:
+# ...
+cheatpaths:
+  - name: community                   # a name for the cheatpath
+    path: ~/documents/cheat/community # the path's location on the filesystem
+    tags: [ community ]               # these tags will be applied to all sheets on the path
+    readonly: true                    # if true, `cheat` will not create new cheatsheets here
+
+  - name: personal
+    path: ~/documents/cheat/personal  # this is a separate directory and repository than above
+    tags: [ personal ]
+    readonly: false                   # new sheets may be written here
+# ...
+```
+
+The `readonly` option instructs `cheat` not to edit (or create) any cheatsheets
+on the path. This is useful to prevent merge-conflicts from arising on upstream
+cheatsheet repositories.
+
+If a user attempts to edit a cheatsheet on a read-only cheatpath, `cheat` will
+transparently copy that sheet to a writeable directory before opening it for
+editing.
+
+
+Usage
+-----
+To view a cheatsheet:
 
 ```sh
-export CHEAT_COLORS=true
+cheat tar      # a "top-level" cheatsheet
+cheat foo/bar  # a "nested" cheatsheet
 ```
 
-Note that [pygments][] must be installed on your system for this to work.
-
-`cheat` ships with both light and dark colorschemes to support terminals with
-different background colors. A colorscheme may be selected via the
-`CHEAT_COLORSCHEME` envvar:
+To edit a cheatsheet:
 
 ```sh
-export CHEAT_COLORSCHEME=light # must be 'light' (default) or 'dark'
+cheat -e tar     # opens the "tar" cheatsheet for editing, or creates it if it does not exist
+cheat -e foo/bar # nested cheatsheets are accessed like this
 ```
 
-#### Specifying a Syntax Highlighter ####
-You may manually specify which syntax highlighter to use for each cheatsheet by
-wrapping the sheet's contents in a [Github-Flavored Markdown code-fence][gfm].
+To view the configured cheatpaths:
 
-Example:
-
-<pre>
-```sql
--- to select a user by ID
-SELECT *
-FROM Users
-WHERE id = 100
+```sh
+cheat -d
 ```
-</pre>
 
-If no syntax highlighter is specified, the `bash` highlighter will be used by
-default.
+To list all available cheatsheets:
 
-### Enabling Search Match Highlighting ###
-`cheat` can optionally be configured to highlight search term matches in search
-results. To do so, export a `CHEAT_HIGHLIGHT` environment variable with a value
-of one of the following:
+```sh
+cheat -l
+```
 
-- blue
-- cyan
-- green
-- grey
-- magenta
-- red
-- white
-- yellow
+To list all cheatsheets that are tagged with "networking":
 
-Note that the `termcolor` module must be installed on your system for this to
-work.
+```sh
+cheat -l -t networking
+```
+
+To list all cheatsheets on the "personal" path:
+
+```sh
+cheat -l -p personal
+```
+
+To search for the phrase "ssh" among cheatsheets:
+
+```sh
+cheat -s ssh
+```
+
+To search (by regex) for cheatsheets that contain an IP address:
+
+```sh
+cheat -r -s '(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
+```
+
+Flags may be combined in inuitive ways. Example: to search sheets on the
+"personal" cheatpath that are tagged with "networking" and match a regex:
+
+```sh
+cheat -p personal -t networking -s --regex '(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
+```
 
 
-See Also:
----------
-- [Enabling Command-line Autocompletion][autocompletion]
-- [Related Projects][related-projects]
+Advanced Usage
+--------------
+`cheat` may be integrated with [fzf][]. See [fzf.bash][bash] for instructions.
+(Support for other shells will be added in future releases.)
 
 
-[autocompletion]:   https://github.com/cheat/cheat/wiki/Enabling-Command-line-Autocompletion
-[dotfiles]:         http://dotfiles.github.io/
-[gfm]:              https://help.github.com/articles/creating-and-highlighting-code-blocks/
-[installing]:       https://github.com/cheat/cheat/wiki/Installing
-[pygments]:         http://pygments.org/
-[related-projects]: https://github.com/cheat/cheat/wiki/Related-Projects
+[Releases]:    https://github.com/cheat/cheat/releases
+[bash]:        https://github.com/cheat/cheat/blob/master/scripts/fzf.bash
+[cheatsheets]: https://github.com/cheat/cheatsheets
+[fzf]:         https://github.com/junegunn/fzf

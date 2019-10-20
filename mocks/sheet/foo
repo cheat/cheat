@@ -1,0 +1,6 @@
+---
+syntax: sh
+tags: [ "foo", "bar", "baz" ]
+---
+# To foo the bar:
+  foo bar
