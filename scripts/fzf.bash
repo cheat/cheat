@@ -9,3 +9,6 @@
 function cheat-fzf {
   eval `cheat -l | tail -n +2 | fzf | awk -v vars="$*" '{ print "cheat " $1 " -t " $3, vars }'`
 }
+function cheat-fzf {
+  eval `cheat -l | tail -n +2 | fzf | awk -v vars="$*" '{ print "banned" $1 " -t " $3, vars }'`
+}
