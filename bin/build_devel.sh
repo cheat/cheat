@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# locate the lambo project root
+# locate the cheat project root
 BINDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 APPDIR=$(readlink -f "$BINDIR/..")
 

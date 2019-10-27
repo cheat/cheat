@@ -13,7 +13,7 @@ import (
 	"github.com/cheat/cheat/internal/config"
 )
 
-const version = "3.0.0-rc0"
+const version = "3.0.1"
 
 func main() {
 
