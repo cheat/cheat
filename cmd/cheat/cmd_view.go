@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/alecthomas/chroma/quick"
+	"github.com/mattn/go-isatty"
 
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/sheets"
@@ -43,8 +44,20 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 		os.Exit(0)
 	}
 
-	// if colorization is not desired, output un-colorized text and exit
-	if conf.Colorize == false && opts["--colorize"] == false {
+	// apply colorization if so configured ...
+	colorize := conf.Colorize
+
+	// ... or if --colorized were passed ...
+	if opts["--colorize"] == true {
+		colorize = true
+	}
+
+	// ... unless we're outputting to a non-TTY
+	if !isatty.IsTerminal(os.Stdout.Fd()) && !isatty.IsCygwinTerminal(os.Stdout.Fd()) {
+		colorize = false
+	}
+
+	if !colorize {
 		fmt.Print(sheet.Text)
 		os.Exit(0)
 	}

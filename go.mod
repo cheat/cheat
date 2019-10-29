@@ -6,6 +6,7 @@ require (
 	github.com/alecthomas/chroma v0.6.7
 	github.com/davecgh/go-spew v1.1.1
 	github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
+	github.com/mattn/go-isatty v0.0.10
 	github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/tj/front v0.0.0-20170212063142-739be213b0a1
