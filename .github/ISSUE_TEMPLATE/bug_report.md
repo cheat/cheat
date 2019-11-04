@@ -1,38 +1,23 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: Submit a bug report
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+Thanks for submitting a bug report. Please provide the following information:
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**A description of the problem**
+Describe the problem here.
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**cheat version info**
+Please paste the output of `cheat -v` here.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**cheat configuration info**
+If your bug pertains to how cheatsheets are loaded and/or displayed, please
+paste here the following information:
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
-
-**Additional context**
-Add any other context about the problem here.
+1. The output of `cheat -d`
+2. The contents of your `conf.yml` file
