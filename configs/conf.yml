@@ -23,9 +23,9 @@ formatter: terminal16m
 # "upstream" cheatsheets.
 #
 # But what if you want to view the "upstream" cheatsheets instead of your own?
-# Cheatsheets may be filtered via 'cheat -f <tag>' in combination with other
+# Cheatsheets may be filtered via 'cheat -t <tag>' in combination with other
 # commands. So, if you want to view the 'tar' cheatsheet that is tagged as
-# 'community' rather than your own, you can use: cheat tar -f community
+# 'community' rather than your own, you can use: cheat tar -t community
 cheatpaths:
 
   # Paths that come earlier are considered to be the most "global", and will
