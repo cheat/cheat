@@ -178,11 +178,11 @@ To search (by regex) for cheatsheets that contain an IP address:
 cheat -r -s '(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
 ```
 
-Flags may be combined in inuitive ways. Example: to search sheets on the
+Flags may be combined in intuitive ways. Example: to search sheets on the
 "personal" cheatpath that are tagged with "networking" and match a regex:
 
 ```sh
-cheat -p personal -t networking -s --regex '(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
+cheat -p personal -t networking --regex -s '(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
 ```
 
 
