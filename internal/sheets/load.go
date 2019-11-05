@@ -48,8 +48,13 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 					"/",
 				)
 
-				// ignore dotfiles. Otherwise, we'll likely load .git/*
-				if strings.HasPrefix(title, ".") {
+				// ignore hidden files and directories. Otherwise, we'll likely load
+				// .git/* and .DS_Store.
+				//
+				// NB: this is still somewhat brittle in that it will miss files
+				// contained within hidden directories in the middle of a path, though
+				// that should not realistically occur.
+				if strings.HasPrefix(title, ".") || strings.HasPrefix(info.Name(), "."){
 					return nil
 				}
 
