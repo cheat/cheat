@@ -4,16 +4,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"sort"
-	"strings"
 
-	"github.com/tj/front"
+	"github.com/cheat/cheat/internal/frontmatter"
 )
-
-// frontmatter is an un-exported helper struct used in parsing cheatsheets
-type frontmatter struct {
-	Tags   []string
-	Syntax string
-}
 
 // Sheet encapsulates sheet information
 type Sheet struct {
@@ -39,9 +32,8 @@ func New(
 		return Sheet{}, fmt.Errorf("failed to read file: %s, %v", path, err)
 	}
 
-	// parse the front-matter
-	var fm frontmatter
-	text, err := front.Unmarshal(markdown, &fm)
+	// parse the cheatsheet frontmatter
+	text, fm, err := frontmatter.Parse(string(markdown))
 	if err != nil {
 		return Sheet{}, fmt.Errorf("failed to parse front-matter: %v", err)
 	}
@@ -56,7 +48,7 @@ func New(
 	return Sheet{
 		Title:    title,
 		Path:     path,
-		Text:     strings.TrimSpace(string(text)) + "\n",
+		Text:     text + "\n",
 		Tags:     tags,
 		Syntax:   fm.Syntax,
 		ReadOnly: readOnly,
