@@ -54,7 +54,7 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 				// NB: this is still somewhat brittle in that it will miss files
 				// contained within hidden directories in the middle of a path, though
 				// that should not realistically occur.
-				if strings.HasPrefix(title, ".") || strings.HasPrefix(info.Name(), "."){
+				if strings.HasPrefix(title, ".") || strings.HasPrefix(info.Name(), ".") {
 					return nil
 				}
 

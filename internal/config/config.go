@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	cp "github.com/cheat/cheat/internal/cheatpath"
 
@@ -38,12 +39,23 @@ func New(opts map[string]interface{}, confPath string) (Config, error) {
 		return Config{}, fmt.Errorf("could not unmarshal yaml: %v", err)
 	}
 
-	// expand ~ in config paths
+	// process cheatpaths
 	for i, cheatpath := range conf.Cheatpaths {
 
+		// expand ~ in config paths
 		expanded, err := homedir.Expand(cheatpath.Path)
 		if err != nil {
 			return Config{}, fmt.Errorf("failed to expand ~: %v", err)
+		}
+
+		// follow symlinks
+		expanded, err = filepath.EvalSymlinks(expanded)
+		if err != nil {
+			return Config{}, fmt.Errorf(
+				"failed to resolve symlink: %s, %v",
+				expanded,
+				err,
+			)
 		}
 
 		conf.Cheatpaths[i].Path = expanded
