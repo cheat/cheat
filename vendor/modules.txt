@@ -1,7 +1,8 @@
-# github.com/alecthomas/chroma v0.6.7
+# github.com/alecthomas/chroma v0.6.8
 github.com/alecthomas/chroma
 github.com/alecthomas/chroma/formatters
 github.com/alecthomas/chroma/formatters/html
+github.com/alecthomas/chroma/formatters/svg
 github.com/alecthomas/chroma/lexers
 github.com/alecthomas/chroma/lexers/a
 github.com/alecthomas/chroma/lexers/b
@@ -48,8 +49,6 @@ github.com/mattn/go-isatty
 github.com/mgutz/ansi
 # github.com/mitchellh/go-homedir v1.1.0
 github.com/mitchellh/go-homedir
-# github.com/tj/front v0.0.0-20170212063142-739be213b0a1
-github.com/tj/front
 # golang.org/x/sys v0.0.0-20191008105621-543471e840be
 golang.org/x/sys/unix
 # gopkg.in/yaml.v1 v1.0.0-20140924161607-9f9df34309c0
