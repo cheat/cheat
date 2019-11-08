@@ -1,26 +1,23 @@
 package config
 
 import (
-	//"os"
-	//"path/filepath"
-	//"reflect"
+	"os"
+	"path/filepath"
+	"reflect"
 	"testing"
 
-	//"github.com/davecgh/go-spew/spew"
-	//"github.com/mitchellh/go-homedir"
+	"github.com/davecgh/go-spew/spew"
+	"github.com/mitchellh/go-homedir"
 
-	//"github.com/cheat/cheat/internal/cheatpath"
-	//"github.com/cheat/cheat/internal/mock"
+	"github.com/cheat/cheat/internal/cheatpath"
+	"github.com/cheat/cheat/internal/mock"
 )
 
-// BUG: changes pertaining to symlink handling introduced in 3.0.4 break this
-// test.
-/*
 // TestConfig asserts that the configs are loaded correctly
 func TestConfigSuccessful(t *testing.T) {
 
 	// initialize a config
-	conf, err := New(map[string]interface{}{}, mock.Path("conf/conf.yml"))
+	conf, err := New(map[string]interface{}{}, mock.Path("conf/conf.yml"), false)
 	if err != nil {
 		t.Errorf("failed to parse config file: %v", err)
 	}
@@ -66,14 +63,13 @@ func TestConfigSuccessful(t *testing.T) {
 		)
 	}
 }
-*/
 
 // TestConfigFailure asserts that an error is returned if the config file
 // cannot be read.
 func TestConfigFailure(t *testing.T) {
 
 	// attempt to read a non-existent config file
-	_, err := New(map[string]interface{}{}, "/does-not-exit")
+	_, err := New(map[string]interface{}{}, "/does-not-exit", false)
 	if err == nil {
 		t.Errorf("failed to error on unreadable config")
 	}
@@ -83,20 +79,19 @@ func TestConfigFailure(t *testing.T) {
 // specified in the configs
 func TestEmptyEditor(t *testing.T) {
 
-	/*
 	// clear the environment variables
 	os.Setenv("VISUAL", "")
 	os.Setenv("EDITOR", "")
 
 	// initialize a config
-	conf, err := New(map[string]interface{}{}, mock.Path("conf/empty.yml"))
+	conf, err := New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
 	if err == nil {
 		t.Errorf("failed to return an error on empty editor")
 	}
 
 	// set editor, and assert that it is respected
 	os.Setenv("EDITOR", "foo")
-	conf, err = New(map[string]interface{}{}, mock.Path("conf/empty.yml"))
+	conf, err = New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
 	if err != nil {
 		t.Errorf("failed to init configs: %v", err)
 	}
@@ -106,12 +101,11 @@ func TestEmptyEditor(t *testing.T) {
 
 	// set visual, and assert that it overrides editor
 	os.Setenv("VISUAL", "bar")
-	conf, err = New(map[string]interface{}{}, mock.Path("conf/empty.yml"))
+	conf, err = New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
 	if err != nil {
 		t.Errorf("failed to init configs: %v", err)
 	}
 	if conf.Editor != "bar" {
 		t.Errorf("failed to respect editor: want: bar, got: %s", conf.Editor)
 	}
-	*/
 }

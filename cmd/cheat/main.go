@@ -39,7 +39,7 @@ func main() {
 	}
 
 	// initialize the configs
-	conf, err := config.New(opts, confpath)
+	conf, err := config.New(opts, confpath, true)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to load config: %v\n", err)
 		os.Exit(1)

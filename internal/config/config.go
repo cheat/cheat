@@ -22,7 +22,7 @@ type Config struct {
 }
 
 // New returns a new Config struct
-func New(opts map[string]interface{}, confPath string) (Config, error) {
+func New(opts map[string]interface{}, confPath string, resolve bool) (Config, error) {
 
 	// read the config file
 	buf, err := ioutil.ReadFile(confPath)
@@ -49,13 +49,22 @@ func New(opts map[string]interface{}, confPath string) (Config, error) {
 		}
 
 		// follow symlinks
-		expanded, err = filepath.EvalSymlinks(expanded)
-		if err != nil {
-			return Config{}, fmt.Errorf(
-				"failed to resolve symlink: %s, %v",
-				expanded,
-				err,
-			)
+		//
+		// NB: `resolve` is an ugly kludge that exists for the sake of unit-tests.
+		// It's necessary because `EvalSymlinks` will error if the symlink points
+		// to a non-existent location on the filesystem. When unit-testing,
+		// however, we don't want to have dependencies on the filesystem. As such,
+		// `resolve` is a switch that allows us to turn off symlink resolution when
+		// running the config tests.
+		if resolve {
+			expanded, err = filepath.EvalSymlinks(expanded)
+			if err != nil {
+				return Config{}, fmt.Errorf(
+					"failed to resolve symlink: %s, %v",
+					expanded,
+					err,
+				)
+			}
 		}
 
 		conf.Cheatpaths[i].Path = expanded
