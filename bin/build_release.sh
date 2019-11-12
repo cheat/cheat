@@ -4,6 +4,9 @@
 BINDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 APPDIR=$(readlink -f "$BINDIR/..")
 
+# update the vendored dependencies
+go mod vendor && go mod tidy
+
 # build embeds
 cd "$APPDIR/cmd/cheat"
 go clean && go generate
