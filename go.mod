@@ -10,5 +10,5 @@ require (
 	github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b
 	github.com/mitchellh/go-homedir v1.1.0
 	gopkg.in/yaml.v1 v1.0.0-20140924161607-9f9df34309c0
-	gopkg.in/yaml.v2 v2.2.4
+	gopkg.in/yaml.v2 v2.2.5
 )
