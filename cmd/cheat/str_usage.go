@@ -20,6 +20,7 @@ Options:
   -r --regex            Treat search <phrase> as a regex
   -s --search=<phrase>  Search cheatsheets for <phrase>
   -t --tag=<tag>        Return only sheets matching <tag>
+  -T --tags             List all tags in use
   -v --version          Print the version number
 
 Examples:

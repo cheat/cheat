@@ -76,6 +76,9 @@ func main() {
 	case opts["--list"].(bool):
 		cmd = cmdList
 
+	case opts["--tags"].(bool):
+		cmd = cmdTags
+
 	case opts["--search"] != nil:
 		cmd = cmdSearch
 
