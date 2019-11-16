@@ -55,7 +55,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 		// compile the regex
 		reg, err := regexp.Compile(pattern)
 		if err != nil {
-			fmt.Errorf("failed to compile regexp: %s, %v", pattern, err)
+			fmt.Fprintln(os.Stderr, fmt.Sprintf("failed to compile regexp: %s, %v", pattern, err))
 			os.Exit(1)
 		}
 

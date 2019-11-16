@@ -14,13 +14,15 @@ Options:
   --init                Write a default config file to stdout
   -c --colorize         Colorize output
   -d --directories      List cheatsheet directories
-  -e --edit=<sheet>     Edit cheatsheet
+  -e --edit=<sheet>     Edit <sheet>
   -l --list             List cheatsheets
   -p --path=<name>      Return only sheets found on path <name>
   -r --regex            Treat search <phrase> as a regex
   -s --search=<phrase>  Search cheatsheets for <phrase>
   -t --tag=<tag>        Return only sheets matching <tag>
+  -T --tags             List all tags in use
   -v --version          Print the version number
+  --rm=<sheet>          Remove (delete) <sheet>
 
 Examples:
 
@@ -42,6 +44,9 @@ Examples:
   To list all available cheatsheets:
     cheat -l
 
+  To list all tags in use:
+    cheat -T
+
   To list available cheatsheets that are tagged as "personal":
     cheat -l -t personal
 
@@ -50,5 +55,8 @@ Examples:
 
   To search (by regex) for cheatsheets that contain an IP address:
     cheat -c -r -s '(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
+
+  To remove (delete) the foo/bar cheatsheet:
+    cheat --rm foo/bar
 `)
 }
