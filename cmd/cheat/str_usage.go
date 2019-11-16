@@ -22,6 +22,7 @@ Options:
   -t --tag=<tag>        Return only sheets matching <tag>
   -T --tags             List all tags in use
   -v --version          Print the version number
+  --rm=<sheet>          Remove (delete) <sheet>
 
 Examples:
 
@@ -43,6 +44,9 @@ Examples:
   To list all available cheatsheets:
     cheat -l
 
+  To list all tags in use:
+    cheat -T
+
   To list available cheatsheets that are tagged as "personal":
     cheat -l -t personal
 
@@ -51,5 +55,8 @@ Examples:
 
   To search (by regex) for cheatsheets that contain an IP address:
     cheat -c -r -s '(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
+
+  To remove (delete) the foo/bar cheatsheet:
+    cheat --rm foo/bar
 `)
 }

@@ -13,7 +13,7 @@ import (
 	"github.com/cheat/cheat/internal/config"
 )
 
-const version = "3.0.7"
+const version = "3.1.0"
 
 func main() {
 
@@ -81,6 +81,9 @@ func main() {
 
 	case opts["--search"] != nil:
 		cmd = cmdSearch
+
+	case opts["--rm"] != nil:
+		cmd = cmdRemove
 
 	case opts["<cheatsheet>"] != nil:
 		cmd = cmdView
