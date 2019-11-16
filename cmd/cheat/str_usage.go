@@ -14,7 +14,7 @@ Options:
   --init                Write a default config file to stdout
   -c --colorize         Colorize output
   -d --directories      List cheatsheet directories
-  -e --edit=<sheet>     Edit cheatsheet
+  -e --edit=<sheet>     Edit <sheet>
   -l --list             List cheatsheets
   -p --path=<name>      Return only sheets found on path <name>
   -r --regex            Treat search <phrase> as a regex
