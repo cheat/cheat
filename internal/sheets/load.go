@@ -45,7 +45,7 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 				// accessed. Eg: `cheat tar` - `tar` is the title)
 				title := strings.TrimPrefix(
 					strings.TrimPrefix(path, cheatpath.Path),
-					"/",
+					string(os.PathSeparator),
 				)
 
 				// ignore hidden files and directories. Otherwise, we'll likely load
