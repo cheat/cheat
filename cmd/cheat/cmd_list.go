@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"sort"
 	"strings"
 	"text/tabwriter"
@@ -44,6 +45,39 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 	sort.Slice(flattened, func(i, j int) bool {
 		return flattened[i].Title < flattened[j].Title
 	})
+
+	// filter if <cheatsheet> was specified
+	// NB: our docopt specification is misleading here. When used in conjunction
+	// with `-l`, `<cheatsheet>` is really a pattern against which to filter
+	// sheet titles.
+	if opts["<cheatsheet>"] != nil {
+
+		// initialize a slice of filtered sheets
+		filtered := []sheet.Sheet{}
+
+		// initialize our filter pattern
+		pattern := "(?i)" + opts["<cheatsheet>"].(string)
+
+		// compile the regex
+		reg, err := regexp.Compile(pattern)
+		if err != nil {
+			fmt.Fprintln(
+				os.Stderr,
+				fmt.Sprintf("failed to compile regexp: %s, %v", pattern, err),
+			)
+			os.Exit(1)
+		}
+
+		// iterate over each cheatsheet, and pass-through those which match the
+		// filter pattern
+		for _, s := range flattened {
+			if reg.MatchString(s.Title) {
+				filtered = append(filtered, s)
+			}
+		}
+
+		flattened = filtered
+	}
 
 	// exit early if no cheatsheets are available
 	if len(flattened) == 0 {

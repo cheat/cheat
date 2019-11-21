@@ -44,6 +44,9 @@ Examples:
   To list all available cheatsheets:
     cheat -l
 
+  To list all cheatsheets whose titles match "apt":
+    cheat -l apt
+
   To list all tags in use:
     cheat -T
 
