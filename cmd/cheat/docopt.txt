@@ -18,7 +18,7 @@ Options:
 Examples:
 
   To initialize a config file:
-    mkdir -p ~/.config/cheat && cheat --init > ~/.config/cheat/conf.yml
+    {{.InitConfigCommand}}
 
   To view the tar cheatsheet:
     cheat tar
@@ -26,8 +26,8 @@ Examples:
   To edit (or create) the foo cheatsheet:
     cheat -e foo
 
-  To edit (or create) the foo/bar cheatsheet on the "work" cheatpath:
-    cheat -p work -e foo/bar
+  To edit (or create) the foo{{.PathSeparator}}bar cheatsheet on the "work" cheatpath:
+    cheat -p work -e foo{{.PathSeparator}}bar
 
   To view all cheatsheet directories:
     cheat -d
@@ -47,5 +47,5 @@ Examples:
   To search (by regex) for cheatsheets that contain an IP address:
     cheat -c -r -s '(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
 
-  To remove (delete) the foo/bar cheatsheet:
-    cheat --rm foo/bar
+  To remove (delete) the foo{{.PathSeparator}}bar cheatsheet:
+    cheat --rm foo{{.PathSeparator}}bar

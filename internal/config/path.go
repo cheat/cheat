@@ -4,56 +4,144 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/mitchellh/go-homedir"
 )
 
-// Path returns the config file path
-func Path(sys string) (string, error) {
+const (
+	configFilePathEnvVar = "CHEAT_CONFIG_PATH"
+	configFileName       = "conf.yml"
+	configFolder         = "cheat"
+)
 
-	var paths []string
+// getenv returns an environment variable if set
+func getenv(envVar string) (string, error) {
 
-	// if CHEAT_CONFIG_PATH is set, return it
-	if os.Getenv("CHEAT_CONFIG_PATH") != "" {
+	value := os.Getenv(envVar)
 
-		// expand ~
-		expanded, err := homedir.Expand(os.Getenv("CHEAT_CONFIG_PATH"))
+	if value != "" {
+
+		// expand environment variable
+		expanded, err := homedir.Expand(value)
 		if err != nil {
-			return "", fmt.Errorf("failed to expand ~: %v", err)
+			return "", fmt.Errorf("failed to expand %s: %v", envVar, err)
 		}
 
 		return expanded, nil
+	}
 
-		// OSX config paths
-	} else if sys == "darwin" {
+	return "", nil
+}
 
-		paths = []string{
-			path.Join(os.Getenv("XDG_CONFIG_HOME"), "/cheat/conf.yml"),
-			path.Join(os.Getenv("HOME"), ".config/cheat/conf.yml"),
-			path.Join(os.Getenv("HOME"), ".cheat/conf.yml"),
-		}
+// PreferredFolderPath returns the default cheat folder path
+func PreferredFolderPath(sys string) (string, error) {
 
-		// Linux config paths
-	} else if sys == "linux" {
+	switch sys {
 
-		paths = []string{
-			path.Join(os.Getenv("XDG_CONFIG_HOME"), "/cheat/conf.yml"),
-			path.Join(os.Getenv("HOME"), ".config/cheat/conf.yml"),
-			path.Join(os.Getenv("HOME"), ".cheat/conf.yml"),
-			"/etc/cheat/conf.yml",
-		}
+	case "darwin":
 
-		// Windows config paths
-	} else if sys == "windows" {
+		// macOS default folder path
+		return path.Join(os.Getenv("XDG_CONFIG_HOME"), configFolder), nil
 
-		paths = []string{
-			fmt.Sprintf("%s/cheat/conf.yml", os.Getenv("APPDATA")),
-			fmt.Sprintf("%s/cheat/conf.yml", os.Getenv("PROGRAMDATA")),
-		}
+	case "linux":
+
+		// Linux default folder path
+		return path.Join(os.Getenv("XDG_CONFIG_HOME"), configFolder), nil
+
+	case "windows":
+
+		// Windows default folder path
+		folderPath := path.Join(os.Getenv("APPDATA"), configFolder)
+		return strings.ReplaceAll(folderPath, "/", "\\"), nil
+
+	default:
 
 		// Unsupported platforms
-	} else {
 		return "", fmt.Errorf("unsupported os: %s", sys)
+
+	}
+}
+
+// PreferredConfigPath returns the default config file path
+func PreferredConfigPath(sys string) (string, error) {
+
+	// if CHEAT_CONFIG_PATH is set, return it
+	envFilePath, err := getenv(configFilePathEnvVar)
+	if err != nil {
+		return "", err
+	}
+
+	if envFilePath != "" {
+		return envFilePath, nil
+	}
+
+	configFolder, err := PreferredFolderPath(sys)
+	if err != nil {
+		return "", err
+	}
+
+	configPath := path.Join(configFolder, configFileName)
+	if sys == "windows" {
+		configPath = strings.ReplaceAll(configPath, "/", "\\")
+	}
+
+	return configPath, nil
+}
+
+// Path returns the config file path
+func Path(sys string) (string, error) {
+
+	// if CHEAT_CONFIG_PATH is set, return it
+	envFilePath, err := getenv(configFilePathEnvVar)
+	if err != nil {
+		return "", err
+	}
+
+	if envFilePath != "" {
+		return envFilePath, nil
+	}
+
+	var paths []string
+
+	switch sys {
+
+	case "darwin":
+
+		// macOS config paths
+		paths = []string{
+			path.Join(os.Getenv("XDG_CONFIG_HOME"), configFolder, configFileName),
+			path.Join(os.Getenv("HOME"), ".config", configFolder, configFileName),
+			path.Join(os.Getenv("HOME"), "."+configFolder, configFileName),
+		}
+
+	case "linux":
+
+		// Linux config paths
+		paths = []string{
+			path.Join(os.Getenv("XDG_CONFIG_HOME"), configFolder, configFileName),
+			path.Join(os.Getenv("HOME"), ".config", configFolder, configFileName),
+			path.Join(os.Getenv("HOME"), "."+configFolder, configFileName),
+			path.Join("/etc", "."+configFolder, configFileName),
+		}
+
+	case "windows":
+
+		// Windows config paths
+		paths = []string{
+			path.Join(os.Getenv("APPDATA"), configFolder, configFileName),
+			path.Join(os.Getenv("PROGRAMDATA"), configFolder, configFileName),
+		}
+
+		for i, p := range paths {
+			paths[i] = strings.ReplaceAll(p, "/", "\\")
+		}
+
+	default:
+
+		// Unsupported platforms
+		return "", fmt.Errorf("unsupported os: %s", sys)
+
 	}
 
 	// check if the config file exists on any paths

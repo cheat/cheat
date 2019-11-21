@@ -44,21 +44,21 @@ cheatpaths:
   # Note that the paths and tags listed below are just examples. You may freely
   # change them to suit your needs.
   - name: community
-    path: ~/.dotfiles/cheat/community
+    path: {{.CheatsheetsBasePath}}community
     tags: [ community ]
     readonly: true
 
   # Maybe your company or department maintains a repository of cheatsheets as
   # well. It's probably sensible to list those second.
   - name: work
-    path: ~/.dotfiles/cheat/work
+    path: {{.CheatsheetsBasePath}}work
     tags: [ work ]
     readonly: false
 
   # If you have personalized cheatsheets, list them last. They will take
   # precedence over the more global cheatsheets.
   - name: personal
-    path: ~/.dotfiles/cheat/personal
+    path: {{.CheatsheetsBasePath}}personal
     tags: [ personal ]
     readonly: false
 `)

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"text/template"
 
 	"github.com/docopt/docopt-go"
 
@@ -37,6 +38,20 @@ func main() {
 		fmt.Fprintln(os.Stderr, "could not locate config file")
 		os.Exit(1)
 	}
+
+	// fmt.Println("Path:", confpath)
+
+	// prefconfpath, err := config.PreferredConfigPath(runtime.GOOS)
+	// if err != nil {
+	// 	os.Exit(1)
+	// }
+	// fmt.Println("PreferredConfigPath:", prefconfpath)
+
+	// preffolderpath, err := config.PreferredFolderPath(runtime.GOOS)
+	// if err != nil {
+	// 	os.Exit(1)
+	// }
+	// fmt.Println("PreferredFolderPath:", preffolderpath)
 
 	// initialize the configs
 	conf, err := config.New(opts, confpath, true)
@@ -89,7 +104,40 @@ func main() {
 		cmd = cmdView
 
 	default:
-		fmt.Println(usage())
+
+		prefFolderPath, err := config.PreferredFolderPath(runtime.GOOS)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "could not locate config folder path: ", err)
+			os.Exit(1)
+		}
+
+		prefConfigPath, err := config.PreferredConfigPath(runtime.GOOS)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "could not locate config folder path: ", err)
+			os.Exit(1)
+		}
+
+		var initConfigCommand string
+		switch runtime.GOOS {
+		case "windows":
+			initConfigCommand = fmt.Sprintf("md \"%s\" | Out-Null; cheat --init > \"%s\"", prefFolderPath, prefConfigPath)
+		default:
+			initConfigCommand = fmt.Sprintf("mkdir -p %s && cheat --init > %s", prefFolderPath, prefConfigPath)
+		}
+
+		type UsageValues struct {
+			InitConfigCommand string
+			PathSeparator     string
+		}
+
+		values := UsageValues{initConfigCommand, string(os.PathSeparator)}
+		t := template.Must(template.New("usage").Parse(usage()))
+		err = t.Execute(os.Stdout, values)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "executing template: ", err)
+			os.Exit(1)
+		}
+
 		os.Exit(0)
 	}
 
