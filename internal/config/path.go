@@ -90,7 +90,7 @@ func Path() (string, error) {
 
 	case "darwin":
 
-		homePath = os.Getenv("HOME")
+		homePath := os.Getenv("HOME")
 
 		// macOS config paths
 		paths = []string{
@@ -104,7 +104,7 @@ func Path() (string, error) {
 
 	case "linux":
 
-		homePath = os.Getenv("HOME")
+		homePath := os.Getenv("HOME")
 
 		// Linux config paths
 		paths = []string{
