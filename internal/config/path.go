@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"runtime"
 	"os"
 	"path"
 	"strings"
@@ -15,39 +16,30 @@ const (
 	configFolder         = "cheat"
 )
 
-// getenv returns an environment variable if set
-func getenv(envVar string) (string, error) {
-
-	value := os.Getenv(envVar)
-
-	if value != "" {
-
-		// expand environment variable
-		expanded, err := homedir.Expand(value)
-		if err != nil {
-			return "", fmt.Errorf("failed to expand %s: %v", envVar, err)
-		}
-
-		return expanded, nil
-	}
-
-	return "", nil
-}
-
 // PreferredFolderPath returns the default cheat folder path
-func PreferredFolderPath(sys string) (string, error) {
+func PreferredFolderPath() (string, error) {
 
-	switch sys {
+	switch runtime.GOOS {
 
 	case "darwin":
 
 		// macOS default folder path
-		return path.Join(os.Getenv("XDG_CONFIG_HOME"), configFolder), nil
+		xdgConfigHome := os.Getenv("XDG_CONFIG_HOME")
+		if xdgConfigHome != "" {
+			return path.Join(xdgConfigHome, configFolder), nil
+		} else {
+			return path.Join("~/.config", configFolder), nil
+		}
 
 	case "linux":
 
 		// Linux default folder path
-		return path.Join(os.Getenv("XDG_CONFIG_HOME"), configFolder), nil
+		xdgConfigHome := os.Getenv("XDG_CONFIG_HOME")
+		if xdgConfigHome != "" {
+			return path.Join(xdgConfigHome, configFolder), nil
+		} else {
+			return path.Join("~/.config", configFolder), nil
+		}
 
 	case "windows":
 
@@ -58,31 +50,27 @@ func PreferredFolderPath(sys string) (string, error) {
 	default:
 
 		// Unsupported platforms
-		return "", fmt.Errorf("unsupported os: %s", sys)
+		return "", fmt.Errorf("unsupported os: %s", runtime.GOOS)
 
 	}
 }
 
 // PreferredConfigPath returns the default config file path
-func PreferredConfigPath(sys string) (string, error) {
+func PreferredConfigPath() (string, error) {
 
 	// if CHEAT_CONFIG_PATH is set, return it
-	envFilePath, err := getenv(configFilePathEnvVar)
-	if err != nil {
-		return "", err
-	}
-
+	envFilePath := os.Getenv(configFilePathEnvVar)
 	if envFilePath != "" {
 		return envFilePath, nil
 	}
 
-	configFolder, err := PreferredFolderPath(sys)
+	configFolder, err := PreferredFolderPath()
 	if err != nil {
 		return "", err
 	}
 
 	configPath := path.Join(configFolder, configFileName)
-	if sys == "windows" {
+	if runtime.GOOS == "windows" {
 		configPath = strings.ReplaceAll(configPath, "/", "\\")
 	}
 
@@ -90,10 +78,10 @@ func PreferredConfigPath(sys string) (string, error) {
 }
 
 // Path returns the config file path
-func Path(sys string) (string, error) {
+func Path() (string, error) {
 
 	// if CHEAT_CONFIG_PATH is set, return it
-	envFilePath, err := getenv(configFilePathEnvVar)
+	envFilePath, err := getExpandedEnv(configFilePathEnvVar)
 	if err != nil {
 		return "", err
 	}
@@ -104,7 +92,7 @@ func Path(sys string) (string, error) {
 
 	var paths []string
 
-	switch sys {
+	switch runtime.GOOS {
 
 	case "darwin":
 
@@ -140,7 +128,7 @@ func Path(sys string) (string, error) {
 	default:
 
 		// Unsupported platforms
-		return "", fmt.Errorf("unsupported os: %s", sys)
+		return "", fmt.Errorf("unsupported os: %s", runtime.GOOS)
 
 	}
 
@@ -153,4 +141,23 @@ func Path(sys string) (string, error) {
 
 	// we can't find the config file if we make it this far
 	return "", fmt.Errorf("could not locate config file")
+}
+
+// getExpandedEnv returns an expanded environment variable if set
+func getExpandedEnv(envVar string) (string, error) {
+
+	value := os.Getenv(envVar)
+
+	if value != "" {
+
+		// expand environment variable
+		expanded, err := homedir.Expand(value)
+		if err != nil {
+			return "", fmt.Errorf("failed to expand %s: %v", envVar, err)
+		}
+
+		return expanded, nil
+	}
+
+	return "", nil
 }

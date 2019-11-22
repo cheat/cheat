@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"runtime"
 	"text/template"
 
 	"github.com/cheat/cheat/internal/config"
@@ -12,7 +11,7 @@ import (
 // cmdInit displays an example config file.
 func cmdInit() {
 
-	prefFolderPath, err := config.PreferredFolderPath(runtime.GOOS)
+	prefFolderPath, err := config.PreferredFolderPath()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "could not locate config folder path: ", err)
 		os.Exit(1)
@@ -30,7 +29,7 @@ func cmdInit() {
 	t := template.Must(template.New("configs").Parse(configs()))
 	err = t.Execute(os.Stdout, values)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "executing template:: ", err)
+		fmt.Fprintln(os.Stderr, "could not execute template configs: ", err)
 		os.Exit(1)
 	}
 }

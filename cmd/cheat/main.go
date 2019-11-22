@@ -33,25 +33,19 @@ func main() {
 	}
 
 	// load the config file
-	confpath, err := config.Path(runtime.GOOS)
+	confpath, err := config.Path()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "could not locate config file")
+		fmt.Fprint(os.Stderr, "could not locate config file")
+
+		initConfigCommand, err := generateInitConfigCommand()
+		if err == nil {
+			fmt.Fprintln(os.Stderr, "; to initialize a config file:")
+			fmt.Fprint(os.Stderr, "  ", initConfigCommand)
+		}
+
+		fmt.Fprintln(os.Stderr)
 		os.Exit(1)
 	}
-
-	// fmt.Println("Path:", confpath)
-
-	// prefconfpath, err := config.PreferredConfigPath(runtime.GOOS)
-	// if err != nil {
-	// 	os.Exit(1)
-	// }
-	// fmt.Println("PreferredConfigPath:", prefconfpath)
-
-	// preffolderpath, err := config.PreferredFolderPath(runtime.GOOS)
-	// if err != nil {
-	// 	os.Exit(1)
-	// }
-	// fmt.Println("PreferredFolderPath:", preffolderpath)
 
 	// initialize the configs
 	conf, err := config.New(opts, confpath, true)
@@ -105,24 +99,10 @@ func main() {
 
 	default:
 
-		prefFolderPath, err := config.PreferredFolderPath(runtime.GOOS)
+		initConfigCommand, err := generateInitConfigCommand()
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "could not locate config folder path: ", err)
+			fmt.Fprintf(os.Stderr, "could not generate init command: %v\n", err)
 			os.Exit(1)
-		}
-
-		prefConfigPath, err := config.PreferredConfigPath(runtime.GOOS)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "could not locate config folder path: ", err)
-			os.Exit(1)
-		}
-
-		var initConfigCommand string
-		switch runtime.GOOS {
-		case "windows":
-			initConfigCommand = fmt.Sprintf("md \"%s\" | Out-Null; cheat --init > \"%s\"", prefFolderPath, prefConfigPath)
-		default:
-			initConfigCommand = fmt.Sprintf("mkdir -p %s && cheat --init > %s", prefFolderPath, prefConfigPath)
 		}
 
 		type UsageValues struct {
@@ -132,15 +112,37 @@ func main() {
 
 		values := UsageValues{initConfigCommand, string(os.PathSeparator)}
 		t := template.Must(template.New("usage").Parse(usage()))
+
 		err = t.Execute(os.Stdout, values)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "executing template: ", err)
+			fmt.Fprintln(os.Stderr, "could not execute template usage: ", err)
 			os.Exit(1)
 		}
 
+		fmt.Println()
 		os.Exit(0)
 	}
 
 	// execute the command
 	cmd(opts, conf)
+}
+
+func generateInitConfigCommand() (string, error) {
+
+	prefFolderPath, err := config.PreferredFolderPath()
+	if err != nil {
+		return "", err
+	}
+
+	prefConfigPath, err := config.PreferredConfigPath()
+	if err != nil {
+		return "", err
+	}
+
+	switch runtime.GOOS {
+	case "windows":
+		return fmt.Sprintf("md \"%s\" | Out-Null; cheat.exe --init > \"%s\"", prefFolderPath, prefConfigPath), nil
+	default:
+		return fmt.Sprintf("mkdir -p %s && cheat --init > %s", prefFolderPath, prefConfigPath), nil
+	}
 }
