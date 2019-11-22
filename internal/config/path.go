@@ -2,9 +2,9 @@ package config
 
 import (
 	"fmt"
-	"runtime"
 	"os"
 	"path"
+	"runtime"
 	"strings"
 
 	"github.com/mitchellh/go-homedir"
@@ -24,11 +24,7 @@ func PreferredFolderPath() (string, error) {
 	case "darwin":
 
 		// macOS default folder path
-		xdgConfigHome := os.Getenv("XDG_CONFIG_HOME")
-		if xdgConfigHome != "" {
-			return path.Join(xdgConfigHome, configFolder), nil
-		}
-		return path.Join("~/.config", configFolder), nil
+		return path.Join("~/Library/Application Support", configFolder), nil
 
 	case "linux":
 
@@ -94,21 +90,28 @@ func Path() (string, error) {
 
 	case "darwin":
 
+		homePath = os.Getenv("HOME")
+
 		// macOS config paths
 		paths = []string{
+			path.Join(homePath, "Library/Application Support", configFolder, configFileName),
 			path.Join(os.Getenv("XDG_CONFIG_HOME"), configFolder, configFileName),
-			path.Join(os.Getenv("HOME"), ".config", configFolder, configFileName),
-			path.Join(os.Getenv("HOME"), "."+configFolder, configFileName),
+			path.Join(homePath, ".config", configFolder, configFileName),
+			path.Join(homePath, "."+configFolder, configFileName),
+			path.Join("/Library/Application Support", configFolder, configFileName),
+			path.Join("/etc", configFolder, configFileName),
 		}
 
 	case "linux":
 
+		homePath = os.Getenv("HOME")
+
 		// Linux config paths
 		paths = []string{
 			path.Join(os.Getenv("XDG_CONFIG_HOME"), configFolder, configFileName),
-			path.Join(os.Getenv("HOME"), ".config", configFolder, configFileName),
-			path.Join(os.Getenv("HOME"), "."+configFolder, configFileName),
-			path.Join("/etc", "."+configFolder, configFileName),
+			path.Join(homePath, ".config", configFolder, configFileName),
+			path.Join(homePath, "."+configFolder, configFileName),
+			path.Join("/etc", configFolder, configFileName),
 		}
 
 	case "windows":
@@ -145,7 +148,6 @@ func Path() (string, error) {
 func getExpandedEnv(envVar string) (string, error) {
 
 	value := os.Getenv(envVar)
-
 	if value != "" {
 
 		// expand environment variable

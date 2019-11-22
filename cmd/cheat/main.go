@@ -149,8 +149,16 @@ func generateInitConfigCommand() (string, error) {
 			}
 			return path
 		}
-		return fmt.Sprintf("md -Force \"%s\" | Out-Null; cheat.exe --init > \"%s\"", collapse(prefFolderPath), collapse(prefConfigPath)), nil
-	default:
-		return fmt.Sprintf("mkdir -p %s && cheat --init > %s", prefFolderPath, prefConfigPath), nil
+
+		return fmt.Sprintf("md -Force \"%s\" | Out-Null; cheat.exe --init > \"%s\"",
+			collapse(prefFolderPath), collapse(prefConfigPath)), nil
+
+	default: /* posix */
+		var escape = func(path string) string {
+			return strings.ReplaceAll(path, " ", "\\ ")
+		}
+
+		return fmt.Sprintf("mkdir -p %s && cheat --init > %s",
+			escape(prefFolderPath), escape(prefConfigPath)), nil
 	}
 }
