@@ -27,9 +27,8 @@ func PreferredFolderPath() (string, error) {
 		xdgConfigHome := os.Getenv("XDG_CONFIG_HOME")
 		if xdgConfigHome != "" {
 			return path.Join(xdgConfigHome, configFolder), nil
-		} else {
-			return path.Join("~/.config", configFolder), nil
 		}
+		return path.Join("~/.config", configFolder), nil
 
 	case "linux":
 
@@ -37,9 +36,8 @@ func PreferredFolderPath() (string, error) {
 		xdgConfigHome := os.Getenv("XDG_CONFIG_HOME")
 		if xdgConfigHome != "" {
 			return path.Join(xdgConfigHome, configFolder), nil
-		} else {
-			return path.Join("~/.config", configFolder), nil
 		}
+		return path.Join("~/.config", configFolder), nil
 
 	case "windows":
 

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"strings"
 	"text/template"
 
 	"github.com/docopt/docopt-go"
@@ -141,7 +142,14 @@ func generateInitConfigCommand() (string, error) {
 
 	switch runtime.GOOS {
 	case "windows":
-		return fmt.Sprintf("md \"%s\" | Out-Null; cheat.exe --init > \"%s\"", prefFolderPath, prefConfigPath), nil
+		var collapse = func(path string) string {
+			var appDataPath = os.Getenv("APPDATA")
+			if strings.HasPrefix(path, appDataPath) {
+				path = "$env:APPDATA" + path[len(appDataPath):]
+			}
+			return path
+		}
+		return fmt.Sprintf("md -Force \"%s\" | Out-Null; cheat.exe --init > \"%s\"", collapse(prefFolderPath), collapse(prefConfigPath)), nil
 	default:
 		return fmt.Sprintf("mkdir -p %s && cheat --init > %s", prefFolderPath, prefConfigPath), nil
 	}
