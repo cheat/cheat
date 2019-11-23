@@ -2,6 +2,8 @@ package sheet
 
 import (
 	"reflect"
+	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/cheat/cheat/internal/mock"
@@ -34,9 +36,15 @@ func TestSheetSuccess(t *testing.T) {
 		)
 	}
 
+	gotText := sheet.Text
+	if runtime.GOOS == "windows" {
+		// If we're on windows with \r\n line separators \r needs to go
+		gotText = strings.ReplaceAll(gotText, "\r", "")
+	}
+
 	wantText := "# To foo the bar:\n  foo bar\n"
-	if sheet.Text != wantText {
-		t.Errorf("failed to init text: want: %s, got: %s", wantText, sheet.Text)
+	if gotText != wantText {
+		t.Errorf("failed to init text: want: %s, got: %s", wantText, gotText)
 	}
 
 	// NB: tags should sort alphabetically

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 	"runtime"
-	"strings"
 
 	"github.com/mitchellh/go-homedir"
 )
@@ -38,8 +38,7 @@ func PreferredFolderPath() (string, error) {
 	case "windows":
 
 		// Windows default folder path
-		folderPath := path.Join(os.Getenv("APPDATA"), configFolder)
-		return strings.ReplaceAll(folderPath, "/", "\\"), nil
+		return filepath.Clean(path.Join(os.Getenv("APPDATA"), configFolder)), nil
 
 	default:
 
@@ -63,12 +62,7 @@ func PreferredConfigPath() (string, error) {
 		return "", err
 	}
 
-	configPath := path.Join(configFolder, configFileName)
-	if runtime.GOOS == "windows" {
-		configPath = strings.ReplaceAll(configPath, "/", "\\")
-	}
-
-	return configPath, nil
+	return filepath.Clean(path.Join(configFolder, configFileName)), nil
 }
 
 // Path returns the config file path
@@ -118,12 +112,8 @@ func Path() (string, error) {
 
 		// Windows config paths
 		paths = []string{
-			path.Join(os.Getenv("APPDATA"), configFolder, configFileName),
-			path.Join(os.Getenv("PROGRAMDATA"), configFolder, configFileName),
-		}
-
-		for i, p := range paths {
-			paths[i] = strings.ReplaceAll(p, "/", "\\")
+			filepath.Clean(path.Join(os.Getenv("APPDATA"), configFolder, configFileName)),
+			filepath.Clean(path.Join(os.Getenv("PROGRAMDATA"), configFolder, configFileName)),
 		}
 
 	default:
