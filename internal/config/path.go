@@ -19,6 +19,12 @@ const (
 // PreferredFolderPath returns the default cheat folder path
 func PreferredFolderPath() (string, error) {
 
+	// if CHEAT_CONFIG_PATH is set, honor it
+	envFilePath := os.Getenv(configFilePathEnvVar)
+	if envFilePath != "" {
+		return filepath.Dir(envFilePath), nil
+	}
+
 	switch runtime.GOOS {
 
 	case "darwin":
@@ -51,7 +57,7 @@ func PreferredFolderPath() (string, error) {
 // PreferredConfigPath returns the default config file path
 func PreferredConfigPath() (string, error) {
 
-	// if CHEAT_CONFIG_PATH is set, return it
+	// if CHEAT_CONFIG_PATH is set, honor it
 	envFilePath := os.Getenv(configFilePathEnvVar)
 	if envFilePath != "" {
 		return envFilePath, nil
