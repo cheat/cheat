@@ -38,12 +38,6 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 	// sort the cheatsheets alphabetically, and search for matches
 	for _, sheet := range sheets.Sort(consolidated) {
 
-		// colorize output?
-		colorize := false
-		if conf.Colorize == true || opts["--colorize"] == true {
-			colorize = true
-		}
-
 		// assume that we want to perform a case-insensitive search for <phrase>
 		pattern := "(?i)" + phrase
 
@@ -60,7 +54,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 		}
 
 		// search the sheet
-		matches := sheet.Search(reg, colorize)
+		matches := sheet.Search(reg, conf.Color(opts))
 
 		// display the results
 		if len(matches) > 0 {
