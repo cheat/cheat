@@ -92,6 +92,10 @@ if __name__ == '__main__':
     elif options['--list']:
         print(sheets.list(), end="")
 
+    elif options['ls']:
+        print(sheets.list(), end="")
+
+
     # create/edit cheatsheet
     elif options['--edit']:
         sheet.edit(options['<cheatsheet>'])
