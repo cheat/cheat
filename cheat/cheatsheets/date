@@ -1,8 +1,0 @@
-# Print date in format suitable for affixing to file names
-date +"%Y%m%d_%H%M%S"
-
-# Convert Unix timestamp to Date(Linux)
-date -d @1440359821
-
-# Convert Unix timestamp to Date(Mac)
-date -r 1440359821

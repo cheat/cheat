@@ -1,5 +1,0 @@
-# List contents of RPM
-rpm2cpio foo.rpm | cpio -vt
-
-# Extract contents of RPM
-rpm2cpio foo.rpm | cpio -vid

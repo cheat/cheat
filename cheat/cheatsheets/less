@@ -1,9 +1,0 @@
-# To disable the terminal refresh when exiting
-less -X
-
-# To save the contents to a file
-# Method 1 - Only works when the input is a pipe
-s <filename>
-
-# Method 2 - This should work whether input is a pipe or an ordinary file.
-Type g or < (g or less-than) | $ (pipe then dollar) then cat > <filename> and Enter.

@@ -1,5 +1,0 @@
-# To kill a process using it's full process name
-pkill <processname>
-
-# To kill a process by it's partial name
-pkill -f <string>

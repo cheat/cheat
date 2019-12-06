@@ -1,0 +1,17 @@
+---
+editor: vim
+
+colorize: true
+
+cheatpaths:
+  - path: ~/.dotfiles/cheat/community
+    tags: [ community ]
+    readonly: true
+
+  - path: ~/.dotfiles/cheat/work
+    tags: [ work ]
+    readonly: false
+
+  - path: ~/.dotfiles/cheat/personal
+    tags: [ personal ]
+    readonly: false

@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: cheat
+Version: 2.5.1
+Summary: cheat allows you to create and view interactive cheatsheets on the command-line. It was designed to help remind *nix system administrators of options for commands that they use frequently, but not frequently enough to remember.
+Home-page: https://github.com/chrisallenlane/cheat
+Author: Chris Lane
+Author-email: chris@chris-allen-lane.com
+License: GPL3
+Description: UNKNOWN
+Platform: UNKNOWN
