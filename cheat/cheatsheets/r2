@@ -965,3 +965,9 @@
 
 	$wiki "query string"
 	
+# Hexcursor commands (user defined structs)
+     1) Define that struct
+	r2> "td struct ios_header={int a; intb;};"
+     2) Reference it while being located within visual insert mode (V -> i)
+	r2> e cmd.hexcursor=tp ios_header
+
