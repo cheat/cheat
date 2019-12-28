@@ -3,7 +3,7 @@ module github.com/cheat/cheat
 go 1.13
 
 require (
-	github.com/alecthomas/chroma v0.6.9
+	github.com/alecthomas/chroma v0.7.0
 	github.com/davecgh/go-spew v1.1.1
 	github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
 	github.com/mattn/go-isatty v0.0.11
