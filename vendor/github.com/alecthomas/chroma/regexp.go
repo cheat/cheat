@@ -34,7 +34,6 @@ func (e EmitterFunc) Emit(groups []string, lexer Lexer) Iterator { return e(grou
 func ByGroups(emitters ...Emitter) Emitter {
 	return EmitterFunc(func(groups []string, lexer Lexer) Iterator {
 		iterators := make([]Iterator, 0, len(groups)-1)
-		// NOTE: If this panics, there is a mismatch with groups
 		if len(emitters) != len(groups)-1 {
 			iterators = append(iterators, Error.Emit(groups, lexer))
 			// panic(errors.Errorf("number of groups %q does not match number of emitters %v", groups, emitters))

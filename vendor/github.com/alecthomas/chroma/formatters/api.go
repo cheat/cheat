@@ -20,7 +20,7 @@ var (
 		return nil
 	}))
 	// Default HTML formatter outputs self-contained HTML.
-	htmlFull = Register("html", html.New(html.Standalone(), html.WithClasses())) // nolint
+	htmlFull = Register("html", html.New(html.Standalone(true), html.WithClasses(true))) // nolint
 	SVG      = Register("svg", svg.New(svg.EmbedFont("Liberation Mono", svg.FontLiberationMono, svg.WOFF)))
 )
 
