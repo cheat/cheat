@@ -14,11 +14,11 @@ import (
 
 // Config encapsulates configuration parameters
 type Config struct {
-	Colorize   bool           `yaml:colorize`
-	Editor     string         `yaml:editor`
-	Cheatpaths []cp.Cheatpath `yaml:cheatpaths`
-	Style      string         `yaml:style`
-	Formatter  string         `yaml:formatter`
+	Colorize   bool           `yaml:"colorize"`
+	Editor     string         `yaml:"editor"`
+	Cheatpaths []cp.Cheatpath `yaml:"cheatpaths"`
+	Style      string         `yaml:"style"`
+	Formatter  string         `yaml:"formatter"`
 }
 
 // New returns a new Config struct
