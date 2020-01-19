@@ -125,6 +125,11 @@ If a user attempts to edit a cheatsheet on a read-only cheatpath, `cheat` will
 transparently copy that sheet to a writeable directory before opening it for
 editing.
 
+### Directory-scoped Cheatpaths ###
+At times, it can be useful to closely associate cheatsheets with a directory on
+your filesystem. `cheat` facilitates this by searching for a `.cheat` folder in
+the current working directory. If found, the `.cheat` directory will
+(temporarily) be added to the cheatpaths.
 
 Usage
 -----
