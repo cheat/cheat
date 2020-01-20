@@ -14,11 +14,11 @@ import (
 
 // Config encapsulates configuration parameters
 type Config struct {
-	Colorize   bool           `yaml:colorize`
-	Editor     string         `yaml:editor`
-	Cheatpaths []cp.Cheatpath `yaml:cheatpaths`
-	Style      string         `yaml:style`
-	Formatter  string         `yaml:formatter`
+	Colorize   bool           `yaml:"colorize"`
+	Editor     string         `yaml:"editor"`
+	Cheatpaths []cp.Cheatpath `yaml:"cheatpaths"`
+	Style      string         `yaml:"style"`
+	Formatter  string         `yaml:"formatter"`
 }
 
 // New returns a new Config struct
@@ -37,6 +37,24 @@ func New(opts map[string]interface{}, confPath string, resolve bool) (Config, er
 	err = yaml.UnmarshalStrict(buf, &conf)
 	if err != nil {
 		return Config{}, fmt.Errorf("could not unmarshal yaml: %v", err)
+	}
+
+	// if a .cheat directory exists locally, append it to the cheatpaths
+	cwd, err := os.Getwd()
+	if err != nil {
+		return Config{}, fmt.Errorf("failed to get cwd: %v", err)
+	}
+
+	local := filepath.Join(cwd, ".cheat")
+	if _, err := os.Stat(local); err == nil {
+		path := cp.Cheatpath{
+			Name:     "cwd",
+			Path:     local,
+			ReadOnly: false,
+			Tags:     []string{},
+		}
+
+		conf.Cheatpaths = append(conf.Cheatpaths, path)
 	}
 
 	// process cheatpaths

@@ -52,3 +52,13 @@ cheatpaths:
     path: ~/.dotfiles/cheat/personal
     tags: [ personal ]
     readonly: false
+
+  # While it requires no specific configuration here, it's also worth noting
+  # that 'cheat' will automatically append directories named '.cheat' within
+  # the current working directory to the 'cheatpath'. This can be very useful
+  # if you'd like to closely associate cheatsheets with, for example, a
+  # directory containing source code.
+  #
+  # Such "directory-scoped" cheatsheets will be treated as the most "local"
+  # cheatsheets, and will override less "local" cheatsheets. Likewise,
+  # directory-scoped cheatsheets will always be editable ('readonly: false').
