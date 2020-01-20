@@ -16,6 +16,7 @@ RM     := rm
 SCC    := scc
 SED    := sed
 SORT   := sort
+ZIP    := zip -m
 
 # build flags
 BUILD_FLAGS  := -ldflags="-s -w" -mod vendor
@@ -60,9 +61,11 @@ generate:
 .PHONY: $(RELEASES)
 $(RELEASES): clean generate check
 ifeq ($(arch),arm)
-	GOARCH=$(arch) GOOS=$(os) GOARM=$(arm) $(GO) build $(BUILD_FLAGS) -o $(dist_dir)/$(bin) $(cmd_dir)
+	GOARCH=$(arch) GOOS=$(os) GOARM=$(arm) $(GO) build $(BUILD_FLAGS) -o $(dist_dir)/$(bin) $(cmd_dir) && \
+	$(ZIP) $(dist_dir)/$(bin).zip $(dist_dir)/$(bin)
 else
-	GOARCH=$(arch) GOOS=$(os) $(GO) build $(BUILD_FLAGS) -o $(dist_dir)/$(bin) $(cmd_dir)
+	GOARCH=$(arch) GOOS=$(os) $(GO) build $(BUILD_FLAGS) -o $(dist_dir)/$(bin) $(cmd_dir) && \
+	$(ZIP) $(dist_dir)/$(bin).zip $(dist_dir)/$(bin)
 endif
 
 ## install: builds and installs cheat on your PATH
@@ -111,7 +114,7 @@ fmt:
 ## lint: lints go source files
 .PHONY: lint
 lint:
-	$(LINT) -exclude $(root_dir)/vendor/... $(root_dir)/...
+	$(LINT) -exclude $(root_dir)/vendor/... $(root_dir)/... && \
 	$(GO) vet $(root_dir)/...
 
 ## test: runs unit-tests
