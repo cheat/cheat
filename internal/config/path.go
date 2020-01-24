@@ -23,36 +23,21 @@ func Path(sys string) (string, error) {
 		}
 
 		return expanded, nil
+	}
 
-		// OSX config paths
-	} else if sys == "darwin" {
-
+	switch sys {
+	case "darwin", "linux", "freebsd":
 		paths = []string{
 			path.Join(os.Getenv("XDG_CONFIG_HOME"), "/cheat/conf.yml"),
 			path.Join(os.Getenv("HOME"), ".config/cheat/conf.yml"),
 			path.Join(os.Getenv("HOME"), ".cheat/conf.yml"),
 		}
-
-		// Linux config paths
-	} else if sys == "linux" {
-
-		paths = []string{
-			path.Join(os.Getenv("XDG_CONFIG_HOME"), "/cheat/conf.yml"),
-			path.Join(os.Getenv("HOME"), ".config/cheat/conf.yml"),
-			path.Join(os.Getenv("HOME"), ".cheat/conf.yml"),
-			"/etc/cheat/conf.yml",
-		}
-
-		// Windows config paths
-	} else if sys == "windows" {
-
+	case "windows":
 		paths = []string{
 			fmt.Sprintf("%s/cheat/conf.yml", os.Getenv("APPDATA")),
 			fmt.Sprintf("%s/cheat/conf.yml", os.Getenv("PROGRAMDATA")),
 		}
-
-		// Unsupported platforms
-	} else {
+	default:
 		return "", fmt.Errorf("unsupported os: %s", sys)
 	}
 
