@@ -1,8 +1,7 @@
 # paths
 makefile := $(realpath $(lastword $(MAKEFILE_LIST)))
-root_dir := $(shell dirname $(makefile))
-cmd_dir  := $(root_dir)/cmd/cheat
-dist_dir := $(root_dir)/dist
+cmd_dir  := ./cmd/cheat
+dist_dir := ./dist
 
 # executables
 CAT    := cat
@@ -10,6 +9,7 @@ COLUMN := column
 CTAGS  := ctags
 GO     := go
 GREP   := grep
+GZIP   := gzip --best
 LINT   := revive
 MKDIR  := mkdir -p
 RM     := rm
@@ -21,37 +21,57 @@ SORT   := sort
 BUILD_FLAGS  := -ldflags="-s -w" -mod vendor
 GOBIN        :=
 
-# NB: this is a  kludge to specify the desired build targets. This information
-# would "naturally" be best structured as an array of structs, but lacking that
-# capability, we're condensing that information into strings which we will
-# later split.
-#
-# Format: <architecture>/<os>/<arm-version>/<executable-name>
-.PHONY: $(RELEASES)
-RELEASES :=                               \
-	amd64/darwin/0/cheat-darwin-amd64       \
-	amd64/linux/0/cheat-linux-amd64         \
-	amd64/windows/0/cheat-windows-amd64.exe \
-	arm/linux/5/cheat-linux-arm5            \
-	arm/linux/6/cheat-linux-arm6            \
-	arm/linux/7/cheat-linux-arm7
-
-# macros to unpack the above
-parts = $(subst /, ,$@)
-arch  = $(word 1, $(parts))
-os    = $(word 2, $(parts))
-arm   = $(word 3, $(parts))
-bin   = $(word 4, $(parts))
-
+# release binaries
+releases :=                        \
+	$(dist_dir)/cheat-darwin-amd64 \
+	$(dist_dir)/cheat-linux-amd64  \
+	$(dist_dir)/cheat-linux-arm5   \
+	$(dist_dir)/cheat-linux-arm6   \
+	$(dist_dir)/cheat-linux-arm7   \
+	$(dist_dir)/cheat-windows-amd64.exe
 
 ## build: builds an executable for your architecture
 .PHONY: build
-build: clean generate
+build: $(dist_dir)
 	$(GO) build $(BUILD_FLAGS) -o $(dist_dir)/cheat $(cmd_dir)
 
 ## build-release: builds release executables
 .PHONY: build-release
-build-release: $(RELEASES)
+build-release: $(releases)
+
+# cheat-darwin-amd64
+$(dist_dir)/cheat-darwin-amd64: prepare
+	GOARCH=amd64 GOOS=darwin \
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@
+
+# cheat-linux-amd64
+$(dist_dir)/cheat-linux-amd64: prepare
+	GOARCH=amd64 GOOS=linux \
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@
+
+# cheat-linux-arm5
+$(dist_dir)/cheat-linux-arm5: prepare
+	GOARCH=arm GOOS=linux GOARM=5 \
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@
+
+# cheat-linux-arm6
+$(dist_dir)/cheat-linux-arm6: prepare
+	GOARCH=arm GOOS=linux GOARM=6 \
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@
+
+# cheat-linux-arm7
+$(dist_dir)/cheat-linux-arm7: prepare
+	GOARCH=arm GOOS=linux GOARM=7 \
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@
+
+# cheat-windows-amd64
+$(dist_dir)/cheat-windows-amd64.exe: prepare
+	GOARCH=amd64 GOOS=windows \
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(ZIP) $@.zip $@
+
+# ./dist
+$(dist_dir):
+	$(MKDIR) $(dist_dir)
 
 .PHONY: generate
 generate:
@@ -70,9 +90,6 @@ endif
 install:
 	$(GO) install $(BUILD_FLAGS) $(GOBIN) $(cmd_dir) 
 
-$(dist_dir):
-	$(MKDIR) $(dist_dir)
-
 ## clean: removes compiled executables
 .PHONY: clean
 clean: $(dist_dir)
@@ -81,7 +98,7 @@ clean: $(dist_dir)
 ## distclean: removes the tags file
 .PHONY: distclean
 distclean:
-	$(RM) $(root_dir)/tags
+	$(RM) ./tags
 
 ## setup: installs revive (linter) and scc (sloc tool)
 .PHONY: setup
@@ -96,17 +113,17 @@ sloc:
 ## tags: builds a tags file
 .PHONY: tags
 tags:
-	$(CTAGS) -R $(root_dir) --exclude=$(root_dir)/vendor
+	$(CTAGS) -R . --exclude=./vendor
 
 ## vendor: downloads, tidies, and verifies dependencies
 .PHONY: vendor
-vendor: lint # kludge: revive appears to complain if the vendor directory disappears while a lint is running
+vendor:
 	$(GO) mod vendor && $(GO) mod tidy && $(GO) mod verify
 
 ## fmt: runs go fmt
 .PHONY: fmt
 fmt:
-	$(GO) fmt $(root_dir)/...
+	$(GO) fmt ./...
 
 ## lint: lints go source files
 .PHONY: lint
@@ -117,11 +134,14 @@ lint:
 ## test: runs unit-tests
 .PHONY: test
 test: 
-	$(GO) test $(root_dir)/...
+	$(GO) test ./...
 
-## check: formats, lints, vendors, and run unit-tests
+## check: formats, lints, vets, vendors, and run unit-tests
 .PHONY: check
-check: fmt lint vendor test
+check: | vendor fmt lint vet test
+
+.PHONY: prepare
+prepare: | $(dist_dir) clean generate vendor fmt lint vet test
 
 ## help: displays this help text
 .PHONY: help
