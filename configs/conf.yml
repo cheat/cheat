@@ -34,22 +34,23 @@ cheatpaths:
   #
   # Note that the paths and tags listed below are just examples. You may freely
   # change them to suit your needs.
+  #
+  # TODO: regarding community cheatsheets: these must be installed separately.
+  # You may download them here:
+  #
+  # https://github.com/cheat/cheatsheets
+  #
+  # Once downloaded, ensure that 'path' below points to the location at which
+  # you downloaded the community cheatsheets.
   - name: community
-    path: ~/.dotfiles/cheat/community
+    path: ~/cheat/cheatsheets/community
     tags: [ community ]
     readonly: true
-
-  # Maybe your company or department maintains a repository of cheatsheets as
-  # well. It's probably sensible to list those second.
-  - name: work
-    path: ~/.dotfiles/cheat/work
-    tags: [ work ]
-    readonly: false
 
   # If you have personalized cheatsheets, list them last. They will take
   # precedence over the more global cheatsheets.
   - name: personal
-    path: ~/.dotfiles/cheat/personal
+    path: ~/cheat/cheatsheets/personal
     tags: [ personal ]
     readonly: false
 
