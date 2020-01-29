@@ -33,7 +33,7 @@ releases :=                        \
 
 ## build: builds an executable for your architecture
 .PHONY: build
-build: $(dist_dir)
+build: $(dist_dir) clean generate
 	$(GO) build $(BUILD_FLAGS) -o $(dist_dir)/cheat $(cmd_dir)
 
 ## build-release: builds release executables
