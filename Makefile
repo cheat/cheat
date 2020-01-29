@@ -19,7 +19,7 @@ SORT   := sort
 ZIP    := zip -m
 
 # build flags
-BUILD_FLAGS  := -ldflags="-s -w" -mod vendor
+BUILD_FLAGS  := -ldflags="-s -w" -mod vendor -trimpath
 GOBIN        :=
 
 # release binaries
@@ -39,6 +39,10 @@ build: $(dist_dir)
 ## build-release: builds release executables
 .PHONY: build-release
 build-release: $(releases)
+
+## ci: builds a "release" executable for the current architecture (used in ci)
+.PHONY: ci
+ci: | setup prepare build
 
 # cheat-darwin-amd64
 $(dist_dir)/cheat-darwin-amd64: prepare
@@ -91,7 +95,7 @@ clean: $(dist_dir)
 ## distclean: removes the tags file
 .PHONY: distclean
 distclean:
-	$(RM) ./tags
+	$(RM) tags
 
 ## setup: installs revive (linter) and scc (sloc tool)
 .PHONY: setup
@@ -106,7 +110,7 @@ sloc:
 ## tags: builds a tags file
 .PHONY: tags
 tags:
-	$(CTAGS) -R . --exclude=./vendor
+	$(CTAGS) -R . --exclude=vendor
 
 ## vendor: downloads, tidies, and verifies dependencies
 .PHONY: vendor
