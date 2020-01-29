@@ -75,14 +75,16 @@ func New(opts map[string]interface{}, confPath string, resolve bool) (Config, er
 		// `resolve` is a switch that allows us to turn off symlink resolution when
 		// running the config tests.
 		if resolve {
-			expanded, err = filepath.EvalSymlinks(expanded)
+			evaled, err := filepath.EvalSymlinks(expanded)
 			if err != nil {
 				return Config{}, fmt.Errorf(
-					"failed to resolve symlink: %s, %v",
+					"failed to resolve symlink: %s: %v",
 					expanded,
 					err,
 				)
 			}
+
+			expanded = evaled
 		}
 
 		conf.Cheatpaths[i].Path = expanded
