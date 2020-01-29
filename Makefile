@@ -95,7 +95,7 @@ clean: $(dist_dir)
 ## distclean: removes the tags file
 .PHONY: distclean
 distclean:
-	$(RM) tags
+	$(RM) -f tags
 
 ## setup: installs revive (linter) and scc (sloc tool)
 .PHONY: setup
@@ -110,7 +110,7 @@ sloc:
 ## tags: builds a tags file
 .PHONY: tags
 tags:
-	$(CTAGS) -R . --exclude=vendor
+	$(CTAGS) -R --exclude=vendor --languages=go
 
 ## vendor: downloads, tidies, and verifies dependencies
 .PHONY: vendor
