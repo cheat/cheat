@@ -47,27 +47,27 @@ ci: | setup prepare build
 # cheat-darwin-amd64
 $(dist_dir)/cheat-darwin-amd64: prepare
 	GOARCH=amd64 GOOS=darwin \
-	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
 
 # cheat-linux-amd64
 $(dist_dir)/cheat-linux-amd64: prepare
 	GOARCH=amd64 GOOS=linux \
-	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
 
 # cheat-linux-arm5
 $(dist_dir)/cheat-linux-arm5: prepare
 	GOARCH=arm GOOS=linux GOARM=5 \
-	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
 
 # cheat-linux-arm6
 $(dist_dir)/cheat-linux-arm6: prepare
 	GOARCH=arm GOOS=linux GOARM=6 \
-	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
 
 # cheat-linux-arm7
 $(dist_dir)/cheat-linux-arm7: prepare
 	GOARCH=arm GOOS=linux GOARM=7 \
-	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
 
 # cheat-windows-amd64
 $(dist_dir)/cheat-windows-amd64.exe: prepare
