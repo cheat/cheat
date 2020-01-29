@@ -31,11 +31,33 @@ func main() {
 		os.Exit(0)
 	}
 
-	// load the config file
-	confpath, err := config.Path(runtime.GOOS)
+	// load the os-specifc paths at which the config file may be located
+	confpaths, err := config.Paths(runtime.GOOS)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "could not locate config file")
+		fmt.Fprintf(os.Stderr, "failed to load config: %v\n", err)
 		os.Exit(1)
+	}
+
+	// search for the config file in the above paths
+	confpath, err := config.Path(confpaths)
+	if err != nil {
+
+		// the config file does not exist, so we'll try to create one
+		if err = config.Init(confpaths[0], configs()); err != nil {
+			fmt.Fprintf(
+				os.Stderr,
+				"failed to create config file: %s: %v\n",
+				confpaths[0],
+				err,
+			)
+			os.Exit(1)
+		}
+
+		confpath = confpaths[0]
+
+		fmt.Printf("Created config file: %s\n", confpath)
+		fmt.Println("Please edit this file now to configure cheat.")
+		os.Exit(0)
 	}
 
 	// initialize the configs
