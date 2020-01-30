@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"strings"
 
 	"github.com/docopt/docopt-go"
 
@@ -31,8 +32,15 @@ func main() {
 		os.Exit(0)
 	}
 
+	// read the envvars into a map of strings
+	envvars := map[string]string{}
+	for _, e := range os.Environ() {
+		pair := strings.SplitN(e, "=", 2)
+		envvars[pair[0]] = pair[1]
+	}
+
 	// load the os-specifc paths at which the config file may be located
-	confpaths, err := config.Paths(runtime.GOOS)
+	confpaths, err := config.Paths(runtime.GOOS, envvars)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to load config: %v\n", err)
 		os.Exit(1)
