@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"os"
 	"path"
 
 	"github.com/mitchellh/go-homedir"
@@ -10,13 +9,13 @@ import (
 
 // Paths returns config file paths that are appropriate for the operating
 // system
-func Paths(sys string) ([]string, error) {
+func Paths(sys string, envvars map[string]string) ([]string, error) {
 
-	// if CHEAT_CONFIG_PATH is set, return it
-	if os.Getenv("CHEAT_CONFIG_PATH") != "" {
+	// if `CHEAT_CONFIG_PATH` is set, expand ~ and return it
+	if confpath, ok := envvars["CHEAT_CONFIG_PATH"]; ok {
 
 		// expand ~
-		expanded, err := homedir.Expand(os.Getenv("CHEAT_CONFIG_PATH"))
+		expanded, err := homedir.Expand(confpath)
 		if err != nil {
 			return []string{}, fmt.Errorf("failed to expand ~: %v", err)
 		}
@@ -26,15 +25,24 @@ func Paths(sys string) ([]string, error) {
 
 	switch sys {
 	case "darwin", "linux", "freebsd":
-		return []string{
-			path.Join(os.Getenv("XDG_CONFIG_HOME"), "/cheat/conf.yml"),
-			path.Join(os.Getenv("HOME"), ".config/cheat/conf.yml"),
-			path.Join(os.Getenv("HOME"), ".cheat/conf.yml"),
-		}, nil
+		paths := []string{}
+
+		// don't include the `XDG_CONFIG_HOME` path if that envvar is not set
+		if xdgpath, ok := envvars["XDG_CONFIG_HOME"]; ok {
+			paths = append(paths, path.Join(xdgpath, "/cheat/conf.yml"))
+		}
+
+		// `HOME` will always be set on a POSIX-compliant system, though
+		paths = append(paths, []string{
+			path.Join(envvars["HOME"], ".config/cheat/conf.yml"),
+			path.Join(envvars["HOME"], ".cheat/conf.yml"),
+		}...)
+
+		return paths, nil
 	case "windows":
 		return []string{
-			fmt.Sprintf("%s/cheat/conf.yml", os.Getenv("APPDATA")),
-			fmt.Sprintf("%s/cheat/conf.yml", os.Getenv("PROGRAMDATA")),
+			path.Join(envvars["APPDATA"], "/cheat/conf.yml"),
+			path.Join(envvars["PROGRAMDATA"], "/cheat/conf.yml"),
 		}, nil
 	default:
 		return []string{}, fmt.Errorf("unsupported os: %s", sys)
