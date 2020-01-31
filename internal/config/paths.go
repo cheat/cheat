@@ -32,8 +32,8 @@ func Paths(sys string, envvars map[string]string) ([]string, error) {
 		}, nil
 	case "windows":
 		return []string{
-			fmt.Sprintf("%s/cheat/conf.yml", envvars["APPDATA"]),
-			fmt.Sprintf("%s/cheat/conf.yml", envvars["PROGRAMDATA"]),
+			path.Join(envvars["APPDATA"], "/cheat/conf.yml"),
+			path.Join(envvars["PROGRAMDATA"], "/cheat/conf.yml"),
 		}, nil
 	default:
 		return []string{}, fmt.Errorf("unsupported os: %s", sys)
