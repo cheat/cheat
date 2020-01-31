@@ -3,6 +3,10 @@ language: go
 go:
   - 1.13.x
 
+os:
+  - linux
+  - osx
+
 env:
   - GO111MODULE=on
 
