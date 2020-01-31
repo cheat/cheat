@@ -21,6 +21,7 @@ ZIP    := zip -m
 # build flags
 BUILD_FLAGS  := -ldflags="-s -w" -mod vendor -trimpath
 GOBIN        :=
+TMPDIR       := /tmp
 
 # release binaries
 releases :=                        \
@@ -136,6 +137,12 @@ vet:
 .PHONY: test
 test: 
 	$(GO) test ./...
+
+## coverage: generates a test coverage report
+.PHONY: coverage
+coverage:
+	$(GO) test ./... -coverprofile=$(TMPDIR)/cheat-coverage.out && \
+	$(GO) tool cover -html=$(TMPDIR)/cheat-coverage.out
 
 ## check: formats, lints, vets, vendors, and run unit-tests
 .PHONY: check
