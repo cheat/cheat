@@ -1,62 +1,72 @@
-_cheat_cheatpaths()
-{
-  if [[ -z "${cur// }" ]]; then
-    compgen -W "$(cheat -d | cut -d':' -f1)"
-  else
-    compgen -W "$(cheat -d | cut -d':' -f1 | grep $cur)"
-  fi
-}
+# cheat(1) completion                                      -*- shell-script -*-
 
-_cheat_cheatsheets()
+# generate cheatsheet completions, optionally using `fzf`
+_cheat_complete_cheatsheets()
 {
   if [[ "${CHEAT_USE_FZF:-0}" != 0 ]]; then
-    FZF_COMPLETION_TRIGGER='' _fzf_complete "--no-multi" "$@" < <(cheat -l | tail -n +2 | cut -d' ' -f1)
+    FZF_COMPLETION_TRIGGER='' _fzf_complete "--no-multi" "$@" < <(
+      cheat -l | tail -n +2 | cut -d' ' -f1
+    )
   else
-    COMPREPLY=( $(compgen -W "$(cheat -l $cur | tail -n +2 | cut -d' ' -f1)") )
+    COMPREPLY=( $(compgen -W "$(cheat -l | tail -n +2 | cut -d' ' -f1)" -- "$cur") )
   fi
 }
 
-_cheat_tags()
+# generate tag completions, optionally using `fzf`
+_cheat_complete_tags()
 {
-  if [[ -z "${cur// }" ]]; then
-    compgen -W "$(cheat -T)"
+  if [[ "${CHEAT_USE_FZF:-0}" != 0 ]]; then
+    FZF_COMPLETION_TRIGGER='' _fzf_complete "--no-multi" "$@" < <(cheat -T)
   else
-    compgen -W "$(cheat -T | grep $cur)"
+    COMPREPLY=( $(compgen -W "$(cheat -T)" -- "$cur") )
   fi
 }
 
+# implement the `cheat` autocompletions
 _cheat()
 {
   local cur prev words cword split
   _init_completion -s || return
 
+  # complete options that are currently being typed: `--col` => `--colorize`
+  if [[ $cur == -* ]]; then
+    COMPREPLY=( $(compgen -W '$(_parse_help "$1" | sed "s/=//g")' -- "$cur") )
+    [[ $COMPREPLY == *= ]] && compopt -o nospace
+    return
+  fi
+
+  # implement completions
   case $prev in
+    --colorize|-c|\
+    --directories|-d|\
+    --init|\
+    --regex|-r|\
+    --search|-s|\
+    --tags|-T|\
+    --version|-v)
+      # noop the above, which should implement no completions
+      ;;
     --edit|-e)
-      _cheat_cheatsheets
+      _cheat_complete_cheatsheets
+      ;;
+    --list|-l)
+      _cheat_complete_cheatsheets
       ;;
     --path|-p)
-      COMPREPLY=( $(_cheat_cheatpaths) )
+      COMPREPLY=( $(compgen -W "$(cheat -d | cut -d':' -f1)" -- "$cur") )  
       ;;
     --rm)
-      _cheat_cheatsheets
+      _cheat_complete_cheatsheets
       ;;
-    --tags|-t)
-      COMPREPLY=( $(_cheat_tags) )
+    --tag|-t)
+      _cheat_complete_tags
+      ;;
+    *)
+      _cheat_complete_cheatsheets
       ;;
   esac
 
   $split && return
-
-  if [[ ! "$cur" =~ ^-.*  ]]; then
-      _cheat_cheatsheets
-      return
-  fi
-
-  if [[ $cur == -* ]]; then
-    COMPREPLY=( $(compgen -W '$(_parse_help "$1")' -- "$cur") )
-    [[ $COMPREPLY == *= ]] && compopt -o nospace
-    return
-  fi
 
 } &&
 complete -F _cheat cheat
