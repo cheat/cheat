@@ -3,7 +3,7 @@
 # generate cheatsheet completions, optionally using `fzf`
 _cheat_complete_cheatsheets()
 {
-  if [[ "${CHEAT_USE_FZF:-0}" != 0 ]]; then
+  if [[ "$CHEAT_USE_FZF" = true ]]; then
     FZF_COMPLETION_TRIGGER='' _fzf_complete "--no-multi" "$@" < <(
       cheat -l | tail -n +2 | cut -d' ' -f1
     )
@@ -15,7 +15,7 @@ _cheat_complete_cheatsheets()
 # generate tag completions, optionally using `fzf`
 _cheat_complete_tags()
 {
-  if [[ "${CHEAT_USE_FZF:-0}" != 0 ]]; then
+  if [ "$CHEAT_USE_FZF" = true ]; then
     FZF_COMPLETION_TRIGGER='' _fzf_complete "--no-multi" "$@" < <(cheat -T)
   else
     COMPREPLY=( $(compgen -W "$(cheat -T)" -- "$cur") )
