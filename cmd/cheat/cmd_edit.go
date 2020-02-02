@@ -99,8 +99,15 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 		}
 	}
 
+	// split `conf.Editor` into parts to separate the editor's executable from
+	// any arguments it may have been passed. If this is not done, the nearby
+	// call to `exec.Command` will fail.
+	parts := strings.Fields(conf.Editor)
+	editor := parts[0]
+	args := append(parts[1:], editpath)
+
 	// edit the cheatsheet
-	cmd := exec.Command(conf.Editor, editpath)
+	cmd := exec.Command(editor, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
