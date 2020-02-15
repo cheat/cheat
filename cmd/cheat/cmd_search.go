@@ -78,7 +78,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 		if len(matches) > 0 {
 			fmt.Printf("%s:\n", sheet.Title)
 			for _, m := range matches {
-				fmt.Printf("  %d: %s\n", m.Line, m.Text)
+				fmt.Printf("  %s\n", m.Text)
 			}
 			fmt.Print("\n")
 		}

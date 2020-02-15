@@ -15,7 +15,7 @@ func (s *Sheet) Search(reg *regexp.Regexp) []Match {
 	// search through the cheatsheet's text line by line
 	// TODO: searching line-by-line is surely the "naive" approach. Revisit this
 	// later with an eye for performance improvements.
-	for linenum, line := range strings.Split(s.Text, "\n") {
+	for _, line := range strings.Split(s.Text, "\n") {
 
 		// exit early if the line doesn't match the regex
 		if !reg.MatchString(line) {
@@ -24,7 +24,6 @@ func (s *Sheet) Search(reg *regexp.Regexp) []Match {
 
 		// init the match
 		m := Match{
-			Line: linenum + 1,
 			Text: strings.TrimSpace(line),
 		}
 
