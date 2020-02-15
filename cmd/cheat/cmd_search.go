@@ -1,13 +1,11 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"regexp"
 	"strings"
 
-	"github.com/alecthomas/chroma/quick"
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/sheet"
 	"github.com/cheat/cheat/internal/sheets"
@@ -85,23 +83,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 
 		// if colorization was requested, apply it here
 		if conf.Color(opts) {
-
-			// if the syntax was not specified, default to bash
-			lex := sheet.Syntax
-			if lex == "" {
-				lex = "bash"
-			}
-
-			var buf bytes.Buffer
-			err = quick.Highlight(
-				&buf,
-				sheet.Text,
-				lex,
-				conf.Formatter,
-				conf.Style,
-			)
-
-			sheet.Text = buf.String()
+			sheet.Colorize(conf)
 		}
 
 		// output the cheatsheet title
