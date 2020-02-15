@@ -36,7 +36,7 @@ func TestSearchSingleMatch(t *testing.T) {
 
 	// mock a cheatsheet
 	sheet := Sheet{
-		Text: "The quick brown fox\njumped over\nthe lazy dog.",
+		Text: "The quick brown fox\njumped over\n\nthe lazy dog.",
 	}
 
 	// compile the search regex
@@ -49,7 +49,7 @@ func TestSearchSingleMatch(t *testing.T) {
 	matches := sheet.Search(reg)
 
 	// specify the expected results
-	want := "The quick brown fox"
+	want := "The quick brown fox\njumped over"
 
 	// assert that the correct matches were returned
 	if matches != want {
@@ -67,7 +67,7 @@ func TestSearchMultiMatch(t *testing.T) {
 
 	// mock a cheatsheet
 	sheet := Sheet{
-		Text: "The quick brown fox\njumped over\nthe lazy dog.",
+		Text: "The quick brown fox\n\njumped over\n\nthe lazy dog.",
 	}
 
 	// compile the search regex
@@ -80,7 +80,7 @@ func TestSearchMultiMatch(t *testing.T) {
 	matches := sheet.Search(reg)
 
 	// specify the expected results
-	want := "The quick brown fox\nthe lazy dog."
+	want := "The quick brown fox\n\nthe lazy dog."
 
 	// assert that the correct matches were returned
 	if !reflect.DeepEqual(matches, want) {
