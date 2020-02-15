@@ -5,12 +5,11 @@ import (
 	"strings"
 )
 
-// Search searches for regexp matches in a cheatsheet's text, and optionally
-// colorizes matching strings.
-func (s *Sheet) Search(reg *regexp.Regexp) []Match {
+// Search returns lines within a sheet's Text that match the search regex
+func (s *Sheet) Search(reg *regexp.Regexp) string {
 
 	// record matches
-	matches := []Match{}
+	matches := []string{}
 
 	// search through the cheatsheet's text line by line
 	// TODO: searching line-by-line is surely the "naive" approach. Revisit this
@@ -22,14 +21,9 @@ func (s *Sheet) Search(reg *regexp.Regexp) []Match {
 			continue
 		}
 
-		// init the match
-		m := Match{
-			Text: strings.TrimSpace(line),
-		}
-
 		// record the match
-		matches = append(matches, m)
+		matches = append(matches, line)
 	}
 
-	return matches
+	return strings.Join(matches, "\n")
 }

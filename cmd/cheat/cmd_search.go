@@ -1,11 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"regexp"
 	"strings"
 
+	"github.com/alecthomas/chroma/quick"
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/sheet"
 	"github.com/cheat/cheat/internal/sheets"
@@ -71,17 +73,44 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 			os.Exit(1)
 		}
 
-		// search the sheet
-		matches := sheet.Search(reg)
+		// `Search` will return text entries that match the search terms. We're
+		// using it here to overwrite the prior cheatsheet Text, filtering it to
+		// only what is relevant
+		sheet.Text = sheet.Search(reg)
 
-		// display the results
-		if len(matches) > 0 {
-			fmt.Printf("%s:\n", sheet.Title)
-			for _, m := range matches {
-				fmt.Printf("  %s\n", m.Text)
-			}
-			fmt.Print("\n")
+		// if the sheet did not match the search, ignore it and move on
+		if sheet.Text == "" {
+			continue
 		}
-	}
 
+		// if colorization was requested, apply it here
+		if conf.Color(opts) {
+
+			// if the syntax was not specified, default to bash
+			lex := sheet.Syntax
+			if lex == "" {
+				lex = "bash"
+			}
+
+			var buf bytes.Buffer
+			err = quick.Highlight(
+				&buf,
+				sheet.Text,
+				lex,
+				conf.Formatter,
+				conf.Style,
+			)
+
+			sheet.Text = buf.String()
+		}
+
+		// output the cheatsheet title
+		fmt.Printf("%s:\n", sheet.Title)
+
+		// indent each line of content with two spaces
+		for _, line := range strings.Split(sheet.Text, "\n") {
+			fmt.Printf("  %s\n", line)
+		}
+		fmt.Println("")
+	}
 }
