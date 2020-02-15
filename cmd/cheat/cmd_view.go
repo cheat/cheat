@@ -5,8 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/alecthomas/chroma/quick"
-
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/sheets"
 )
@@ -43,29 +41,11 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 		os.Exit(0)
 	}
 
-	if !conf.Color(opts) {
-		fmt.Print(sheet.Text)
-		os.Exit(0)
+	// apply colorization if requested
+	if conf.Color(opts) {
+		sheet.Colorize(conf)
 	}
 
-	// otherwise, colorize the output
-	// if the syntax was not specified, default to bash
-	lex := sheet.Syntax
-	if lex == "" {
-		lex = "bash"
-	}
-
-	// apply syntax highlighting
-	err = quick.Highlight(
-		os.Stdout,
-		sheet.Text,
-		lex,
-		conf.Formatter,
-		conf.Style,
-	)
-
-	// if colorization somehow failed, output non-colorized text
-	if err != nil {
-		fmt.Print(sheet.Text)
-	}
+	// display the cheatsheet
+	fmt.Print(sheet.Text)
 }
