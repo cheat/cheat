@@ -72,7 +72,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 		}
 
 		// search the sheet
-		matches := sheet.Search(reg, conf.Color(opts))
+		matches := sheet.Search(reg)
 
 		// display the results
 		if len(matches) > 0 {
