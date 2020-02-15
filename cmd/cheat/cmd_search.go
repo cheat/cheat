@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/cheat/cheat/internal/config"
+	"github.com/cheat/cheat/internal/sheet"
 	"github.com/cheat/cheat/internal/sheets"
 )
 
@@ -34,6 +35,23 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 	// `title` => `sheet` (ie, allow more local cheatsheets to override less
 	// local cheatsheets)
 	consolidated := sheets.Consolidate(cheatsheets)
+
+	// if <cheatsheet> was provided, search that single sheet only
+	if opts["<cheatsheet>"] != nil {
+
+		cheatsheet := opts["<cheatsheet>"].(string)
+
+		// assert that the cheatsheet exists
+		s, ok := consolidated[cheatsheet]
+		if !ok {
+			fmt.Printf("No cheatsheet found for '%s'.\n", cheatsheet)
+			os.Exit(0)
+		}
+
+		consolidated = map[string]sheet.Sheet{
+			cheatsheet: s,
+		}
+	}
 
 	// sort the cheatsheets alphabetically, and search for matches
 	for _, sheet := range sheets.Sort(consolidated) {
