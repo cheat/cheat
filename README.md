@@ -194,7 +194,7 @@ cheat -p personal -t networking --regex -s '(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
 Advanced Usage
 --------------
 Shell autocompletion is currently available for the `bash` and `fish` shells.
-Copy the relevant [completion script][completion-scripts] into the appropriate
+Copy the relevant [completion script][completions] into the appropriate
 directory on your filesystem to enable autocompletion. (This directory will
 vary depending on operating system and shell specifics.)
 
@@ -206,6 +206,6 @@ integration:
 2. Set an envvar: `export CHEAT_USE_FZF=true`
 
 [Releases]:    https://github.com/cheat/cheat/releases
-[bash]:        https://github.com/cheat/cheat/blob/master/scripts/fzf.bash
 [cheatsheets]: https://github.com/cheat/cheatsheets
+[completions]: https://github.com/cheat/cheat/tree/master/scripts
 [fzf]:         https://github.com/junegunn/fzf
