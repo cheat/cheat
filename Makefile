@@ -34,7 +34,7 @@ releases :=                        \
 
 ## build: builds an executable for your architecture
 .PHONY: build
-build: $(dist_dir) clean generate
+build: $(dist_dir) clean vendor generate
 	$(GO) build $(BUILD_FLAGS) -o $(dist_dir)/cheat $(cmd_dir)
 
 ## build-release: builds release executables
@@ -85,7 +85,7 @@ generate:
 
 ## install: builds and installs cheat on your PATH
 .PHONY: install
-install:
+install: build
 	$(GO) install $(BUILD_FLAGS) $(GOBIN) $(cmd_dir) 
 
 ## clean: removes compiled executables
