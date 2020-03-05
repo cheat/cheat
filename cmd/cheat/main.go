@@ -68,7 +68,7 @@ func main() {
 			os.Exit(0)
 		}
 
-		// prompt the user to create a config file
+		// prompt the user to download the community cheatsheets
 		yes, err = installer.Prompt(
 			"Would you like to download the community cheatsheets? [Y/n]",
 			true,
