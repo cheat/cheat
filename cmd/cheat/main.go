@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/docopt/docopt-go"
-	"github.com/mitchellh/go-homedir"
 
 	"github.com/cheat/cheat/internal/cheatpath"
 	"github.com/cheat/cheat/internal/config"
@@ -68,6 +67,11 @@ func main() {
 			os.Exit(0)
 		}
 
+		// determine the correct paths for the config file and (optional) community
+		// cheatsheet download
+		confpath  = confpaths[0]
+		confdir  := path.Dir(confpath)
+
 		// prompt the user to download the community cheatsheets
 		yes, err = installer.Prompt(
 			"Would you like to download the community cheatsheets? [Y/n]",
@@ -81,26 +85,15 @@ func main() {
 		// clone the community cheatsheets if so instructed
 		if yes {
 
-			// get the user's home directory
-			home, err := homedir.Dir()
-			if err != nil {
-				fmt.Fprintf(
-					os.Stderr,
-					"failed to create config: failed to get user home directory: %v\n",
-					err,
-				)
-				os.Exit(1)
-			}
-
 			// clone the community cheatsheets
-			community := path.Join(home, ".config/cheat/cheatsheets/community")
+			community := path.Join(confdir, "/cheatsheets/community")
 			if err := installer.Clone(community); err != nil {
 				fmt.Fprintf(os.Stderr, "failed to create config: %v\n", err)
 				os.Exit(1)
 			}
 
 			// create a directory for personal cheatsheets too
-			personal := path.Join(home, ".config/cheat/cheatsheets/personal")
+			personal := path.Join(confdir, "/cheatsheets/personal")
 			if err := os.MkdirAll(personal, os.ModePerm); err != nil {
 				fmt.Fprintf(
 					os.Stderr,
@@ -112,20 +105,18 @@ func main() {
 		}
 
 		// the config file does not exist, so we'll try to create one
-		if err = config.Init(confpaths[0], configs()); err != nil {
+		if err = config.Init(confpath, configs()); err != nil {
 			fmt.Fprintf(
 				os.Stderr,
 				"failed to create config file: %s: %v\n",
-				confpaths[0],
+				confpath,
 				err,
 			)
 			os.Exit(1)
 		}
 
-		confpath = confpaths[0]
-
 		fmt.Printf("Created config file: %s\n", confpath)
-		fmt.Println("Please edit this file now to configure cheat.")
+		fmt.Println("Please read this file for advanced configuration information.")
 		os.Exit(0)
 	}
 
