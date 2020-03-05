@@ -5,13 +5,16 @@ package main
 import (
 	"fmt"
 	"os"
+	"path"
 	"runtime"
 	"strings"
 
 	"github.com/docopt/docopt-go"
+	"github.com/mitchellh/go-homedir"
 
 	"github.com/cheat/cheat/internal/cheatpath"
 	"github.com/cheat/cheat/internal/config"
+	"github.com/cheat/cheat/internal/installer"
 )
 
 const version = "3.6.0"
@@ -49,6 +52,64 @@ func main() {
 	// search for the config file in the above paths
 	confpath, err := config.Path(confpaths)
 	if err != nil {
+
+		// prompt the user to create a config file
+		yes, err := installer.Prompt(
+			"A config file was not found. Would you like to create one now? [Y/n]",
+			true,
+		)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "failed to create config: %v\n", err)
+			os.Exit(1)
+		}
+
+		// exit early on a negative answer
+		if !yes {
+			os.Exit(0)
+		}
+
+		// prompt the user to create a config file
+		yes, err = installer.Prompt(
+			"Would you like to download the community cheatsheets? [Y/n]",
+			true,
+		)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "failed to create config: %v\n", err)
+			os.Exit(1)
+		}
+
+		// clone the community cheatsheets if so instructed
+		if yes {
+
+			// get the user's home directory
+			home, err := homedir.Dir()
+			if err != nil {
+				fmt.Fprintf(
+					os.Stderr,
+					"failed to create config: failed to get user home directory: %v\n",
+					err,
+				)
+				os.Exit(1)
+			}
+
+			// clone the community cheatsheets
+			community := path.Join(home, ".config/cheat/cheatsheets/community")
+			if err := installer.Clone(community); err != nil {
+				fmt.Fprintf(os.Stderr, "failed to create config: %v\n", err)
+				os.Exit(1)
+			}
+
+			// create a directory for personal cheatsheets too
+			personal := path.Join(home, ".config/cheat/cheatsheets/personal")
+			if err := os.MkdirAll(personal, os.ModePerm); err != nil {
+				fmt.Fprintf(
+					os.Stderr,
+					"failed to create config: failed to create directory: %s: %v\n",
+					personal,
+					err)
+				os.Exit(1)
+			}
+		}
 
 		// the config file does not exist, so we'll try to create one
 		if err = config.Init(confpaths[0], configs()); err != nil {

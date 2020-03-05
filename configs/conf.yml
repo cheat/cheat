@@ -43,14 +43,14 @@ cheatpaths:
   # Once downloaded, ensure that 'path' below points to the location at which
   # you downloaded the community cheatsheets.
   - name: community
-    path: ~/cheat/cheatsheets/community
+    path: ~/.config/cheat/cheatsheets/community
     tags: [ community ]
     readonly: true
 
   # If you have personalized cheatsheets, list them last. They will take
   # precedence over the more global cheatsheets.
   - name: personal
-    path: ~/cheat/cheatsheets/personal
+    path: ~/.config/cheat/cheatsheets/personal
     tags: [ personal ]
     readonly: false
 
