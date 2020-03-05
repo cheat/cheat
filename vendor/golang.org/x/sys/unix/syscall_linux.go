@@ -1555,8 +1555,8 @@ func Sendfile(outfd int, infd int, offset *int64, count int) (written int, err e
 //sys	Acct(path string) (err error)
 //sys	AddKey(keyType string, description string, payload []byte, ringid int) (id int, err error)
 //sys	Adjtimex(buf *Timex) (state int, err error)
-//sys	Capget(hdr *CapUserHeader, data *CapUserData) (err error)
-//sys	Capset(hdr *CapUserHeader, data *CapUserData) (err error)
+//sysnb	Capget(hdr *CapUserHeader, data *CapUserData) (err error)
+//sysnb	Capset(hdr *CapUserHeader, data *CapUserData) (err error)
 //sys	Chdir(path string) (err error)
 //sys	Chroot(path string) (err error)
 //sys	ClockGetres(clockid int32, res *Timespec) (err error)
@@ -1652,6 +1652,30 @@ func Setuid(uid int) (err error) {
 
 func Setgid(uid int) (err error) {
 	return EOPNOTSUPP
+}
+
+// SetfsgidRetGid sets fsgid for current thread and returns previous fsgid set.
+// setfsgid(2) will return a non-nil error only if its caller lacks CAP_SETUID capability.
+// If the call fails due to other reasons, current fsgid will be returned.
+func SetfsgidRetGid(gid int) (int, error) {
+	return setfsgid(gid)
+}
+
+// SetfsuidRetUid sets fsuid for current thread and returns previous fsuid set.
+// setfsgid(2) will return a non-nil error only if its caller lacks CAP_SETUID capability
+// If the call fails due to other reasons, current fsuid will be returned.
+func SetfsuidRetUid(uid int) (int, error) {
+	return setfsuid(uid)
+}
+
+func Setfsgid(gid int) error {
+	_, err := setfsgid(gid)
+	return err
+}
+
+func Setfsuid(uid int) error {
+	_, err := setfsuid(uid)
+	return err
 }
 
 func Signalfd(fd int, sigmask *Sigset_t, flags int) (newfd int, err error) {

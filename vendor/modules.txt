@@ -45,7 +45,7 @@ github.com/docopt/docopt-go
 github.com/mattn/go-isatty
 # github.com/mitchellh/go-homedir v1.1.0
 github.com/mitchellh/go-homedir
-# golang.org/x/sys v0.0.0-20200116001909-b77594299b42
+# golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527
 golang.org/x/sys/unix
 # gopkg.in/yaml.v1 v1.0.0-20140924161607-9f9df34309c0
 gopkg.in/yaml.v1
