@@ -59,7 +59,6 @@ func main() {
 	// search for the config file in the above paths
 	confpath, err := config.Path(confpaths)
 	if err != nil {
-
 		// prompt the user to create a config file
 		yes, err := installer.Prompt(
 			"A config file was not found. Would you like to create one now? [Y/n]",
@@ -75,10 +74,21 @@ func main() {
 			os.Exit(0)
 		}
 
-		// determine the correct paths for the config file and (optional) community
-		// cheatsheet download
-		confpath  = confpaths[0]
-		confdir  := path.Dir(confpath)
+		// read the config template
+		configs := configs()
+
+		// determine the appropriate paths for config data and (optional) community
+		// cheatsheets based on the user's platform
+		confpath = confpaths[0]
+		confdir := path.Dir(confpath)
+
+		// create paths for community and personal cheatsheets
+		community := path.Join(confdir, "/cheatsheets/community")
+		personal := path.Join(confdir, "/cheatsheets/personal")
+
+		// template the above paths into the default configs
+		configs = strings.Replace(configs, "COMMUNITY_PATH", community, -1)
+		configs = strings.Replace(configs, "PERSONAL_PATH", personal, -1)
 
 		// prompt the user to download the community cheatsheets
 		yes, err = installer.Prompt(
@@ -92,16 +102,13 @@ func main() {
 
 		// clone the community cheatsheets if so instructed
 		if yes {
-
 			// clone the community cheatsheets
-			community := path.Join(confdir, "/cheatsheets/community")
 			if err := installer.Clone(community); err != nil {
 				fmt.Fprintf(os.Stderr, "failed to create config: %v\n", err)
 				os.Exit(1)
 			}
 
-			// create a directory for personal cheatsheets too
-			personal := path.Join(confdir, "/cheatsheets/personal")
+			// also create a directory for personal cheatsheets
 			if err := os.MkdirAll(personal, os.ModePerm); err != nil {
 				fmt.Fprintf(
 					os.Stderr,
@@ -113,7 +120,7 @@ func main() {
 		}
 
 		// the config file does not exist, so we'll try to create one
-		if err = config.Init(confpath, configs()); err != nil {
+		if err = config.Init(confpath, configs); err != nil {
 			fmt.Fprintf(
 				os.Stderr,
 				"failed to create config file: %s: %v\n",
