@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/docopt/docopt-go"
+	"github.com/mitchellh/go-homedir"
 
 	"github.com/cheat/cheat/internal/cheatpath"
 	"github.com/cheat/cheat/internal/config"
@@ -34,6 +35,13 @@ func main() {
 		os.Exit(0)
 	}
 
+	// get the user's home directory
+	home, err := homedir.Dir()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to get user home directory: %v\n", err)
+		os.Exit(1)
+	}
+
 	// read the envvars into a map of strings
 	envvars := map[string]string{}
 	for _, e := range os.Environ() {
@@ -42,7 +50,7 @@ func main() {
 	}
 
 	// load the os-specifc paths at which the config file may be located
-	confpaths, err := config.Paths(runtime.GOOS, envvars)
+	confpaths, err := config.Paths(runtime.GOOS, home, envvars)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to load config: %v\n", err)
 		os.Exit(1)

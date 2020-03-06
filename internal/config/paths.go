@@ -9,13 +9,11 @@ import (
 
 // Paths returns config file paths that are appropriate for the operating
 // system
-func Paths(sys string, envvars map[string]string) ([]string, error) {
-
-	// get the user's home directory
-	home, err := homedir.Dir()
-	if err != nil {
-		return []string{}, fmt.Errorf("failed to get user home directory: %v", err)
-	}
+func Paths(
+	sys string,
+	home string,
+	envvars map[string]string,
+) ([]string, error) {
 
 	// if `CHEAT_CONFIG_PATH` is set, expand ~ and return it
 	if confpath, ok := envvars["CHEAT_CONFIG_PATH"]; ok {
