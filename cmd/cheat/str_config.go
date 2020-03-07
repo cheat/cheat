@@ -41,33 +41,34 @@ cheatpaths:
   # thus be overridden by more local cheatsheets. That being the case, you
   # should probably list community cheatsheets first.
   #
-  # Note that the paths and tags listed below are just examples. You may freely
+  # Note that the paths and tags listed below are placeholders. You may freely
   # change them to suit your needs.
   #
-  # TODO: regarding community cheatsheets: these must be installed separately.
-  # You may download them here:
+  # Community cheatsheets must be installed separately, though you may have
+  # downloaded them automatically when installing 'cheat'. If not, you may
+  # download them here:
   #
   # https://github.com/cheat/cheatsheets
   #
   # Once downloaded, ensure that 'path' below points to the location at which
   # you downloaded the community cheatsheets.
   - name: community
-    path: ~/cheat/cheatsheets/community
+    path: COMMUNITY_PATH
     tags: [ community ]
     readonly: true
 
   # If you have personalized cheatsheets, list them last. They will take
   # precedence over the more global cheatsheets.
   - name: personal
-    path: ~/cheat/cheatsheets/personal
+    path: PERSONAL_PATH
     tags: [ personal ]
     readonly: false
 
-  # While it requires no specific configuration here, it's also worth noting
-  # that 'cheat' will automatically append directories named '.cheat' within
-  # the current working directory to the 'cheatpath'. This can be very useful
-  # if you'd like to closely associate cheatsheets with, for example, a
-  # directory containing source code.
+  # While it requires no configuration here, it's also worth noting that
+  # 'cheat' will automatically append directories named '.cheat' within the
+  # current working directory to the 'cheatpath'. This can be very useful if
+  # you'd like to closely associate cheatsheets with, for example, a directory
+  # containing source code.
   #
   # Such "directory-scoped" cheatsheets will be treated as the most "local"
   # cheatsheets, and will override less "local" cheatsheets. Likewise,

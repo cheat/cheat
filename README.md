@@ -51,7 +51,9 @@ Installing
 Configuring
 -----------
 ### conf.yml ###
-`cheat` is configured by a YAML file that can be generated with `cheat --init`:
+`cheat` is configured by a YAML file that will be auto-generated on first run.
+Should you need to create a config file manually, you can do
+so via:
 
 ```sh
 mkdir -p ~/.config/cheat && cheat --init > ~/.config/cheat/conf.yml
@@ -89,7 +91,8 @@ const squares = [1, 2, 3, 4].map(x => x * x);
 ```
 
 The `cheat` executable includes no cheatsheets, but [community-sourced
-cheatsheets are available][cheatsheets].
+cheatsheets are available][cheatsheets]. You will be asked if you would like to
+install the community-sourced cheatsheets the first time you run `cheat`.
 
 
 Cheatpaths

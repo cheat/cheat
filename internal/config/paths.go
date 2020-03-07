@@ -9,7 +9,11 @@ import (
 
 // Paths returns config file paths that are appropriate for the operating
 // system
-func Paths(sys string, envvars map[string]string) ([]string, error) {
+func Paths(
+	sys string,
+	home string,
+	envvars map[string]string,
+) ([]string, error) {
 
 	// if `CHEAT_CONFIG_PATH` is set, expand ~ and return it
 	if confpath, ok := envvars["CHEAT_CONFIG_PATH"]; ok {
@@ -32,10 +36,10 @@ func Paths(sys string, envvars map[string]string) ([]string, error) {
 			paths = append(paths, path.Join(xdgpath, "/cheat/conf.yml"))
 		}
 
-		// `HOME` will always be set on a POSIX-compliant system, though
+		// if `XDG_CONFIG_HOME` is not set, search the user's home directory
 		paths = append(paths, []string{
-			path.Join(envvars["HOME"], ".config/cheat/conf.yml"),
-			path.Join(envvars["HOME"], ".cheat/conf.yml"),
+			path.Join(home, ".config/cheat/conf.yml"),
+			path.Join(home, ".cheat/conf.yml"),
 		}...)
 
 		return paths, nil

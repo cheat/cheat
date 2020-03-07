@@ -11,9 +11,11 @@ import (
 // *nix platforms
 func TestValidatePathsNix(t *testing.T) {
 
+	// mock the user's home directory
+	home := "/home/foo"
+
 	// mock some envvars
 	envvars := map[string]string{
-		"HOME":            "/home/foo",
 		"XDG_CONFIG_HOME": "/home/bar",
 	}
 
@@ -27,7 +29,7 @@ func TestValidatePathsNix(t *testing.T) {
 	// test each *nix os
 	for _, os := range oses {
 		// get the paths for the platform
-		paths, err := Paths(os, envvars)
+		paths, err := Paths(os, home, envvars)
 		if err != nil {
 			t.Errorf("paths returned an error: %v", err)
 		}
@@ -54,10 +56,11 @@ func TestValidatePathsNix(t *testing.T) {
 // on *nix platforms when `XDG_CONFIG_HOME is not set
 func TestValidatePathsNixNoXDG(t *testing.T) {
 
+	// mock the user's home directory
+	home := "/home/foo"
+
 	// mock some envvars
-	envvars := map[string]string{
-		"HOME": "/home/foo",
-	}
+	envvars := map[string]string{}
 
 	// specify the platforms to test
 	oses := []string{
@@ -69,7 +72,7 @@ func TestValidatePathsNixNoXDG(t *testing.T) {
 	// test each *nix os
 	for _, os := range oses {
 		// get the paths for the platform
-		paths, err := Paths(os, envvars)
+		paths, err := Paths(os, home, envvars)
 		if err != nil {
 			t.Errorf("paths returned an error: %v", err)
 		}
@@ -95,6 +98,9 @@ func TestValidatePathsNixNoXDG(t *testing.T) {
 // on Windows platforms
 func TestValidatePathsWindows(t *testing.T) {
 
+	// mock the user's home directory
+	home := "not-used-on-windows"
+
 	// mock some envvars
 	envvars := map[string]string{
 		"APPDATA":     "/apps",
@@ -102,7 +108,7 @@ func TestValidatePathsWindows(t *testing.T) {
 	}
 
 	// get the paths for the platform
-	paths, err := Paths("windows", envvars)
+	paths, err := Paths("windows", home, envvars)
 	if err != nil {
 		t.Errorf("paths returned an error: %v", err)
 	}
@@ -126,7 +132,7 @@ func TestValidatePathsWindows(t *testing.T) {
 // TestValidatePathsUnsupported asserts that an error is returned on
 // unsupported platforms
 func TestValidatePathsUnsupported(t *testing.T) {
-	_, err := Paths("unsupported", map[string]string{})
+	_, err := Paths("unsupported", "", map[string]string{})
 	if err == nil {
 		t.Errorf("failed to return error on unsupported platform")
 	}
@@ -136,15 +142,17 @@ func TestValidatePathsUnsupported(t *testing.T) {
 // returned when `CHEAT_CONFIG_PATH` is explicitly specified.
 func TestValidatePathsCheatConfigPath(t *testing.T) {
 
+	// mock the user's home directory
+	home := "/home/foo"
+
 	// mock some envvars
 	envvars := map[string]string{
-		"HOME":              "/home/foo",
 		"XDG_CONFIG_HOME":   "/home/bar",
 		"CHEAT_CONFIG_PATH": "/home/baz/conf.yml",
 	}
 
 	// get the paths for the platform
-	paths, err := Paths("linux", envvars)
+	paths, err := Paths("linux", home, envvars)
 	if err != nil {
 		t.Errorf("paths returned an error: %v", err)
 	}

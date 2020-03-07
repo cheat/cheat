@@ -5,13 +5,16 @@ package main
 import (
 	"fmt"
 	"os"
+	"path"
 	"runtime"
 	"strings"
 
 	"github.com/docopt/docopt-go"
+	"github.com/mitchellh/go-homedir"
 
 	"github.com/cheat/cheat/internal/cheatpath"
 	"github.com/cheat/cheat/internal/config"
+	"github.com/cheat/cheat/internal/installer"
 )
 
 const version = "3.6.0"
@@ -32,6 +35,13 @@ func main() {
 		os.Exit(0)
 	}
 
+	// get the user's home directory
+	home, err := homedir.Dir()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to get user home directory: %v\n", err)
+		os.Exit(1)
+	}
+
 	// read the envvars into a map of strings
 	envvars := map[string]string{}
 	for _, e := range os.Environ() {
@@ -39,8 +49,8 @@ func main() {
 		envvars[pair[0]] = pair[1]
 	}
 
-	// load the os-specifc paths at which the config file may be located
-	confpaths, err := config.Paths(runtime.GOOS, envvars)
+	// identify the os-specifc paths at which configs may be located
+	confpaths, err := config.Paths(runtime.GOOS, home, envvars)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to load config: %v\n", err)
 		os.Exit(1)
@@ -49,22 +59,79 @@ func main() {
 	// search for the config file in the above paths
 	confpath, err := config.Path(confpaths)
 	if err != nil {
+		// prompt the user to create a config file
+		yes, err := installer.Prompt(
+			"A config file was not found. Would you like to create one now? [Y/n]",
+			true,
+		)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "failed to create config: %v\n", err)
+			os.Exit(1)
+		}
+
+		// exit early on a negative answer
+		if !yes {
+			os.Exit(0)
+		}
+
+		// read the config template
+		configs := configs()
+
+		// determine the appropriate paths for config data and (optional) community
+		// cheatsheets based on the user's platform
+		confpath = confpaths[0]
+		confdir := path.Dir(confpath)
+
+		// create paths for community and personal cheatsheets
+		community := path.Join(confdir, "/cheatsheets/community")
+		personal := path.Join(confdir, "/cheatsheets/personal")
+
+		// template the above paths into the default configs
+		configs = strings.Replace(configs, "COMMUNITY_PATH", community, -1)
+		configs = strings.Replace(configs, "PERSONAL_PATH", personal, -1)
+
+		// prompt the user to download the community cheatsheets
+		yes, err = installer.Prompt(
+			"Would you like to download the community cheatsheets? [Y/n]",
+			true,
+		)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "failed to create config: %v\n", err)
+			os.Exit(1)
+		}
+
+		// clone the community cheatsheets if so instructed
+		if yes {
+			// clone the community cheatsheets
+			if err := installer.Clone(community); err != nil {
+				fmt.Fprintf(os.Stderr, "failed to create config: %v\n", err)
+				os.Exit(1)
+			}
+
+			// also create a directory for personal cheatsheets
+			if err := os.MkdirAll(personal, os.ModePerm); err != nil {
+				fmt.Fprintf(
+					os.Stderr,
+					"failed to create config: failed to create directory: %s: %v\n",
+					personal,
+					err)
+				os.Exit(1)
+			}
+		}
 
 		// the config file does not exist, so we'll try to create one
-		if err = config.Init(confpaths[0], configs()); err != nil {
+		if err = config.Init(confpath, configs); err != nil {
 			fmt.Fprintf(
 				os.Stderr,
 				"failed to create config file: %s: %v\n",
-				confpaths[0],
+				confpath,
 				err,
 			)
 			os.Exit(1)
 		}
 
-		confpath = confpaths[0]
-
 		fmt.Printf("Created config file: %s\n", confpath)
-		fmt.Println("Please edit this file now to configure cheat.")
+		fmt.Println("Please read this file for advanced configuration information.")
 		os.Exit(0)
 	}
 
