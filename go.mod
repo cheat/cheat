@@ -1,6 +1,6 @@
 module github.com/cheat/cheat
 
-go 1.13
+go 1.14
 
 require (
 	github.com/alecthomas/chroma v0.7.1
