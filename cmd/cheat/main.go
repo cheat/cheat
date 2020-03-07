@@ -49,7 +49,7 @@ func main() {
 		envvars[pair[0]] = pair[1]
 	}
 
-	// load the os-specifc paths at which the config file may be located
+	// identify the os-specifc paths at which configs may be located
 	confpaths, err := config.Paths(runtime.GOOS, home, envvars)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to load config: %v\n", err)
