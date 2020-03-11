@@ -33,7 +33,7 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 
 				// fail if an error occurred while walking the directory
 				if err != nil {
-					return fmt.Errorf("error walking path: %v", err)
+					return fmt.Errorf("failed to walk path: %v", err)
 				}
 
 				// don't register directories as cheatsheets
@@ -61,7 +61,12 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 				// parse the cheatsheet file into a `sheet` struct
 				s, err := sheet.New(title, path, cheatpath.Tags, cheatpath.ReadOnly)
 				if err != nil {
-					return fmt.Errorf("could not create sheet: %v", err)
+					return fmt.Errorf(
+						"failed to load sheet: %s, path: %s, err: %v",
+						title,
+						path,
+						err,
+					)
 				}
 
 				// register the cheatsheet on its cheatpath, keyed by its title
