@@ -1,6 +1,7 @@
 package frontmatter
 
 import (
+	"fmt"
 	"strings"
 
 	"gopkg.in/yaml.v1"
@@ -28,7 +29,16 @@ func Parse(markdown string) (string, Frontmatter, error) {
 
 	// otherwise, split the frontmatter and cheatsheet text
 	parts := strings.SplitN(markdown, delim, 3)
-	err := yaml.Unmarshal([]byte(parts[1]), &fm)
 
-	return strings.TrimSpace(parts[2]), fm, err
+	// return an error if the frontmatter parses into the wrong number of parts
+	if len(parts) != 3 {
+		return markdown, fm, fmt.Errorf("failed to delimit frontmatter")
+	}
+
+	// return an error if the YAML cannot be unmarshalled
+	if err := yaml.Unmarshal([]byte(parts[1]), &fm); err != nil {
+		return markdown, fm, fmt.Errorf("failed to unmarshal frontmatter: %v", err)
+	}
+
+	return strings.TrimSpace(parts[2]), fm, nil
 }

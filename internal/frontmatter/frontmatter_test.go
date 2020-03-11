@@ -69,3 +69,27 @@ func TestHasNoFrontmatter(t *testing.T) {
 		t.Errorf("failed to parse tags: want: len 0, got: len %d", len(fm.Tags))
 	}
 }
+
+// TestHasInvalidFrontmatter asserts that markdown is properly parsed when it
+// contains invalid frontmatter
+func TestHasInvalidFrontmatter(t *testing.T) {
+
+	// stub our cheatsheet content (with invalid frontmatter)
+	markdown := `---
+syntax: go
+tags: [ test ]
+To foo the bar: baz`
+
+	// parse the frontmatter
+	text, _, err := Parse(markdown)
+
+	// assert that an error was returned
+	if err == nil {
+		t.Error("failed to error on invalid frontmatter")
+	}
+
+	// assert that the "raw" markdown was returned
+	if text != markdown {
+		t.Errorf("failed to parse text: want: %s, got: %s", markdown, text)
+	}
+}
