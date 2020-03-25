@@ -1,4 +1,4 @@
-% CHEAT(1) Version 3.7.0 | General Commands Manual
+% CHEAT(1) | General Commands Manual
 
 NAME
 ====
