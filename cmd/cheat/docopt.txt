@@ -2,18 +2,18 @@ Usage:
   cheat [options] [<cheatsheet>]
 
 Options:
-  --init                Write a default config file to stdout
-  -c --colorize         Colorize output
-  -d --directories      List cheatsheet directories
-  -e --edit=<sheet>     Edit <sheet>
-  -l --list             List cheatsheets
-  -p --path=<name>      Return only sheets found on path <name>
-  -r --regex            Treat search <phrase> as a regex
-  -s --search=<phrase>  Search cheatsheets for <phrase>
-  -t --tag=<tag>        Return only sheets matching <tag>
-  -T --tags             List all tags in use
-  -v --version          Print the version number
-  --rm=<sheet>          Remove (delete) <sheet>
+  --init                  Write a default config file to stdout
+  -c --colorize           Colorize output
+  -d --directories        List cheatsheet directories
+  -e --edit=<cheatsheet>  Edit <cheatsheet>
+  -l --list               List cheatsheets
+  -p --path=<name>        Return only sheets found on path <name>
+  -r --regex              Treat search <phrase> as a regex
+  -s --search=<phrase>    Search cheatsheets for <phrase>
+  -t --tag=<tag>          Return only sheets matching <tag>
+  -T --tags               List all tags in use
+  -v --version            Print the version number
+  --rm=<cheatsheet>       Remove (delete) <cheatsheet>
 
 Examples:
 
