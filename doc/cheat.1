@@ -175,15 +175,17 @@ For detailed instructions on how to configure cheatpaths, please refer
 to the comments in conf.yml.
 .SS Autocompletion
 .PP
-Autocompletion scripts for \f[B]bash\f[]/\f[B]zsh\f[] and \f[B]fish\f[]
-are available for download:
+Autocompletion scripts for \f[B]bash\f[], \f[B]zsh\f[], and
+\f[B]fish\f[] are available for download:
 .IP \[bu] 2
 <https://github.com/cheat/cheat/blob/master/scripts/cheat.bash>
 .IP \[bu] 2
 <https://github.com/cheat/cheat/blob/master/scripts/cheat.fish>
+.IP \[bu] 2
+<https://github.com/cheat/cheat/blob/master/scripts/cheat.zsh>
 .PP
-The \f[B]bash\f[]/\f[B]zsh\f[] scripts provide optional integration with
-\f[B]fzf\f[], if the latter is available on your \f[B]PATH\f[].
+The \f[B]bash\f[] and \f[B]zsh\f[] scripts provide optional integration
+with \f[B]fzf\f[], if the latter is available on your \f[B]PATH\f[].
 .PP
 The installation process will vary per system and shell configuration,
 and thus will not be discussed here.
@@ -193,6 +195,12 @@ and thus will not be discussed here.
 The path at which the config file is available.
 If \f[B]CHEAT_CONFIG_PATH\f[] is set, all other config paths will be
 ignored.
+.RS
+.RE
+.TP
+.B \f[B]CHEAT_USE_FZF\f[]
+If set, autocompletion scripts will attempt to integrate with
+\f[B]fzf\f[].
 .RS
 .RE
 .SH BUGS
