@@ -137,14 +137,15 @@ comments in conf.yml.
 
 Autocompletion
 --------------
-Autocompletion scripts for **bash**/**zsh** and **fish** are available for
+Autocompletion scripts for **bash**, **zsh**, and **fish** are available for
 download:
 
 - <https://github.com/cheat/cheat/blob/master/scripts/cheat.bash>
 - <https://github.com/cheat/cheat/blob/master/scripts/cheat.fish>
+- <https://github.com/cheat/cheat/blob/master/scripts/cheat.zsh>
 
-The **bash**/**zsh** scripts provide optional integration with **fzf**, if the
-latter is available on your **PATH**.
+The **bash** and **zsh** scripts provide optional integration with **fzf**, if
+the latter is available on your **PATH**.
 
 The installation process will vary per system and shell configuration, and thus
 will not be discussed here.
@@ -157,6 +158,10 @@ ENVIRONMENT
 
 : The path at which the config file is available. If **CHEAT_CONFIG_PATH** is
 set, all other config paths will be ignored.
+
+**CHEAT_USE_FZF**
+
+: If set, autocompletion scripts will attempt to integrate with **fzf**.
 
 
 BUGS
