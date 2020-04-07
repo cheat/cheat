@@ -1,7 +1,6 @@
 #compdef cheat
 
-local -a cheats
-cheats=()
+local cheats taglist pathlist
 
 _cheat_complete_cheatsheets()
 {
