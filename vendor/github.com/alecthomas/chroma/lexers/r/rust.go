@@ -58,7 +58,7 @@ var Rust = internal.Register(MustNewLexer(
 			{`'[a-zA-Z_]\w*`, NameAttribute, nil},
 			{`[{}()\[\],.;]`, Punctuation, nil},
 			{`[+\-*/%&|<>^!~@=:?]`, Operator, nil},
-			{`[a-zA-Z_]\w*`, Name, nil},
+			{`(r#)?[a-zA-Z_]\w*`, Name, nil},
 			{`#!?\[`, CommentPreproc, Push("attribute[")},
 			{`([A-Za-z_]\w*)(!)(\s*)([A-Za-z_]\w*)?(\s*)(\{)`, ByGroups(CommentPreproc, Punctuation, TextWhitespace, Name, TextWhitespace, Punctuation), Push("macro{")},
 			{`([A-Za-z_]\w*)(!)(\s*)([A-Za-z_]\w*)?(\()`, ByGroups(CommentPreproc, Punctuation, TextWhitespace, Name, Punctuation), Push("macro(")},

@@ -6,7 +6,8 @@ import (
 
 var (
 	defaultOptions = &TokeniseOptions{
-		State: "root",
+		State:    "root",
+		EnsureLF: true,
 	}
 )
 
@@ -80,6 +81,10 @@ type TokeniseOptions struct {
 	State string
 	// Nested tokenisation.
 	Nested bool
+
+	// If true, all EOLs are converted into LF
+	// by replacing CRLF and CR
+	EnsureLF bool
 }
 
 // A Lexer for tokenising source code.

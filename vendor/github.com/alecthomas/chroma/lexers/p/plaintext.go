@@ -11,6 +11,7 @@ var Plaintext = internal.Register(MustNewLexer(
 		Aliases:   []string{"text", "plain", "no-highlight"},
 		Filenames: []string{"*.txt"},
 		MimeTypes: []string{"text/plain"},
+		Priority:  0.1,
 	},
 	internal.PlaintextRules,
 ))

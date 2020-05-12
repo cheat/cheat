@@ -3,28 +3,30 @@ release:
   github:
     owner: alecthomas
     name: chroma
-brew:
-  install: bin.install "chroma"
+brews:
+  -
+    install: bin.install "chroma"
 builds:
 - goos:
-  - linux
-  - darwin
-  - windows
+    - linux
+    - darwin
+    - windows
   goarch:
-  - amd64
-  - "386"
+    - amd64
+    - "386"
   goarm:
-  - "6"
+    - "6"
   main: ./cmd/chroma/main.go
   ldflags: -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}}
   binary: chroma
-archive:
-  format: tar.gz
-  name_template: '{{ .Binary }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{
+archives:
+  -
+    format: tar.gz
+    name_template: '{{ .Binary }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{
     .Arm }}{{ end }}'
-  files:
-  - COPYING
-  - README*
+    files:
+      - COPYING
+      - README*
 snapshot:
   name_template: SNAPSHOT-{{ .Commit }}
 checksum:
