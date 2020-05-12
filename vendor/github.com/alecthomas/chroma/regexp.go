@@ -410,6 +410,9 @@ func (r *RegexLexer) Tokenise(options *TokeniseOptions, text string) (Iterator, 
 	if options == nil {
 		options = defaultOptions
 	}
+	if options.EnsureLF {
+		text = ensureLF(text)
+	}
 	if !options.Nested && r.config.EnsureNL && !strings.HasSuffix(text, "\n") {
 		text += "\n"
 	}
@@ -436,4 +439,23 @@ func matchRules(text []rune, pos int, rules []*CompiledRule) (int, *CompiledRule
 		}
 	}
 	return 0, &CompiledRule{}, nil
+}
+
+// replace \r and \r\n with \n
+// same as strings.ReplaceAll but more efficient
+func ensureLF(text string) string {
+	buf := make([]byte, len(text))
+	var j int
+	for i := 0; i < len(text); i++ {
+		c := text[i]
+		if c == '\r' {
+			if i < len(text)-1 && text[i+1] == '\n' {
+				continue
+			}
+			c = '\n'
+		}
+		buf[j] = c
+		j++
+	}
+	return string(buf[:j])
 }

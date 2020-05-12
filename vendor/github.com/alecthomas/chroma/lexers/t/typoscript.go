@@ -10,9 +10,10 @@ var Typoscript = internal.Register(MustNewLexer(
 	&Config{
 		Name:      "TypoScript",
 		Aliases:   []string{"typoscript"},
-		Filenames: []string{"*.ts", "*.txt"},
+		Filenames: []string{"*.ts"},
 		MimeTypes: []string{"text/x-typoscript"},
 		DotAll:    true,
+		Priority:  0.1,
 	},
 	Rules{
 		"root": {

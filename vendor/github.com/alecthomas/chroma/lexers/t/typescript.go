@@ -9,7 +9,7 @@ import (
 var TypeScript = internal.Register(MustNewLexer(
 	&Config{
 		Name:      "TypeScript",
-		Aliases:   []string{"ts", "typescript"},
+		Aliases:   []string{"ts", "tsx", "typescript"},
 		Filenames: []string{"*.ts", "*.tsx"},
 		MimeTypes: []string{"text/x-typescript"},
 		DotAll:    true,
@@ -32,6 +32,7 @@ var TypeScript = internal.Register(MustNewLexer(
 			{`\n`, Text, Pop(1)},
 		},
 		"root": {
+			Include("jsx"),
 			{`^(?=\s|/|<!--)`, Text, Push("slashstartsregex")},
 			Include("commentsandwhitespace"),
 			{`\+\+|--|~|&&|\?|:|\|\||\\(?=\n)|(<<|>>>?|==?|!=?|[-<>+*%&|^/])=?`, Operator, Push("slashstartsregex")},
@@ -67,6 +68,29 @@ var TypeScript = internal.Register(MustNewLexer(
 		},
 		"interp-inside": {
 			{`\}`, LiteralStringInterpol, Pop(1)},
+			Include("root"),
+		},
+		"jsx": {
+			{`(<)(/?)(>)`, ByGroups(Punctuation, Punctuation, Punctuation), nil},
+			{`(<)([\w\.]+)`, ByGroups(Punctuation, NameTag), Push("tag")},
+			{`(<)(/)([\w\.]*)(>)`, ByGroups(Punctuation, Punctuation, NameTag, Punctuation), nil},
+		},
+		"tag": {
+			{`\s+`, Text, nil},
+			{`([\w]+\s*)(=)(\s*)`, ByGroups(NameAttribute, Operator, Text), Push("attr")},
+			{`[{}]+`, Punctuation, nil},
+			{`[\w\.]+`, NameAttribute, nil},
+			{`(/?)(\s*)(>)`, ByGroups(Punctuation, Text, Punctuation), Pop(1)},
+		},
+		"attr": {
+			{`{`, Punctuation, Push("expression")},
+			{`".*?"`, LiteralString, Pop(1)},
+			{`'.*?'`, LiteralString, Pop(1)},
+			Default(Pop(1)),
+		},
+		"expression": {
+			{`{`, Punctuation, Push()},
+			{`}`, Punctuation, Pop(1)},
 			Include("root"),
 		},
 	},

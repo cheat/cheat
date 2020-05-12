@@ -37,19 +37,20 @@ func Names(withAliases bool) []string {
 
 // Get a Lexer by name, alias or file extension.
 func Get(name string) chroma.Lexer {
-	candidates := chroma.PrioritisedLexers{}
 	if lexer := Registry.byName[name]; lexer != nil {
-		candidates = append(candidates, lexer)
+		return lexer
 	}
 	if lexer := Registry.byAlias[name]; lexer != nil {
-		candidates = append(candidates, lexer)
+		return lexer
 	}
 	if lexer := Registry.byName[strings.ToLower(name)]; lexer != nil {
-		candidates = append(candidates, lexer)
+		return lexer
 	}
 	if lexer := Registry.byAlias[strings.ToLower(name)]; lexer != nil {
-		candidates = append(candidates, lexer)
+		return lexer
 	}
+
+	candidates := chroma.PrioritisedLexers{}
 	// Try file extension.
 	if lexer := Match("filename." + name); lexer != nil {
 		candidates = append(candidates, lexer)

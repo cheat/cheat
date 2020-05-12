@@ -2,11 +2,12 @@ package m
 
 import (
 	. "github.com/alecthomas/chroma" // nolint
+	"github.com/alecthomas/chroma/lexers/h"
 	"github.com/alecthomas/chroma/lexers/internal"
 )
 
 // Markdown lexer.
-var Markdown = internal.Register(MustNewLexer(
+var Markdown = internal.Register(DelegatingLexer(h.HTML, MustNewLexer(
 	&Config{
 		Name:      "markdown",
 		Aliases:   []string{"md", "mkd"},
@@ -40,8 +41,8 @@ var Markdown = internal.Register(MustNewLexer(
 			{"`[^`]+`", LiteralStringBacktick, nil},
 			{`[@#][\w/:]+`, NameEntity, nil},
 			{`(!?\[)([^]]+)(\])(\()([^)]+)(\))`, ByGroups(Text, NameTag, Text, Text, NameAttribute, Text), nil},
-			{`[^\\\s]+`, Text, nil},
-			{`.|\n`, Text, nil},
+			{`[^\\\s]+`, Other, nil},
+			{`.|\n`, Other, nil},
 		},
 	},
-))
+)))
