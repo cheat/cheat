@@ -28,6 +28,7 @@ TMPDIR       := /tmp
 # release binaries
 releases :=                        \
 	$(dist_dir)/cheat-darwin-amd64 \
+	$(dist_dir)/cheat-linux-386    \
 	$(dist_dir)/cheat-linux-amd64  \
 	$(dist_dir)/cheat-linux-arm5   \
 	$(dist_dir)/cheat-linux-arm6   \
@@ -50,6 +51,11 @@ ci: | setup prepare build
 # cheat-darwin-amd64
 $(dist_dir)/cheat-darwin-amd64: prepare
 	GOARCH=amd64 GOOS=darwin \
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
+
+# cheat-linux-386
+$(dist_dir)/cheat-linux-386: prepare
+	GOARCH=386 GOOS=linux \
 	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
 
 # cheat-linux-amd64
