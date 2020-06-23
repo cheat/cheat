@@ -34,13 +34,22 @@ func TestValidatePathsNix(t *testing.T) {
 			t.Errorf("paths returned an error: %v", err)
 		}
 
+		want := []string{}
 		// specify the expected output
-		want := []string{
-			"/home/bar/cheat/conf.yml",
-			"/home/foo/.config/cheat/conf.yml",
-			"/home/foo/.cheat/conf.yml",
+		if os == "linux" {
+			want = []string{
+				"/home/bar/cheat/conf.yml",
+				"/home/foo/.config/cheat/conf.yml",
+				"/home/foo/.cheat/conf.yml",
+				"/etc/cheat/conf.yml",
+			}
+		} else {
+			want = []string{
+				"/home/bar/cheat/conf.yml",
+				"/home/foo/.config/cheat/conf.yml",
+				"/home/foo/.cheat/conf.yml",
+			}
 		}
-
 		// assert that output matches expectations
 		if !reflect.DeepEqual(paths, want) {
 			t.Errorf(
@@ -77,10 +86,19 @@ func TestValidatePathsNixNoXDG(t *testing.T) {
 			t.Errorf("paths returned an error: %v", err)
 		}
 
+		want := []string{}
 		// specify the expected output
-		want := []string{
-			"/home/foo/.config/cheat/conf.yml",
-			"/home/foo/.cheat/conf.yml",
+		if os == "linux" {
+			want = []string{
+				"/home/foo/.config/cheat/conf.yml",
+				"/home/foo/.cheat/conf.yml",
+				"/etc/cheat/conf.yml",
+			}
+		} else {
+			want = []string{
+				"/home/foo/.config/cheat/conf.yml",
+				"/home/foo/.cheat/conf.yml",
+			}
 		}
 
 		// assert that output matches expectations

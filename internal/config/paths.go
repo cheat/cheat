@@ -37,11 +37,20 @@ func Paths(
 		}
 
 		// if `XDG_CONFIG_HOME` is not set, search the user's home directory
-		paths = append(paths, []string{
-			path.Join(home, ".config/cheat/conf.yml"),
-			path.Join(home, ".cheat/conf.yml"),
-		}...)
-
+		if sys == "linux" {
+			// if we are on the linux then also check the location which is
+			// conforming to the file system hiearchy standard
+			paths = append(paths, []string{
+				path.Join(home, ".config/cheat/conf.yml"),
+				path.Join(home, ".cheat/conf.yml"),
+				"/etc/cheat/conf.yml",
+			}...)
+		} else {
+			paths = append(paths, []string{
+				path.Join(home, ".config/cheat/conf.yml"),
+				path.Join(home, ".cheat/conf.yml"),
+			}...)
+		}
 		return paths, nil
 	case "windows":
 		return []string{
