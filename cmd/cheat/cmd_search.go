@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/cheat/cheat/internal/config"
+	"github.com/cheat/cheat/internal/display"
 	"github.com/cheat/cheat/internal/sheet"
 	"github.com/cheat/cheat/internal/sheets"
 )
@@ -45,7 +46,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 		s, ok := consolidated[cheatsheet]
 		if !ok {
 			fmt.Printf("No cheatsheet found for '%s'.\n", cheatsheet)
-			os.Exit(0)
+			os.Exit(2)
 		}
 
 		consolidated = map[string]sheet.Sheet{
@@ -87,12 +88,14 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 		}
 
 		// output the cheatsheet title
-		fmt.Printf("%s:\n", sheet.Title)
+		out := fmt.Sprintf("%s:\n", sheet.Title)
 
 		// indent each line of content with two spaces
 		for _, line := range strings.Split(sheet.Text, "\n") {
-			fmt.Printf("  %s\n", line)
+			out += fmt.Sprintf("  %s\n", line)
 		}
-		fmt.Println("")
+
+		// display the output
+		display.Display(out, conf)
 	}
 }

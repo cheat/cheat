@@ -163,6 +163,15 @@ set, all other config paths will be ignored.
 
 : If set, autocompletion scripts will attempt to integrate with **fzf**.
 
+RETURN VALUES
+=============
+
+0. Successful termination
+
+1. Application error
+
+2. Cheatsheet(s) not found
+
 
 BUGS
 ====

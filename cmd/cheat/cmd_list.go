@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"regexp"
@@ -9,6 +10,7 @@ import (
 	"text/tabwriter"
 
 	"github.com/cheat/cheat/internal/config"
+	"github.com/cheat/cheat/internal/display"
 	"github.com/cheat/cheat/internal/sheet"
 	"github.com/cheat/cheat/internal/sheets"
 )
@@ -79,16 +81,19 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 		flattened = filtered
 	}
 
-	// exit early if no cheatsheets are available
+	// return exit code 2 if no cheatsheets are available
 	if len(flattened) == 0 {
-		os.Exit(0)
+		os.Exit(2)
 	}
 
 	// initialize a tabwriter to produce cleanly columnized output
-	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', 0)
+	var out bytes.Buffer
+	w := tabwriter.NewWriter(&out, 0, 0, 1, ' ', 0)
+
+	// write a header row
+	fmt.Fprintln(w, "title:\tfile:\ttags:")
 
 	// generate sorted, columnized output
-	fmt.Fprintln(w, "title:\tfile:\ttags:")
 	for _, sheet := range flattened {
 		fmt.Fprintln(w, fmt.Sprintf(
 			"%s\t%s\t%s",
@@ -100,4 +105,5 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 
 	// write columnized output to stdout
 	w.Flush()
+	display.Display(out.String(), conf)
 }

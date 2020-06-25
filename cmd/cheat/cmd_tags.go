@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/cheat/cheat/internal/config"
+	"github.com/cheat/cheat/internal/display"
 	"github.com/cheat/cheat/internal/sheets"
 )
 
@@ -18,8 +19,12 @@ func cmdTags(opts map[string]interface{}, conf config.Config) {
 		os.Exit(1)
 	}
 
-	// write sheet tags to stdout
+	// assemble the output
+	out := ""
 	for _, tag := range sheets.Tags(cheatsheets) {
-		fmt.Println(tag)
+		out += fmt.Sprintln(tag)
 	}
+
+	// display the output
+	display.Display(out, conf)
 }

@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/cheat/cheat/internal/config"
+	"github.com/cheat/cheat/internal/display"
 	"github.com/cheat/cheat/internal/sheets"
 )
 
@@ -38,7 +39,7 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 	sheet, ok := consolidated[cheatsheet]
 	if !ok {
 		fmt.Printf("No cheatsheet found for '%s'.\n", cheatsheet)
-		os.Exit(0)
+		os.Exit(2)
 	}
 
 	// apply colorization if requested
@@ -47,5 +48,5 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 	}
 
 	// display the cheatsheet
-	fmt.Print(sheet.Text)
+	display.Display(sheet.Text, conf)
 }
