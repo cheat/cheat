@@ -46,7 +46,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 		s, ok := consolidated[cheatsheet]
 		if !ok {
 			fmt.Printf("No cheatsheet found for '%s'.\n", cheatsheet)
-			os.Exit(0)
+			os.Exit(2)
 		}
 
 		consolidated = map[string]sheet.Sheet{

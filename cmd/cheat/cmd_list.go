@@ -81,9 +81,9 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 		flattened = filtered
 	}
 
-	// exit early if no cheatsheets are available
+	// return exit code 2 if no cheatsheets are available
 	if len(flattened) == 0 {
-		os.Exit(0)
+		os.Exit(2)
 	}
 
 	// initialize a tabwriter to produce cleanly columnized output

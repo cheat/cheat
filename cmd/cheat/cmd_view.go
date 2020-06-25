@@ -39,7 +39,7 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 	sheet, ok := consolidated[cheatsheet]
 	if !ok {
 		fmt.Printf("No cheatsheet found for '%s'.\n", cheatsheet)
-		os.Exit(0)
+		os.Exit(2)
 	}
 
 	// apply colorization if requested

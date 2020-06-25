@@ -37,8 +37,8 @@ func cmdRemove(opts map[string]interface{}, conf config.Config) {
 	// fail early if the requested cheatsheet does not exist
 	sheet, ok := consolidated[cheatsheet]
 	if !ok {
-		fmt.Fprintln(os.Stderr, fmt.Sprintf("no cheatsheet found for '%s'.\n", cheatsheet))
-		os.Exit(1)
+		fmt.Fprintln(os.Stderr, fmt.Sprintf("No cheatsheet found for '%s'.\n", cheatsheet))
+		os.Exit(2)
 	}
 
 	// fail early if the sheet is read-only
