@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 
 	cp "github.com/cheat/cheat/internal/cheatpath"
 
@@ -19,6 +20,7 @@ type Config struct {
 	Cheatpaths []cp.Cheatpath `yaml:"cheatpaths"`
 	Style      string         `yaml:"style"`
 	Formatter  string         `yaml:"formatter"`
+	Pager      string         `yaml:"pager"`
 }
 
 // New returns a new Config struct
@@ -109,6 +111,11 @@ func New(opts map[string]interface{}, confPath string, resolve bool) (Config, er
 	// if a chroma formatter was not provided, set a default
 	if conf.Formatter == "" {
 		conf.Formatter = "terminal16m"
+	}
+
+	// if a pager was not provided, set a default
+	if strings.TrimSpace(conf.Pager) == "" {
+		conf.Pager = ""
 	}
 
 	return conf, nil

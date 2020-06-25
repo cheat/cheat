@@ -14,6 +14,9 @@ style: monokai
 # One of: "terminal", "terminal256", "terminal16m"
 formatter: terminal16m
 
+# Through which pager should output be piped? (Unset this key for no pager.)
+pager: less -FRX
+
 # The paths at which cheatsheets are available. Tags associated with a cheatpath
 # are automatically attached to all cheatsheets residing on that path.
 #
