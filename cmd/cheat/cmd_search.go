@@ -55,6 +55,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 	}
 
 	// sort the cheatsheets alphabetically, and search for matches
+	out := ""
 	for _, sheet := range sheets.Sort(consolidated) {
 
 		// assume that we want to perform a case-insensitive search for <phrase>
@@ -88,14 +89,14 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 		}
 
 		// output the cheatsheet title
-		out := fmt.Sprintf("%s:\n", sheet.Title)
+		out += fmt.Sprintf("%s:\n", sheet.Title)
 
 		// indent each line of content with two spaces
 		for _, line := range strings.Split(sheet.Text, "\n") {
 			out += fmt.Sprintf("  %s\n", line)
 		}
-
-		// display the output
-		display.Display(out, conf)
 	}
+
+	// display the output
+	display.Display(out, conf)
 }
