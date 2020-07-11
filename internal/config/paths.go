@@ -36,10 +36,10 @@ func Paths(
 			paths = append(paths, path.Join(xdgpath, "/cheat/conf.yml"))
 		}
 
-		// if `XDG_CONFIG_HOME` is not set, search the user's home directory
 		paths = append(paths, []string{
 			path.Join(home, ".config/cheat/conf.yml"),
 			path.Join(home, ".cheat/conf.yml"),
+			"/etc/cheat/conf.yml",
 		}...)
 
 		return paths, nil

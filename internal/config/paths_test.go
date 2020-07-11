@@ -39,6 +39,7 @@ func TestValidatePathsNix(t *testing.T) {
 			"/home/bar/cheat/conf.yml",
 			"/home/foo/.config/cheat/conf.yml",
 			"/home/foo/.cheat/conf.yml",
+			"/etc/cheat/conf.yml",
 		}
 
 		// assert that output matches expectations
@@ -81,6 +82,7 @@ func TestValidatePathsNixNoXDG(t *testing.T) {
 		want := []string{
 			"/home/foo/.config/cheat/conf.yml",
 			"/home/foo/.cheat/conf.yml",
+			"/etc/cheat/conf.yml",
 		}
 
 		// assert that output matches expectations
