@@ -1,4 +1,4 @@
-# github.com/alecthomas/chroma v0.7.3
+# github.com/alecthomas/chroma v0.8.0
 ## explicit
 github.com/alecthomas/chroma
 github.com/alecthomas/chroma/formatters
@@ -31,6 +31,7 @@ github.com/alecthomas/chroma/lexers/v
 github.com/alecthomas/chroma/lexers/w
 github.com/alecthomas/chroma/lexers/x
 github.com/alecthomas/chroma/lexers/y
+github.com/alecthomas/chroma/lexers/z
 github.com/alecthomas/chroma/quick
 github.com/alecthomas/chroma/styles
 # github.com/danwakefield/fnmatch v0.0.0-20160403171240-cbb64ac3d964
