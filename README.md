@@ -98,7 +98,7 @@ install the community-sourced cheatsheets the first time you run `cheat`.
 Cheatpaths
 ----------
 Cheatsheets are stored on "cheatpaths", which are directories that contain
-cheetsheets. Cheatpaths are specified in the `conf.yml` file.
+cheatsheets. Cheatpaths are specified in the `conf.yml` file.
 
 It can be useful to configure `cheat` against multiple cheatpaths. A common
 pattern is to store cheatsheets from multiple repositories on individual
