@@ -9,7 +9,7 @@ import (
 	"github.com/cheat/cheat/internal/sheet"
 )
 
-// TestTags asserts that cheetsheet tags are properly returned
+// TestTags asserts that cheatsheet tags are properly returned
 func TestTags(t *testing.T) {
 
 	// mock cheatsheets available on multiple cheatpaths
