@@ -71,6 +71,9 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 
 				// register the cheatsheet on its cheatpath, keyed by its title
 				pathsheets[title] = s
+				if shorterTitle, b := sameNameToParentDir(title); b {
+					pathsheets[shorterTitle] = s
+				}
 				return nil
 			})
 		if err != nil {
@@ -84,4 +87,15 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 
 	// return the cheatsheets, grouped by cheatpath
 	return sheets, nil
+}
+
+func sameNameToParentDir(path string) (string, bool) {
+	fileName := filepath.Base(path)
+	dir := filepath.Dir(path)
+	parDir := filepath.Base(dir)
+	if parDir == fileName {
+		return strings.TrimSuffix(strings.TrimSuffix(path, fileName), string(os.PathSeparator)), true
+	} else {
+		return "", false
+	}
 }
