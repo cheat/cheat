@@ -90,8 +90,7 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 }
 
 func sameNameToParentDir(path string) (string, bool) {
-	fileName := filepath.Base(path)
-	dir := filepath.Dir(path)
+	dir, fileName := filepath.Split(path)
 	parDir := filepath.Base(dir)
 	if parDir == fileName {
 		return strings.TrimSuffix(strings.TrimSuffix(path, fileName), string(os.PathSeparator)), true
