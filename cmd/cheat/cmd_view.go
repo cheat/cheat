@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/cheat/cheat/internal/config"
@@ -38,8 +39,19 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 	// fail early if the requested cheatsheet does not exist
 	sheet, ok := consolidated[cheatsheet]
 	if !ok {
-		fmt.Printf("No cheatsheet found for '%s'.\n", cheatsheet)
-		os.Exit(2)
+		if opts["--tag"] != nil {
+			fmt.Printf("No cheatsheet found for '%s'.\n", cheatsheet)
+			os.Exit(2)
+		} else {
+			path := opts["<cheatsheet>"]
+			opts["--tag"], opts["<cheatsheet>"] = splitTagAndPath(path.(string))
+			if opts["<cheatsheet>"] == "" || opts["--tag"] == "" {
+				fmt.Printf("No cheatsheet found for '%s'.\n", cheatsheet)
+				os.Exit(2)
+			}
+			cmdView(opts, conf)
+			return
+		}
 	}
 
 	// apply colorization if requested
@@ -49,4 +61,12 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 
 	// display the cheatsheet
 	display.Display(sheet.Text, conf)
+}
+
+func splitTagAndPath(path string) (string, string) {
+	s := strings.Split(path, string(filepath.Separator))
+	if len(s) > 0 {
+		return s[0], filepath.Join(s[1:]...)
+	}
+	return "", ""
 }
