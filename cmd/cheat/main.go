@@ -185,6 +185,9 @@ func main() {
 	case opts["<cheatsheet>"] != nil:
 		cmd = cmdView
 
+	case opts["--tag"] != nil && opts["--tag"].(string) != "":
+		cmd = cmdList
+
 	default:
 		fmt.Println(usage())
 		os.Exit(0)
