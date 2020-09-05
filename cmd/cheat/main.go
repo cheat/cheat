@@ -17,7 +17,7 @@ import (
 	"github.com/cheat/cheat/internal/installer"
 )
 
-const version = "4.0.3"
+const version = "4.1.0"
 
 func main() {
 
@@ -184,6 +184,9 @@ func main() {
 
 	case opts["<cheatsheet>"] != nil:
 		cmd = cmdView
+
+	case opts["--tag"] != nil && opts["--tag"].(string) != "":
+		cmd = cmdList
 
 	default:
 		fmt.Println(usage())
