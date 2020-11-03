@@ -58,12 +58,15 @@ includes_Darwin='
 #define _DARWIN_USE_64_BIT_INODE
 #include <stdint.h>
 #include <sys/attr.h>
+#include <sys/clonefile.h>
+#include <sys/kern_control.h>
 #include <sys/types.h>
 #include <sys/event.h>
 #include <sys/ptrace.h>
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/sockio.h>
+#include <sys/sys_domain.h>
 #include <sys/sysctl.h>
 #include <sys/mman.h>
 #include <sys/mount.h>
@@ -93,6 +96,7 @@ includes_DragonFly='
 #include <sys/ioctl.h>
 #include <net/bpf.h>
 #include <net/if.h>
+#include <net/if_clone.h>
 #include <net/if_types.h>
 #include <net/route.h>
 #include <netinet/in.h>
@@ -107,6 +111,7 @@ includes_FreeBSD='
 #include <sys/types.h>
 #include <sys/disk.h>
 #include <sys/event.h>
+#include <sys/sched.h>
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/sockio.h>
@@ -187,13 +192,17 @@ struct ltchars {
 #include <sys/select.h>
 #include <sys/signalfd.h>
 #include <sys/socket.h>
+#include <sys/timerfd.h>
 #include <sys/uio.h>
 #include <sys/xattr.h>
 #include <linux/bpf.h>
 #include <linux/can.h>
+#include <linux/can/error.h>
+#include <linux/can/raw.h>
 #include <linux/capability.h>
 #include <linux/cryptouser.h>
 #include <linux/devlink.h>
+#include <linux/dm-ioctl.h>
 #include <linux/errqueue.h>
 #include <linux/falloc.h>
 #include <linux/fanotify.h>
@@ -224,6 +233,7 @@ struct ltchars {
 #include <linux/net_namespace.h>
 #include <linux/nsfs.h>
 #include <linux/perf_event.h>
+#include <linux/pps.h>
 #include <linux/ptrace.h>
 #include <linux/random.h>
 #include <linux/reboot.h>
@@ -296,6 +306,7 @@ includes_NetBSD='
 #include <sys/extattr.h>
 #include <sys/mman.h>
 #include <sys/mount.h>
+#include <sys/sched.h>
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/sockio.h>
@@ -324,6 +335,7 @@ includes_OpenBSD='
 #include <sys/mman.h>
 #include <sys/mount.h>
 #include <sys/select.h>
+#include <sys/sched.h>
 #include <sys/socket.h>
 #include <sys/sockio.h>
 #include <sys/stat.h>
@@ -364,6 +376,7 @@ includes_SunOS='
 #include <sys/socket.h>
 #include <sys/sockio.h>
 #include <sys/stat.h>
+#include <sys/stream.h>
 #include <sys/mman.h>
 #include <sys/wait.h>
 #include <sys/ioctl.h>
@@ -480,7 +493,7 @@ ccflags="$@"
 		$2 ~ /^(MS|MNT|UMOUNT)_/ ||
 		$2 ~ /^NS_GET_/ ||
 		$2 ~ /^TUN(SET|GET|ATTACH|DETACH)/ ||
-		$2 ~ /^(O|F|[ES]?FD|NAME|S|PTRACE|PT)_/ ||
+		$2 ~ /^(O|F|[ES]?FD|NAME|S|PTRACE|PT|TFD)_/ ||
 		$2 ~ /^KEXEC_/ ||
 		$2 ~ /^LINUX_REBOOT_CMD_/ ||
 		$2 ~ /^LINUX_REBOOT_MAGIC[12]$/ ||
@@ -488,6 +501,7 @@ ccflags="$@"
 		$2 !~ "NLA_TYPE_MASK" &&
 		$2 !~ /^RTC_VL_(ACCURACY|BACKUP|DATA)/ &&
 		$2 ~ /^(NETLINK|NLM|NLMSG|NLA|IFA|IFAN|RT|RTC|RTCF|RTN|RTPROT|RTNH|ARPHRD|ETH_P|NETNSA)_/ ||
+		$2 ~ /^FIORDCHK$/ ||
 		$2 ~ /^SIOC/ ||
 		$2 ~ /^TIOC/ ||
 		$2 ~ /^TCGET/ ||
@@ -506,16 +520,21 @@ ccflags="$@"
 		$2 ~ /^(CLOCK|TIMER)_/ ||
 		$2 ~ /^CAN_/ ||
 		$2 ~ /^CAP_/ ||
+		$2 ~ /^CP_/ ||
+		$2 ~ /^CPUSTATES$/ ||
+		$2 ~ /^CTLIOCGINFO$/ ||
 		$2 ~ /^ALG_/ ||
+		$2 ~ /^FI(CLONE|DEDUPERANGE)/ ||
 		$2 ~ /^FS_(POLICY_FLAGS|KEY_DESC|ENCRYPTION_MODE|[A-Z0-9_]+_KEY_SIZE)/ ||
-		$2 ~ /^FS_IOC_.*(ENCRYPTION|VERITY|GETFLAGS)/ ||
+		$2 ~ /^FS_IOC_.*(ENCRYPTION|VERITY|[GS]ETFLAGS)/ ||
 		$2 ~ /^FS_VERITY_/ ||
 		$2 ~ /^FSCRYPT_/ ||
+		$2 ~ /^DM_/ ||
 		$2 ~ /^GRND_/ ||
 		$2 ~ /^RND/ ||
 		$2 ~ /^KEY_(SPEC|REQKEY_DEFL)_/ ||
 		$2 ~ /^KEYCTL_/ ||
-		$2 ~ /^PERF_EVENT_IOC_/ ||
+		$2 ~ /^PERF_/ ||
 		$2 ~ /^SECCOMP_MODE_/ ||
 		$2 ~ /^SPLICE_/ ||
 		$2 ~ /^SYNC_FILE_RANGE_/ ||
@@ -534,7 +553,7 @@ ccflags="$@"
 		$2 ~ /^XATTR_(CREATE|REPLACE|NO(DEFAULT|FOLLOW|SECURITY)|SHOWCOMPRESSION)/ ||
 		$2 ~ /^ATTR_(BIT_MAP_COUNT|(CMN|VOL|FILE)_)/ ||
 		$2 ~ /^FSOPT_/ ||
-		$2 ~ /^WDIOC_/ ||
+		$2 ~ /^WDIO[CFS]_/ ||
 		$2 ~ /^NFN/ ||
 		$2 ~ /^XDP_/ ||
 		$2 ~ /^RWF_/ ||

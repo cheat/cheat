@@ -69,3 +69,19 @@ func TestSheetFailure(t *testing.T) {
 		t.Errorf("failed to return an error on unreadable sheet")
 	}
 }
+
+// TestSheetFrontMatterFailure asserts that an error is returned if the sheet's
+// frontmatter cannot be parsed.
+func TestSheetFrontMatterFailure(t *testing.T) {
+
+	// initialize a sheet
+	_, err := New(
+		"foo",
+		mock.Path("sheet/bad-fm"),
+		[]string{"alpha", "bravo"},
+		false,
+	)
+	if err == nil {
+		t.Errorf("failed to return an error on malformed front-matter")
+	}
+}
