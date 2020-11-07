@@ -47,17 +47,17 @@ Installing
 `cheat` has no dependencies. To install it, download the executable from the
 [releases][] page and place it on your `PATH`.
 
+Alternatively, if you have [go][] installed, you may install `cheat` using `go
+get`:
+
+```sh
+go get -u github.com/cheat/cheat/cmd/cheat
+```
 
 Configuring
 -----------
 ### conf.yml ###
 `cheat` is configured by a YAML file that will be auto-generated on first run.
-Should you need to create a config file manually, you can do
-so via:
-
-```sh
-mkdir -p ~/.config/cheat && cheat --init > ~/.config/cheat/conf.yml
-```
 
 By default, the config file is assumed to exist on an XDG-compliant
 configuration path like `~/.config/cheat/conf.yml`. If you would like to store
@@ -211,3 +211,4 @@ Additionally, `cheat` supports enhanced autocompletion via integration with
 [cheatsheets]: https://github.com/cheat/cheatsheets
 [completions]: https://github.com/cheat/cheat/tree/master/scripts
 [fzf]:         https://github.com/junegunn/fzf
+[go]:          https://golang.org
