@@ -7,6 +7,7 @@ dist_dir := ./dist
 CAT    := cat
 COLUMN := column
 CTAGS  := ctags
+DOCKER := docker
 GO     := go
 GREP   := grep
 GZIP   := gzip --best
@@ -19,6 +20,8 @@ SCC    := scc
 SED    := sed
 SORT   := sort
 ZIP    := zip -m
+
+docker_image := cheat-devel:latest
 
 # build flags
 BUILD_FLAGS  := -ldflags="-s -w" -mod vendor -trimpath
@@ -105,6 +108,7 @@ clean: $(dist_dir)
 .PHONY: distclean
 distclean:
 	$(RM) -f tags
+	@$(DOCKER) image rm -f $(docker_image)
 
 ## setup: install revive (linter) and scc (sloc tool)
 .PHONY: setup
@@ -164,6 +168,16 @@ check: | vendor fmt lint vet test
 
 .PHONY: prepare
 prepare: | $(dist_dir) clean generate vendor fmt lint vet test
+
+## docker-setup: create a docker image for use during development
+.PHONY: docker-setup
+docker-setup:
+	$(DOCKER) build  -t $(docker_image) -f Dockerfile .
+
+## docker-sh: shell into the docker development container
+.PHONY: docker-sh
+docker-sh:
+	$(DOCKER) run -v $(shell pwd):/app -ti $(docker_image) /bin/ash
 
 ## help: display this help text
 .PHONY: help
