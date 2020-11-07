@@ -47,6 +47,21 @@ Installing
 `cheat` has no dependencies. To install it, download the executable from the
 [releases][] page and place it on your `PATH`.
 
+May be you can do like this:
+```shell
+mkdir cheat && cd cheat # creat fold and in
+wget -c https://github.com/cheat/cheat/releases/download/4.1.1/cheat-linux-amd64.gz #download {4.1.1}can change
+gunzip cheat-linux-amd64.gz  # 解压gunzip
+sudo chmod 755 cheat-linux-amd64 #更改权限
+sudo mv cheat-linux-amd64 /usr/local/bin/cheat # 更换目录并改名
+cheat -v # 查看cheat命令
+```
+Append path:
+```shell
+#export PATH=$PATH:/usr/local/bin: 
+echo 'export PATH=$PATH:/usr/local/bin:'>>~/.zshrc #直接写入配置文件
+source ~/.zshrc
+```
 
 Configuring
 -----------
