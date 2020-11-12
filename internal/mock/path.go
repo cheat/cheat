@@ -13,7 +13,7 @@ func Path(filename string) string {
 	// determine the path of this file during runtime
 	_, thisfile, _, _ := runtime.Caller(0)
 
-	// compute the config path
+	// compute the mock path
 	file, err := filepath.Abs(
 		path.Join(
 			filepath.Dir(thisfile),
@@ -22,7 +22,7 @@ func Path(filename string) string {
 		),
 	)
 	if err != nil {
-		panic(fmt.Errorf("failed to resolve config path: %v", err))
+		panic(fmt.Errorf("failed to resolve mock path: %v", err))
 	}
 
 	return file
