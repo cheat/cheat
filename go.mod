@@ -3,7 +3,7 @@ module github.com/cheat/cheat
 go 1.14
 
 require (
-	github.com/alecthomas/chroma v0.8.1
+	github.com/alecthomas/chroma v0.8.2
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dlclark/regexp2 v1.4.0 // indirect
 	github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
