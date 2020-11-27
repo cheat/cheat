@@ -13,6 +13,7 @@ func TestSheetSuccess(t *testing.T) {
 	// initialize a sheet
 	sheet, err := New(
 		"foo",
+		"community",
 		mock.Path("sheet/foo"),
 		[]string{"alpha", "bravo"},
 		false,
@@ -61,6 +62,7 @@ func TestSheetFailure(t *testing.T) {
 	// initialize a sheet
 	_, err := New(
 		"foo",
+		"community",
 		mock.Path("/does-not-exist"),
 		[]string{"alpha", "bravo"},
 		false,
@@ -77,6 +79,7 @@ func TestSheetFrontMatterFailure(t *testing.T) {
 	// initialize a sheet
 	_, err := New(
 		"foo",
+		"community",
 		mock.Path("sheet/bad-fm"),
 		[]string{"alpha", "bravo"},
 		false,
