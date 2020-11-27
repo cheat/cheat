@@ -88,15 +88,18 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 			sheet.Colorize(conf)
 		}
 
-		// output the cheatsheet title
-		out += fmt.Sprintf("%s:\n", sheet.Title)
+		// display the cheatsheet title and path
+		out += fmt.Sprintf("\n%s %s\n",
+			display.Underline(sheet.Title),
+			display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath)),
+		)
 
-		// indent each line of content with two spaces
-		for _, line := range strings.Split(sheet.Text, "\n") {
-			out += fmt.Sprintf("  %s\n", line)
-		}
+		// indent each line of content
+		out += display.Indent(sheet.Text) + "\n"
 	}
 
 	// display the output
+	// NB: resist the temptation to call `display.Display` multiple times in
+	// the loop above. That will not play nicely with the paginator.
 	display.Display(out, conf)
 }
