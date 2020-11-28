@@ -50,7 +50,7 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 				}
 
 				// display the cheatsheet
-				display.Display(display.Indent(sheet.Text), conf)
+				display.Write(display.Indent(sheet.Text), conf)
 			}
 		}
 
@@ -76,5 +76,5 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 	}
 
 	// display the cheatsheet
-	display.Display(sheet.Text, conf)
+	display.Write(sheet.Text, conf)
 }

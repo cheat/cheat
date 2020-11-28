@@ -91,5 +91,5 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 	// display the output
 	// NB: resist the temptation to call `display.Display` multiple times in
 	// the loop above. That will not play nicely with the paginator.
-	display.Display(out, conf)
+	display.Write(out, conf)
 }

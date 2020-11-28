@@ -27,5 +27,5 @@ func cmdDirectories(opts map[string]interface{}, conf config.Config) {
 
 	// write columnized output to stdout
 	w.Flush()
-	display.Display(out.String(), conf)
+	display.Write(out.String(), conf)
 }
