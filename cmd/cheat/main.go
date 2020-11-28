@@ -5,7 +5,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"path"
 	"runtime"
 	"strings"
 
@@ -74,62 +73,16 @@ func main() {
 			os.Exit(0)
 		}
 
-		// read the config template
-		configs := configs()
-
-		// determine the appropriate paths for config data and (optional) community
-		// cheatsheets based on the user's platform
+		// choose a confpath
 		confpath = confpaths[0]
-		confdir := path.Dir(confpath)
 
-		// create paths for community and personal cheatsheets
-		community := path.Join(confdir, "/cheatsheets/community")
-		personal := path.Join(confdir, "/cheatsheets/personal")
-
-		// template the above paths into the default configs
-		configs = strings.Replace(configs, "COMMUNITY_PATH", community, -1)
-		configs = strings.Replace(configs, "PERSONAL_PATH", personal, -1)
-
-		// prompt the user to download the community cheatsheets
-		yes, err = installer.Prompt(
-			"Would you like to download the community cheatsheets? [Y/n]",
-			true,
-		)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed to create config: %v\n", err)
+		// run the installer
+		if err := installer.Run(configs(), confpath); err != nil {
+			fmt.Fprintf(os.Stderr, "failed to run installer: %v\n", err)
 			os.Exit(1)
 		}
 
-		// clone the community cheatsheets if so instructed
-		if yes {
-			// clone the community cheatsheets
-			if err := installer.Clone(community); err != nil {
-				fmt.Fprintf(os.Stderr, "failed to create config: %v\n", err)
-				os.Exit(1)
-			}
-
-			// also create a directory for personal cheatsheets
-			if err := os.MkdirAll(personal, os.ModePerm); err != nil {
-				fmt.Fprintf(
-					os.Stderr,
-					"failed to create config: failed to create directory: %s: %v\n",
-					personal,
-					err)
-				os.Exit(1)
-			}
-		}
-
-		// the config file does not exist, so we'll try to create one
-		if err = config.Init(confpath, configs); err != nil {
-			fmt.Fprintf(
-				os.Stderr,
-				"failed to create config file: %s: %v\n",
-				confpath,
-				err,
-			)
-			os.Exit(1)
-		}
-
+		// notify the user and exit
 		fmt.Printf("Created config file: %s\n", confpath)
 		fmt.Println("Please read this file for advanced configuration information.")
 		os.Exit(0)
