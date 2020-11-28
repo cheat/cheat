@@ -8,7 +8,6 @@ import (
 
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/display"
-	"github.com/cheat/cheat/internal/sheet"
 	"github.com/cheat/cheat/internal/sheets"
 )
 
@@ -32,71 +31,65 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 		)
 	}
 
-	// consolidate the cheatsheets found on all paths into a single map of
-	// `title` => `sheet` (ie, allow more local cheatsheets to override less
-	// local cheatsheets)
-	consolidated := sheets.Consolidate(cheatsheets)
-
-	// if <cheatsheet> was provided, search that single sheet only
-	if opts["<cheatsheet>"] != nil {
-
-		cheatsheet := opts["<cheatsheet>"].(string)
-
-		// assert that the cheatsheet exists
-		s, ok := consolidated[cheatsheet]
-		if !ok {
-			fmt.Printf("No cheatsheet found for '%s'.\n", cheatsheet)
-			os.Exit(2)
-		}
-
-		consolidated = map[string]sheet.Sheet{
-			cheatsheet: s,
-		}
-	}
-
-	// sort the cheatsheets alphabetically, and search for matches
+	// iterate over each cheatpath
 	out := ""
-	for _, sheet := range sheets.Sort(consolidated) {
+	for _, pathcheats := range cheatsheets {
 
-		// assume that we want to perform a case-insensitive search for <phrase>
-		pattern := "(?i)" + phrase
+		// sort the cheatsheets alphabetically, and search for matches
+		for _, sheet := range sheets.Sort(pathcheats) {
 
-		// unless --regex is provided, in which case we pass the regex unaltered
-		if opts["--regex"] == true {
-			pattern = phrase
-		}
+			// if <cheatsheet> was provided, constrain the search only to
+			// matching cheatsheets
+			if opts["<cheatsheet>"] != nil && sheet.Title != opts["<cheatsheet>"] {
+				continue
+			}
 
-		// compile the regex
-		reg, err := regexp.Compile(pattern)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, fmt.Sprintf("failed to compile regexp: %s, %v", pattern, err))
-			os.Exit(1)
-		}
+			// assume that we want to perform a case-insensitive search for <phrase>
+			pattern := "(?i)" + phrase
 
-		// `Search` will return text entries that match the search terms. We're
-		// using it here to overwrite the prior cheatsheet Text, filtering it to
-		// only what is relevant
-		sheet.Text = sheet.Search(reg)
+			// unless --regex is provided, in which case we pass the regex unaltered
+			if opts["--regex"] == true {
+				pattern = phrase
+			}
 
-		// if the sheet did not match the search, ignore it and move on
-		if sheet.Text == "" {
-			continue
-		}
+			// compile the regex
+			reg, err := regexp.Compile(pattern)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, fmt.Sprintf("failed to compile regexp: %s, %v", pattern, err))
+				os.Exit(1)
+			}
 
-		// if colorization was requested, apply it here
-		if conf.Color(opts) {
-			sheet.Colorize(conf)
-		}
+			// `Search` will return text entries that match the search terms. We're
+			// using it here to overwrite the prior cheatsheet Text, filtering it to
+			// only what is relevant
+			sheet.Text = sheet.Search(reg)
 
-		// output the cheatsheet title
-		out += fmt.Sprintf("%s:\n", sheet.Title)
+			// if the sheet did not match the search, ignore it and move on
+			if sheet.Text == "" {
+				continue
+			}
 
-		// indent each line of content with two spaces
-		for _, line := range strings.Split(sheet.Text, "\n") {
-			out += fmt.Sprintf("  %s\n", line)
+			// if colorization was requested, apply it here
+			if conf.Color(opts) {
+				sheet.Colorize(conf)
+			}
+
+			// display the cheatsheet title and path
+			out += fmt.Sprintf("%s %s\n",
+				display.Underline(sheet.Title),
+				display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf),
+			)
+
+			// indent each line of content
+			out += display.Indent(sheet.Text) + "\n"
 		}
 	}
+
+	// trim superfluous newlines
+	out = strings.TrimSpace(out)
 
 	// display the output
-	display.Display(out, conf)
+	// NB: resist the temptation to call `display.Display` multiple times in
+	// the loop above. That will not play nicely with the paginator.
+	display.Write(out, conf)
 }

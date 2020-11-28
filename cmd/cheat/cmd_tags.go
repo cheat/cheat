@@ -26,5 +26,5 @@ func cmdTags(opts map[string]interface{}, conf config.Config) {
 	}
 
 	// display the output
-	display.Display(out, conf)
+	display.Write(out, conf)
 }

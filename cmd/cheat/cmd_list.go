@@ -37,8 +37,8 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 	// sheets with local sheets), here we simply want to create a slice
 	// containing all sheets.
 	flattened := []sheet.Sheet{}
-	for _, pathSheets := range cheatsheets {
-		for _, s := range pathSheets {
+	for _, pathsheets := range cheatsheets {
+		for _, s := range pathsheets {
 			flattened = append(flattened, s)
 		}
 	}
@@ -105,5 +105,5 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 
 	// write columnized output to stdout
 	w.Flush()
-	display.Display(out.String(), conf)
+	display.Write(out.String(), conf)
 }

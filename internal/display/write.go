@@ -9,9 +9,9 @@ import (
 	"github.com/cheat/cheat/internal/config"
 )
 
-// Display writes output either directly to stdout, or through a pager,
+// Write writes output either directly to stdout, or through a pager,
 // depending upon configuration.
-func Display(out string, conf config.Config) {
+func Write(out string, conf config.Config) {
 	// if no pager was configured, print the output to stdout and exit
 	if conf.Pager == "" {
 		fmt.Print(out)

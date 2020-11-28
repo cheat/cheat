@@ -136,6 +136,10 @@ man:
 vendor:
 	$(GO) mod vendor && $(GO) mod tidy && $(GO) mod verify
 
+## vendor-update: update vendored dependencies
+vendor-update:
+	$(GO) get -t -u ./... 
+
 ## fmt: run go fmt
 .PHONY: fmt
 fmt:

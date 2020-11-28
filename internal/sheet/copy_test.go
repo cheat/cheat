@@ -25,7 +25,7 @@ func TestCopyFlat(t *testing.T) {
 	}
 
 	// mock a cheatsheet struct
-	sheet, err := New("foo", src.Name(), []string{}, false)
+	sheet, err := New("foo", "community", src.Name(), []string{}, false)
 	if err != nil {
 		t.Errorf("failed to init cheatsheet: %v", err)
 	}
@@ -72,7 +72,13 @@ func TestCopyDeep(t *testing.T) {
 	}
 
 	// mock a cheatsheet struct
-	sheet, err := New("/cheat-tests/alpha/bravo/foo", src.Name(), []string{}, false)
+	sheet, err := New(
+		"/cheat-tests/alpha/bravo/foo",
+		"community",
+		src.Name(),
+		[]string{},
+		false,
+	)
 	if err != nil {
 		t.Errorf("failed to init cheatsheet: %v", err)
 	}

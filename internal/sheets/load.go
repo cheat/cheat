@@ -59,7 +59,13 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 				}
 
 				// parse the cheatsheet file into a `sheet` struct
-				s, err := sheet.New(title, path, cheatpath.Tags, cheatpath.ReadOnly)
+				s, err := sheet.New(
+					title,
+					cheatpath.Name,
+					path,
+					cheatpath.Tags,
+					cheatpath.ReadOnly,
+				)
 				if err != nil {
 					return fmt.Errorf(
 						"failed to load sheet: %s, path: %s, err: %v",

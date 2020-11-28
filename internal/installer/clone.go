@@ -8,8 +8,8 @@ import (
 
 const cloneURL = "https://github.com/cheat/cheatsheets.git"
 
-// Clone clones the community cheatsheets
-func Clone(path string) error {
+// clone clones the community cheatsheets
+func clone(path string) error {
 
 	// perform the clone in a shell
 	cmd := exec.Command("git", "clone", cloneURL, path)

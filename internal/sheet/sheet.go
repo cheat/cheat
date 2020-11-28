@@ -10,17 +10,19 @@ import (
 
 // Sheet encapsulates sheet information
 type Sheet struct {
-	Title    string
-	Path     string
-	Text     string
-	Tags     []string
-	Syntax   string
-	ReadOnly bool
+	Title     string
+	CheatPath string
+	Path      string
+	Text      string
+	Tags      []string
+	Syntax    string
+	ReadOnly  bool
 }
 
 // New initializes a new Sheet
 func New(
 	title string,
+	cheatpath string,
 	path string,
 	tags []string,
 	readOnly bool,
@@ -46,11 +48,12 @@ func New(
 
 	// initialize and return a sheet
 	return Sheet{
-		Title:    title,
-		Path:     path,
-		Text:     text + "\n",
-		Tags:     tags,
-		Syntax:   fm.Syntax,
-		ReadOnly: readOnly,
+		Title:     title,
+		CheatPath: cheatpath,
+		Path:      path,
+		Text:      text + "\n",
+		Tags:      tags,
+		Syntax:    fm.Syntax,
+		ReadOnly:  readOnly,
 	}, nil
 }

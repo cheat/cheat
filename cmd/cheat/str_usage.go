@@ -12,11 +12,12 @@ func usage() string {
 
 Options:
   --init                  Write a default config file to stdout
+  -a --all                Search among all cheatpaths
   -c --colorize           Colorize output
   -d --directories        List cheatsheet directories
   -e --edit=<cheatsheet>  Edit <cheatsheet>
   -l --list               List cheatsheets
-  -p --path=<name>        Return only sheets found on path <name>
+  -p --path=<name>        Return only sheets found on cheatpath <name>
   -r --regex              Treat search <phrase> as a regex
   -s --search=<phrase>    Search cheatsheets for <phrase>
   -t --tag=<tag>          Return only sheets matching <tag>

@@ -30,9 +30,39 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 		)
 	}
 
-	// consolidate the cheatsheets found on all paths into a single map of
-	// `title` => `sheet` (ie, allow more local cheatsheets to override less
-	// local cheatsheets)
+	// if --all was passed, display cheatsheets from all cheatpaths
+	if opts["--all"].(bool) {
+		// iterate over the cheatpaths
+		out := ""
+		for _, cheatpath := range cheatsheets {
+
+			// if the cheatpath contains the specified cheatsheet, display it
+			if sheet, ok := cheatpath[cheatsheet]; ok {
+
+				// identify the matching cheatsheet
+				out += fmt.Sprintf("%s %s\n",
+					display.Underline(sheet.Title),
+					display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf),
+				)
+
+				// apply colorization if requested
+				if conf.Color(opts) {
+					sheet.Colorize(conf)
+				}
+
+				// display the cheatsheet
+				out += display.Indent(sheet.Text) + "\n"
+			}
+		}
+
+		// display and exit
+		display.Write(strings.TrimSuffix(out, "\n"), conf)
+		os.Exit(0)
+	}
+
+	// otherwise, consolidate the cheatsheets found on all paths into a single
+	// map of `title` => `sheet` (ie, allow more local cheatsheets to override
+	// less local cheatsheets)
 	consolidated := sheets.Consolidate(cheatsheets)
 
 	// fail early if the requested cheatsheet does not exist
@@ -48,5 +78,5 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 	}
 
 	// display the cheatsheet
-	display.Display(sheet.Text, conf)
+	display.Write(sheet.Text, conf)
 }
