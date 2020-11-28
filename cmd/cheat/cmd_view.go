@@ -41,7 +41,7 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 				// identify the matching cheatsheet
 				fmt.Println(fmt.Sprintf("%s %s",
 					display.Underline(sheet.Title),
-					display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath)),
+					display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf),
 				))
 
 				// apply colorization if requested

@@ -77,7 +77,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 			// display the cheatsheet title and path
 			out += fmt.Sprintf("\n%s %s\n",
 				display.Underline(sheet.Title),
-				display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath)),
+				display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf),
 			)
 
 			// indent each line of content
