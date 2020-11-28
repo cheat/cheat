@@ -75,7 +75,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 			}
 
 			// display the cheatsheet title and path
-			out += fmt.Sprintf("\n%s %s\n",
+			out += fmt.Sprintf("%s %s\n",
 				display.Underline(sheet.Title),
 				display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf),
 			)
@@ -85,8 +85,8 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 		}
 	}
 
-	// trim the leading newline
-	out = strings.TrimPrefix(out, "\n")
+	// trim superfluous newlines
+	out = strings.TrimSpace(out)
 
 	// display the output
 	// NB: resist the temptation to call `display.Display` multiple times in

@@ -33,16 +33,17 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 	// if --all was passed, display cheatsheets from all cheatpaths
 	if opts["--all"].(bool) {
 		// iterate over the cheatpaths
+		out := ""
 		for _, cheatpath := range cheatsheets {
 
 			// if the cheatpath contains the specified cheatsheet, display it
 			if sheet, ok := cheatpath[cheatsheet]; ok {
 
 				// identify the matching cheatsheet
-				fmt.Println(fmt.Sprintf("%s %s",
+				out += fmt.Sprintf("%s %s\n",
 					display.Underline(sheet.Title),
 					display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf),
-				))
+				)
 
 				// apply colorization if requested
 				if conf.Color(opts) {
@@ -50,11 +51,12 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 				}
 
 				// display the cheatsheet
-				display.Write(display.Indent(sheet.Text), conf)
+				out += display.Indent(sheet.Text) + "\n"
 			}
 		}
 
-		// exit early
+		// display and exit
+		display.Write(strings.TrimSuffix(out, "\n"), conf)
 		os.Exit(0)
 	}
 
