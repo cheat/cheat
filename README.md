@@ -94,6 +94,21 @@ The `cheat` executable includes no cheatsheets, but [community-sourced
 cheatsheets are available][cheatsheets]. You will be asked if you would like to
 install the community-sourced cheatsheets the first time you run `cheat`.
 
+### Script ###
+You can manage the cheatsheets via a script `cheatsheets`.
+
+#### Download and install ####
+```sh
+mkdir -p ~/.local/bin
+wget -O ~/.local/bin/cheatsheets https://raw.githubusercontent.com/cheat/cheat/master/scripts/git/cheatsheets
+chmod +x ~/.local/bin/cheatsheets
+```
+
+#### Pull changes ####
+To pull the community and personal cheatsheets call `cheatsheets pull`
+
+#### Push changes ####
+To push your personal cheatsheets call `cheatsheets push`
 
 Cheatpaths
 ----------
