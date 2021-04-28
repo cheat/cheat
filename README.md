@@ -1,7 +1,7 @@
+![Workflow status](https://github.com/cheat/cheat/workflows/build/badge.svg)
+
 cheat
 =====
-
-[![Build Status](https://travis-ci.com/cheat/cheat.svg?branch=master)](https://travis-ci.com/cheat/cheat)
 
 `cheat` allows you to create and view interactive cheatsheets on the
 command-line. It was designed to help remind \*nix system administrators of

@@ -1,0 +1,57 @@
+name: Go
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  # TODO: is it possible to DRY out these jobs? Aside from `runs-on`, they are
+  # identical.
+  build-linux:
+    runs-on: [ ubuntu-latest ] 
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    - name: Set up Revive (linter)
+      run: go get -u github.com/boyter/scc github.com/mgechev/revive
+      env:
+          GO111MODULE: off
+
+
+    - name: Build
+      run: make build
+
+    - name: Test
+      run: make test
+
+  build-osx:
+    runs-on: [ macos-latest ] 
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    - name: Set up Revive (linter)
+      run: go get -u github.com/boyter/scc github.com/mgechev/revive
+      env:
+          GO111MODULE: off
+
+    - name: Build
+      run: make build
+
+    - name: Test
+      run: make test
+
+    # TODO: windows
