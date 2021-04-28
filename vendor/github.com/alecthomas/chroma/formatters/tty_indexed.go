@@ -20,6 +20,20 @@ var ttyTables = map[int]*ttyTable{
 		foreground: map[chroma.Colour]string{
 			c("#000000"): "\033[30m", c("#7f0000"): "\033[31m", c("#007f00"): "\033[32m", c("#7f7fe0"): "\033[33m",
 			c("#00007f"): "\033[34m", c("#7f007f"): "\033[35m", c("#007f7f"): "\033[36m", c("#e5e5e5"): "\033[37m",
+			c("#555555"): "\033[1m\033[30m", c("#ff0000"): "\033[1m\033[31m", c("#00ff00"): "\033[1m\033[32m", c("#ffff00"): "\033[1m\033[33m",
+			c("#0000ff"): "\033[1m\033[34m", c("#ff00ff"): "\033[1m\033[35m", c("#00ffff"): "\033[1m\033[36m", c("#ffffff"): "\033[1m\033[37m",
+		},
+		background: map[chroma.Colour]string{
+			c("#000000"): "\033[40m", c("#7f0000"): "\033[41m", c("#007f00"): "\033[42m", c("#7f7fe0"): "\033[43m",
+			c("#00007f"): "\033[44m", c("#7f007f"): "\033[45m", c("#007f7f"): "\033[46m", c("#e5e5e5"): "\033[47m",
+			c("#555555"): "\033[1m\033[40m", c("#ff0000"): "\033[1m\033[41m", c("#00ff00"): "\033[1m\033[42m", c("#ffff00"): "\033[1m\033[43m",
+			c("#0000ff"): "\033[1m\033[44m", c("#ff00ff"): "\033[1m\033[45m", c("#00ffff"): "\033[1m\033[46m", c("#ffffff"): "\033[1m\033[47m",
+		},
+	},
+	16: {
+		foreground: map[chroma.Colour]string{
+			c("#000000"): "\033[30m", c("#7f0000"): "\033[31m", c("#007f00"): "\033[32m", c("#7f7fe0"): "\033[33m",
+			c("#00007f"): "\033[34m", c("#7f007f"): "\033[35m", c("#007f7f"): "\033[36m", c("#e5e5e5"): "\033[37m",
 			c("#555555"): "\033[90m", c("#ff0000"): "\033[91m", c("#00ff00"): "\033[92m", c("#ffff00"): "\033[93m",
 			c("#0000ff"): "\033[94m", c("#ff00ff"): "\033[95m", c("#00ffff"): "\033[96m", c("#ffffff"): "\033[97m",
 		},
@@ -227,15 +241,11 @@ type indexedTTYFormatter struct {
 func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it chroma.Iterator) (err error) {
 	theme := styleToEscapeSequence(c.table, style)
 	for token := it(); token != chroma.EOF; token = it() {
-		// TODO: Cache token lookups?
 		clr, ok := theme[token.Type]
 		if !ok {
 			clr, ok = theme[token.Type.SubCategory()]
 			if !ok {
 				clr = theme[token.Type.Category()]
-				// if !ok {
-				// 	clr = theme[chroma.InheritStyle]
-				// }
 			}
 		}
 		if clr != "" {
@@ -249,10 +259,22 @@ func (c *indexedTTYFormatter) Format(w io.Writer, style *chroma.Style, it chroma
 	return nil
 }
 
+// TTY is an 8-colour terminal formatter.
+//
+// The Lab colour space is used to map RGB values to the most appropriate index colour.
+var TTY = Register("terminal", &indexedTTYFormatter{ttyTables[8]})
+
 // TTY8 is an 8-colour terminal formatter.
 //
 // The Lab colour space is used to map RGB values to the most appropriate index colour.
-var TTY8 = Register("terminal", &indexedTTYFormatter{ttyTables[8]})
+var TTY8 = Register("terminal8", &indexedTTYFormatter{ttyTables[8]})
+
+// TTY16 is a 16-colour terminal formatter.
+//
+// It uses \033[3xm for normal colours and \033[90Xm for bright colours.
+//
+// The Lab colour space is used to map RGB values to the most appropriate index colour.
+var TTY16 = Register("terminal16", &indexedTTYFormatter{ttyTables[16]})
 
 // TTY256 is a 256-colour terminal formatter.
 //
