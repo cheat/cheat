@@ -138,7 +138,7 @@ vendor:
 
 ## vendor-update: update vendored dependencies
 vendor-update:
-	$(GO) get -t -u ./... 
+	$(GO) get -t -u ./... && $(GO) mod vendor
 
 ## fmt: run go fmt
 .PHONY: fmt
