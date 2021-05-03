@@ -1,0 +1,11 @@
+version: 2
+updates:
+- package-ecosystem: gomod
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: github.com/alecthomas/chroma
+    versions:
+    - 0.9.1
