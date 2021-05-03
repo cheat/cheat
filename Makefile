@@ -40,16 +40,12 @@ releases :=                        \
 
 ## build: build an executable for your architecture
 .PHONY: build
-build: $(dist_dir) clean vendor generate man
+build: $(dist_dir) clean fmt lint vet vendor generate man
 	$(GO) build $(BUILD_FLAGS) -o $(dist_dir)/cheat $(cmd_dir)
 
 ## build-release: build release executables
 .PHONY: build-release
 build-release: $(releases)
-
-## ci: build a "release" executable for the current architecture (used in ci)
-.PHONY: ci
-ci: | setup prepare build
 
 # cheat-darwin-amd64
 $(dist_dir)/cheat-darwin-amd64: prepare
