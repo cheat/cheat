@@ -47,7 +47,7 @@ github.com/dlclark/regexp2/syntax
 github.com/docopt/docopt-go
 # github.com/kr/text v0.2.0
 ## explicit
-# github.com/mattn/go-isatty v0.0.12
+# github.com/mattn/go-isatty v0.0.13
 ## explicit
 github.com/mattn/go-isatty
 # github.com/mitchellh/go-homedir v1.1.0
