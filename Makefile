@@ -36,6 +36,7 @@ releases :=                        \
 	$(dist_dir)/cheat-linux-arm5   \
 	$(dist_dir)/cheat-linux-arm6   \
 	$(dist_dir)/cheat-linux-arm7   \
+	$(dist_dir)/cheat-linux-arm64   \
 	$(dist_dir)/cheat-windows-amd64.exe
 
 ## build: build an executable for your architecture
@@ -75,6 +76,11 @@ $(dist_dir)/cheat-linux-arm6: prepare
 # cheat-linux-arm7
 $(dist_dir)/cheat-linux-arm7: prepare
 	GOARCH=arm GOOS=linux GOARM=7 \
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
+	
+# cheat-linux-arm64
+$(dist_dir)/cheat-linux-arm64: prepare
+	GOARCH=arm64 GOOS=linux \
 	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
 
 # cheat-windows-amd64
