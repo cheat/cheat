@@ -40,8 +40,7 @@ _cheat() {
     '(-t --tag)'{-t,--tag}'[Return only sheets matching <tag>]: :->taglist' \
     '(-T --tags)'{-T,--tags}'[List all tags in use]: :->none' \
     '(-v --version)'{-v,--version}'[Print the version number]: :->none' \
-    '(--rm)--rm[Remove (delete) <sheet>]: :->personal' \
-    '(-)*: :->full'
+    '(--rm)--rm[Remove (delete) <sheet>]: :->personal' 
 
   case $state in
     (none)
@@ -63,4 +62,4 @@ _cheat() {
   esac
 }
 
-_cheat
+compdef _cheat cheat
