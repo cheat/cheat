@@ -36,7 +36,7 @@ releases :=                        \
 	$(dist_dir)/cheat-linux-arm5   \
 	$(dist_dir)/cheat-linux-arm6   \
 	$(dist_dir)/cheat-linux-arm7   \
-	$(dist_dir)/cheat-linux-arm64   \
+	$(dist_dir)/cheat-linux-arm64  \
 	$(dist_dir)/cheat-windows-amd64.exe
 
 ## build: build an executable for your architecture
