@@ -49,10 +49,10 @@ Installing
 [releases][] page and place it on your `PATH`.
 
 Alternatively, if you have [go][] installed, you may install `cheat` using `go
-get`:
+install`:
 
 ```sh
-go get -u github.com/cheat/cheat/cmd/cheat
+go install github.com/cheat/cheat/cmd/cheat@latest
 ```
 
 Configuring
