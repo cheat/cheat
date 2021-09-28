@@ -23,7 +23,7 @@ func Prompt(prompt string, def bool) (bool, error) {
 	}
 
 	// normalize the answer
-	ans = strings.ToLower(strings.TrimRight(ans, "\n"))
+	ans = strings.ToLower(strings.TrimSpace(ans))
 
 	// return the appropriate response
 	switch ans {
