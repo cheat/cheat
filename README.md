@@ -45,8 +45,8 @@ tar -cjvf '/path/to/foo.tgz' '/path/to/foo/'
 
 Installing
 ----------
-`cheat` has no dependencies. To install it, download the executable from the
-[releases][] page and place it on your `PATH`.
+`cheat` has no dependencies. To install it, use `brew install cheat` or download the 
+executable from the [releases][] page and place it on your `PATH`.
 
 Alternatively, if you have [go][] installed, you may install `cheat` using `go
 get`:
