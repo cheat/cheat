@@ -1,7 +1,7 @@
 ![Workflow status](https://github.com/cheat/cheat/actions/workflows/build.yml/badge.svg)
 
 
-cheat
+cheat information
 =====
 
 `cheat` allows you to create and view interactive cheatsheets on the
