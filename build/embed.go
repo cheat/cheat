@@ -1,3 +1,4 @@
+//go:build ignore
 // +build ignore
 
 // This script embeds `docopt.txt and `conf.yml` into the binary during at
@@ -5,13 +6,11 @@
 
 package main
 
-
 import (
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
-	"path"
 	"path/filepath"
 )
 
@@ -52,10 +51,10 @@ func main() {
 	for _, file := range files {
 
 		// delete the outfile
-		os.Remove(path.Join(root, file.Out))
+		os.Remove(filepath.Join(root, file.Out))
 
 		// read the static template
-		bytes, err := ioutil.ReadFile(path.Join(root, file.In))
+		bytes, err := ioutil.ReadFile(filepath.Join(root, file.In))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -64,7 +63,7 @@ func main() {
 		data := template(file.Method, string(bytes))
 
 		// write the file to the specified outpath
-		spath := path.Join(root, file.Out)
+		spath := filepath.Join(root, file.Out)
 		err = ioutil.WriteFile(spath, []byte(data), 0644)
 		if err != nil {
 			log.Fatal(err)
