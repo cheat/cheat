@@ -25,7 +25,7 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 		os.Exit(1)
 	}
 
-	// filter cheatcheats by tag if --tag was provided
+	// filter cheatsheets by tag if --tag was provided
 	if opts["--tag"] != nil {
 		cheatsheets = sheets.Filter(
 			cheatsheets,
