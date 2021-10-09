@@ -35,6 +35,9 @@ Are you unable to do the above, but still want to contribute? You can help
 `cheat` simply by telling others about it. Share it with friends and coworkers
 that might benefit from using it.
 
+#### Pull Requests ####
+Please open all pull-requests against the `develop` branch.
+
 
 [cheat]: https://github.com/cheat/cheat
 [cheatsheets]: https://github.com/cheat/cheatsheets
