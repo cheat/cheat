@@ -45,6 +45,9 @@ func main() {
 	envvars := map[string]string{}
 	for _, e := range os.Environ() {
 		pair := strings.SplitN(e, "=", 2)
+		if runtime.GOOS == "windows" {
+			pair[0] = strings.ToUpper(pair[0])
+		}
 		envvars[pair[0]] = pair[1]
 	}
 
