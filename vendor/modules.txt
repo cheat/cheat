@@ -47,7 +47,7 @@ github.com/dlclark/regexp2/syntax
 github.com/docopt/docopt-go
 # github.com/kr/text v0.2.0
 ## explicit
-# github.com/mattn/go-isatty v0.0.13
+# github.com/mattn/go-isatty v0.0.14
 ## explicit
 github.com/mattn/go-isatty
 # github.com/mitchellh/go-homedir v1.1.0
@@ -57,8 +57,7 @@ github.com/mitchellh/go-homedir
 ## explicit
 # github.com/sergi/go-diff v1.1.0
 ## explicit
-# golang.org/x/sys v0.0.0-20210608053332-aa57babbf139
-## explicit
+# golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 # gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f
