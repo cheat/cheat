@@ -28,7 +28,7 @@ func Paths(
 	}
 
 	switch sys {
-	case "darwin", "linux", "freebsd":
+	case "android", "darwin", "linux", "freebsd":
 		paths := []string{}
 
 		// don't include the `XDG_CONFIG_HOME` path if that envvar is not set

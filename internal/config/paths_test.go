@@ -21,6 +21,7 @@ func TestValidatePathsNix(t *testing.T) {
 
 	// specify the platforms to test
 	oses := []string{
+		"android",
 		"darwin",
 		"freebsd",
 		"linux",
