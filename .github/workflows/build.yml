@@ -18,7 +18,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
-        go-version: 1.16
+        go-version: 1.17
 
     - name: Set up Revive (linter)
       run: go get -u github.com/boyter/scc github.com/mgechev/revive
@@ -41,7 +41,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
-        go-version: 1.16
+        go-version: 1.17
 
     - name: Set up Revive (linter)
       run: go get -u github.com/boyter/scc github.com/mgechev/revive
