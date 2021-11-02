@@ -96,7 +96,7 @@ run() {
     e cheat -e custom_vim                               #
     if mode demo; then
         # NOTE: A bit of a hack needed to display the editor
-        timeout 2 tmux new-session "vim -R .cheat/custom_vim" >/dev/null
+        timeout 2 tmux new-session "tmux set status off; vim -R .cheat/custom_vim" >/dev/null
     else
         cheat -e custom_vim
     fi
