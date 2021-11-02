@@ -4,8 +4,8 @@
 cheat
 =====
 
-<!-- TODO: change link to point to your upload to asciinema. -->
 <div align="center">
+  <!-- TODO: change link to point to your upload to asciinema. -->
   <a href="https://asciinema.org/a/Euf4KZlGhbHmmUfrROMel2yny">
     <img width="600" src="/doc/demo/cheat_demo.svg" />
   </a>
