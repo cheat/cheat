@@ -14,7 +14,7 @@ cheat
     This demo was created using
     <a href="https://github.com/veracioux/tuterm">tuterm</a>.
   </sub>
-  <br /><br />
+  <br />
   <sub>
     Run <code>tuterm doc/demo/cheat.tut</code> in this repository for an interactive tutorial.
   </sub>
