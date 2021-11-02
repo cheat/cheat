@@ -39,14 +39,18 @@ _Message() {
 }
 alias M=_Message
 
-generate_custom_cheatsheet() {
+generate_custom_vim_cheatsheet() {
     echo "---"
-    echo "tags: [ custom ]"
+    echo "tags: [ custom, vim ]"
     echo "---"
-    echo "# TODO Something thoughtful"
-    echo "something --clever"
-    echo "# TODO etc..."
-    echo "todo --etc"
+    echo "# Open files in a horizontal split"
+    echo "vim -o file1 file2 ..."
+    echo "# Open files in a vertical split"
+    echo "vim -O file1 file2 ..."
+    echo "# Go to next buffer"
+    echo ":n"
+    echo "# Go to previous buffer"
+    echo -n ":N"
 }
 
 # Print prompt but only in demo mode
