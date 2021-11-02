@@ -4,6 +4,23 @@
 cheat
 =====
 
+<!-- TODO: change link to point to your upload to asciinema. -->
+<div align="center">
+  <a href="https://asciinema.org/a/Euf4KZlGhbHmmUfrROMel2yny">
+    <img width="600" src="/doc/demo/cheat_demo.svg" />
+  </a>
+  <br />
+  <sub>
+    This demo was created using
+    <a href="https://github.com/veracioux/tuterm">tuterm</a>.
+  </sub>
+  <br /><br />
+  <sub>
+    Run <code>tuterm doc/demo/cheat.tut</code> in this repository for an interactive tutorial.
+  </sub>
+</div>
+<br />
+
 `cheat` allows you to create and view interactive cheatsheets on the
 command-line. It was designed to help remind \*nix system administrators of
 options for commands that they use frequently, but not frequently enough to
