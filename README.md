@@ -49,7 +49,8 @@ Installing
 [releases][] page and place it on your `PATH`.
 
 Alternatively, if you have [go][] installed, you may install `cheat` using `go
-get`:
+get` (or [`go
+install` if your go version is >1.6][gogetdeprecation]) :
 
 ```sh
 go get -u github.com/cheat/cheat/cmd/cheat
@@ -228,3 +229,4 @@ Additionally, `cheat` supports enhanced autocompletion via integration with
 [completions]: https://github.com/cheat/cheat/tree/master/scripts
 [fzf]:         https://github.com/junegunn/fzf
 [go]:          https://golang.org
+[gogetdeprecation]:       https://go.dev/doc/go-get-install-deprecation
