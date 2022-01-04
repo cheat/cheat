@@ -55,6 +55,12 @@ get`:
 go get -u github.com/cheat/cheat/cmd/cheat
 ```
 
+### Using Homebrew
+
+```sh
+brew install cheat
+```
+
 Configuring
 -----------
 ### conf.yml ###
