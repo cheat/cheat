@@ -52,7 +52,7 @@ Alternatively, if you have [go][] installed, you may install `cheat` using `go
 get`:
 
 ```sh
-go get -u github.com/cheat/cheat/cmd/cheat
+go install github.com/cheat/cheat/cmd/cheat@latest
 ```
 
 Configuring
