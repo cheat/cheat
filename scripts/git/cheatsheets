@@ -1,4 +1,18 @@
 #!/bin/sh -e
+init() {
+  readarray d < <(yq -c '.cheatpaths[]' ~/.cheat.yml)
+
+  for c in "${d[@]}"; 
+  do
+      name="$(echo ${c} | yq -r '.name')"
+      path="$(echo ${c} | yq -r '.path')"
+      src="$( echo ${c} | yq -r '.source')"
+
+      echo "Init $name"
+      [ ! -d "$path" ] && git clone $src $path || :
+  done
+  echo "Finished init"
+}
 
 pull() {
   for d in `cheat -d | awk '{print $2}'`;
@@ -36,8 +50,13 @@ if [ "$1" = "pull" ]; then
   pull
 elif [ "$1" = "push" ]; then
   push
+elif [ "$1" = "init" ]; then
+  init
 else
   echo "Usage:
+  # init cheatsheets
+  cheatsheets init
+
   # pull changes
   cheatsheets pull
 
