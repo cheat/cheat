@@ -14,6 +14,7 @@ Options:
   --init                  Write a default config file to stdout
   -a --all                Search among all cheatpaths
   -c --colorize           Colorize output
+  -C --config             Print config path
   -d --directories        List cheatsheet directories
   -e --edit=<cheatsheet>  Edit <cheatsheet>
   -l --list               List cheatsheets
@@ -29,6 +30,9 @@ Examples:
 
   To initialize a config file:
     mkdir -p ~/.config/cheat && cheat --init > ~/.config/cheat/conf.yml
+
+  To show current config path:
+    cheat -C
 
   To view the tar cheatsheet:
     cheat tar

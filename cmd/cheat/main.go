@@ -104,6 +104,12 @@ func main() {
 		os.Exit(1)
 	}
 
+	// print config path
+	if opts["--config"] != nil && opts["--config"] == true {
+		fmt.Fprintf(os.Stdout, "config: %s\n", confpath)
+		os.Exit(0)
+	}
+
 	// filter the cheatpaths if --path was passed
 	if opts["--path"] != nil {
 		conf.Cheatpaths, err = cheatpath.Filter(

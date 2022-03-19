@@ -1,15 +1,15 @@
 #!/bin/sh -e
 init() {
-  readarray d < <(yq -c '.cheatpaths[]' ~/.cheat.yml)
+  readarray d < <(yq -c '.cheatpaths[]' "$(cheat -C | awk '{print $2}')")
 
   for c in "${d[@]}"; 
   do
       name="$(echo ${c} | yq -r '.name')"
       path="$(echo ${c} | yq -r '.path')"
+      path="${path/#\~/$HOME}"
       src="$( echo ${c} | yq -r '.source')"
 
-      echo "Init $name"
-      [ ! -d "$path" ] && git clone $src $path || :
+      [ ! -d "$path" ] && (echo "Init $name"; git clone $src $path) || :
   done
   echo "Finished init"
 }
