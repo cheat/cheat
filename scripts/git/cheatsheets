@@ -12,7 +12,8 @@ init() {
           echo "Init $name"
           git clone "$source" "$path"
       fi
-  done < <(yq -r '.cheatpaths[] | [.name, .path, .source] | @tsv' "$(cheat -C | awk '{print $2}')")
+  # requires go-yq
+  done < <(yq '.cheatpaths[] | [.name, .path, .source] | @tsv' "$(cheat -C | awk '{print $2}')")
 
   echo "Finished init"
 }
