@@ -48,11 +48,15 @@ Installing
 `cheat` has no dependencies. To install it, download the executable from the
 [releases][] page and place it on your `PATH`.
 
-Alternatively, if you have [go][] installed, you may install `cheat` using `go
-get`:
+Alternatively, you may use [go][] if is installed on your system.
 
+For Go up to version v1.17:
 ```sh
 go get -u github.com/cheat/cheat/cmd/cheat
+```
+For Go as of version 1.17:
+```
+go install github.com/cheat/cheat/cmd/cheat@latest
 ```
 
 Configuring
