@@ -50,11 +50,11 @@ Installing
 
 Alternatively, you may use [go][] if is installed on your system.
 
-For go up to version v1.17:
+For go up to v1.17:
 ```sh
 go get -u github.com/cheat/cheat/cmd/cheat
 ```
-For go as of version 1.17:
+For go as of v1.17:
 ```sh
 go install github.com/cheat/cheat/cmd/cheat@latest
 ```
