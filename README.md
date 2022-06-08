@@ -55,7 +55,7 @@ For Go up to version v1.17:
 go get -u github.com/cheat/cheat/cmd/cheat
 ```
 For Go as of version 1.17:
-```
+```sh
 go install github.com/cheat/cheat/cmd/cheat@latest
 ```
 
