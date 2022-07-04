@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	cp "github.com/cheat/cheat/internal/cheatpath"
@@ -98,8 +100,22 @@ func New(opts map[string]interface{}, confPath string, resolve bool) (Config, er
 			conf.Editor = os.Getenv("VISUAL")
 		} else if os.Getenv("EDITOR") != "" {
 			conf.Editor = os.Getenv("EDITOR")
+		} else if runtime.GOOS == "windows" {
+			conf.Editor = "notepad"
 		} else {
-			return Config{}, fmt.Errorf("no editor set")
+			// try to fall back to `nano`
+			path, err := exec.LookPath("nano")
+			if err != nil {
+				return Config{}, fmt.Errorf("failed to locate nano: %s", err)
+			}
+
+			// use `nano` if we found it
+			if path != "" {
+				conf.Editor = "nano"
+				// otherwise, give up
+			} else {
+				return Config{}, fmt.Errorf("no editor set")
+			}
 		}
 	}
 
@@ -110,12 +126,13 @@ func New(opts map[string]interface{}, confPath string, resolve bool) (Config, er
 
 	// if a chroma formatter was not provided, set a default
 	if conf.Formatter == "" {
-		conf.Formatter = "terminal16m"
+		conf.Formatter = "terminal"
 	}
 
-	// if a pager was not provided, set a default
-	if strings.TrimSpace(conf.Pager) == "" {
-		conf.Pager = ""
+	// attempt to fall back to `PAGER` if a pager is not specified in configs
+	conf.Pager = strings.TrimSpace(conf.Pager)
+	if conf.Pager == "" && os.Getenv("PAGER") != "" {
+		conf.Pager = os.Getenv("PAGER")
 	}
 
 	return conf, nil

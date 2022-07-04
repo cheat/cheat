@@ -85,8 +85,8 @@ func TestEmptyEditor(t *testing.T) {
 
 	// initialize a config
 	conf, err := New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
-	if err == nil {
-		t.Errorf("failed to return an error on empty editor")
+	if err != nil {
+		t.Errorf("failed to initialize test: %v", err)
 	}
 
 	// set editor, and assert that it is respected
