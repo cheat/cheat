@@ -86,7 +86,7 @@ $(dist_dir)/cheat-linux-arm64: prepare
 # cheat-windows-amd64
 $(dist_dir)/cheat-windows-amd64.exe: prepare
 	GOARCH=amd64 GOOS=windows \
-	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(ZIP) $@.zip $@
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(ZIP) $@.zip $@ -j
 
 # ./dist
 $(dist_dir):
