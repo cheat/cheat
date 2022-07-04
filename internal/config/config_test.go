@@ -39,17 +39,17 @@ func TestConfigSuccessful(t *testing.T) {
 	// assert that the cheatpaths are correct
 	want := []cheatpath.Cheatpath{
 		cheatpath.Cheatpath{
-			Path:     filepath.Join(home, ".dotfiles/cheat/community"),
+			Path:     filepath.Join(home, ".dotfiles", "cheat", "community"),
 			ReadOnly: true,
 			Tags:     []string{"community"},
 		},
 		cheatpath.Cheatpath{
-			Path:     filepath.Join(home, ".dotfiles/cheat/work"),
+			Path:     filepath.Join(home, ".dotfiles", "cheat", "work"),
 			ReadOnly: false,
 			Tags:     []string{"work"},
 		},
 		cheatpath.Cheatpath{
-			Path:     filepath.Join(home, ".dotfiles/cheat/personal"),
+			Path:     filepath.Join(home, ".dotfiles", "cheat", "personal"),
 			ReadOnly: false,
 			Tags:     []string{"personal"},
 		},

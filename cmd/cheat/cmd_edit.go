@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/cheat/cheat/internal/cheatpath"
@@ -58,10 +58,10 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 		}
 
 		// compute the new edit path
-		editpath = path.Join(writepath.Path, sheet.Title)
+		editpath = filepath.Join(writepath.Path, sheet.Title)
 
 		// create any necessary subdirectories
-		dirs := path.Dir(editpath)
+		dirs := filepath.Dir(editpath)
 		if dirs != "." {
 			if err := os.MkdirAll(dirs, 0755); err != nil {
 				fmt.Fprintf(os.Stderr, "failed to create directory: %s, %v\n", dirs, err)
@@ -87,10 +87,10 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 		}
 
 		// compute the new edit path
-		editpath = path.Join(writepath.Path, cheatsheet)
+		editpath = filepath.Join(writepath.Path, cheatsheet)
 
 		// create any necessary subdirectories
-		dirs := path.Dir(editpath)
+		dirs := filepath.Dir(editpath)
 		if dirs != "." {
 			if err := os.MkdirAll(dirs, 0755); err != nil {
 				fmt.Fprintf(os.Stderr, "failed to create directory: %s, %v\n", dirs, err)

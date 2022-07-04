@@ -33,20 +33,20 @@ func Paths(
 
 		// don't include the `XDG_CONFIG_HOME` path if that envvar is not set
 		if xdgpath, ok := envvars["XDG_CONFIG_HOME"]; ok {
-			paths = append(paths, filepath.Join(xdgpath, "/cheat/conf.yml"))
+			paths = append(paths, filepath.Join(xdgpath, "cheat", "conf.yml"))
 		}
 
 		paths = append(paths, []string{
-			filepath.Join(home, ".config/cheat/conf.yml"),
-			filepath.Join(home, ".cheat/conf.yml"),
+			filepath.Join(home, ".config", "cheat", "conf.yml"),
+			filepath.Join(home, ".cheat", "conf.yml"),
 			"/etc/cheat/conf.yml",
 		}...)
 
 		return paths, nil
 	case "windows":
 		return []string{
-			filepath.Join(envvars["APPDATA"], "/cheat/conf.yml"),
-			filepath.Join(envvars["PROGRAMDATA"], "/cheat/conf.yml"),
+			filepath.Join(envvars["APPDATA"], "cheat", "conf.yml"),
+			filepath.Join(envvars["PROGRAMDATA"], "cheat", "conf.yml"),
 		}, nil
 	default:
 		return []string{}, fmt.Errorf("unsupported os: %s", sys)
