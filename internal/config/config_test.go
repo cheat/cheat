@@ -39,17 +39,17 @@ func TestConfigSuccessful(t *testing.T) {
 	// assert that the cheatpaths are correct
 	want := []cheatpath.Cheatpath{
 		cheatpath.Cheatpath{
-			Path:     filepath.Join(home, ".dotfiles/cheat/community"),
+			Path:     filepath.Join(home, ".dotfiles", "cheat", "community"),
 			ReadOnly: true,
 			Tags:     []string{"community"},
 		},
 		cheatpath.Cheatpath{
-			Path:     filepath.Join(home, ".dotfiles/cheat/work"),
+			Path:     filepath.Join(home, ".dotfiles", "cheat", "work"),
 			ReadOnly: false,
 			Tags:     []string{"work"},
 		},
 		cheatpath.Cheatpath{
-			Path:     filepath.Join(home, ".dotfiles/cheat/personal"),
+			Path:     filepath.Join(home, ".dotfiles", "cheat", "personal"),
 			ReadOnly: false,
 			Tags:     []string{"personal"},
 		},
@@ -85,8 +85,8 @@ func TestEmptyEditor(t *testing.T) {
 
 	// initialize a config
 	conf, err := New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
-	if err == nil {
-		t.Errorf("failed to return an error on empty editor")
+	if err != nil {
+		t.Errorf("failed to initialize test: %v", err)
 	}
 
 	// set editor, and assert that it is respected

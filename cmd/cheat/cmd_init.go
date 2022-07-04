@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"path"
+	"path/filepath"
 	"runtime"
 	"strings"
 
@@ -42,11 +42,11 @@ func cmdInit() {
 	// determine the appropriate paths for config data and (optional) community
 	// cheatsheets based on the user's platform
 	confpath := confpaths[0]
-	confdir := path.Dir(confpath)
+	confdir := filepath.Dir(confpath)
 
 	// create paths for community and personal cheatsheets
-	community := path.Join(confdir, "/cheatsheets/community")
-	personal := path.Join(confdir, "/cheatsheets/personal")
+	community := filepath.Join(confdir, "cheatsheets", "community")
+	personal := filepath.Join(confdir, "cheatsheets", "personal")
 
 	// template the above paths into the default configs
 	configs = strings.Replace(configs, "COMMUNITY_PATH", community, -1)

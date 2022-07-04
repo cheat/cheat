@@ -3,7 +3,7 @@ package installer
 import (
 	"fmt"
 	"os"
-	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/cheat/cheat/internal/config"
@@ -14,11 +14,11 @@ func Run(configs string, confpath string) error {
 
 	// determine the appropriate paths for config data and (optional) community
 	// cheatsheets based on the user's platform
-	confdir := path.Dir(confpath)
+	confdir := filepath.Dir(confpath)
 
 	// create paths for community and personal cheatsheets
-	community := path.Join(confdir, "/cheatsheets/community")
-	personal := path.Join(confdir, "/cheatsheets/personal")
+	community := filepath.Join(confdir, "cheatsheets", "community")
+	personal := filepath.Join(confdir, "cheatsheets", "personal")
 
 	// template the above paths into the default configs
 	configs = strings.Replace(configs, "COMMUNITY_PATH", community, -1)
@@ -36,11 +36,13 @@ func Run(configs string, confpath string) error {
 	// clone the community cheatsheets if so instructed
 	if yes {
 		// clone the community cheatsheets
+		fmt.Printf("Cloning community cheatsheets to %s.\n", community)
 		if err := clone(community); err != nil {
 			return fmt.Errorf("failed to clone cheatsheets: %v", err)
 		}
 
 		// also create a directory for personal cheatsheets
+		fmt.Printf("Cloning personal cheatsheets to %s.\n", personal)
 		if err := os.MkdirAll(personal, os.ModePerm); err != nil {
 			return fmt.Errorf("failed to create directory: %v", err)
 		}

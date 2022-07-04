@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path"
+	"path/filepath"
 )
 
 // Copy copies a cheatsheet to a new location
@@ -22,7 +22,7 @@ func (s *Sheet) Copy(dest string) error {
 	defer infile.Close()
 
 	// create any necessary subdirectories
-	dirs := path.Dir(dest)
+	dirs := filepath.Dir(dest)
 	if dirs != "." {
 		if err := os.MkdirAll(dirs, 0755); err != nil {
 			return fmt.Errorf("failed to create directory: %s, %v", dirs, err)

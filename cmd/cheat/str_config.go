@@ -9,22 +9,23 @@ import (
 func configs() string {
 	return strings.TrimSpace(`---
 # The editor to use with 'cheat -e <sheet>'. Defaults to $EDITOR or $VISUAL.
-editor: vim
+# editor: vim
 
 # Should 'cheat' always colorize output?
-colorize: true
+colorize: false
 
 # Which 'chroma' colorscheme should be applied to the output?
 # Options are available here:
 #   https://github.com/alecthomas/chroma/tree/master/styles
-style: monokai
+# style: monokai
 
 # Which 'chroma' "formatter" should be applied?
 # One of: "terminal", "terminal256", "terminal16m"
-formatter: terminal16m
+formatter: terminal
 
 # Through which pager should output be piped? (Unset this key for no pager.)
-pager: less -FRX
+pager: more
+# pager: less -FRX # <- recommended where available
 
 # The paths at which cheatsheets are available. Tags associated with a cheatpath
 # are automatically attached to all cheatsheets residing on that path.
