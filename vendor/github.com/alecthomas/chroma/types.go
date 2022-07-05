@@ -38,6 +38,10 @@ func (t *TokenType) UnmarshalJSON(data []byte) error {
 const (
 	// Default background style.
 	Background TokenType = -1 - iota
+	// PreWrapper style.
+	PreWrapper
+	// Line style.
+	Line
 	// Line numbers in output.
 	LineNumbers
 	// Line numbers in output when in table.
@@ -48,6 +52,8 @@ const (
 	LineTable
 	// Line numbers table TD wrapper style.
 	LineTableTD
+	// Code line wrapper style.
+	CodeLine
 	// Input that could not be tokenised.
 	Error
 	// Other is used by the Delegate lexer to indicate which tokens should be handled by the delegate.
@@ -219,12 +225,15 @@ const (
 
 var (
 	StandardTypes = map[TokenType]string{
-		Background:       "chroma",
+		Background:       "bg",
+		PreWrapper:       "chroma",
+		Line:             "line",
 		LineNumbers:      "ln",
 		LineNumbersTable: "lnt",
 		LineHighlight:    "hl",
 		LineTable:        "lntable",
 		LineTableTD:      "lntd",
+		CodeLine:         "cl",
 		Text:             "",
 		Whitespace:       "w",
 		Error:            "err",
@@ -342,6 +351,6 @@ func (t TokenType) InSubCategory(other TokenType) bool {
 	return t/100 == other/100
 }
 
-func (t TokenType) Emit(groups []string, lexer Lexer) Iterator {
+func (t TokenType) Emit(groups []string, _ *LexerState) Iterator {
 	return Literator(Token{Type: t, Value: groups[0]})
 }

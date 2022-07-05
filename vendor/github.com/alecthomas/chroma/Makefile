@@ -12,7 +12,7 @@ tokentype_string.go: types.go
 
 chromad:
 	rm -f chromad
-	(export CGOENABLED=0 GOOS=linux ; cd ./cmd/chromad && go build -ldflags="-X 'main.version=$(VERSION)'" -o ../../chromad .)
+	(export CGOENABLED=0 GOOS=linux GOARCH=amd64; cd ./cmd/chromad && go build -ldflags="-X 'main.version=$(VERSION)'" -o ../../chromad .)
 
 upload: chromad
 	scp chromad root@swapoff.org: && \
