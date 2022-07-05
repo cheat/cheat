@@ -105,6 +105,10 @@ wget -O ~/.local/bin/cheatsheets https://raw.githubusercontent.com/cheat/cheat/m
 chmod +x ~/.local/bin/cheatsheets
 ```
 
+#### Init cheatsheets ####
+This command requires `yq`
+To init the cheatsheets call `cheatsheets init` 
+
 #### Pull changes ####
 To pull the community and personal cheatsheets call `cheatsheets pull`
 

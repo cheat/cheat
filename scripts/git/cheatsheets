@@ -1,4 +1,22 @@
-#!/bin/sh -e
+#!/bin/bash -e
+init() {
+  if ! cheat -C > /dev/null; then
+      exit 1
+  fi 
+  while IFS=$'\t' read -r name path source;
+  do
+      # failed to use posix sh to expand tilde
+      path="${path/#\~/$HOME}"
+      # git clone when path not exists or path exists but empty
+      if [ ! -d "$path" ] || [ -d "$path" ] && [ -z "$(ls -A "$path")" ]; then
+          echo "Init $name"
+          git clone "$source" "$path"
+      fi
+  # requires go-yq
+  done < <(yq '.cheatpaths[] | [.name, .path, .source] | @tsv' "$(cheat -C | awk '{print $2}')")
+
+  echo "Finished init"
+}
 
 pull() {
   for d in `cheat -d | awk '{print $2}'`;
@@ -36,8 +54,13 @@ if [ "$1" = "pull" ]; then
   pull
 elif [ "$1" = "push" ]; then
   push
+elif [ "$1" = "init" ]; then
+  init
 else
   echo "Usage:
+  # init cheatsheets
+  cheatsheets init
+
   # pull changes
   cheatsheets pull
 

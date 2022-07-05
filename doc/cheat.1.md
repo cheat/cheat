@@ -26,6 +26,9 @@ OPTIONS
 -c, --colorize
 : Colorize output.
 
+-C, --config
+: Print config path
+
 -d, --directories
 : List cheatsheet directories.
 

@@ -38,6 +38,7 @@ _cheat()
   # implement completions
   case $prev in
     --colorize|-c|\
+    --config|-C|\
     --directories|-d|\
     --init|\
     --regex|-r|\
