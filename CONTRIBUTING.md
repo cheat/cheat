@@ -19,7 +19,8 @@ tracker][issues] to discuss with the maintainer whether it would be considered
 for merging.
 
 `cheat` is mostly mature and feature-complete, but may still have some room for
-new features.
+new features. See [HACKING.md][hacking] for a quick-start guide to `cheat`
+development.
 
 #### Add documentation ####
 Did you encounter features, bugs, edge-cases, use-cases, or environment
@@ -41,6 +42,7 @@ Please open all pull-requests against the `develop` branch.
 
 [cheat]: https://github.com/cheat/cheat
 [cheatsheets]: https://github.com/cheat/cheatsheets
+[hacking]: HACKING.md
 [issues]: https://github.com/cheat/cheat/issues 
 [pr]: https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request-from-a-fork
 [wiki]: https://github.com/cheat/cheat/wiki
