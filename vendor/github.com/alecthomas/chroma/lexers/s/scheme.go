@@ -30,7 +30,7 @@ func schemeLangRules() Rules {
 			{`-?\d+`, LiteralNumberInteger, nil},
 			{`"(\\\\|\\"|[^"])*"`, LiteralString, nil},
 			{`'[\w!$%&*+,/:<=>?@^~|-]+`, LiteralStringSymbol, nil},
-			{`#\\([()/'\"._!§$%& ?=+-]|[a-zA-Z0-9]+)`, LiteralStringChar, nil},
+			{`#\\(alarm|backspace|delete|esc|linefeed|newline|page|return|space|tab|vtab|x[0-9a-zA-Z]{1,5}|.)`, LiteralStringChar, nil},
 			{`(#t|#f)`, NameConstant, nil},
 			{"('|#|`|,@|,|\\.)", Operator, nil},
 			{`(lambda |define |if |else |cond |and |or |case |let |let\* |letrec |begin |do |delay |set\! |\=\> |quote |quasiquote |unquote |unquote\-splicing |define\-syntax |let\-syntax |letrec\-syntax |syntax\-rules )`, Keyword, nil},

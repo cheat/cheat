@@ -120,7 +120,7 @@ func maxLineWidth(lines [][]chroma.Token) int {
 	for _, tokens := range lines {
 		length := 0
 		for _, token := range tokens {
-			length += len(strings.Replace(token.String(), `	`, "    ", -1))
+			length += len(strings.ReplaceAll(token.String(), `	`, "    "))
 		}
 		if length > maxWidth {
 			maxWidth = length
@@ -136,7 +136,7 @@ func (f *Formatter) writeTokenBackgrounds(w io.Writer, lines [][]chroma.Token, s
 	for index, tokens := range lines {
 		lineLength := 0
 		for _, token := range tokens {
-			length := len(strings.Replace(token.String(), `	`, "    ", -1))
+			length := len(strings.ReplaceAll(token.String(), `	`, "    "))
 			tokenBackground := style.Get(token.Type).Background
 			if tokenBackground.IsSet() && tokenBackground != style.Get(chroma.Background).Background {
 				fmt.Fprintf(w, "<rect id=\"%s\" x=\"%dch\" y=\"%fem\" width=\"%dch\" height=\"1.2em\" fill=\"%s\" />\n", escapeString(token.String()), lineLength, 1.2*float64(index)+0.25, length, style.Get(token.Type).Background.String())

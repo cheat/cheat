@@ -46,6 +46,13 @@ func WithPreWrapper(wrapper PreWrapper) Option {
 	}
 }
 
+// WrapLongLines wraps long lines.
+func WrapLongLines(b bool) Option {
+	return func(f *Formatter) {
+		f.wrapLongLines = b
+	}
+}
+
 // WithLineNumbers formats output with line numbers.
 func WithLineNumbers(b bool) Option {
 	return func(f *Formatter) {
@@ -131,10 +138,18 @@ var (
 	}
 	defaultPreWrapper = preWrapper{
 		start: func(code bool, styleAttr string) string {
-			return fmt.Sprintf("<pre%s>", styleAttr)
+			if code {
+				return fmt.Sprintf(`<pre tabindex="0"%s><code>`, styleAttr)
+			}
+
+			return fmt.Sprintf(`<pre tabindex="0"%s>`, styleAttr)
 		},
 		end: func(code bool) string {
-			return "</pre>"
+			if code {
+				return `</code></pre>`
+			}
+
+			return `</pre>`
 		},
 	}
 )
@@ -147,6 +162,7 @@ type Formatter struct {
 	allClasses          bool
 	preWrapper          PreWrapper
 	tabWidth            int
+	wrapLongLines       bool
 	lineNumbers         bool
 	lineNumbersInTable  bool
 	linkableLineNumbers bool
@@ -197,10 +213,10 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 
 	if wrapInTable {
 		// List line numbers in its own <td>
-		fmt.Fprintf(w, "<div%s>\n", f.styleAttr(css, chroma.Background))
+		fmt.Fprintf(w, "<div%s>\n", f.styleAttr(css, chroma.PreWrapper))
 		fmt.Fprintf(w, "<table%s><tr>", f.styleAttr(css, chroma.LineTable))
 		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD))
-		fmt.Fprintf(w, f.preWrapper.Start(false, f.styleAttr(css, chroma.Background)))
+		fmt.Fprintf(w, f.preWrapper.Start(false, f.styleAttr(css, chroma.PreWrapper)))
 		for index := range lines {
 			line := f.baseLineNumber + index
 			highlight, next := f.shouldHighlight(highlightIndex, line)
@@ -222,7 +238,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD, "width:100%"))
 	}
 
-	fmt.Fprintf(w, f.preWrapper.Start(true, f.styleAttr(css, chroma.Background)))
+	fmt.Fprintf(w, f.preWrapper.Start(true, f.styleAttr(css, chroma.PreWrapper)))
 
 	highlightIndex = 0
 	for index, tokens := range lines {
@@ -232,13 +248,27 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		if next {
 			highlightIndex++
 		}
+
+		// Start of Line
+		fmt.Fprint(w, `<span`)
 		if highlight {
-			fmt.Fprintf(w, "<span%s>", f.styleAttr(css, chroma.LineHighlight))
+			// Line + LineHighlight
+			if f.Classes {
+				fmt.Fprintf(w, ` class="%s %s"`, f.class(chroma.Line), f.class(chroma.LineHighlight))
+			} else {
+				fmt.Fprintf(w, ` style="%s %s"`, css[chroma.Line], css[chroma.LineHighlight])
+			}
+			fmt.Fprint(w, `>`)
+		} else {
+			fmt.Fprintf(w, "%s>", f.styleAttr(css, chroma.Line))
 		}
 
+		// Line number
 		if f.lineNumbers && !wrapInTable {
 			fmt.Fprintf(w, "<span%s%s>%s</span>", f.styleAttr(css, chroma.LineNumbers), f.lineIDAttribute(line), f.lineTitleWithLinkIfNeeded(lineDigits, line))
 		}
+
+		fmt.Fprintf(w, `<span%s>`, f.styleAttr(css, chroma.CodeLine))
 
 		for _, token := range tokens {
 			html := html.EscapeString(token.String())
@@ -248,9 +278,10 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 			}
 			fmt.Fprint(w, html)
 		}
-		if highlight {
-			fmt.Fprintf(w, "</span>")
-		}
+
+		fmt.Fprint(w, `</span>`) // End of CodeLine
+
+		fmt.Fprint(w, `</span>`) // End of Line
 	}
 
 	fmt.Fprintf(w, f.preWrapper.End(true))
@@ -351,7 +382,11 @@ func (f *Formatter) tabWidthStyle() string {
 func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 	css := f.styleToCSS(style)
 	// Special-case background as it is mapped to the outer ".chroma" class.
-	if _, err := fmt.Fprintf(w, "/* %s */ .%schroma { %s }\n", chroma.Background, f.prefix, css[chroma.Background]); err != nil {
+	if _, err := fmt.Fprintf(w, "/* %s */ .%sbg { %s }\n", chroma.Background, f.prefix, css[chroma.Background]); err != nil {
+		return err
+	}
+	// Special-case PreWrapper as it is the ".chroma" class.
+	if _, err := fmt.Fprintf(w, "/* %s */ .%schroma { %s }\n", chroma.PreWrapper, f.prefix, css[chroma.PreWrapper]); err != nil {
 		return err
 	}
 	// Special-case code column of table to expand width.
@@ -375,7 +410,8 @@ func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
 	sort.Ints(tts)
 	for _, ti := range tts {
 		tt := chroma.TokenType(ti)
-		if tt == chroma.Background {
+		switch tt {
+		case chroma.Background, chroma.PreWrapper:
 			continue
 		}
 		class := f.class(tt)
@@ -405,12 +441,21 @@ func (f *Formatter) styleToCSS(style *chroma.Style) map[chroma.TokenType]string 
 		classes[t] = StyleEntryToCSS(entry)
 	}
 	classes[chroma.Background] += f.tabWidthStyle()
-	lineNumbersStyle := "margin-right: 0.4em; padding: 0 0.4em 0 0.4em;"
+	classes[chroma.PreWrapper] += classes[chroma.Background] + `;`
+	// Make PreWrapper a grid to show highlight style with full width.
+	if len(f.highlightRanges) > 0 {
+		classes[chroma.PreWrapper] += `display: grid;`
+	}
+	// Make PreWrapper wrap long lines.
+	if f.wrapLongLines {
+		classes[chroma.PreWrapper] += `white-space: pre-wrap; word-break: break-word;`
+	}
+	lineNumbersStyle := `white-space: pre; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;`
 	// All rules begin with default rules followed by user provided rules
+	classes[chroma.Line] = `display: flex;` + classes[chroma.Line]
 	classes[chroma.LineNumbers] = lineNumbersStyle + classes[chroma.LineNumbers]
 	classes[chroma.LineNumbersTable] = lineNumbersStyle + classes[chroma.LineNumbersTable]
-	classes[chroma.LineHighlight] = "display: block; width: 100%;" + classes[chroma.LineHighlight]
-	classes[chroma.LineTable] = "border-spacing: 0; padding: 0; margin: 0; border: 0; width: auto; overflow: auto; display: block;" + classes[chroma.LineTable]
+	classes[chroma.LineTable] = "border-spacing: 0; padding: 0; margin: 0; border: 0;" + classes[chroma.LineTable]
 	classes[chroma.LineTableTD] = "vertical-align: top; padding: 0; margin: 0; border: 0;" + classes[chroma.LineTableTD]
 	return classes
 }

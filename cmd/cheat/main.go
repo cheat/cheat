@@ -16,12 +16,12 @@ import (
 	"github.com/cheat/cheat/internal/installer"
 )
 
-const version = "4.2.4"
+const version = "4.2.5"
 
 func main() {
 
 	// initialize options
-	opts, err := docopt.Parse(usage(), nil, true, version, false)
+	opts, err := docopt.ParseArgs(usage(), nil, version)
 	if err != nil {
 		// panic here, because this should never happen
 		panic(fmt.Errorf("docopt failed to parse: %v", err))

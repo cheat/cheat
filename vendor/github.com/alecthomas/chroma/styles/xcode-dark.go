@@ -21,7 +21,7 @@ var (
 
 // Xcode dark style
 var XcodeDark = Register(chroma.MustNewStyle("xcode-dark", chroma.StyleEntries{
-	chroma.Background: plainText + " bg: " + background,
+	chroma.Background: plainText + " bg:" + background,
 
 	chroma.Comment:          comments,
 	chroma.CommentMultiline: comments,
