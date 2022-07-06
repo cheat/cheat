@@ -39,7 +39,7 @@ Package manager  | Installing
 ---------------- | -----------
 [brew][]         | `brew install cheat`
 [docker][]       | `alias cheat='docker run --rm bannmann/docker-cheat'`
-[nix][]          | `nix-env --install cheat`
+[nix][]          | `nix-env -iA nixos.cheat`
 [snap][]         | `snap install cheat`
 
 <!--[pacman][]       |-->
@@ -71,7 +71,7 @@ export CHEAT_CONFIG_PATH="~/.dotfiles/cheat/conf.yml"
 [cheatpaths]: README.md#cheatpaths
 [community]:  https://github.com/cheat/cheatsheets/
 [docker]:     https://github.com/bannmann/docker-cheat
-[nix]:        https://pkgs.on-nix.com/nixpkgs/cheat/
+[nix]:        https://search.nixos.org/packages?channel=unstable&show=cheat&from=0&size=50&sort=relevance&type=packages&query=cheat 
 [pacman]:     # 
 [releases]:   https://github.com/cheat/cheat/releases
 [snap]:       https://snapcraft.io/cheat
