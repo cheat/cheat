@@ -93,3 +93,56 @@ To foo the bar: baz`
 		t.Errorf("failed to parse text: want: %s, got: %s", markdown, text)
 	}
 }
+
+// TestTrimEmptyLines assert that leading and trailing empty lines are removed
+func TestTrimEmptyLines(t *testing.T) {
+
+	// define for readability of the tests
+	blank := "\x20"
+	linefeed := "\x0A"
+
+	testCases := []struct {
+		input string
+		want  string
+	}{
+		// nothing to be trimmed
+		{"", ""},
+		{"a", "a"},
+		{" non empty line ", " non empty line "},
+		{" non empty line " + linefeed, " non empty line " + linefeed},
+		{" non empty line " + linefeed + " another non empty line ", " non empty line " + linefeed + " another non empty line "},
+		{" non empty line " + linefeed + " another non empty line " + linefeed, " non empty line " + linefeed + " another non empty line " + linefeed},
+		// trim leading empty lines
+		{linefeed + " non empty line ", " non empty line "},
+		{blank + linefeed + " non empty line ", " non empty line "},
+		{blank + linefeed + linefeed + " non empty line ", " non empty line "},
+		{linefeed + blank + linefeed + " non empty line ", " non empty line "},
+		{blank + linefeed + blank + linefeed + " non empty line ", " non empty line "},
+		{linefeed + " non empty line " + linefeed + " another non empty line ", " non empty line " + linefeed + " another non empty line "},
+		{blank, ""},
+		{linefeed, ""},
+		{blank + linefeed, ""},
+		{linefeed + blank, ""},
+		{blank + linefeed + blank, ""},
+		{linefeed + blank + linefeed, ""},
+		// trim trailing empty lines
+		{" non empty line " + linefeed + blank, " non empty line " + linefeed},
+		{" non empty line " + linefeed + blank + linefeed, " non empty line " + linefeed},
+		{" non empty line " + linefeed + blank + linefeed + blank, " non empty line " + linefeed},
+	}
+
+	for _, testCase := range testCases {
+		// parse the input
+		text, _, err := Parse(testCase.input)
+
+		// assert expectations
+		if err != nil {
+			t.Errorf("failed to parse input: %v", err)
+		}
+
+		// assert that the wanted output was returned
+		if text != testCase.want {
+			t.Errorf("failed to parse text: want: [%s], got: [%s]", testCase.want, text)
+		}
+	}
+}
