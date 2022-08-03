@@ -37,7 +37,8 @@ github.com/alecthomas/chroma/styles
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
-# github.com/dlclark/regexp2 v1.4.0
+# github.com/dlclark/regexp2 v1.7.0
+## explicit
 github.com/dlclark/regexp2
 github.com/dlclark/regexp2/syntax
 # github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
@@ -53,7 +54,7 @@ github.com/mattn/go-isatty
 github.com/mitchellh/go-homedir
 # github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e
 ## explicit
-# golang.org/x/sys v0.0.0-20220704084225-05e143d24a9e
+# golang.org/x/sys v0.0.0-20220731174439-a90be440212d
 ## explicit
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
