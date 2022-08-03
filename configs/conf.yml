@@ -14,8 +14,7 @@ colorize: false
 # One of: "terminal", "terminal256", "terminal16m"
 formatter: terminal
 
-# Through which pager should output be piped? (Unset this key for no pager.)
-pager: more
+# Through which pager should output be piped?
 # pager: less -FRX # <- recommended where available
 
 # The paths at which cheatsheets are available. Tags associated with a cheatpath

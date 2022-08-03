@@ -131,8 +131,36 @@ func New(opts map[string]interface{}, confPath string, resolve bool) (Config, er
 
 	// attempt to fall back to `PAGER` if a pager is not specified in configs
 	conf.Pager = strings.TrimSpace(conf.Pager)
-	if conf.Pager == "" && os.Getenv("PAGER") != "" {
-		conf.Pager = os.Getenv("PAGER")
+	if conf.Pager == "" {
+		// look for `pager`, `less`, and `more` on the system PATH
+		pagerPath, _ := exec.LookPath("pager")
+		lessPath, _ := exec.LookPath("less")
+		morePath, _ := exec.LookPath("more")
+
+		// search first for a `PAGER` envvar
+		if os.Getenv("PAGER") != "" {
+			conf.Pager = os.Getenv("PAGER")
+
+			// search for `pager`
+		} else if pagerPath != "" {
+			conf.Pager = pagerPath
+
+			// search for `less`
+		} else if lessPath != "" {
+			conf.Pager = lessPath
+
+			// search for `more`
+			//
+			// XXX: this causes issues on some Linux systems. See:
+			// https://github.com/cheat/cheat/issues/681#issuecomment-1201842334
+			//
+			// By checking for `more` last, we're hoping to at least mitigate
+			// the frequency of this occurrence, because `pager` and `less` are
+			// likely to be available on most systems on which a user is likely
+			// to have installed `cheat`.
+		} else if morePath != "" {
+			conf.Pager = morePath
+		}
 	}
 
 	return conf, nil
