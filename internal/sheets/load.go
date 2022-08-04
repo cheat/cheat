@@ -2,6 +2,7 @@ package sheets
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -55,7 +56,11 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 				// contained within hidden directories in the middle of a path, though
 				// that should not realistically occur.
 				if strings.HasPrefix(title, ".") || strings.HasPrefix(info.Name(), ".") {
-					return nil
+					// Do not walk hidden directories. This is important,
+					// because it's common for cheatsheets to be stored in
+					// version-control, and a `.git` directory can easily
+					// contain thousands of files.
+					return fs.SkipDir
 				}
 
 				// parse the cheatsheet file into a `sheet` struct
