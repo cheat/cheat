@@ -20,7 +20,7 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 	// load the cheatsheets
 	cheatsheets, err := sheets.Load(conf.Cheatpaths)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, fmt.Sprintf("failed to list cheatsheets: %v", err))
+		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
 		os.Exit(1)
 	}
 

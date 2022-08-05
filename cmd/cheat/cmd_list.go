@@ -21,7 +21,7 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 	// load the cheatsheets
 	cheatsheets, err := sheets.Load(conf.Cheatpaths)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, fmt.Sprintf("failed to list cheatsheets: %v", err))
+		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -63,10 +63,7 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 		// compile the regex
 		reg, err := regexp.Compile(pattern)
 		if err != nil {
-			fmt.Fprintln(
-				os.Stderr,
-				fmt.Sprintf("failed to compile regexp: %s, %v", pattern, err),
-			)
+			fmt.Fprintf(os.Stderr, "failed to compile regexp: %s, %v\n", pattern, err)
 			os.Exit(1)
 		}
 
@@ -95,12 +92,7 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 
 	// generate sorted, columnized output
 	for _, sheet := range flattened {
-		fmt.Fprintln(w, fmt.Sprintf(
-			"%s\t%s\t%s",
-			sheet.Title,
-			sheet.Path,
-			strings.Join(sheet.Tags, ","),
-		))
+		fmt.Fprintf(w, "%s\t%s\t%s\n", sheet.Title, sheet.Path, strings.Join(sheet.Tags, ","))
 	}
 
 	// write columnized output to stdout

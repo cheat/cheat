@@ -17,7 +17,7 @@ func cmdRemove(opts map[string]interface{}, conf config.Config) {
 	// load the cheatsheets
 	cheatsheets, err := sheets.Load(conf.Cheatpaths)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, fmt.Sprintf("failed to list cheatsheets: %v", err))
+		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -37,19 +37,19 @@ func cmdRemove(opts map[string]interface{}, conf config.Config) {
 	// fail early if the requested cheatsheet does not exist
 	sheet, ok := consolidated[cheatsheet]
 	if !ok {
-		fmt.Fprintln(os.Stderr, fmt.Sprintf("No cheatsheet found for '%s'.\n", cheatsheet))
+		fmt.Fprintf(os.Stderr, "No cheatsheet found for '%s'.\n", cheatsheet)
 		os.Exit(2)
 	}
 
 	// fail early if the sheet is read-only
 	if sheet.ReadOnly {
-		fmt.Fprintln(os.Stderr, fmt.Sprintf("cheatsheet '%s' is read-only.", cheatsheet))
+		fmt.Fprintf(os.Stderr, "cheatsheet '%s' is read-only.\n", cheatsheet)
 		os.Exit(1)
 	}
 
 	// otherwise, attempt to delete the sheet
 	if err := os.Remove(sheet.Path); err != nil {
-		fmt.Fprintln(os.Stderr, fmt.Sprintf("failed to delete sheet: %s, %v", sheet.Title, err))
+		fmt.Fprintf(os.Stderr, "failed to delete sheet: %s, %v\n", sheet.Title, err)
 		os.Exit(1)
 	}
 }

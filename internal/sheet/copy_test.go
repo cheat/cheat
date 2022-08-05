@@ -1,7 +1,6 @@
 package sheet
 
 import (
-	"io/ioutil"
 	"os"
 	"path"
 	"testing"
@@ -13,7 +12,7 @@ func TestCopyFlat(t *testing.T) {
 
 	// mock a cheatsheet file
 	text := "this is the cheatsheet text"
-	src, err := ioutil.TempFile("", "foo-src")
+	src, err := os.CreateTemp("", "foo-src")
 	if err != nil {
 		t.Errorf("failed to mock cheatsheet: %v", err)
 	}
@@ -41,7 +40,7 @@ func TestCopyFlat(t *testing.T) {
 	}
 
 	// assert that the destination file contains the correct text
-	got, err := ioutil.ReadFile(outpath)
+	got, err := os.ReadFile(outpath)
 	if err != nil {
 		t.Errorf("failed to read destination file: %v", err)
 	}
@@ -60,7 +59,7 @@ func TestCopyDeep(t *testing.T) {
 
 	// mock a cheatsheet file
 	text := "this is the cheatsheet text"
-	src, err := ioutil.TempFile("", "foo-src")
+	src, err := os.CreateTemp("", "foo-src")
 	if err != nil {
 		t.Errorf("failed to mock cheatsheet: %v", err)
 	}
@@ -94,7 +93,7 @@ func TestCopyDeep(t *testing.T) {
 	}
 
 	// assert that the destination file contains the correct text
-	got, err := ioutil.ReadFile(outpath)
+	got, err := os.ReadFile(outpath)
 	if err != nil {
 		t.Errorf("failed to read destination file: %v", err)
 	}

@@ -10,7 +10,7 @@ import (
 func Faint(str string, conf config.Config) string {
 	// make `str` faint only if colorization has been requested
 	if conf.Colorize {
-		return fmt.Sprintf(fmt.Sprintf("\033[2m%s\033[0m", str))
+		return fmt.Sprintf("\033[2m%s\033[0m", str)
 	}
 
 	// otherwise, return the string unmodified
