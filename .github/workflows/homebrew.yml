@@ -1,3 +1,4 @@
+---
 name: homebrew
 
 on:
@@ -11,7 +12,8 @@ jobs:
     steps:
       - uses: mislav/bump-homebrew-formula-action@v1
         with:
-          # A PR will be sent to github.com/Homebrew/homebrew-core to update this formula:
+          # A PR will be sent to github.com/Homebrew/homebrew-core to update
+          # this formula:
           formula-name: cheat
         env:
           COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
