@@ -1,7 +1,6 @@
 package config
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 )
@@ -10,7 +9,7 @@ import (
 func TestInit(t *testing.T) {
 
 	// initialize a temporary config file
-	confFile, err := ioutil.TempFile("", "cheat-test")
+	confFile, err := os.CreateTemp("", "cheat-test")
 	if err != nil {
 		t.Errorf("failed to create temp file: %v", err)
 	}
@@ -25,7 +24,7 @@ func TestInit(t *testing.T) {
 	}
 
 	// read back the config file contents
-	bytes, err := ioutil.ReadFile(confFile.Name())
+	bytes, err := os.ReadFile(confFile.Name())
 	if err != nil {
 		t.Errorf("failed to read config file: %v", err)
 	}

@@ -14,7 +14,7 @@ func Prompt(prompt string, def bool) (bool, error) {
 	reader := bufio.NewReader(os.Stdin)
 
 	// display the prompt
-	fmt.Print(fmt.Sprintf("%s: ", prompt))
+	fmt.Printf("%s: ", prompt)
 
 	// read the answer
 	ans, err := reader.ReadString('\n')

@@ -11,12 +11,10 @@ func Writeable(cheatpaths []Cheatpath) (Cheatpath, error) {
 	// NB: we're going backwards because we assume that the most "local"
 	// cheatpath will be specified last in the configs
 	for i := len(cheatpaths) - 1; i >= 0; i-- {
-
 		// if the cheatpath is not read-only, it is writeable, and thus returned
-		if cheatpaths[i].ReadOnly == false {
+		if !cheatpaths[i].ReadOnly {
 			return cheatpaths[i], nil
 		}
-
 	}
 
 	// otherwise, return an error

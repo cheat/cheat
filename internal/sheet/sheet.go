@@ -2,7 +2,7 @@ package sheet
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"sort"
 
 	"github.com/cheat/cheat/internal/frontmatter"
@@ -29,7 +29,7 @@ func New(
 ) (Sheet, error) {
 
 	// read the cheatsheet file
-	markdown, err := ioutil.ReadFile(path)
+	markdown, err := os.ReadFile(path)
 	if err != nil {
 		return Sheet{}, fmt.Errorf("failed to read file: %s, %v", path, err)
 	}

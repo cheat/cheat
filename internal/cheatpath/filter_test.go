@@ -46,7 +46,7 @@ func TestFilterFailure(t *testing.T) {
 	}
 
 	// filter the paths
-	paths, err := Filter(paths, "qux")
+	_, err := Filter(paths, "qux")
 	if err == nil {
 		t.Errorf("failed to return an error on non-existent cheatpath")
 	}

@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -29,7 +28,7 @@ type Config struct {
 func New(opts map[string]interface{}, confPath string, resolve bool) (Config, error) {
 
 	// read the config file
-	buf, err := ioutil.ReadFile(confPath)
+	buf, err := os.ReadFile(confPath)
 	if err != nil {
 		return Config{}, fmt.Errorf("could not read config file: %v", err)
 	}

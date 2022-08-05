@@ -31,7 +31,7 @@ func Write(out string, conf config.Config) {
 	// handle errors
 	err := cmd.Run()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, fmt.Sprintf("failed to write to pager: %v", err))
+		fmt.Fprintf(os.Stderr, "failed to write to pager: %v\n", err)
 		os.Exit(1)
 	}
 }

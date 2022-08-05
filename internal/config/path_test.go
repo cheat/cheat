@@ -1,7 +1,6 @@
 package config
 
 import (
-	"io/ioutil"
 	"os"
 	"testing"
 )
@@ -24,7 +23,7 @@ func TestPathConfigNotExists(t *testing.T) {
 func TestPathConfigExists(t *testing.T) {
 
 	// initialize a temporary config file
-	confFile, err := ioutil.TempFile("", "cheat-test")
+	confFile, err := os.CreateTemp("", "cheat-test")
 	if err != nil {
 		t.Errorf("failed to create temp file: %v", err)
 	}

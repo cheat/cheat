@@ -18,11 +18,7 @@ func cmdDirectories(opts map[string]interface{}, conf config.Config) {
 
 	// generate sorted, columnized output
 	for _, path := range conf.Cheatpaths {
-		fmt.Fprintln(w, fmt.Sprintf(
-			"%s:\t%s",
-			path.Name,
-			path.Path,
-		))
+		fmt.Fprintf(w, "%s:\t%s\n", path.Name, path.Path)
 	}
 
 	// write columnized output to stdout

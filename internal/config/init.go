@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -16,7 +15,7 @@ func Init(confpath string, configs string) error {
 	}
 
 	// write the config file
-	if err := ioutil.WriteFile(confpath, []byte(configs), 0644); err != nil {
+	if err := os.WriteFile(confpath, []byte(configs), 0644); err != nil {
 		return fmt.Errorf("failed to create file: %v", err)
 	}
 
