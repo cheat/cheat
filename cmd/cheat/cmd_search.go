@@ -59,9 +59,9 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 				os.Exit(1)
 			}
 
-			// `Search` will return text entries that match the search terms. We're
-			// using it here to overwrite the prior cheatsheet Text, filtering it to
-			// only what is relevant
+			// `Search` will return text entries that match the search terms.
+			// We're using it here to overwrite the prior cheatsheet Text,
+			// filtering it to only what is relevant.
 			sheet.Text = sheet.Search(reg)
 
 			// if the sheet did not match the search, ignore it and move on
@@ -74,14 +74,16 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 				sheet.Colorize(conf)
 			}
 
-			// display the cheatsheet title and path
-			out += fmt.Sprintf("%s %s\n",
-				display.Underline(sheet.Title),
+			// display the cheatsheet body
+			out += fmt.Sprintf(
+				"%s %s\n%s\n",
+				// append the cheatsheet title
+				sheet.Title,
+				// append the cheatsheet path
 				display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf),
+				// indent each line of content
+				display.Indent(sheet.Text),
 			)
-
-			// indent each line of content
-			out += display.Indent(sheet.Text) + "\n"
 		}
 	}
 
@@ -89,7 +91,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 	out = strings.TrimSpace(out)
 
 	// display the output
-	// NB: resist the temptation to call `display.Display` multiple times in
-	// the loop above. That will not play nicely with the paginator.
+	// NB: resist the temptation to call `display.Write` multiple times in the
+	// loop above. That will not play nicely with the paginator.
 	display.Write(out, conf)
 }

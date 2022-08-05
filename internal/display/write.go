@@ -23,14 +23,13 @@ func Write(out string, conf config.Config) {
 	pager := parts[0]
 	args := parts[1:]
 
-	// run the pager
+	// configure the pager
 	cmd := exec.Command(pager, args...)
 	cmd.Stdin = strings.NewReader(out)
 	cmd.Stdout = os.Stdout
 
-	// handle errors
-	err := cmd.Run()
-	if err != nil {
+	// run the pager and handle errors
+	if err := cmd.Run(); err != nil {
 		fmt.Fprintf(os.Stderr, "failed to write to pager: %v\n", err)
 		os.Exit(1)
 	}
