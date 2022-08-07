@@ -24,7 +24,9 @@ colorize: false
 formatter: terminal
 
 # Through which pager should output be piped?
-# pager: less -FRX # <- recommended where available
+# 'less -FRX' is recommended on Unix systems
+# 'more' is recommended on Windows
+pager: PAGER_PATH
 
 # The paths at which cheatsheets are available. Tags associated with a cheatpath
 # are automatically attached to all cheatsheets residing on that path.
