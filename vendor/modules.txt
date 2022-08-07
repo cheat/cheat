@@ -1,5 +1,5 @@
 # github.com/alecthomas/chroma v0.10.0
-## explicit
+## explicit; go 1.13
 github.com/alecthomas/chroma
 github.com/alecthomas/chroma/formatters
 github.com/alecthomas/chroma/formatters/html
@@ -38,7 +38,7 @@ github.com/alecthomas/chroma/styles
 ## explicit
 github.com/davecgh/go-spew/spew
 # github.com/dlclark/regexp2 v1.7.0
-## explicit
+## explicit; go 1.13
 github.com/dlclark/regexp2
 github.com/dlclark/regexp2/syntax
 # github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815
@@ -47,15 +47,15 @@ github.com/docopt/docopt-go
 # github.com/kr/text v0.2.0
 ## explicit
 # github.com/mattn/go-isatty v0.0.14
-## explicit
+## explicit; go 1.12
 github.com/mattn/go-isatty
 # github.com/mitchellh/go-homedir v1.1.0
 ## explicit
 github.com/mitchellh/go-homedir
 # github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e
-## explicit
-# golang.org/x/sys v0.0.0-20220731174439-a90be440212d
-## explicit
+## explicit; go 1.12
+# golang.org/x/sys v0.0.0-20220804214406-8e32c043e418
+## explicit; go 1.17
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 # gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f
@@ -64,5 +64,5 @@ golang.org/x/sys/unix
 ## explicit
 gopkg.in/yaml.v1
 # gopkg.in/yaml.v2 v2.4.0
-## explicit
+## explicit; go 1.15
 gopkg.in/yaml.v2

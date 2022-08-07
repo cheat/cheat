@@ -23,6 +23,7 @@ func Run(configs string, confpath string) error {
 	// template the above paths into the default configs
 	configs = strings.Replace(configs, "COMMUNITY_PATH", community, -1)
 	configs = strings.Replace(configs, "PERSONAL_PATH", personal, -1)
+	configs = strings.Replace(configs, "PAGER_PATH", config.Pager(), -1)
 
 	// prompt the user to download the community cheatsheets
 	yes, err := Prompt(

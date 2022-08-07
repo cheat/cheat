@@ -3,9 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 
 	cp "github.com/cheat/cheat/internal/cheatpath"
@@ -22,6 +20,7 @@ type Config struct {
 	Style      string         `yaml:"style"`
 	Formatter  string         `yaml:"formatter"`
 	Pager      string         `yaml:"pager"`
+	Path       string
 }
 
 // New returns a new Config struct
@@ -35,6 +34,9 @@ func New(opts map[string]interface{}, confPath string, resolve bool) (Config, er
 
 	// initialize a config object
 	conf := Config{}
+
+	// store the config path
+	conf.Path = confPath
 
 	// unmarshal the yaml
 	err = yaml.UnmarshalStrict(buf, &conf)
@@ -93,28 +95,11 @@ func New(opts map[string]interface{}, confPath string, resolve bool) (Config, er
 		conf.Cheatpaths[i].Path = expanded
 	}
 
-	// if an editor was not provided in the configs, look to envvars
+	// if an editor was not provided in the configs, attempt to choose one
+	// that's appropriate for the environment
 	if conf.Editor == "" {
-		if os.Getenv("VISUAL") != "" {
-			conf.Editor = os.Getenv("VISUAL")
-		} else if os.Getenv("EDITOR") != "" {
-			conf.Editor = os.Getenv("EDITOR")
-		} else if runtime.GOOS == "windows" {
-			conf.Editor = "notepad"
-		} else {
-			// try to fall back to `nano`
-			path, err := exec.LookPath("nano")
-			if err != nil {
-				return Config{}, fmt.Errorf("failed to locate nano: %s", err)
-			}
-
-			// use `nano` if we found it
-			if path != "" {
-				conf.Editor = "nano"
-				// otherwise, give up
-			} else {
-				return Config{}, fmt.Errorf("no editor set")
-			}
+		if conf.Editor, err = Editor(); err != nil {
+			return Config{}, err
 		}
 	}
 
@@ -128,39 +113,8 @@ func New(opts map[string]interface{}, confPath string, resolve bool) (Config, er
 		conf.Formatter = "terminal"
 	}
 
-	// attempt to fall back to `PAGER` if a pager is not specified in configs
+	// load the pager
 	conf.Pager = strings.TrimSpace(conf.Pager)
-	if conf.Pager == "" {
-		// look for `pager`, `less`, and `more` on the system PATH
-		pagerPath, _ := exec.LookPath("pager")
-		lessPath, _ := exec.LookPath("less")
-		morePath, _ := exec.LookPath("more")
-
-		// search first for a `PAGER` envvar
-		if os.Getenv("PAGER") != "" {
-			conf.Pager = os.Getenv("PAGER")
-
-			// search for `pager`
-		} else if pagerPath != "" {
-			conf.Pager = pagerPath
-
-			// search for `less`
-		} else if lessPath != "" {
-			conf.Pager = lessPath
-
-			// search for `more`
-			//
-			// XXX: this causes issues on some Linux systems. See:
-			// https://github.com/cheat/cheat/issues/681#issuecomment-1201842334
-			//
-			// By checking for `more` last, we're hoping to at least mitigate
-			// the frequency of this occurrence, because `pager` and `less` are
-			// likely to be available on most systems on which a user is likely
-			// to have installed `cheat`.
-		} else if morePath != "" {
-			conf.Pager = morePath
-		}
-	}
 
 	return conf, nil
 }

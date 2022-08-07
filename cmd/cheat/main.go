@@ -16,7 +16,7 @@ import (
 	"github.com/cheat/cheat/internal/installer"
 )
 
-const version = "4.2.7"
+const version = "4.3.0"
 
 func main() {
 
@@ -120,6 +120,9 @@ func main() {
 	var cmd func(map[string]interface{}, config.Config)
 
 	switch {
+	case opts["--conf"].(bool):
+		cmd = cmdConf
+
 	case opts["--directories"].(bool):
 		cmd = cmdDirectories
 
