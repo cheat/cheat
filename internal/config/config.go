@@ -20,6 +20,7 @@ type Config struct {
 	Style      string         `yaml:"style"`
 	Formatter  string         `yaml:"formatter"`
 	Pager      string         `yaml:"pager"`
+	Path       string
 }
 
 // New returns a new Config struct
@@ -33,6 +34,9 @@ func New(opts map[string]interface{}, confPath string, resolve bool) (Config, er
 
 	// initialize a config object
 	conf := Config{}
+
+	// store the config path
+	conf.Path = confPath
 
 	// unmarshal the yaml
 	err = yaml.UnmarshalStrict(buf, &conf)

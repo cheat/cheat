@@ -120,6 +120,9 @@ func main() {
 	var cmd func(map[string]interface{}, config.Config)
 
 	switch {
+	case opts["--conf"].(bool):
+		cmd = cmdConf
+
 	case opts["--directories"].(bool):
 		cmd = cmdDirectories
 

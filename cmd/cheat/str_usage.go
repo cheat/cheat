@@ -24,6 +24,7 @@ Options:
   -T --tags               List all tags in use
   -v --version            Print the version number
   --rm=<cheatsheet>       Remove (delete) <cheatsheet>
+  --conf                  Display the config file path
 
 Examples:
 
@@ -62,5 +63,8 @@ Examples:
 
   To remove (delete) the foo/bar cheatsheet:
     cheat --rm foo/bar
+
+  To view the configuration file path:
+	cheat --conf
 `)
 }
