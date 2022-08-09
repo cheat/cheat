@@ -15,11 +15,22 @@ func Editor() (string, error) {
 		return "notepad", nil
 	}
 
-	// look for `nano` on the `PATH`
+	// look for `nano` and `vim` on the `PATH`
+	def, _ := exec.LookPath("editor") // default `editor` wrapper
 	nano, _ := exec.LookPath("nano")
+	vim, _ := exec.LookPath("vim")
 
-	// search for `$VISUAL`, `$EDITOR`, and then `nano`, in that order
-	for _, editor := range []string{os.Getenv("VISUAL"), os.Getenv("EDITOR"), nano} {
+	// set editor priority
+	editors := []string{
+		os.Getenv("VISUAL"),
+		os.Getenv("EDITOR"),
+		def,
+		nano,
+		vim,
+	}
+
+	// return the first editor that was found per the priority above
+	for _, editor := range editors {
 		if editor != "" {
 			return editor, nil
 		}

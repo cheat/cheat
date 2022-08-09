@@ -9,7 +9,7 @@ import (
 func configs() string {
 	return strings.TrimSpace(`---
 # The editor to use with 'cheat -e <sheet>'. Defaults to $EDITOR or $VISUAL.
-# editor: vim
+editor: EDITOR_PATH
 
 # Should 'cheat' always colorize output?
 colorize: false
