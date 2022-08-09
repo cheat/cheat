@@ -1,6 +1,6 @@
 ---
 # The editor to use with 'cheat -e <sheet>'. Defaults to $EDITOR or $VISUAL.
-# editor: vim
+editor: EDITOR_PATH
 
 # Should 'cheat' always colorize output?
 colorize: false
@@ -8,11 +8,11 @@ colorize: false
 # Which 'chroma' colorscheme should be applied to the output?
 # Options are available here:
 #   https://github.com/alecthomas/chroma/tree/master/styles
-# style: monokai
+style: monokai
 
 # Which 'chroma' "formatter" should be applied?
 # One of: "terminal", "terminal256", "terminal16m"
-formatter: terminal
+formatter: terminal256
 
 # Through which pager should output be piped?
 # 'less -FRX' is recommended on Unix systems
@@ -32,7 +32,6 @@ pager: PAGER_PATH
 # commands. So, if you want to view the 'tar' cheatsheet that is tagged as
 # 'community' rather than your own, you can use: cheat tar -t community
 cheatpaths:
-
   # Paths that come earlier are considered to be the most "global", and will
   # thus be overridden by more local cheatsheets. That being the case, you
   # should probably list community cheatsheets first.

@@ -49,17 +49,18 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 					string(os.PathSeparator),
 				)
 
-				// ignore hidden files and directories. Otherwise, we'll likely load
-				// .git/* and .DS_Store.
+				// Don't walk the `.git` directory. Doing so creates
+				// hundreds/thousands of needless syscalls and could
+				// potentially harm performance on machines with slow disks.
 				//
-				// NB: this is still somewhat brittle in that it will miss files
-				// contained within hidden directories in the middle of a path, though
-				// that should not realistically occur.
-				if strings.HasPrefix(title, ".") || strings.HasPrefix(info.Name(), ".") {
-					// Do not walk hidden directories. This is important,
-					// because it's common for cheatsheets to be stored in
-					// version-control, and a `.git` directory can easily
-					// contain thousands of files.
+				// NB: We _do_ want to walk hidden directories, however, so we
+				// should not constrain this further (perhaps to include all
+				// hidden directories). In the wild, many users appear to store
+				// cheatsheets in a `.config` directory (seemingly a default
+				// behavior of `brew`), and `cheat` explicitly supports a
+				// local `.cheat` directory. Constraining further here will
+				// break those use-cases - and has done so in the past!
+				if strings.Contains(path, ".git") {
 					return fs.SkipDir
 				}
 

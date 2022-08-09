@@ -20,10 +20,17 @@ func Run(configs string, confpath string) error {
 	community := filepath.Join(confdir, "cheatsheets", "community")
 	personal := filepath.Join(confdir, "cheatsheets", "personal")
 
-	// template the above paths into the default configs
+	// set default cheatpaths
 	configs = strings.Replace(configs, "COMMUNITY_PATH", community, -1)
 	configs = strings.Replace(configs, "PERSONAL_PATH", personal, -1)
+
+	// locate and set a default pager
 	configs = strings.Replace(configs, "PAGER_PATH", config.Pager(), -1)
+
+	// locate and set a default editor
+	if editor, err := config.Editor(); err == nil {
+		configs = strings.Replace(configs, "EDITOR_PATH", editor, -1)
+	}
 
 	// prompt the user to download the community cheatsheets
 	yes, err := Prompt(
