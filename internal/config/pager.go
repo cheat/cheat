@@ -3,10 +3,16 @@ package config
 import (
 	"os"
 	"os/exec"
+	"runtime"
 )
 
 // Pager attempts to locate a pager that's appropriate for the environment.
 func Pager() string {
+
+	// default to `more` on Windows
+	if runtime.GOOS == "windows" {
+		return "more"
+	}
 
 	// if $PAGER is set, return the corresponding pager
 	if os.Getenv("PAGER") != "" {
