@@ -1,4 +1,4 @@
-package frontmatter
+package sheet
 
 import (
 	"testing"
@@ -16,7 +16,7 @@ tags: [ test ]
 To foo the bar: baz`
 
 	// parse the frontmatter
-	text, fm, err := Parse(markdown)
+	fm, text, err := parse(markdown)
 
 	// assert expectations
 	if err != nil {
@@ -50,7 +50,7 @@ func TestHasNoFrontmatter(t *testing.T) {
 	markdown := "To foo the bar: baz"
 
 	// parse the frontmatter
-	text, fm, err := Parse(markdown)
+	fm, text, err := parse(markdown)
 
 	// assert expectations
 	if err != nil {
@@ -81,7 +81,7 @@ tags: [ test ]
 To foo the bar: baz`
 
 	// parse the frontmatter
-	text, _, err := Parse(markdown)
+	_, text, err := parse(markdown)
 
 	// assert that an error was returned
 	if err == nil {

@@ -1,4 +1,4 @@
-package frontmatter
+package sheet
 
 import (
 	"fmt"
@@ -8,14 +8,8 @@ import (
 	"gopkg.in/yaml.v1"
 )
 
-// Frontmatter encapsulates cheatsheet frontmatter data
-type Frontmatter struct {
-	Tags   []string
-	Syntax string
-}
-
 // Parse parses cheatsheet frontmatter
-func Parse(markdown string) (string, Frontmatter, error) {
+func parse(markdown string) (frontmatter, string, error) {
 
 	// determine the appropriate line-break for the platform
 	linebreak := "\n"
@@ -27,11 +21,11 @@ func Parse(markdown string) (string, Frontmatter, error) {
 	delim := fmt.Sprintf("---%s", linebreak)
 
 	// initialize a frontmatter struct
-	var fm Frontmatter
+	var fm frontmatter
 
 	// if the markdown does not contain frontmatter, pass it through unmodified
 	if !strings.HasPrefix(markdown, delim) {
-		return markdown, fm, nil
+		return fm, markdown, nil
 	}
 
 	// otherwise, split the frontmatter and cheatsheet text
@@ -39,13 +33,13 @@ func Parse(markdown string) (string, Frontmatter, error) {
 
 	// return an error if the frontmatter parses into the wrong number of parts
 	if len(parts) != 3 {
-		return markdown, fm, fmt.Errorf("failed to delimit frontmatter")
+		return fm, markdown, fmt.Errorf("failed to delimit frontmatter")
 	}
 
 	// return an error if the YAML cannot be unmarshalled
 	if err := yaml.Unmarshal([]byte(parts[1]), &fm); err != nil {
-		return markdown, fm, fmt.Errorf("failed to unmarshal frontmatter: %v", err)
+		return fm, markdown, fmt.Errorf("failed to unmarshal frontmatter: %v", err)
 	}
 
-	return parts[2], fm, nil
+	return fm, parts[2], nil
 }

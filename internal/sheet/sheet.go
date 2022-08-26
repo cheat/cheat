@@ -4,9 +4,13 @@ import (
 	"fmt"
 	"os"
 	"sort"
-
-	"github.com/cheat/cheat/internal/frontmatter"
 )
+
+// Frontmatter encapsulates cheatsheet frontmatter data
+type frontmatter struct {
+	Tags   []string
+	Syntax string
+}
 
 // Sheet encapsulates sheet information
 type Sheet struct {
@@ -34,8 +38,8 @@ func New(
 		return Sheet{}, fmt.Errorf("failed to read file: %s, %v", path, err)
 	}
 
-	// parse the cheatsheet frontmatter
-	text, fm, err := frontmatter.Parse(string(markdown))
+	// parse the raw cheatsheet text
+	fm, text, err := parse(string(markdown))
 	if err != nil {
 		return Sheet{}, fmt.Errorf("failed to parse front-matter: %v", err)
 	}
