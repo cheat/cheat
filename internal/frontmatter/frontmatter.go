@@ -2,6 +2,7 @@ package frontmatter
 
 import (
 	"fmt"
+	"runtime"
 	"strings"
 
 	"gopkg.in/yaml.v1"
@@ -16,15 +17,21 @@ type Frontmatter struct {
 // Parse parses cheatsheet frontmatter
 func Parse(markdown string) (string, Frontmatter, error) {
 
+	// determine the appropriate line-break for the platform
+	linebreak := "\n"
+	if runtime.GOOS == "windows" {
+		linebreak = "\r\n"
+	}
+
 	// specify the frontmatter delimiter
-	delim := "---"
+	delim := fmt.Sprintf("---%s", linebreak)
 
 	// initialize a frontmatter struct
 	var fm Frontmatter
 
 	// if the markdown does not contain frontmatter, pass it through unmodified
 	if !strings.HasPrefix(markdown, delim) {
-		return strings.TrimSpace(markdown), fm, nil
+		return markdown, fm, nil
 	}
 
 	// otherwise, split the frontmatter and cheatsheet text
@@ -40,5 +47,5 @@ func Parse(markdown string) (string, Frontmatter, error) {
 		return markdown, fm, fmt.Errorf("failed to unmarshal frontmatter: %v", err)
 	}
 
-	return strings.TrimSpace(parts[2]), fm, nil
+	return parts[2], fm, nil
 }

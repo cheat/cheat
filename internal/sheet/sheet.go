@@ -51,7 +51,7 @@ func New(
 		Title:     title,
 		CheatPath: cheatpath,
 		Path:      path,
-		Text:      text + "\n",
+		Text:      text,
 		Tags:      tags,
 		Syntax:    fm.Syntax,
 		ReadOnly:  readOnly,
