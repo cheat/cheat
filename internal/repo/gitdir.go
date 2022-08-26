@@ -1,4 +1,4 @@
-package sheets
+package repo
 
 import (
 	"fmt"
@@ -6,9 +6,9 @@ import (
 	"strings"
 )
 
-// isGitDir returns `true` if `path` is within a `.git` directory, or `false`
-// otherwise
-func isGitDir(path string) (bool, error) {
+// GitDir returns `true` if we are iterating over a directory contained within
+// a repositories `.git` directory.
+func GitDir(path string) (bool, error) {
 
 	/*
 		A bit of context is called for here, because this functionality has

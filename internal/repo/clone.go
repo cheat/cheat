@@ -1,4 +1,4 @@
-package installer
+package repo
 
 import (
 	"fmt"
@@ -7,11 +7,11 @@ import (
 	"github.com/go-git/go-git/v5"
 )
 
-// clone clones the community cheatsheets
-func clone(path string) error {
+// Clone clones the repo available at `url`
+func Clone(url string) error {
 
 	// clone the community cheatsheets
-	_, err := git.PlainClone(path, false, &git.CloneOptions{
+	_, err := git.PlainClone(url, false, &git.CloneOptions{
 		URL:      "https://github.com/cheat/cheatsheets.git",
 		Depth:    1,
 		Progress: os.Stdout,
