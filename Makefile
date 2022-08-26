@@ -41,7 +41,7 @@ releases :=                        \
 
 ## build: build an executable for your architecture
 .PHONY: build
-build: $(dist_dir) clean fmt lint vet vendor generate man
+build: $(dist_dir) | clean generate fmt lint vet vendor man
 	$(GO) build $(BUILD_FLAGS) -o $(dist_dir)/cheat $(cmd_dir)
 
 ## build-release: build release executables
@@ -104,7 +104,7 @@ install: build
 ## clean: remove compiled executables
 .PHONY: clean
 clean: $(dist_dir)
-	$(RM) -f $(dist_dir)/*
+	$(RM) -f $(dist_dir)/* $(cmd_dir)/str_config.go $(cmd_dir)/str_usage.go
 
 ## distclean: remove the tags file
 .PHONY: distclean
