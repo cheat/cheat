@@ -52,15 +52,11 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 				// Don't walk the `.git` directory. Doing so creates
 				// hundreds/thousands of needless syscalls and could
 				// potentially harm performance on machines with slow disks.
-				//
-				// NB: We _do_ want to walk hidden directories, however, so we
-				// should not constrain this further (perhaps to include all
-				// hidden directories). In the wild, many users appear to store
-				// cheatsheets in a `.config` directory (seemingly a default
-				// behavior of `brew`), and `cheat` explicitly supports a
-				// local `.cheat` directory. Constraining further here will
-				// break those use-cases - and has done so in the past!
-				if strings.Contains(path, ".git") {
+				skip, err := isGitDir(path)
+				if err != nil {
+					return fmt.Errorf("failed to identify .git directory: %v", err)
+				}
+				if skip {
 					return fs.SkipDir
 				}
 
