@@ -35,12 +35,13 @@ go install github.com/cheat/cheat/cmd/cheat@latest
 ### Install via package manager
 Several community-maintained packages are also available:
 
-Package manager  | Installing
+Package manager  | Package(s)
 ---------------- | -----------
-[brew][]         | `brew install cheat`
-[docker][]       | `alias cheat='docker run --rm bannmann/docker-cheat'`
-[nix][]          | `nix-env -iA nixos.cheat`
-[snap][]         | `snap install cheat`
+aur              | [cheat][pkg-aur-cheat], [cheat-bin][pkg-aur-cheat-bin]
+brew             | [cheat][pkg-brew]
+docker           | [docker-cheat][pkg-docker]
+nix              | [nixos.cheat][pkg-nix]
+snap             | [cheat][pkg-snap]
 
 <!--[pacman][]       |-->
 
@@ -67,11 +68,12 @@ specifies its path:
 export CHEAT_CONFIG_PATH="~/.dotfiles/cheat/conf.yml"
 ```
 
-[brew]:       https://formulae.brew.sh/formula/cheat 
-[cheatpaths]: README.md#cheatpaths
-[community]:  https://github.com/cheat/cheatsheets/
-[docker]:     https://github.com/bannmann/docker-cheat
-[nix]:        https://search.nixos.org/packages?channel=unstable&show=cheat&from=0&size=50&sort=relevance&type=packages&query=cheat 
-[pacman]:     # 
-[releases]:   https://github.com/cheat/cheat/releases
-[snap]:       https://snapcraft.io/cheat
+[cheatpaths]:        README.md#cheatpaths
+[community]:         https://github.com/cheat/cheatsheets/
+[pkg-aur-cheat-bin]: https://aur.archlinux.org/packages/cheat-bin
+[pkg-aur-cheat]:     https://aur.archlinux.org/packages/cheat
+[pkg-brew]:          https://formulae.brew.sh/formula/cheat 
+[pkg-docker]:        https://github.com/bannmann/docker-cheat
+[pkg-nix]:           https://search.nixos.org/packages?channel=unstable&show=cheat&from=0&size=50&sort=relevance&type=packages&query=cheat 
+[pkg-snap]:          https://snapcraft.io/cheat
+[releases]:          https://github.com/cheat/cheat/releases
