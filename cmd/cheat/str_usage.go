@@ -65,6 +65,6 @@ Examples:
     cheat --rm foo/bar
 
   To view the configuration file path:
-	cheat --conf
+    cheat --conf
 `)
 }
