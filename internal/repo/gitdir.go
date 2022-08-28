@@ -60,6 +60,7 @@ func GitDir(path string) (bool, error) {
 		2. A cheatpath is a repository
 		3. A cheatpath is a repository, and contains a `.git*` file
 		4. A cheatpath is a submodule
+		5. A cheatpath is a hidden directory
 
 		Care must be taken to support the above on both Unix and Windows
 		systems, which have different directory separators and line-endings.
