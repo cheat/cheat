@@ -37,16 +37,53 @@ func isGitDir(path string) (bool, error) {
 
 		See: https://github.com/cheat/cheat/issues/694
 
-		Accounting for all of the above, we are now searching for the presence
-		of a `.git` literal string in the cheatsheet file path. If it is not
-		found, we continue to walk the directory, as before.
+		The next attempt at solving this was to search for a `.git` literal
+		string in the cheatsheet file path. If a match was not found, we would
+		continue to walk the directory, as before.
 
-		If it *is* found, we determine if `.git` refers to a file or directory,
-		and only stop walking the path in the latter case.
+		If a match *was* found, we determined whether `.git` referred to a file
+		or directory, and would only stop walking the path in the latter case.
+
+		This, however, caused crashes if a cheatpath contained a `.gitignore`
+		file. (Presumably, a crash would likewise occur on the presence of
+		`.gitattributes`, `.gitmodules`, etc.)
+
+		See: https://github.com/cheat/cheat/issues/699
+
+		Accounting for all of the above (hopefully?), the current solution is
+		not to search for `.git`, but `.git/` (including the directory
+		separator), and then only ceasing to walk the directory on a match.
+
+		To summarize, this code must account for the following possibilities:
+
+		1. A cheatpath is not a repository
+		2. A cheatpath is a repository
+		3. A cheatpath is a repository, and contains a `.git*` file
+		4. A cheatpath is a submodule
+
+		Care must be taken to support the above on both Unix and Windows
+		systems, which have different directory separators and line-endings.
+
+		There is a lot of nuance to all of this, and it would be worthwhile to
+		do two things to stop writing bugs here:
+
+		1. Build integration tests around all of this
+		2. Discard string-matching solutions entirely, and use `go-git` instead
+
+		NB: A reasonable smoke-test for ensuring that skipping is being applied
+		correctly is to run the following command:
+
+		    make && strace ./dist/cheat -l | wc -l
+
+		That check should be run twice: once normally, and once after
+		commenting out the "skip" check in `sheets.Load`.
+
+		The specific line counts don't matter; what matters is that the number
+		of syscalls should be significantly lower with the skip check enabled.
 	*/
 
 	// determine if the literal string `.git` appears within `path`
-	pos := strings.Index(path, ".git")
+	pos := strings.Index(path, fmt.Sprintf(".git%s", string(os.PathSeparator)))
 
 	// if it does not, we know for certain that we are not within a `.git`
 	// directory.
@@ -61,7 +98,7 @@ func isGitDir(path string) (bool, error) {
 	// See: https://github.com/cheat/cheat/issues/694
 
 	// truncate `path` to the occurrence of `.git`
-	f, err := os.Stat(path[:pos+4])
+	f, err := os.Stat(path[:pos+5])
 	if err != nil {
 		return false, fmt.Errorf("failed to stat path %s: %v", path, err)
 	}
