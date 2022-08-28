@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	cp "github.com/cheat/cheat/internal/cheatpath"
+	"github.com/cheat/cheat/internal/repo"
 	"github.com/cheat/cheat/internal/sheet"
 )
 
@@ -52,7 +53,7 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 				// Don't walk the `.git` directory. Doing so creates
 				// hundreds/thousands of needless syscalls and could
 				// potentially harm performance on machines with slow disks.
-				skip, err := isGitDir(path)
+				skip, err := repo.GitDir(path)
 				if err != nil {
 					return fmt.Errorf("failed to identify .git directory: %v", err)
 				}

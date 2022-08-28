@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/cheat/cheat/internal/config"
+	"github.com/cheat/cheat/internal/repo"
 )
 
 // Run runs the installer
@@ -45,7 +46,7 @@ func Run(configs string, confpath string) error {
 	if yes {
 		// clone the community cheatsheets
 		fmt.Printf("Cloning community cheatsheets to %s.\n", community)
-		if err := clone(community); err != nil {
+		if err := repo.Clone(community); err != nil {
 			return fmt.Errorf("failed to clone cheatsheets: %v", err)
 		}
 
