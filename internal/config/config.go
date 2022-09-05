@@ -9,7 +9,7 @@ import (
 	cp "github.com/cheat/cheat/internal/cheatpath"
 
 	"github.com/mitchellh/go-homedir"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 // Config encapsulates configuration parameters
@@ -39,7 +39,7 @@ func New(opts map[string]interface{}, confPath string, resolve bool) (Config, er
 	conf.Path = confPath
 
 	// unmarshal the yaml
-	err = yaml.UnmarshalStrict(buf, &conf)
+	err = yaml.Unmarshal(buf, &conf)
 	if err != nil {
 		return Config{}, fmt.Errorf("could not unmarshal yaml: %v", err)
 	}
