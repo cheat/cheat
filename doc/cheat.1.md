@@ -20,40 +20,40 @@ remember.
 OPTIONS
 =======
 
---init
+\--init
 : Print a config file to stdout.
 
--c, --colorize
+-c, \--colorize
 : Colorize output.
 
--d, --directories
+-d, \--directories
 : List cheatsheet directories.
 
--e, --edit=_CHEATSHEET_
+-e, \--edit=_CHEATSHEET_
 : Open _CHEATSHEET_ for editing.
 
--l, --list
+-l, \--list
 : List available cheatsheets.
 
--p, --path=_PATH_
+-p, \--path=_PATH_
 : Filter only to sheets found on path _PATH_.
 
--r, --regex
+-r, \--regex
 : Treat search _PHRASE_ as a regular expression.
 
--s, --search=_PHRASE_
+-s, \--search=_PHRASE_
 : Search cheatsheets for _PHRASE_.
 
--t, --tag=_TAG_
+-t, \--tag=_TAG_
 : Filter only to sheets tagged with _TAG_.
 
--T, --tags
+-T, \--tags
 : List all tags in use.
 
--v, --version
+-v, \--version
 : Print the version number.
 
---rm=_CHEATSHEET_
+\--rm=_CHEATSHEET_
 : Remove (deletes) _CHEATSHEET_.
 
 
@@ -91,7 +91,7 @@ To search (by regex) for cheatsheets that contain an IP address:
 : cheat -c -r -s _'(?:[0-9]{1,3}\.){3}[0-9]{1,3}'_
 
 To remove (delete) the foo/bar cheatsheet:
-: cheat --rm _foo/bar_
+: cheat \--rm _foo/bar_
 
 
 FILES
@@ -121,7 +121,7 @@ encountered will be respected.
 
 If **cheat** cannot locate a config file, it will ask if you'd like to generate
 one automatically. Alternatively, you may also generate a config file manually
-by running **cheat --init** and saving its output to the appropriate location
+by running **cheat \--init** and saving its output to the appropriate location
 for your platform.
 
 
