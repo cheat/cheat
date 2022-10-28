@@ -166,6 +166,8 @@ If a user attempts to edit a cheatsheet on a read-only cheatpath, `cheat` will
 transparently copy that sheet to a writeable directory before opening it for
 editing.
 
+[JSON schema](https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/cheatsheets.json) is available for `conf.yml` file.
+
 ### Directory-scoped Cheatpaths ###
 At times, it can be useful to closely associate cheatsheets with a directory on
 your filesystem. `cheat` facilitates this by searching for a `.cheat` folder in
