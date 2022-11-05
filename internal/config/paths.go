@@ -28,7 +28,10 @@ func Paths(
 	}
 
 	switch sys {
-	case "android", "darwin", "linux", "freebsd":
+
+	// darwin/linux/unix
+	case "aix", "android", "darwin", "dragonfly", "freebsd", "illumos", "ios",
+		"linux", "netbsd", "openbsd", "plan9", "solaris":
 		paths := []string{}
 
 		// don't include the `XDG_CONFIG_HOME` path if that envvar is not set
@@ -43,6 +46,8 @@ func Paths(
 		}...)
 
 		return paths, nil
+
+	// windows
 	case "windows":
 		return []string{
 			filepath.Join(envvars["APPDATA"], "cheat", "conf.yml"),

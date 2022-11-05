@@ -35,13 +35,17 @@ releases :=                        \
 	$(dist_dir)/cheat-linux-amd64  \
 	$(dist_dir)/cheat-linux-arm5   \
 	$(dist_dir)/cheat-linux-arm6   \
-	$(dist_dir)/cheat-linux-arm7   \
 	$(dist_dir)/cheat-linux-arm64  \
+	$(dist_dir)/cheat-linux-arm7   \
+	$(dist_dir)/cheat-netbsd-amd64  \
+	$(dist_dir)/cheat-openbsd-amd64  \
+	$(dist_dir)/cheat-plan9-amd64  \
+	$(dist_dir)/cheat-solaris-amd64  \
 	$(dist_dir)/cheat-windows-amd64.exe
 
 ## build: build an executable for your architecture
 .PHONY: build
-build: $(dist_dir) | clean generate fmt lint vet vendor man
+build: | clean $(dist_dir) generate fmt lint vet vendor man
 	$(GO) build $(BUILD_FLAGS) -o $(dist_dir)/cheat $(cmd_dir)
 
 ## build-release: build release executables
@@ -83,6 +87,26 @@ $(dist_dir)/cheat-linux-arm64: prepare
 	GOARCH=arm64 GOOS=linux \
 	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
 
+# cheat-netbsd-amd64
+$(dist_dir)/cheat-netbsd-amd64: prepare
+	GOARCH=amd64 GOOS=netbsd \
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
+
+# cheat-openbsd-amd64
+$(dist_dir)/cheat-openbsd-amd64: prepare
+	GOARCH=amd64 GOOS=openbsd \
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
+
+# cheat-plan9-amd64
+$(dist_dir)/cheat-plan9-amd64: prepare
+	GOARCH=amd64 GOOS=plan9 \
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
+
+# cheat-solaris-amd64
+$(dist_dir)/cheat-solaris-amd64: prepare
+	GOARCH=amd64 GOOS=solaris \
+	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
+
 # cheat-windows-amd64
 $(dist_dir)/cheat-windows-amd64.exe: prepare
 	GOARCH=amd64 GOOS=windows \
@@ -103,7 +127,7 @@ install: build
 
 ## clean: remove compiled executables
 .PHONY: clean
-clean: $(dist_dir)
+clean:
 	$(RM) -f $(dist_dir)/* $(cmd_dir)/str_config.go $(cmd_dir)/str_usage.go
 
 ## distclean: remove the tags file
@@ -140,7 +164,7 @@ vendor:
 
 ## vendor-update: update vendored dependencies
 vendor-update:
-	$(GO) get -t -u ./... && $(GO) mod vendor
+	$(GO) get -t -u ./... && $(GO) mod vendor && $(GO) mod tidy && $(GO) mod verify
 
 ## fmt: run go fmt
 .PHONY: fmt
@@ -173,7 +197,7 @@ coverage:
 check: | vendor fmt lint vet test
 
 .PHONY: prepare
-prepare: | $(dist_dir) clean generate vendor fmt lint vet test
+prepare: | clean $(dist_dir) generate vendor fmt lint vet test
 
 ## docker-setup: create a docker image for use during development
 .PHONY: docker-setup

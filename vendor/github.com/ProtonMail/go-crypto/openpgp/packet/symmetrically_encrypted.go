@@ -37,8 +37,6 @@ func (se *SymmetricallyEncrypted) parse(r io.Reader) error {
 		if buf[0] != symmetricallyEncryptedVersion {
 			return errors.UnsupportedError("unknown SymmetricallyEncrypted version")
 		}
-	} else {
-		return errors.UnsupportedError("Symmetrically encrypted packets without MDC are not supported")
 	}
 	se.Contents = r
 	return nil

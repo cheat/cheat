@@ -5,7 +5,7 @@ import (
 	"runtime"
 	"strings"
 
-	"gopkg.in/yaml.v1"
+	"gopkg.in/yaml.v2"
 )
 
 // Parse parses cheatsheet frontmatter
