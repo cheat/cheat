@@ -130,8 +130,14 @@ ParsePackets:
 					pubKeys = append(pubKeys, keyEnvelopePair{k, p})
 				}
 			}
-		case *packet.SymmetricallyEncrypted, *packet.AEADEncrypted:
-			edp = p.(packet.EncryptedDataPacket)
+		case *packet.SymmetricallyEncrypted:
+			if !p.MDC && !config.AllowUnauthenticatedMessages() {
+				return nil, errors.UnsupportedError("message is not authenticated")
+			}
+			edp = p
+			break ParsePackets
+		case *packet.AEADEncrypted:
+			edp = p
 			break ParsePackets
 		case *packet.Compressed, *packet.LiteralData, *packet.OnePassSignature:
 			// This message isn't encrypted.
