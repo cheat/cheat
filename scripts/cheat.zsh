@@ -40,7 +40,8 @@ _cheat() {
     '(-t --tag)'{-t,--tag}'[Return only sheets matching <tag>]: :->taglist' \
     '(-T --tags)'{-T,--tags}'[List all tags in use]: :->none' \
     '(-v --version)'{-v,--version}'[Print the version number]: :->none' \
-    '(--rm)--rm[Remove (delete) <sheet>]: :->personal' 
+    '(--rm)--rm[Remove (delete) <sheet>]: :->personal' \
+    '(-)*: :->full'
 
   case $state in
     (none)
