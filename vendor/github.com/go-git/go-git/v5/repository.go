@@ -56,7 +56,7 @@ var (
 	ErrWorktreeNotProvided       = errors.New("worktree should be provided")
 	ErrIsBareRepository          = errors.New("worktree not available in a bare repository")
 	ErrUnableToResolveCommit     = errors.New("unable to resolve commit")
-	ErrPackedObjectsNotSupported = errors.New("Packed objects not supported")
+	ErrPackedObjectsNotSupported = errors.New("packed objects not supported")
 )
 
 // Repository represents a git repository
@@ -280,6 +280,9 @@ func dotGitToOSFilesystems(path string, detect bool) (dot, wt billy.Filesystem, 
 
 		pathinfo, err := fs.Stat("/")
 		if !os.IsNotExist(err) {
+			if pathinfo == nil {
+				return nil, nil, err
+			}
 			if !pathinfo.IsDir() && detect {
 				fs = osfs.New(filepath.Dir(path))
 			}
@@ -1547,7 +1550,7 @@ func (r *Repository) ResolveRevision(rev plumbing.Revision) (*plumbing.Hash, err
 			}
 
 			if c == nil {
-				return &plumbing.ZeroHash, fmt.Errorf(`No commit message match regexp : "%s"`, re.String())
+				return &plumbing.ZeroHash, fmt.Errorf("no commit message match regexp: %q", re.String())
 			}
 
 			commit = c
