@@ -15,7 +15,7 @@ cd /tmp \
   && sudo mv cheat-linux-amd64 /usr/local/bin/cheat
 ```
 
-You may need to need to change the version number (`4.4.0`) and the archive
+You may need to change the version number (`4.4.0`) and the archive
 (`cheat-linux-amd64.gz`) depending on your platform.
 
 See the [releases page][releases] for a list of supported platforms.
