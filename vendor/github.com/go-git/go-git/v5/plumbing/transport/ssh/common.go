@@ -121,10 +121,15 @@ func (c *command) connect() error {
 	if err != nil {
 		return err
 	}
+	hostWithPort := c.getHostWithPort()
+	config, err = SetConfigHostKeyFields(config, hostWithPort)
+	if err != nil {
+		return err
+	}
 
 	overrideConfig(c.config, config)
 
-	c.client, err = dial("tcp", c.getHostWithPort(), config)
+	c.client, err = dial("tcp", hostWithPort, config)
 	if err != nil {
 		return err
 	}
@@ -160,6 +165,23 @@ func dial(network, addr string, config *ssh.ClientConfig) (*ssh.Client, error) {
 		return nil, err
 	}
 	return ssh.NewClient(c, chans, reqs), nil
+}
+
+// SetConfigHostKeyFields sets cfg.HostKeyCallback and cfg.HostKeyAlgorithms
+// based on OpenSSH known_hosts. cfg is modified in-place. hostWithPort must be
+// supplied, since the algorithms will be set based on the known host keys for
+// that specific host. Otherwise, golang.org/x/crypto/ssh can return an error
+// upon connecting to a host whose *first* key is not known, even though other
+// keys (of different types) are known and match properly.
+// For background see https://github.com/go-git/go-git/issues/411 as well as
+// https://github.com/golang/go/issues/29286 for root cause.
+func SetConfigHostKeyFields(cfg *ssh.ClientConfig, hostWithPort string) (*ssh.ClientConfig, error) {
+	kh, err := newKnownHosts()
+	if err == nil {
+		cfg.HostKeyCallback = kh.HostKeyCallback()
+		cfg.HostKeyAlgorithms = kh.HostKeyAlgorithms(hostWithPort)
+	}
+	return cfg, err
 }
 
 func (c *command) getHostWithPort() string {
