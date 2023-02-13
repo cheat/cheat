@@ -21,8 +21,28 @@ You may need to need to change the version number (`4.4.0`) and the archive
 See the [releases page][releases] for a list of supported platforms.
 
 #### Windows
-TODO: community support is requested here. Please open a PR if you'd like to
-contribute installation instructions for Windows.
+First, you must download the executable for Windows using this command:
+```sh
+Invoke-WebRequest -Uri https://github.com/cheat/cheat/releases/download/4.4.0/cheat-windows-amd64.exe.zip -OutFile cheat-windows-amd64.exe.zip
+```
+You may need to need to change the version number (`4.4.0`) if a newer version is released.
+
+This will download the resource into the zipped folder cheat-windows-amd64.exe.zip.
+
+Next, extract the contents of the newly created .zip file and navigate to the cheat-windows-amd64.exe application.
+
+Next, rename the executable to "cheat.exe"
+
+Now, run the application and type "y" to the prompts given to you.
+This will create the config file and download the community cheatsheets into this directory: C:\\Users\\[user]\\AppData\\Roaming\\cheat
+
+Next, move the executable cheat.exe to the directory mentioned above.
+
+Now, go to Settings > System > About > Advanced System Settings > Environmental Variables
+In the bottom panel, look for the Path variable, then click Edit.
+Click New, then copy and paste the location of the "cheat" directory. By default, the location is C:\\Users\\[user]\\AppData\\Roaming\\cheat
+
+Note that you may change the location of the "cheat" directory. Just make sure that you also change the path in Environmental Variables.
 
 ### Install via `go install`
 If you have `go` version `>=1.17` available on your `PATH`, you can install
