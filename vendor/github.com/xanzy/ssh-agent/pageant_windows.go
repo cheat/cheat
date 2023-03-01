@@ -66,7 +66,7 @@ var (
 	winFindWindow  = winAPI(user32dll, "FindWindowW")
 	winSendMessage = winAPI(user32dll, "SendMessageW")
 
-	kernel32dll           = windows.NewLazySystemDLL("user32.dll")
+	kernel32dll           = windows.NewLazySystemDLL("kernel32.dll")
 	winGetCurrentThreadID = winAPI(kernel32dll, "GetCurrentThreadId")
 )
 

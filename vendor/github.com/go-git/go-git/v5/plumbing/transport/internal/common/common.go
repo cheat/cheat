@@ -428,11 +428,6 @@ func isRepoNotFoundError(s string) bool {
 	return false
 }
 
-var (
-	nak = []byte("NAK")
-	eol = []byte("\n")
-)
-
 // uploadPack implements the git-upload-pack protocol.
 func uploadPack(w io.WriteCloser, r io.Reader, req *packp.UploadPackRequest) error {
 	// TODO support multi_ack mode
