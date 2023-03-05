@@ -191,3 +191,10 @@ Additionally, `cheat` supports enhanced autocompletion via integration with
 [completions]:   https://github.com/cheat/cheat/tree/master/scripts
 [fzf]:           https://github.com/junegunn/fzf
 [go]:            https://golang.org
+
+Similar projects
+----------------
+- [Command Line Interface Pages](https://github.com/command-line-interface-pages)
+- [TlDr](https://github.com/tldr-pages/tldr)
+- [Cheatsheets](https://github.com/rstacruz/cheatsheets)
+- [Eg](https://github.com/srsudar/eg)
