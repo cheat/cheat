@@ -21,8 +21,16 @@ You may need to need to change the version number (`4.4.0`) and the archive
 See the [releases page][releases] for a list of supported platforms.
 
 #### Windows
-TODO: community support is requested here. Please open a PR if you'd like to
-contribute installation instructions for Windows.
+To install "cheat" on Windows using PowerShell, follow these steps:
+
+- Open PowerShell as an administrator. You can do this by right-clicking the Windows PowerShell or PowerShell application in the Start menu and selecting 'Run as administrator'.
+
+- Copy and paste the following command into the elevated PowerShell window:
+
+```sh
+Invoke-WebRequest -Uri 'https://github.com/cheat/cheat/releases/download/4.4.0/cheat-windows-amd64.exe.zip' -OutFile cheat-windows-amd64.exe.zip ; Expand-Archive -Path .\cheat-windows-amd64.exe.zip -DestinationPath 'C:\Program Files\Cheat' -Force ; Rename-Item -Path 'C:\Program Files\Cheat\cheat-windows-amd64.exe' -NewName 'cheat.exe' ; [System.Environment]::SetEnvironmentVariable('Path', [System.Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::Machine) + ';C:\Program Files\Cheat', [System.EnvironmentVariableTarget]::Machine)
+```
+- Open the shell again for a new session and use "cheat".
 
 ### Install via `go install`
 If you have `go` version `>=1.17` available on your `PATH`, you can install
@@ -35,13 +43,13 @@ go install github.com/cheat/cheat/cmd/cheat@latest
 ### Install via package manager
 Several community-maintained packages are also available:
 
-Package manager  | Package(s)
----------------- | -----------
-aur              | [cheat][pkg-aur-cheat], [cheat-bin][pkg-aur-cheat-bin]
-brew             | [cheat][pkg-brew]
-docker           | [docker-cheat][pkg-docker]
-nix              | [nixos.cheat][pkg-nix]
-snap             | [cheat][pkg-snap]
+| Package manager | Package(s)                                             |
+|-----------------|--------------------------------------------------------|
+| aur             | [cheat][pkg-aur-cheat], [cheat-bin][pkg-aur-cheat-bin] |
+| brew            | [cheat][pkg-brew]                                      |
+| docker          | [docker-cheat][pkg-docker]                             |
+| nix             | [nixos.cheat][pkg-nix]                                 |
+| snap            | [cheat][pkg-snap]                                      |
 
 <!--[pacman][]       |-->
 
