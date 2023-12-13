@@ -2,19 +2,25 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build !amd64 || appengine || gccgo
-// +build !amd64 appengine gccgo
-
 package sha3
 
 // KeccakF1600 applies the Keccak permutation to a 1600b-wide
 // state represented as a slice of 25 uint64s.
-func KeccakF1600(a *[25]uint64) {
+// If turbo is true, applies the 12-round variant instead of the
+// regular 24-round variant.
+// nolint:funlen
+func KeccakF1600(a *[25]uint64, turbo bool) {
 	// Implementation translated from Keccak-inplace.c
 	// in the keccak reference code.
 	var t, bc0, bc1, bc2, bc3, bc4, d0, d1, d2, d3, d4 uint64
 
-	for i := 0; i < 24; i += 4 {
+	i := 0
+
+	if turbo {
+		i = 12
+	}
+
+	for ; i < 24; i += 4 {
 		// Combines the 5 steps in each round into 2 steps.
 		// Unrolls 4 rounds per loop and spreads some steps across rounds.
 

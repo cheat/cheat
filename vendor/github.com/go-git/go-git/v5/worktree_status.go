@@ -74,7 +74,7 @@ func (w *Worktree) status(commit plumbing.Hash) (Status, error) {
 		}
 	}
 
-	right, err := w.diffStagingWithWorktree(false)
+	right, err := w.diffStagingWithWorktree(false, true)
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +113,7 @@ func nameFromAction(ch *merkletrie.Change) string {
 	return name
 }
 
-func (w *Worktree) diffStagingWithWorktree(reverse bool) (merkletrie.Changes, error) {
+func (w *Worktree) diffStagingWithWorktree(reverse, excludeIgnoredChanges bool) (merkletrie.Changes, error) {
 	idx, err := w.r.Storer.Index()
 	if err != nil {
 		return nil, err
@@ -138,7 +138,10 @@ func (w *Worktree) diffStagingWithWorktree(reverse bool) (merkletrie.Changes, er
 		return nil, err
 	}
 
-	return w.excludeIgnoredChanges(c), nil
+	if excludeIgnoredChanges {
+		return w.excludeIgnoredChanges(c), nil
+	}
+	return c, nil
 }
 
 func (w *Worktree) excludeIgnoredChanges(changes merkletrie.Changes) merkletrie.Changes {
@@ -169,7 +172,9 @@ func (w *Worktree) excludeIgnoredChanges(changes merkletrie.Changes) merkletrie.
 		if len(path) != 0 {
 			isDir := (len(ch.To) > 0 && ch.To.IsDir()) || (len(ch.From) > 0 && ch.From.IsDir())
 			if m.Match(path, isDir) {
-				continue
+				if len(ch.From) == 0 {
+					continue
+				}
 			}
 		}
 		res = append(res, ch)
@@ -270,10 +275,6 @@ func (w *Worktree) Add(path string) (plumbing.Hash, error) {
 }
 
 func (w *Worktree) doAddDirectory(idx *index.Index, s Status, directory string, ignorePattern []gitignore.Pattern) (added bool, err error) {
-	files, err := w.Filesystem.ReadDir(directory)
-	if err != nil {
-		return false, err
-	}
 	if len(ignorePattern) > 0 {
 		m := gitignore.NewMatcher(ignorePattern)
 		matchPath := strings.Split(directory, string(os.PathSeparator))
@@ -283,30 +284,27 @@ func (w *Worktree) doAddDirectory(idx *index.Index, s Status, directory string, 
 		}
 	}
 
-	for _, file := range files {
-		name := path.Join(directory, file.Name())
+	directory = filepath.ToSlash(filepath.Clean(directory))
 
-		var a bool
-		if file.IsDir() {
-			if file.Name() == GitDirName {
-				// ignore special git directory
-				continue
-			}
-			a, err = w.doAddDirectory(idx, s, name, ignorePattern)
-		} else {
-			a, _, err = w.doAddFile(idx, s, name, ignorePattern)
+	for name := range s {
+		if !isPathInDirectory(name, directory) {
+			continue
 		}
 
+		var a bool
+		a, _, err = w.doAddFile(idx, s, name, ignorePattern)
 		if err != nil {
 			return
 		}
 
-		if !added && a {
-			added = true
-		}
+		added = added || a
 	}
 
 	return
+}
+
+func isPathInDirectory(path, directory string) bool {
+	return directory == "." || strings.HasPrefix(path, directory+"/")
 }
 
 // AddWithOptions file contents to the index,  updates the index using the
