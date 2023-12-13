@@ -5,7 +5,7 @@ import (
 
 	"github.com/cheat/cheat/internal/config"
 
-	"github.com/alecthomas/chroma/quick"
+	"github.com/alecthomas/chroma/v2/quick"
 )
 
 // Colorize applies syntax-highlighting to a cheatsheet's Text.
