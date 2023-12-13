@@ -1,3 +1,5 @@
+// Package sheets implements functions pertaining to loading, sorting,
+// filtering, and tagging cheatsheets.
 package sheets
 
 import (

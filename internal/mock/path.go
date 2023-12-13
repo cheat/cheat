@@ -1,3 +1,4 @@
+// Package mock implements mock functions used in unit-tests.
 package mock
 
 import (

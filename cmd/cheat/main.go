@@ -1,3 +1,4 @@
+// Package main serves as the executable entrypoint.
 package main
 
 //go:generate go run ../../build/embed.go
@@ -16,7 +17,7 @@ import (
 	"github.com/cheat/cheat/internal/installer"
 )
 
-const version = "4.4.0"
+const version = "4.4.1"
 
 func main() {
 

@@ -10,6 +10,7 @@ import (
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
+	formatcfg "github.com/go-git/go-git/v5/plumbing/format/config"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/go-git/go-git/v5/plumbing/protocol/packp/sideband"
 	"github.com/go-git/go-git/v5/plumbing/transport"
@@ -45,6 +46,14 @@ type CloneOptions struct {
 	ReferenceName plumbing.ReferenceName
 	// Fetch only ReferenceName if true.
 	SingleBranch bool
+	// Mirror clones the repository as a mirror.
+	//
+	// Compared to a bare clone, mirror not only maps local branches of the
+	// source to local branches of the target, it maps all refs (including
+	// remote-tracking branches, notes etc.) and sets up a refspec configuration
+	// such that all these refs are overwritten by a git remote update in the
+	// target repository.
+	Mirror bool
 	// No checkout of HEAD after clone if true.
 	NoCheckout bool
 	// Limit fetching to the specified number of commits.
@@ -53,6 +62,9 @@ type CloneOptions struct {
 	// within, using their default settings. This option is ignored if the
 	// cloned repository does not have a worktree.
 	RecurseSubmodules SubmoduleRescursivity
+	// ShallowSubmodules limit cloning submodules to the 1 level of depth.
+	// It matches the git command --shallow-submodules.
+	ShallowSubmodules bool
 	// Progress is where the human readable information sent by the server is
 	// stored, if nil nothing is stored and the capability (if supported)
 	// no-progress, is sent to the server to avoid send this information.
@@ -64,6 +76,17 @@ type CloneOptions struct {
 	InsecureSkipTLS bool
 	// CABundle specify additional ca bundle with system cert pool
 	CABundle []byte
+	// ProxyOptions provides info required for connecting to a proxy.
+	ProxyOptions transport.ProxyOptions
+	// When the repository to clone is on the local machine, instead of
+	// using hard links, automatically setup .git/objects/info/alternates
+	// to share the objects with the source repository.
+	// The resulting repository starts out without any object of its own.
+	// NOTE: this is a possibly dangerous operation; do not use it unless
+	// you understand what it does.
+	//
+	// [Reference]: https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---shared
+	Shared bool
 }
 
 // Validate validates the fields and sets the default values.
@@ -91,6 +114,8 @@ func (o *CloneOptions) Validate() error {
 type PullOptions struct {
 	// Name of the remote to be pulled. If empty, uses the default.
 	RemoteName string
+	// RemoteURL overrides the remote repo address with a custom URL
+	RemoteURL string
 	// Remote branch to clone. If empty, uses HEAD.
 	ReferenceName plumbing.ReferenceName
 	// Fetch only ReferenceName if true.
@@ -113,6 +138,8 @@ type PullOptions struct {
 	InsecureSkipTLS bool
 	// CABundle specify additional ca bundle with system cert pool
 	CABundle []byte
+	// ProxyOptions provides info required for connecting to a proxy.
+	ProxyOptions transport.ProxyOptions
 }
 
 // Validate validates the fields and sets the default values.
@@ -147,7 +174,9 @@ const (
 type FetchOptions struct {
 	// Name of the remote to fetch from. Defaults to origin.
 	RemoteName string
-	RefSpecs   []config.RefSpec
+	// RemoteURL overrides the remote repo address with a custom URL
+	RemoteURL string
+	RefSpecs  []config.RefSpec
 	// Depth limit fetching to the specified number of commits from the tip of
 	// each remote branch history.
 	Depth int
@@ -167,6 +196,8 @@ type FetchOptions struct {
 	InsecureSkipTLS bool
 	// CABundle specify additional ca bundle with system cert pool
 	CABundle []byte
+	// ProxyOptions provides info required for connecting to a proxy.
+	ProxyOptions transport.ProxyOptions
 }
 
 // Validate validates the fields and sets the default values.
@@ -192,8 +223,16 @@ func (o *FetchOptions) Validate() error {
 type PushOptions struct {
 	// RemoteName is the name of the remote to be pushed to.
 	RemoteName string
-	// RefSpecs specify what destination ref to update with what source
-	// object. A refspec with empty src can be used to delete a reference.
+	// RemoteURL overrides the remote repo address with a custom URL
+	RemoteURL string
+	// RefSpecs specify what destination ref to update with what source object.
+	//
+	// The format of a <refspec> parameter is an optional plus +, followed by
+	//  the source object <src>, followed by a colon :, followed by the destination ref <dst>.
+	// The <src> is often the name of the branch you would want to push, but it can be a SHA-1.
+	// The <dst> tells which ref on the remote side is updated with this push.
+	//
+	// A refspec with empty src can be used to delete a reference.
 	RefSpecs []config.RefSpec
 	// Auth credentials, if required, to use with the remote repository.
 	Auth transport.AuthMethod
@@ -206,13 +245,37 @@ type PushOptions struct {
 	// Force allows the push to update a remote branch even when the local
 	// branch does not descend from it.
 	Force bool
-	// InsecureSkipTLS skips ssl verify if protocal is https
+	// InsecureSkipTLS skips ssl verify if protocol is https
 	InsecureSkipTLS bool
 	// CABundle specify additional ca bundle with system cert pool
 	CABundle []byte
 	// RequireRemoteRefs only allows a remote ref to be updated if its current
 	// value is the one specified here.
 	RequireRemoteRefs []config.RefSpec
+	// FollowTags will send any annotated tags with a commit target reachable from
+	// the refs already being pushed
+	FollowTags bool
+	// ForceWithLease allows a force push as long as the remote ref adheres to a "lease"
+	ForceWithLease *ForceWithLease
+	// PushOptions sets options to be transferred to the server during push.
+	Options map[string]string
+	// Atomic sets option to be an atomic push
+	Atomic bool
+	// ProxyOptions provides info required for connecting to a proxy.
+	ProxyOptions transport.ProxyOptions
+}
+
+// ForceWithLease sets fields on the lease
+// If neither RefName nor Hash are set, ForceWithLease protects
+// all refs in the refspec by ensuring the ref of the remote in the local repsitory
+// matches the one in the ref advertisement.
+type ForceWithLease struct {
+	// RefName, when set will protect the ref by ensuring it matches the
+	// hash in the ref advertisement.
+	RefName plumbing.ReferenceName
+	// Hash is the expected object id of RefName. The push will be rejected unless this
+	// matches the corresponding object id of RefName in the refs advertisement.
+	Hash plumbing.Hash
 }
 
 // Validate validates the fields and sets the default values.
@@ -249,6 +312,9 @@ type SubmoduleUpdateOptions struct {
 	RecurseSubmodules SubmoduleRescursivity
 	// Auth credentials, if required, to use with the remote repository.
 	Auth transport.AuthMethod
+	// Depth limit fetching to the specified number of commits from the tip of
+	// each remote branch history.
+	Depth int
 }
 
 var (
@@ -274,6 +340,8 @@ type CheckoutOptions struct {
 	// target branch. Force and Keep are mutually exclusive, should not be both
 	// set to true.
 	Keep bool
+	// SparseCheckoutDirectories
+	SparseCheckoutDirectories []string
 }
 
 // Validate validates the fields and sets the default values.
@@ -366,7 +434,7 @@ type LogOptions struct {
 
 	// Show only those commits in which the specified file was inserted/updated.
 	// It is equivalent to running `git log -- <file-name>`.
-	// this field is kept for compatility, it can be replaced with PathFilter
+	// this field is kept for compatibility, it can be replaced with PathFilter
 	FileName *string
 
 	// Filter commits based on the path of files that are updated
@@ -422,6 +490,10 @@ type CommitOptions struct {
 	// All automatically stage files that have been modified and deleted, but
 	// new files you have not told Git about are not affected.
 	All bool
+	// AllowEmptyCommits enable empty commits to be created. An empty commit
+	// is when no changes to the tree were made, but a new commit message is
+	// provided. The default behavior is false, which results in ErrEmptyCommit.
+	AllowEmptyCommits bool
 	// Author is the author's signature of the commit. If Author is empty the
 	// Name and Email is read from the config, and time.Now it's used as When.
 	Author *object.Signature
@@ -435,10 +507,21 @@ type CommitOptions struct {
 	// commit will not be signed. The private key must be present and already
 	// decrypted.
 	SignKey *openpgp.Entity
+	// Amend will create a new commit object and replace the commit that HEAD currently
+	// points to. Cannot be used with All nor Parents.
+	Amend bool
 }
 
 // Validate validates the fields and sets the default values.
 func (o *CommitOptions) Validate(r *Repository) error {
+	if o.All && o.Amend {
+		return errors.New("all and amend cannot be used together")
+	}
+
+	if o.Amend && len(o.Parents) > 0 {
+		return errors.New("parents cannot be used with amend")
+	}
+
 	if o.Author == nil {
 		if err := o.loadConfigAuthorAndCommitter(r); err != nil {
 			return err
@@ -571,11 +654,34 @@ func (o *CreateTagOptions) loadConfigTagger(r *Repository) error {
 type ListOptions struct {
 	// Auth credentials, if required, to use with the remote repository.
 	Auth transport.AuthMethod
-	// InsecureSkipTLS skips ssl verify if protocal is https
+	// InsecureSkipTLS skips ssl verify if protocol is https
 	InsecureSkipTLS bool
 	// CABundle specify additional ca bundle with system cert pool
 	CABundle []byte
+	// PeelingOption defines how peeled objects are handled during a
+	// remote list.
+	PeelingOption PeelingOption
+	// ProxyOptions provides info required for connecting to a proxy.
+	ProxyOptions transport.ProxyOptions
+	// Timeout specifies the timeout in seconds for list operations
+	Timeout int
 }
+
+// PeelingOption represents the different ways to handle peeled references.
+//
+// Peeled references represent the underlying object of an annotated
+// (or signed) tag. Refer to upstream documentation for more info:
+// https://github.com/git/git/blob/master/Documentation/technical/reftable.txt
+type PeelingOption uint8
+
+const (
+	// IgnorePeeled ignores all peeled reference names. This is the default behavior.
+	IgnorePeeled PeelingOption = 0
+	// OnlyPeeled returns only peeled reference names.
+	OnlyPeeled PeelingOption = 1
+	// AppendPeeled appends peeled reference names to the reference list.
+	AppendPeeled PeelingOption = 2
+)
 
 // CleanOptions describes how a clean should be performed.
 type CleanOptions struct {
@@ -601,7 +707,13 @@ var (
 )
 
 // Validate validates the fields and sets the default values.
+//
+// TODO: deprecate in favor of Validate(r *Repository) in v6.
 func (o *GrepOptions) Validate(w *Worktree) error {
+	return o.validate(w.r)
+}
+
+func (o *GrepOptions) validate(r *Repository) error {
 	if !o.CommitHash.IsZero() && o.ReferenceName != "" {
 		return ErrHashOrReference
 	}
@@ -609,7 +721,7 @@ func (o *GrepOptions) Validate(w *Worktree) error {
 	// If none of CommitHash and ReferenceName are provided, set commit hash of
 	// the repository's head.
 	if o.CommitHash.IsZero() && o.ReferenceName == "" {
-		ref, err := w.r.Head()
+		ref, err := r.Head()
 		if err != nil {
 			return err
 		}
@@ -632,3 +744,13 @@ type PlainOpenOptions struct {
 
 // Validate validates the fields and sets the default values.
 func (o *PlainOpenOptions) Validate() error { return nil }
+
+type PlainInitOptions struct {
+	InitOptions
+	// Determines if the repository will have a worktree (non-bare) or not (bare).
+	Bare         bool
+	ObjectFormat formatcfg.ObjectFormat
+}
+
+// Validate validates the fields and sets the default values.
+func (o *PlainInitOptions) Validate() error { return nil }

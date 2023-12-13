@@ -1,3 +1,4 @@
+// Package repo implements functions pertaining to the management of git repos.
 package repo
 
 import (

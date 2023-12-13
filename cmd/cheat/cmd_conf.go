@@ -6,6 +6,6 @@ import (
 	"github.com/cheat/cheat/internal/config"
 )
 
-func cmdConf(opts map[string]interface{}, conf config.Config) {
+func cmdConf(_ map[string]interface{}, conf config.Config) {
 	fmt.Println(conf.Path)
 }

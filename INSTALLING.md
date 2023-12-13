@@ -9,13 +9,13 @@ On Unix-like systems, you may simply paste the following snippet into your termi
 
 ```sh
 cd /tmp \
-  && wget https://github.com/cheat/cheat/releases/download/4.4.0/cheat-linux-amd64.gz \
+  && wget https://github.com/cheat/cheat/releases/download/4.4.1/cheat-linux-amd64.gz \
   && gunzip cheat-linux-amd64.gz \
   && chmod +x cheat-linux-amd64 \
   && sudo mv cheat-linux-amd64 /usr/local/bin/cheat
 ```
 
-You may need to need to change the version number (`4.4.0`) and the archive
+You may need to need to change the version number (`4.4.1`) and the archive
 (`cheat-linux-amd64.gz`) depending on your platform.
 
 See the [releases page][releases] for a list of supported platforms.

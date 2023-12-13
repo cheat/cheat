@@ -10,7 +10,7 @@ import (
 )
 
 // cmdDirectories lists the configured cheatpaths.
-func cmdDirectories(opts map[string]interface{}, conf config.Config) {
+func cmdDirectories(_ map[string]interface{}, conf config.Config) {
 
 	// initialize a tabwriter to produce cleanly columnized output
 	var out bytes.Buffer

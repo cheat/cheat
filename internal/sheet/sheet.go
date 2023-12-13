@@ -1,3 +1,5 @@
+// Package sheet implements functions pertaining to parsing, searching, and
+// displaying cheatsheets.
 package sheet
 
 import (
