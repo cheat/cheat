@@ -39,7 +39,6 @@ releases :=                        \
 	$(dist_dir)/cheat-linux-arm7   \
 	$(dist_dir)/cheat-netbsd-amd64  \
 	$(dist_dir)/cheat-openbsd-amd64  \
-	$(dist_dir)/cheat-plan9-amd64  \
 	$(dist_dir)/cheat-solaris-amd64  \
 	$(dist_dir)/cheat-windows-amd64.exe
 
