@@ -17,7 +17,7 @@ import (
 	"github.com/cheat/cheat/internal/installer"
 )
 
-const version = "4.4.0"
+const version = "4.4.1"
 
 func main() {
 
