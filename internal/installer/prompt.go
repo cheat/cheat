@@ -1,3 +1,5 @@
+// Package installer implements functions that provide a first-time
+// installation wizard.
 package installer
 
 import (

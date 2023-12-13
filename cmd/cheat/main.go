@@ -1,3 +1,4 @@
+// Package main serves as the executable entrypoint.
 package main
 
 //go:generate go run ../../build/embed.go

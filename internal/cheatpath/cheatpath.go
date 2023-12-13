@@ -1,3 +1,5 @@
+// Package cheatpath implements functions pertaining to cheatsheet file path
+// management.
 package cheatpath
 
 // Cheatpath encapsulates cheatsheet path information

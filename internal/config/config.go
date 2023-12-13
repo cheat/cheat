@@ -1,3 +1,4 @@
+// Package config implements functions pertaining to configuration management.
 package config
 
 import (
@@ -24,7 +25,7 @@ type Config struct {
 }
 
 // New returns a new Config struct
-func New(opts map[string]interface{}, confPath string, resolve bool) (Config, error) {
+func New(_ map[string]interface{}, confPath string, resolve bool) (Config, error) {
 
 	// read the config file
 	buf, err := os.ReadFile(confPath)
