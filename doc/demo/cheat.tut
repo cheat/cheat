@@ -1,0 +1,112 @@
+#!/usr/bin/env tuterm
+
+depends unbuffer
+if mode demo; then depends tmux; fi
+
+configure() {
+    # Configure delays and colors (optional)
+    if mode demo; then
+        DELAY='0.08s'
+        DELAY_SEP='0.2s'
+        DELAY_PROMPT='1s'
+        TUTERM_NAME='cheat-demo'
+    else
+        TUTERM_NAME='cheat-tutorial'
+    fi
+}
+
+# timeout a command but only in demo mode
+demo_timeout() {
+    if mode demo; then
+        unbuffer timeout "$@"
+    else
+        "${@:2}"
+    fi
+}
+
+demo_clear() {
+    if mode demo; then
+        clear
+    fi
+}
+
+_Message() {
+    Message "# $@"
+}
+alias M=_Message
+
+generate_custom_vim_cheatsheet() {
+    echo "---"
+    echo "tags: [ custom, vim ]"
+    echo "---"
+    echo "# Open files in a horizontal split"
+    echo "vim -o file1 file2 ..."
+    echo "# Open files in a vertical split"
+    echo "vim -O file1 file2 ..."
+    echo "# Go to next buffer"
+    echo ":n"
+    echo "# Go to previous buffer"
+    echo -n ":N"
+}
+
+# Print prompt but only in demo mode
+demo_prompt() {
+    mode demo && prompt
+}
+
+run() {
+    # This is where the demo/tutorial happens           # Command tracker
+    M "Read cheat sheets"
+    e cheat tar                                         #
+    demo_timeout 2.5 cheat tar
+
+    demo_clear
+    M "Comes with many cheat sheets preinstalled"
+    e cheat -l                                          #
+    demo_timeout 1.5 cheat -l
+
+    demo_clear
+    M "Search for a command"
+    e cheat -s git                                      #
+    demo_timeout 2 cheat -s git
+
+    demo_clear
+    M "Organize cheat sheets by tag"
+    c cheat --tag vcs                                   #
+
+    demo_prompt
+    mode demo && sleep 1.5
+
+    demo_clear
+    mkdir .cheat
+    generate_custom_vim_cheatsheet > .cheat/custom_vim
+    rm .lesshst
+
+    M "Local cheat sheets"
+    e tree -a                                           #
+    tree -a --noreport
+    e cheat custom_vim                                  #
+    cheat custom_vim
+
+    demo_prompt
+    if mode demo; then sleep 1.5; fi
+
+    demo_clear
+    M "Easily edit cheat sheets"
+    e cheat -e custom_vim                               #
+    if mode demo; then
+        # NOTE: A bit of a hack needed to display the editor
+        timeout 2 tmux new-session "tmux set status off; vim -R .cheat/custom_vim" >/dev/null
+    else
+        cheat -e custom_vim
+    fi
+
+    demo_clear
+    e cheat cheat                                       #
+    demo_timeout 1 cheat cheat
+
+    # Demo ends here
+    if mode demo; then c exit; fi
+}
+
+# vim: filetype=sh
