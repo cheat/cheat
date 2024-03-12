@@ -49,6 +49,8 @@ linters:
     - nosnakecase
     - testableexamples
     - musttag
+    - depguard
+    - goconst
 
 linters-settings:
   govet:

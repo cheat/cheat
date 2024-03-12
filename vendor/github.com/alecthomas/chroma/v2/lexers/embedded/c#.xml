@@ -19,10 +19,10 @@
       <rule pattern="\\\n">
         <token type="Text"/>
       </rule>
-      <rule pattern="///[^\n\r]+">
+      <rule pattern="///[^\n\r]*">
         <token type="CommentSpecial"/>
       </rule>
-      <rule pattern="//[^\n\r]+">
+      <rule pattern="//[^\n\r]*">
         <token type="CommentSingle"/>
       </rule>
       <rule pattern="/[*].*?[*]/">

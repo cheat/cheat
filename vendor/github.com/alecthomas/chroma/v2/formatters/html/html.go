@@ -5,7 +5,9 @@ import (
 	"html"
 	"io"
 	"sort"
+	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/alecthomas/chroma/v2"
 )
@@ -132,6 +134,7 @@ func New(options ...Option) *Formatter {
 		baseLineNumber: 1,
 		preWrapper:     defaultPreWrapper,
 	}
+	f.styleCache = newStyleCache(f)
 	for _, option := range options {
 		option(f)
 	}
@@ -188,6 +191,7 @@ var (
 
 // Formatter that generates HTML.
 type Formatter struct {
+	styleCache            *styleCache
 	standalone            bool
 	prefix                string
 	Classes               bool // Exported field to detect when classes are being used
@@ -220,12 +224,7 @@ func (f *Formatter) Format(w io.Writer, style *chroma.Style, iterator chroma.Ite
 //
 // OTOH we need to be super careful about correct escaping...
 func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.Token) (err error) { // nolint: gocyclo
-	css := f.styleToCSS(style)
-	if !f.Classes {
-		for t, style := range css {
-			css[t] = compressStyle(style)
-		}
-	}
+	css := f.styleCache.get(style, true)
 	if f.standalone {
 		fmt.Fprint(w, "<html>\n")
 		if f.Classes {
@@ -243,7 +242,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 	wrapInTable := f.lineNumbers && f.lineNumbersInTable
 
 	lines := chroma.SplitTokensIntoLines(tokens)
-	lineDigits := len(fmt.Sprintf("%d", f.baseLineNumber+len(lines)-1))
+	lineDigits := len(strconv.Itoa(f.baseLineNumber + len(lines) - 1))
 	highlightIndex := 0
 
 	if wrapInTable {
@@ -251,7 +250,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		fmt.Fprintf(w, "<div%s>\n", f.styleAttr(css, chroma.PreWrapper))
 		fmt.Fprintf(w, "<table%s><tr>", f.styleAttr(css, chroma.LineTable))
 		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD))
-		fmt.Fprintf(w, f.preWrapper.Start(false, f.styleAttr(css, chroma.PreWrapper)))
+		fmt.Fprintf(w, "%s", f.preWrapper.Start(false, f.styleAttr(css, chroma.PreWrapper)))
 		for index := range lines {
 			line := f.baseLineNumber + index
 			highlight, next := f.shouldHighlight(highlightIndex, line)
@@ -273,7 +272,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 		fmt.Fprintf(w, "<td%s>\n", f.styleAttr(css, chroma.LineTableTD, "width:100%"))
 	}
 
-	fmt.Fprintf(w, f.preWrapper.Start(true, f.styleAttr(css, chroma.PreWrapper)))
+	fmt.Fprintf(w, "%s", f.preWrapper.Start(true, f.styleAttr(css, chroma.PreWrapper)))
 
 	highlightIndex = 0
 	for index, tokens := range lines {
@@ -323,7 +322,7 @@ func (f *Formatter) writeHTML(w io.Writer, style *chroma.Style, tokens []chroma.
 			fmt.Fprint(w, `</span>`) // End of Line
 		}
 	}
-	fmt.Fprintf(w, f.preWrapper.End(true))
+	fmt.Fprintf(w, "%s", f.preWrapper.End(true))
 
 	if wrapInTable {
 		fmt.Fprint(w, "</td></tr></table>\n")
@@ -419,7 +418,7 @@ func (f *Formatter) tabWidthStyle() string {
 
 // WriteCSS writes CSS style definitions (without any surrounding HTML).
 func (f *Formatter) WriteCSS(w io.Writer, style *chroma.Style) error {
-	css := f.styleToCSS(style)
+	css := f.styleCache.get(style, false)
 	// Special-case background as it is mapped to the outer ".chroma" class.
 	if _, err := fmt.Fprintf(w, "/* %s */ .%sbg { %s }\n", chroma.Background, f.prefix, css[chroma.Background]); err != nil {
 		return err
@@ -561,4 +560,64 @@ func compressStyle(s string) string {
 		out = append(out, p)
 	}
 	return strings.Join(out, ";")
+}
+
+const styleCacheLimit = 32
+
+type styleCacheEntry struct {
+	style      *chroma.Style
+	compressed bool
+	cache      map[chroma.TokenType]string
+}
+
+type styleCache struct {
+	mu sync.Mutex
+	// LRU cache of compiled (and possibly compressed) styles. This is a slice
+	// because the cache size is small, and a slice is sufficiently fast for
+	// small N.
+	cache []styleCacheEntry
+	f     *Formatter
+}
+
+func newStyleCache(f *Formatter) *styleCache {
+	return &styleCache{f: f}
+}
+
+func (l *styleCache) get(style *chroma.Style, compress bool) map[chroma.TokenType]string {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	// Look for an existing entry.
+	for i := len(l.cache) - 1; i >= 0; i-- {
+		entry := l.cache[i]
+		if entry.style == style && entry.compressed == compress {
+			// Top of the cache, no need to adjust the order.
+			if i == len(l.cache)-1 {
+				return entry.cache
+			}
+			// Move this entry to the end of the LRU
+			copy(l.cache[i:], l.cache[i+1:])
+			l.cache[len(l.cache)-1] = entry
+			return entry.cache
+		}
+	}
+
+	// No entry, create one.
+	cached := l.f.styleToCSS(style)
+	if !l.f.Classes {
+		for t, style := range cached {
+			cached[t] = compressStyle(style)
+		}
+	}
+	if compress {
+		for t, style := range cached {
+			cached[t] = compressStyle(style)
+		}
+	}
+	// Evict the oldest entry.
+	if len(l.cache) >= styleCacheLimit {
+		l.cache = l.cache[0:copy(l.cache, l.cache[1:])]
+	}
+	l.cache = append(l.cache, styleCacheEntry{style: style, cache: cached, compressed: compress})
+	return cached
 }

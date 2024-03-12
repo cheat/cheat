@@ -5,7 +5,7 @@
   <entry type="Other" style="#4c4f69"/>
   <entry type="LineTableTD" style=""/>
   <entry type="LineTable" style=""/>
-  <entry type="LineHighlight" style="#bcc0cc"/>
+  <entry type="LineHighlight" style="bg:#bcc0cc"/>
   <entry type="LineNumbersTable" style="#8c8fa1"/>
   <entry type="LineNumbers" style="#8c8fa1"/>
   <entry type="Keyword" style="#8839ef"/>

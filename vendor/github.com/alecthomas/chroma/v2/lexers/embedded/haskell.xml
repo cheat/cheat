@@ -86,7 +86,7 @@
       <rule pattern="\\(?![:!#$%&amp;*+.\\/&lt;=&gt;?@^|~-]+)">
         <token type="NameFunction"/>
       </rule>
-      <rule pattern="(&lt;-|::|-&gt;|=&gt;|=)(?![:!#$%&amp;*+.\\/&lt;=&gt;?@^|~-]+)">
+      <rule pattern="(&lt;-|::|-&gt;|=&gt;|=|'([:!#$%&amp;*+.\\/&lt;=&gt;?@^|~-]+))(?![:!#$%&amp;*+.\\/&lt;=&gt;?@^|~-]+)">
         <token type="OperatorWord"/>
       </rule>
       <rule pattern=":[:!#$%&amp;*+.\\/&lt;=&gt;?@^|~-]*">
