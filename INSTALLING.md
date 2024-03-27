@@ -21,8 +21,8 @@ You may need to need to change the version number (`4.4.2`) and the archive
 See the [releases page][releases] for a list of supported platforms.
 
 #### Windows
-TODO: community support is requested here. Please open a PR if you'd like to
-contribute installation instructions for Windows.
+On Windows, simply download `cheat-windows-amd64.exe.zip` from the [releases page][releases],
+extract the `.exe` file to a directory in your `PATH`, and rename it to `cheat.exe`.
 
 ### Install via `go install`
 If you have `go` version `>=1.17` available on your `PATH`, you can install
