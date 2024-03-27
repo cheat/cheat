@@ -24,6 +24,10 @@ See the [releases page][releases] for a list of supported platforms.
 On Windows, simply download `cheat-windows-amd64.exe.zip` from the [releases page][releases],
 extract the `.exe` file to a directory in your `PATH`, and rename it to `cheat.exe`.
 
+Do keep in mind that many community-contributed cheatsheets assume a Unix-like environment.
+Some entries may mention other command line syntax or tools (for example, `for` or `cat`)
+that are not available on Windows, or work differently.
+
 ### Install via `go install`
 If you have `go` version `>=1.17` available on your `PATH`, you can install
 `cheat` via `go install`:
