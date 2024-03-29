@@ -21,8 +21,13 @@ You may need to need to change the version number (`4.4.2`) and the archive
 See the [releases page][releases] for a list of supported platforms.
 
 #### Windows
-TODO: community support is requested here. Please open a PR if you'd like to
-contribute installation instructions for Windows.
+### Install via chocolatey
+
+from an elevated powershell with chocolatey package manager installed
+
+```powershell
+choco install cheat
+```
 
 ### Install via `go install`
 If you have `go` version `>=1.17` available on your `PATH`, you can install
@@ -42,6 +47,7 @@ brew             | [cheat][pkg-brew]
 docker           | [docker-cheat][pkg-docker]
 nix              | [nixos.cheat][pkg-nix]
 snap             | [cheat][pkg-snap]
+chocolatey       | [cheat][pkg-choco]
 
 <!--[pacman][]       |-->
 
@@ -76,4 +82,5 @@ export CHEAT_CONFIG_PATH="~/.dotfiles/cheat/conf.yml"
 [pkg-docker]:        https://github.com/bannmann/docker-cheat
 [pkg-nix]:           https://search.nixos.org/packages?channel=unstable&show=cheat&from=0&size=50&sort=relevance&type=packages&query=cheat 
 [pkg-snap]:          https://snapcraft.io/cheat
+[pkg-choco]:         https://community.chocolatey.org/packages/cheat
 [releases]:          https://github.com/cheat/cheat/releases
