@@ -1,4 +1,4 @@
-module github.com/cheat/cheat
+module github.com/cheat/cheat/v4
 
 go 1.19
 
