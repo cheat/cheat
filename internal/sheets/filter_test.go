@@ -52,7 +52,7 @@ func TestFilterSingleTag(t *testing.T) {
 	}
 }
 
-// TestFilterSingleTag asserts that Filter properly filters results when passed
+// TestFilterMultiTag asserts that Filter properly filters results when passed
 // multiple tags
 func TestFilterMultiTag(t *testing.T) {
 
