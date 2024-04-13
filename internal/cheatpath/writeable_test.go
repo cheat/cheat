@@ -29,7 +29,7 @@ func TestWriteableOK(t *testing.T) {
 	}
 }
 
-// TestWriteableOK asserts that Writeable returns an error when no writeable
+// TestWriteableNotOK asserts that Writeable returns an error when no writeable
 // cheatpaths exist
 func TestWriteableNotOK(t *testing.T) {
 

@@ -42,7 +42,7 @@ To foo the bar: baz`
 	}
 }
 
-// TestHasFrontmatter asserts that markdown is properly parsed when it does not
+// TestHasNoFrontmatter asserts that markdown is properly parsed when it does not
 // contain frontmatter
 func TestHasNoFrontmatter(t *testing.T) {
 
