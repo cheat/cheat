@@ -39,7 +39,6 @@ Package manager  | Package(s)
 ---------------- | -----------
 aur              | [cheat][pkg-aur-cheat], [cheat-bin][pkg-aur-cheat-bin]
 brew             | [cheat][pkg-brew]
-docker           | [docker-cheat][pkg-docker]
 nix              | [nixos.cheat][pkg-nix]
 snap             | [cheat][pkg-snap]
 
@@ -73,7 +72,6 @@ export CHEAT_CONFIG_PATH="~/.dotfiles/cheat/conf.yml"
 [pkg-aur-cheat-bin]: https://aur.archlinux.org/packages/cheat-bin
 [pkg-aur-cheat]:     https://aur.archlinux.org/packages/cheat
 [pkg-brew]:          https://formulae.brew.sh/formula/cheat 
-[pkg-docker]:        https://github.com/bannmann/docker-cheat
 [pkg-nix]:           https://search.nixos.org/packages?channel=unstable&show=cheat&from=0&size=50&sort=relevance&type=packages&query=cheat 
 [pkg-snap]:          https://snapcraft.io/cheat
 [releases]:          https://github.com/cheat/cheat/releases
