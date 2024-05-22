@@ -51,10 +51,13 @@
       </rule>
     </state>
     <state name="tag">
+      <rule>
+        <include state="commentsandwhitespace"/>
+      </rule>
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
-      <rule pattern="([\w]+\s*)(=)(\s*)">
+      <rule pattern="([\w-]+\s*)(=)(\s*)">
         <bygroups>
           <token type="NameAttribute"/>
           <token type="Operator"/>
@@ -77,12 +80,25 @@
         <pop depth="1"/>
       </rule>
     </state>
+   <state name="comment">
+      <rule pattern="[^-]+">
+        <token type="Comment"/>
+      </rule>
+      <rule pattern="--&gt;">
+        <token type="Comment"/>
+        <pop depth="1"/>
+      </rule>
+      <rule pattern="-">
+        <token type="Comment"/>
+      </rule>
+    </state>
     <state name="commentsandwhitespace">
       <rule pattern="\s+">
         <token type="Text"/>
       </rule>
       <rule pattern="&lt;!--">
         <token type="Comment"/>
+        <push state="comment"/>
       </rule>
       <rule pattern="//.*?\n">
         <token type="CommentSingle"/>
@@ -200,7 +216,7 @@
       <rule pattern="(Array|Boolean|Date|Error|Function|Math|Number|Object|Packages|RegExp|String|decodeURI|decodeURIComponent|encodeURI|encodeURIComponent|eval|isFinite|isNaN|parseFloat|parseInt|document|this|window)\b">
         <token type="NameBuiltin"/>
       </rule>
-      <rule pattern="\b(module)(\s*)(\s*[\w?.$][\w?.$]*)(\s*)">
+      <rule pattern="\b(module)(\s+)(&quot;[\w\./@]+&quot;)(\s+)">
         <bygroups>
           <token type="KeywordReserved"/>
           <token type="Text"/>
