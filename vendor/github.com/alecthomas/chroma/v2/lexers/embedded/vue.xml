@@ -83,9 +83,10 @@
           <token type="LiteralString"/>
         </bygroups>
       </rule>
-      <rule pattern="(:[\S]+)(=&#34;[\S]+&#34;)">
+      <rule pattern="(:[\S]+)(=)(&#34;[\S]+&#34;)">
         <bygroups>
           <token type="NameTag"/>
+          <token type="Operator"/>
           <token type="LiteralString"/>
         </bygroups>
       </rule>
@@ -104,9 +105,10 @@
           <token type="Punctuation"/>
         </bygroups>
       </rule>
-      <rule pattern="(v-[\w]+)(=&#34;[\S]+&#34;)(&gt;)">
+      <rule pattern="(v-[\w]+)(=)(&#34;[\S ]+&#34;)(&gt;|\s)">
         <bygroups>
           <token type="NameTag"/>
+          <token type="Operator"/>
           <token type="LiteralString"/>
           <token type="Punctuation"/>
         </bygroups>
@@ -258,14 +260,14 @@
       </rule>
     </state>
     <state name="vue">
-      <rule pattern="(&lt;)([\w]+)">
+      <rule pattern="(&lt;)([\w-]+)">
         <bygroups>
           <token type="Punctuation"/>
           <token type="NameTag"/>
         </bygroups>
         <push state="tag"/>
       </rule>
-      <rule pattern="(&lt;)(/)([\w]+)(&gt;)">
+      <rule pattern="(&lt;)(/)([\w-]+)(&gt;)">
         <bygroups>
           <token type="Punctuation"/>
           <token type="Punctuation"/>

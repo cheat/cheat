@@ -49,7 +49,7 @@
       <rule pattern="(true|false|null|_)\b">
         <token type="KeywordConstant"/>
       </rule>
-      <rule pattern="[_a-zA-Z]\w*">
+      <rule pattern="[@#]?[_a-zA-Z$]\w*">
         <token type="Name"/>
       </rule>
     </state>

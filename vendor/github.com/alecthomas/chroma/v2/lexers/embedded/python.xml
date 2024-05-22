@@ -19,6 +19,10 @@
     <filename>BUILD</filename>
     <filename>BUILD.bazel</filename>
     <filename>WORKSPACE</filename>
+    <filename>WORKSPACE.bzlmod</filename>
+    <filename>WORKSPACE.bazel</filename>
+    <filename>MODULE.bazel</filename>
+    <filename>REPO.bazel</filename>
     <filename>*.tac</filename>
     <mime_type>text/x-python</mime_type>
     <mime_type>application/x-python</mime_type>
