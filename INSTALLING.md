@@ -9,20 +9,25 @@ On Unix-like systems, you may simply paste the following snippet into your termi
 
 ```sh
 cd /tmp \
-  && wget https://github.com/cheat/cheat/releases/download/4.4.2/cheat-linux-amd64.gz \
+https://github.com/cheat/cheat/releases/latest/download/cheat-linux-amd64.gz \
   && gunzip cheat-linux-amd64.gz \
   && chmod +x cheat-linux-amd64 \
   && sudo mv cheat-linux-amd64 /usr/local/bin/cheat
 ```
 
-You may need to need to change the version number (`4.4.2`) and the archive
+You may need to need to change the archive
 (`cheat-linux-amd64.gz`) depending on your platform.
 
 See the [releases page][releases] for a list of supported platforms.
 
 #### Windows
-TODO: community support is requested here. Please open a PR if you'd like to
-contribute installation instructions for Windows.
+You can download the latest windows archive in the releases page. Now extract the archive and put "cheat-windows-amd64.exe" in the directory you wish to install it in then rename it to "cheat.exe". Finally, edit the PATH enviroment variable for your user account or the entire system to include the directory where "cheat.exe" is located.
+
+### Install via `winget`
+If you have Windows 10 or later and winget on your system, you can install `cheat` via `winget`:
+```pwsh
+winget install ChrisAllenLane.cheat
+```
 
 ### Install via `go install`
 If you have `go` version `>=1.17` available on your `PATH`, you can install
