@@ -138,7 +138,7 @@ distclean:
 ## setup: install revive (linter) and scc (sloc tool)
 .PHONY: setup
 setup:
-	GO111MODULE=off $(GO) get -u github.com/boyter/scc github.com/mgechev/revive
+	GO111MODULE=off $(GO) install github.com/boyter/scc github.com/mgechev/revive
 
 ## sloc: count "semantic lines of code"
 .PHONY: sloc
