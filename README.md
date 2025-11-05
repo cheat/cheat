@@ -185,6 +185,9 @@ Additionally, `cheat` supports enhanced autocompletion via integration with
 1. Ensure that `fzf` is available on your `$PATH`
 2. Set an envvar: `export CHEAT_USE_FZF=true`
 
+See the [Enable-fzf-Integration](https://github.com/cheat/cheat/wiki/Enable-fzf-Integration) wiki page for an example of integrating with fzf with cheat for autocompletions in oh-my-zsh 
+
+
 [INSTALLING.md]: INSTALLING.md
 [Releases]:      https://github.com/cheat/cheat/releases
 [cheatsheets]:   https://github.com/cheat/cheatsheets
