@@ -20,7 +20,7 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 	// load the cheatsheets
 	cheatsheets, err := sheets.Load(conf.Cheatpaths)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
+		fmt.Fprintf(os.Stderr, "failed to load cheatsheets from configured paths: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -30,6 +30,10 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 			cheatsheets,
 			strings.Split(opts["--tag"].(string), ","),
 		)
+		if len(cheatsheets) == 0 {
+			fmt.Fprintf(os.Stderr, "no cheatsheets found matching the specified tags\n")
+			os.Exit(1)
+		}
 	}
 
 	// consolidate the cheatsheets found on all paths into a single map of
@@ -53,7 +57,7 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 		// begin by getting a writeable cheatpath
 		writepath, err := cheatpath.Writeable(conf.Cheatpaths)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed to get writeable path: %v\n", err)
+			fmt.Fprintf(os.Stderr, "failed to find a writable cheatpath for editing: %v\n", err)
 			os.Exit(1)
 		}
 
@@ -64,7 +68,7 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 		dirs := filepath.Dir(editpath)
 		if dirs != "." {
 			if err := os.MkdirAll(dirs, 0755); err != nil {
-				fmt.Fprintf(os.Stderr, "failed to create directory: %s, %v\n", dirs, err)
+				fmt.Fprintf(os.Stderr, "failed to create directory structure for copied cheatsheet: %s, error: %v\n", dirs, err)
 				os.Exit(1)
 			}
 		}
@@ -82,7 +86,7 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 		// begin by getting a writeable cheatpath
 		writepath, err := cheatpath.Writeable(conf.Cheatpaths)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed to get writeable path: %v\n", err)
+			fmt.Fprintf(os.Stderr, "failed to find a writable cheatpath for new cheatsheet: %v\n", err)
 			os.Exit(1)
 		}
 
@@ -93,7 +97,7 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 		dirs := filepath.Dir(editpath)
 		if dirs != "." {
 			if err := os.MkdirAll(dirs, 0755); err != nil {
-				fmt.Fprintf(os.Stderr, "failed to create directory: %s, %v\n", dirs, err)
+				fmt.Fprintf(os.Stderr, "failed to create directory structure for new cheatsheet: %s, error: %v\n", dirs, err)
 				os.Exit(1)
 			}
 		}
@@ -102,9 +106,7 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 	// split `conf.Editor` into parts to separate the editor's executable from
 	// any arguments it may have been passed. If this is not done, the nearby
 	// call to `exec.Command` will fail.
-	parts := strings.Fields(conf.Editor)
-	editor := parts[0]
-	args := append(parts[1:], editpath)
+	editor, args := parseEditorCommand(conf.Editor, editpath)
 
 	// edit the cheatsheet
 	cmd := exec.Command(editor, args...)
@@ -112,7 +114,53 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 	cmd.Stdin = os.Stdin
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		fmt.Fprintf(os.Stderr, "failed to edit cheatsheet: %v\n", err)
+		fmt.Fprintf(os.Stderr, "failed to execute editor '%s': %v\n", editor, err)
 		os.Exit(1)
 	}
+}
+
+// parseEditorCommand parses the editor command string into the executable and arguments
+// This handles properly quoted paths and arguments that may contain spaces
+func parseEditorCommand(editorCmd string, editpath string) (string, []string) {
+	// Handle the case where editorCmd is empty
+	if editorCmd == "" {
+		return "", []string{editpath}
+	}
+
+	var args []string
+	var currentArg string
+	var inQuotes bool
+	var quoteChar rune
+
+	for _, r := range editorCmd {
+		switch {
+		case r == '"' || r == '\'':
+			if inQuotes && r == quoteChar {
+				inQuotes = false
+			} else if !inQuotes {
+				inQuotes = true
+				quoteChar = r
+			} else {
+				currentArg += string(r)
+			}
+		case r == ' ' && !inQuotes:
+			if currentArg != "" {
+				args = append(args, currentArg)
+				currentArg = ""
+			}
+		default:
+			currentArg += string(r)
+		}
+	}
+
+	// Add the last argument if it exists
+	if currentArg != "" {
+		args = append(args, currentArg)
+	}
+
+	// If no arguments were parsed, use the entire string as the editor
+	editor := args[0]
+	args = append(args[1:], editpath)
+
+	return editor, args
 }
