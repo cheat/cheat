@@ -16,9 +16,18 @@ func Editor() (string, error) {
 	}
 
 	// look for `nano` and `vim` on the `PATH`
-	def, _ := exec.LookPath("editor") // default `editor` wrapper
-	nano, _ := exec.LookPath("nano")
-	vim, _ := exec.LookPath("vim")
+	def, defErr := exec.LookPath("editor") // default `editor` wrapper
+	if defErr != nil {
+		def = "" // Reset to empty string if not found
+	}
+	nano, nanoErr := exec.LookPath("nano")
+	if nanoErr != nil {
+		nano = "" // Reset to empty string if not found
+	}
+	vim, vimErr := exec.LookPath("vim")
+	if vimErr != nil {
+		vim = "" // Reset to empty string if not found
+	}
 
 	// set editor priority
 	editors := []string{
@@ -37,5 +46,5 @@ func Editor() (string, error) {
 	}
 
 	// return an error if no path is found
-	return "", fmt.Errorf("no editor set")
+	return "", fmt.Errorf("no editor found: please set the EDITOR or VISUAL environment variable, or ensure 'nano' or 'vim' are in your PATH")
 }
