@@ -129,7 +129,7 @@ func main() {
 	case opts["--edit"] != nil:
 		cmd = cmdEdit
 
-	case opts["--list"].(bool):
+	case opts["--list"].(bool), opts["--brief"].(bool):
 		cmd = cmdList
 
 	case opts["--tags"].(bool):

@@ -8,6 +8,7 @@ func usage() string {
 Options:
   --init                  Write a default config file to stdout
   -a --all                Search among all cheatpaths
+  -b --brief              List cheatsheets without file paths
   -c --colorize           Colorize output
   -d --directories        List cheatsheet directories
   -e --edit=<cheatsheet>  Edit <cheatsheet>
@@ -41,8 +42,8 @@ Examples:
   To list all available cheatsheets:
     cheat -l
 
-  To list all cheatsheets whose titles match "apt":
-    cheat -l apt
+  To briefly list all cheatsheets whose titles match "apt":
+    cheat -b apt
 
   To list all tags in use:
     cheat -T
