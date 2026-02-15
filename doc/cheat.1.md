@@ -65,6 +65,10 @@ OPTIONS
 --rm=_CHEATSHEET_
 : Remove (deletes) _CHEATSHEET_.
 
+--completion=_SHELL_
+: Generate a shell completion script. _SHELL_ must be one of: **bash**,
+**zsh**, **fish**, **powershell**.
+
 
 EXAMPLES
 ========
@@ -149,18 +153,33 @@ comments in conf.yml.
 
 Autocompletion
 --------------
-Autocompletion scripts for **bash**, **zsh**, and **fish** are available for
-download:
+**cheat** can generate shell completion scripts for **bash**, **zsh**,
+**fish**, and **powershell** via the **--completion** flag:
 
-- <https://github.com/cheat/cheat/blob/master/scripts/cheat.bash>
-- <https://github.com/cheat/cheat/blob/master/scripts/cheat.fish>
-- <https://github.com/cheat/cheat/blob/master/scripts/cheat.zsh>
+    cheat --completion bash
+    cheat --completion zsh
+    cheat --completion fish
+    cheat --completion powershell
 
-The **bash** and **zsh** scripts provide optional integration with **fzf**, if
-the latter is available on your **PATH**.
+Completions are dynamically generated and include cheatsheet names, tags, and
+cheatpath names.
 
-The installation process will vary per system and shell configuration, and thus
-will not be discussed here.
+To install completions, pipe the output to the appropriate location for your
+shell. For example, on **bash**:
+
+    cheat --completion bash > /etc/bash_completion.d/cheat
+
+Or for the current user only:
+
+    cheat --completion bash > ~/.local/share/bash-completion/completions/cheat
+
+For **zsh**, you may need to add the completions directory to your **fpath**:
+
+    cheat --completion zsh > "${fpath[1]}/_cheat"
+
+For **fish**:
+
+    cheat --completion fish > ~/.config/fish/completions/cheat.fish
 
 
 ENVIRONMENT
@@ -170,10 +189,6 @@ ENVIRONMENT
 
 : The path at which the config file is available. If **CHEAT_CONFIG_PATH** is
 set, all other config paths will be ignored.
-
-**CHEAT_USE_FZF**
-
-: If set, autocompletion scripts will attempt to integrate with **fzf**.
 
 RETURN VALUES
 =============

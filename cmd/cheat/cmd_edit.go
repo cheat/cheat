@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/spf13/cobra"
+
 	"github.com/cheat/cheat/internal/cheatpath"
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/sheet"
@@ -14,9 +16,9 @@ import (
 )
 
 // cmdEdit opens a cheatsheet for editing (or creates it if it doesn't exist).
-func cmdEdit(opts map[string]interface{}, conf config.Config) {
+func cmdEdit(cmd *cobra.Command, _ []string, conf config.Config) {
 
-	cheatsheet := opts["--edit"].(string)
+	cheatsheet, _ := cmd.Flags().GetString("edit")
 
 	// validate the cheatsheet name
 	if err := sheet.Validate(cheatsheet); err != nil {
@@ -30,10 +32,11 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
 		os.Exit(1)
 	}
-	if opts["--tag"] != nil {
+	if cmd.Flags().Changed("tag") {
+		tagVal, _ := cmd.Flags().GetString("tag")
 		cheatsheets = sheets.Filter(
 			cheatsheets,
-			strings.Split(opts["--tag"].(string), ","),
+			strings.Split(tagVal, ","),
 		)
 	}
 
@@ -90,14 +93,14 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 	// call to `exec.Command` will fail.
 	parts := strings.Fields(conf.Editor)
 	editor := parts[0]
-	args := append(parts[1:], editpath)
+	editorArgs := append(parts[1:], editpath)
 
 	// edit the cheatsheet
-	cmd := exec.Command(editor, args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stdin = os.Stdin
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
+	editorCmd := exec.Command(editor, editorArgs...)
+	editorCmd.Stdout = os.Stdout
+	editorCmd.Stdin = os.Stdin
+	editorCmd.Stderr = os.Stderr
+	if err := editorCmd.Run(); err != nil {
 		fmt.Fprintf(os.Stderr, "failed to edit cheatsheet: %v\n", err)
 		os.Exit(1)
 	}

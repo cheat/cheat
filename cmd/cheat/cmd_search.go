@@ -6,15 +6,19 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/spf13/cobra"
+
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/display"
 	"github.com/cheat/cheat/internal/sheets"
 )
 
 // cmdSearch searches for strings in cheatsheets.
-func cmdSearch(opts map[string]interface{}, conf config.Config) {
+func cmdSearch(cmd *cobra.Command, args []string, conf config.Config) {
 
-	phrase := opts["--search"].(string)
+	phrase, _ := cmd.Flags().GetString("search")
+	colorize, _ := cmd.Flags().GetBool("colorize")
+	useRegex, _ := cmd.Flags().GetBool("regex")
 
 	// load the cheatsheets
 	cheatsheets, err := sheets.Load(conf.Cheatpaths)
@@ -22,10 +26,11 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
 		os.Exit(1)
 	}
-	if opts["--tag"] != nil {
+	if cmd.Flags().Changed("tag") {
+		tagVal, _ := cmd.Flags().GetString("tag")
 		cheatsheets = sheets.Filter(
 			cheatsheets,
-			strings.Split(opts["--tag"].(string), ","),
+			strings.Split(tagVal, ","),
 		)
 	}
 
@@ -33,7 +38,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 	pattern := "(?i)" + phrase
 
 	// unless --regex is provided, in which case we pass the regex unaltered
-	if opts["--regex"] == true {
+	if useRegex {
 		pattern = phrase
 	}
 
@@ -53,7 +58,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 
 			// if <cheatsheet> was provided, constrain the search only to
 			// matching cheatsheets
-			if opts["<cheatsheet>"] != nil && sheet.Title != opts["<cheatsheet>"] {
+			if len(args) > 0 && sheet.Title != args[0] {
 				continue
 			}
 
@@ -68,7 +73,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 			}
 
 			// if colorization was requested, apply it here
-			if conf.Color(opts) {
+			if conf.Color(colorize) {
 				sheet.Colorize(conf)
 			}
 
@@ -78,7 +83,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 				// append the cheatsheet title
 				sheet.Title,
 				// append the cheatsheet path
-				display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf.Color(opts)),
+				display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf.Color(colorize)),
 				// indent each line of content
 				display.Indent(sheet.Text),
 			)

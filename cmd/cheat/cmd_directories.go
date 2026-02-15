@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"text/tabwriter"
 
+	"github.com/spf13/cobra"
+
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/display"
 )
 
 // cmdDirectories lists the configured cheatpaths.
-func cmdDirectories(_ map[string]interface{}, conf config.Config) {
+func cmdDirectories(_ *cobra.Command, _ []string, conf config.Config) {
 
 	// initialize a tabwriter to produce cleanly columnized output
 	var out bytes.Buffer

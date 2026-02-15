@@ -58,6 +58,11 @@ Print the version number.
 .TP
 \[en]rm=\f[I]CHEATSHEET\f[R]
 Remove (deletes) \f[I]CHEATSHEET\f[R].
+.TP
+\[en]completion=\f[I]SHELL\f[R]
+Generate a shell completion script.
+\f[I]SHELL\f[R] must be one of: \f[B]bash\f[R], \f[B]zsh\f[R],
+\f[B]fish\f[R], \f[B]powershell\f[R].
 .SH EXAMPLES
 .TP
 To view the foo cheatsheet:
@@ -135,37 +140,52 @@ Cheatpaths may be configured in \f[I]conf.yaml\f[R], and viewed via
 For detailed instructions on how to configure cheatpaths, please refer
 to the comments in conf.yml.
 .SS Autocompletion
-Autocompletion scripts for \f[B]bash\f[R], \f[B]zsh\f[R], and
-\f[B]fish\f[R] are available for download:
-.IP \[bu] 2
-\c
-.UR https://github.com/cheat/cheat/blob/master/scripts/cheat.bash
-.UE \c
-.IP \[bu] 2
-\c
-.UR https://github.com/cheat/cheat/blob/master/scripts/cheat.fish
-.UE \c
-.IP \[bu] 2
-\c
-.UR https://github.com/cheat/cheat/blob/master/scripts/cheat.zsh
-.UE \c
+\f[B]cheat\f[R] can generate shell completion scripts for
+\f[B]bash\f[R], \f[B]zsh\f[R], \f[B]fish\f[R], and \f[B]powershell\f[R]
+via the \f[B]\[en]completion\f[R] flag:
+.IP
+.EX
+cheat \-\-completion bash
+cheat \-\-completion zsh
+cheat \-\-completion fish
+cheat \-\-completion powershell
+.EE
 .PP
-The \f[B]bash\f[R] and \f[B]zsh\f[R] scripts provide optional
-integration with \f[B]fzf\f[R], if the latter is available on your
-\f[B]PATH\f[R].
+Completions are dynamically generated and include cheatsheet names,
+tags, and cheatpath names.
 .PP
-The installation process will vary per system and shell configuration,
-and thus will not be discussed here.
+To install completions, pipe the output to the appropriate location for
+your shell.
+For example, on \f[B]bash\f[R]:
+.IP
+.EX
+cheat \-\-completion bash > /etc/bash_completion.d/cheat
+.EE
+.PP
+Or for the current user only:
+.IP
+.EX
+cheat \-\-completion bash > \[ti]/.local/share/bash\-completion/completions/cheat
+.EE
+.PP
+For \f[B]zsh\f[R], you may need to add the completions directory to your
+\f[B]fpath\f[R]:
+.IP
+.EX
+cheat \-\-completion zsh > \[dq]${fpath[1]}/_cheat\[dq]
+.EE
+.PP
+For \f[B]fish\f[R]:
+.IP
+.EX
+cheat \-\-completion fish > \[ti]/.config/fish/completions/cheat.fish
+.EE
 .SH ENVIRONMENT
 .TP
 \f[B]CHEAT_CONFIG_PATH\f[R]
 The path at which the config file is available.
 If \f[B]CHEAT_CONFIG_PATH\f[R] is set, all other config paths will be
 ignored.
-.TP
-\f[B]CHEAT_USE_FZF\f[R]
-If set, autocompletion scripts will attempt to integrate with
-\f[B]fzf\f[R].
 .SH RETURN VALUES
 .IP "0." 3
 Successful termination

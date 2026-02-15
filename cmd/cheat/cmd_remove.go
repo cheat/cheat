@@ -5,15 +5,17 @@ import (
 	"os"
 	"strings"
 
+	"github.com/spf13/cobra"
+
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/sheet"
 	"github.com/cheat/cheat/internal/sheets"
 )
 
 // cmdRemove removes (deletes) a cheatsheet.
-func cmdRemove(opts map[string]interface{}, conf config.Config) {
+func cmdRemove(cmd *cobra.Command, _ []string, conf config.Config) {
 
-	cheatsheet := opts["--rm"].(string)
+	cheatsheet, _ := cmd.Flags().GetString("rm")
 
 	// validate the cheatsheet name
 	if err := sheet.Validate(cheatsheet); err != nil {
@@ -27,10 +29,11 @@ func cmdRemove(opts map[string]interface{}, conf config.Config) {
 		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
 		os.Exit(1)
 	}
-	if opts["--tag"] != nil {
+	if cmd.Flags().Changed("tag") {
+		tagVal, _ := cmd.Flags().GetString("tag")
 		cheatsheets = sheets.Filter(
 			cheatsheets,
-			strings.Split(opts["--tag"].(string), ","),
+			strings.Split(tagVal, ","),
 		)
 	}
 

@@ -175,21 +175,38 @@ added to the cheatpaths. This means you can place a `.cheat` directory at your
 project root and it will be available from any subdirectory within that project.
 
 ## Autocompletion
-Shell autocompletion is currently available for `bash`, `fish`, and `zsh`. Copy
-the relevant [completion script][completions] into the appropriate directory on
-your filesystem to enable autocompletion. (This directory will vary depending
-on operating system and shell specifics.)
+`cheat` can generate shell completion scripts for `bash`, `zsh`, `fish`, and
+`powershell` via the `--completion` flag:
 
-Additionally, `cheat` supports enhanced autocompletion via integration with
-[fzf][]. To enable `fzf` integration:
+```sh
+cheat --completion bash
+cheat --completion zsh
+cheat --completion fish
+cheat --completion powershell
+```
 
-1. Ensure that `fzf` is available on your `$PATH`
-2. Set an envvar: `export CHEAT_USE_FZF=true`
+Pipe the output to the appropriate location for your shell. For example:
+
+```sh
+# bash (user-local)
+mkdir -p ~/.local/share/bash-completion/completions
+cheat --completion bash > ~/.local/share/bash-completion/completions/cheat
+
+# bash (system-wide)
+cheat --completion bash > /etc/bash_completion.d/cheat
+
+# zsh (ensure the directory is on your fpath)
+cheat --completion zsh > "${fpath[1]}/_cheat"
+
+# fish
+cheat --completion fish > ~/.config/fish/completions/cheat.fish
+```
+
+Completions are dynamically generated and include cheatsheet names, tags, and
+cheatpath names.
 
 [INSTALLING.md]: INSTALLING.md
 [Releases]:      https://github.com/cheat/cheat/releases
 [cheatsheets]:   https://github.com/cheat/cheatsheets
-[completions]:   https://github.com/cheat/cheat/tree/master/scripts
 [Chroma]:                https://github.com/alecthomas/chroma
 [supported languages]:   https://github.com/alecthomas/chroma#supported-languages
-[fzf]:                   https://github.com/junegunn/fzf

@@ -7,7 +7,7 @@ import (
 )
 
 // Color indicates whether colorization should be applied to the output
-func (c *Config) Color(opts map[string]interface{}) bool {
+func (c *Config) Color(forceColorize bool) bool {
 
 	// default to the colorization specified in the configs...
 	colorize := c.Colorize
@@ -18,7 +18,7 @@ func (c *Config) Color(opts map[string]interface{}) bool {
 	}
 
 	// ... *unless* the --colorize flag was passed
-	if opts["--colorize"] == true {
+	if forceColorize {
 		colorize = true
 	}
 

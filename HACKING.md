@@ -63,7 +63,7 @@ make coverage-text   # Terminal output
 
 The `cheat` application follows a clean architecture with well-separated concerns:
 
-- **`cmd/cheat/`**: Command layer with argument parsing and command routing
+- **`cmd/cheat/`**: Command layer (cobra-based CLI, flag registration, command routing, shell completions)
 - **`internal/config`**: Configuration management (YAML loading, validation, paths)
 - **`internal/cheatpath`**: Cheatsheet path management (collections, filtering)
 - **`internal/sheet`**: Individual cheatsheet handling (parsing, search, highlighting)  

@@ -5,25 +5,138 @@ import (
 	"fmt"
 	"os"
 	"runtime"
-	"strings"
 
-	"github.com/docopt/docopt-go"
 	"github.com/mitchellh/go-homedir"
+	"github.com/spf13/cobra"
 
 	"github.com/cheat/cheat/internal/cheatpath"
+	"github.com/cheat/cheat/internal/completions"
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/installer"
 )
 
-const version = "4.7.1"
+const version = "5.0.0"
+
+var rootCmd = &cobra.Command{
+	Use:   "cheat [cheatsheet]",
+	Short: "Create and view interactive cheatsheets on the command-line",
+	Long: `cheat allows you to create and view interactive cheatsheets on the
+command-line. It was designed to help remind *nix system administrators of
+options for commands that they use frequently, but not frequently enough to
+remember.`,
+	Example: `  To initialize a config file:
+    mkdir -p ~/.config/cheat && cheat --init > ~/.config/cheat/conf.yml
+
+  To view the tar cheatsheet:
+    cheat tar
+
+  To edit (or create) the foo cheatsheet:
+    cheat -e foo
+
+  To edit (or create) the foo/bar cheatsheet on the "work" cheatpath:
+    cheat -p work -e foo/bar
+
+  To view all cheatsheet directories:
+    cheat -d
+
+  To list all available cheatsheets:
+    cheat -l
+
+  To briefly list all cheatsheets whose titles match "apt":
+    cheat -b apt
+
+  To list all tags in use:
+    cheat -T
+
+  To list available cheatsheets that are tagged as "personal":
+    cheat -l -t personal
+
+  To search for "ssh" among all cheatsheets, and colorize matches:
+    cheat -c -s ssh
+
+  To search (by regex) for cheatsheets that contain an IP address:
+    cheat -c -r -s '(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
+
+  To remove (delete) the foo/bar cheatsheet:
+    cheat --rm foo/bar
+
+  To view the configuration file path:
+    cheat --conf
+
+  To generate shell completions (bash, zsh, fish, powershell):
+    cheat --completion bash`,
+	RunE:              run,
+	Args:              cobra.MaximumNArgs(1),
+	SilenceErrors:     true,
+	SilenceUsage:      true,
+	ValidArgsFunction: completions.Cheatsheets,
+	CompletionOptions: cobra.CompletionOptions{
+		DisableDefaultCmd: true,
+	},
+}
+
+func init() {
+	f := rootCmd.Flags()
+
+	// bool flags
+	f.BoolP("all", "a", false, "Search among all cheatpaths")
+	f.BoolP("brief", "b", false, "List cheatsheets without file paths")
+	f.BoolP("colorize", "c", false, "Colorize output")
+	f.BoolP("directories", "d", false, "List cheatsheet directories")
+	f.Bool("init", false, "Write a default config file to stdout")
+	f.BoolP("list", "l", false, "List cheatsheets")
+	f.BoolP("regex", "r", false, "Treat search <phrase> as a regex")
+	f.BoolP("tags", "T", false, "List all tags in use")
+	f.BoolP("version", "v", false, "Print the version number")
+	f.Bool("conf", false, "Display the config file path")
+
+	// string flags
+	f.StringP("edit", "e", "", "Edit `cheatsheet`")
+	f.StringP("path", "p", "", "Return only sheets found on cheatpath `name`")
+	f.StringP("search", "s", "", "Search cheatsheets for `phrase`")
+	f.StringP("tag", "t", "", "Return only sheets matching `tag`")
+	f.String("rm", "", "Remove (delete) `cheatsheet`")
+	f.String("completion", "", "Generate shell completion script (`shell`: bash, zsh, fish, powershell)")
+
+	// register flag completion functions
+	rootCmd.RegisterFlagCompletionFunc("tag", completions.Tags)
+	rootCmd.RegisterFlagCompletionFunc("path", completions.Paths)
+	rootCmd.RegisterFlagCompletionFunc("edit", completions.Cheatsheets)
+	rootCmd.RegisterFlagCompletionFunc("rm", completions.Cheatsheets)
+}
 
 func main() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
 
-	// initialize options
-	opts, err := docopt.ParseArgs(usage(), nil, version)
-	if err != nil {
-		// panic here, because this should never happen
-		panic(fmt.Errorf("docopt failed to parse: %v", err))
+func run(cmd *cobra.Command, args []string) error {
+	f := cmd.Flags()
+
+	// handle --init early (no config needed)
+	if initFlag, _ := f.GetBool("init"); initFlag {
+		home, err := homedir.Dir()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "failed to get user home directory: %v\n", err)
+			os.Exit(1)
+		}
+		envvars := config.EnvVars()
+		cmdInit(home, envvars)
+		os.Exit(0)
+	}
+
+	// handle --version early
+	if versionFlag, _ := f.GetBool("version"); versionFlag {
+		fmt.Println(version)
+		os.Exit(0)
+	}
+
+	// handle --completion early (no config needed)
+	if f.Changed("completion") {
+		shell, _ := f.GetString("completion")
+		return completions.Generate(cmd, shell, os.Stdout)
 	}
 
 	// get the user's home directory
@@ -34,24 +147,9 @@ func main() {
 	}
 
 	// read the envvars into a map of strings
-	envvars := map[string]string{}
-	for _, e := range os.Environ() {
-		// os.Environ() guarantees "key=value" format (see ADR-002)
-		pair := strings.SplitN(e, "=", 2)
-		if runtime.GOOS == "windows" {
-			pair[0] = strings.ToUpper(pair[0])
-		}
-		envvars[pair[0]] = pair[1]
-	}
+	envvars := config.EnvVars()
 
-	// if --init was passed, we don't want to attempt to load a config file.
-	// Instead, just execute cmd_init and exit
-	if opts["--init"] == true {
-		cmdInit(home, envvars)
-		os.Exit(0)
-	}
-
-	// identify the os-specifc paths at which configs may be located
+	// identify the os-specific paths at which configs may be located
 	confpaths, err := config.Paths(runtime.GOOS, home, envvars)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to load config: %v\n", err)
@@ -105,10 +203,11 @@ func main() {
 	}
 
 	// filter the cheatpaths if --path was passed
-	if opts["--path"] != nil {
+	if f.Changed("path") {
+		pathVal, _ := f.GetString("path")
 		conf.Cheatpaths, err = cheatpath.Filter(
 			conf.Cheatpaths,
-			opts["--path"].(string),
+			pathVal,
 		)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "invalid option --path: %v\n", err)
@@ -117,41 +216,44 @@ func main() {
 	}
 
 	// determine which command to execute
-	var cmd func(map[string]interface{}, config.Config)
+	confFlag, _ := f.GetBool("conf")
+	dirFlag, _ := f.GetBool("directories")
+	listFlag, _ := f.GetBool("list")
+	briefFlag, _ := f.GetBool("brief")
+	tagsFlag, _ := f.GetBool("tags")
+	tagVal, _ := f.GetString("tag")
 
 	switch {
-	case opts["--conf"].(bool):
-		cmd = cmdConf
+	case confFlag:
+		cmdConf(cmd, args, conf)
 
-	case opts["--directories"].(bool):
-		cmd = cmdDirectories
+	case dirFlag:
+		cmdDirectories(cmd, args, conf)
 
-	case opts["--edit"] != nil:
-		cmd = cmdEdit
+	case f.Changed("edit"):
+		cmdEdit(cmd, args, conf)
 
-	case opts["--list"].(bool), opts["--brief"].(bool):
-		cmd = cmdList
+	case listFlag, briefFlag:
+		cmdList(cmd, args, conf)
 
-	case opts["--tags"].(bool):
-		cmd = cmdTags
+	case tagsFlag:
+		cmdTags(cmd, args, conf)
 
-	case opts["--search"] != nil:
-		cmd = cmdSearch
+	case f.Changed("search"):
+		cmdSearch(cmd, args, conf)
 
-	case opts["--rm"] != nil:
-		cmd = cmdRemove
+	case f.Changed("rm"):
+		cmdRemove(cmd, args, conf)
 
-	case opts["<cheatsheet>"] != nil:
-		cmd = cmdView
+	case len(args) > 0:
+		cmdView(cmd, args, conf)
 
-	case opts["--tag"] != nil && opts["--tag"].(string) != "":
-		cmd = cmdList
+	case tagVal != "":
+		cmdList(cmd, args, conf)
 
 	default:
-		fmt.Println(usage())
-		os.Exit(0)
+		return cmd.Help()
 	}
 
-	// execute the command
-	cmd(opts, conf)
+	return nil
 }

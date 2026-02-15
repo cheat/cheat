@@ -100,5 +100,5 @@ The parallelization attempt was valuable as a learning exercise and definitively
 
 ## References
 
-- Benchmark implementation: cmd/cheat/search_bench_test.go
+- Benchmark implementation: test/integration/search_bench_test.go
 - Reverted parallel implementation: see git history (commit 82eb918)

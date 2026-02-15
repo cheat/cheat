@@ -55,9 +55,10 @@ make vendor-update
 The `cheat` command-line tool is organized into several key packages:
 
 ### Command Layer (`cmd/cheat/`)
-- `main.go`: Entry point, argument parsing, command routing
+- `main.go`: Entry point, cobra command definition, flag registration, command routing
 - `cmd_*.go`: Individual command implementations (view, edit, list, search, etc.)
-- Commands are selected based on docopt parsed arguments
+- `completions.go`: Dynamic shell completion functions for cheatsheet names, tags, and paths
+- Commands are routed via a `switch` block in the cobra `RunE` handler
 
 ### Core Internal Packages
 
