@@ -29,6 +29,9 @@ OPTIONS
 -a, --all
 : Search among all cheatpaths.
 
+-b, --brief
+: List cheatsheets without file paths.
+
 -c, --colorize
 : Colorize output.
 
@@ -81,8 +84,8 @@ To view all cheatsheet directories:
 To list all available cheatsheets:
 : cheat -l
 
-To list all cheatsheets whose titles match 'apt':
-: cheat -l _apt_
+To briefly list all cheatsheets whose titles match 'apt':
+: cheat -b _apt_
 
 To list all tags in use:
 : cheat -T

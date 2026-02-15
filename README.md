@@ -70,6 +70,12 @@ To list all available cheatsheets:
 cheat -l
 ```
 
+To briefly list all cheatsheets (names and tags only):
+
+```sh
+cheat -b
+```
+
 To list all cheatsheets that are tagged with "networking":
 
 ```sh

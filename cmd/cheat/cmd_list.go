@@ -87,12 +87,17 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 	var out bytes.Buffer
 	w := tabwriter.NewWriter(&out, 0, 0, 1, ' ', 0)
 
-	// write a header row
-	fmt.Fprintln(w, "title:\tfile:\ttags:")
-
 	// generate sorted, columnized output
-	for _, sheet := range flattened {
-		fmt.Fprintf(w, "%s\t%s\t%s\n", sheet.Title, sheet.Path, strings.Join(sheet.Tags, ","))
+	if opts["--brief"].(bool) {
+		fmt.Fprintln(w, "title:\ttags:")
+		for _, sheet := range flattened {
+			fmt.Fprintf(w, "%s\t%s\n", sheet.Title, strings.Join(sheet.Tags, ","))
+		}
+	} else {
+		fmt.Fprintln(w, "title:\tfile:\ttags:")
+		for _, sheet := range flattened {
+			fmt.Fprintf(w, "%s\t%s\t%s\n", sheet.Title, sheet.Path, strings.Join(sheet.Tags, ","))
+		}
 	}
 
 	// write columnized output to stdout
