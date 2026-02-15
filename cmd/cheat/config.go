@@ -56,7 +56,8 @@ cheatpaths:
     tags: [ work ]
     readonly: false
 
-  # Community cheatsheets are stored here by default:
+  # Community cheatsheets (https://github.com/cheat/cheatsheets):
+  # To install: git clone https://github.com/cheat/cheatsheets COMMUNITY_PATH
   - name: community
     path: COMMUNITY_PATH
     tags: [ community ]

@@ -24,6 +24,59 @@ func TestFirstRunIntegration(t *testing.T) {
 		t.Fatalf("failed to build cheat: %v\nOutput: %s", err, output)
 	}
 
+	t.Run("init comments out community", func(t *testing.T) {
+		testHome := t.TempDir()
+		env := firstRunEnv(testHome)
+
+		cmd := exec.Command(binPath, "--init")
+		cmd.Env = env
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			t.Fatalf("--init failed: %v\nOutput: %s", err, output)
+		}
+		outStr := string(output)
+
+		// No placeholder strings should survive (regression for #721)
+		assertNoPlaceholders(t, outStr)
+
+		// Community cheatpath should be commented out
+		assertCommunityCommentedOut(t, outStr)
+
+		// Personal and work cheatpaths should be active (uncommented)
+		assertCheatpathActive(t, outStr, "personal")
+		assertCheatpathActive(t, outStr, "work")
+
+		// Should include clone instructions
+		if !strings.Contains(outStr, "git clone") {
+			t.Error("expected git clone instructions in --init output")
+		}
+
+		// Save the config and verify it loads without errors.
+		// --init only outputs config, it doesn't create directories,
+		// so we need to create the cheatpath dirs the config references.
+		confpath := filepath.Join(testHome, "conf.yml")
+		if err := os.WriteFile(confpath, output, 0644); err != nil {
+			t.Fatalf("failed to write config: %v", err)
+		}
+
+		// Determine the confdir that --init used (same logic as cmd_init.go)
+		initConfpaths := firstRunConfpaths(testHome)
+		initConfdir := filepath.Dir(initConfpaths[0])
+		for _, name := range []string{"personal", "work"} {
+			dir := filepath.Join(initConfdir, "cheatsheets", name)
+			if err := os.MkdirAll(dir, 0755); err != nil {
+				t.Fatalf("failed to create %s dir: %v", name, err)
+			}
+		}
+
+		cmd2 := exec.Command(binPath, "--directories")
+		cmd2.Env = append(append([]string{}, env...), "CHEAT_CONFIG_PATH="+confpath)
+		output2, err := cmd2.CombinedOutput()
+		if err != nil {
+			t.Fatalf("config from --init failed to load: %v\nOutput: %s", err, output2)
+		}
+	})
+
 	t.Run("decline config creation", func(t *testing.T) {
 		testHome := t.TempDir()
 		env := firstRunEnv(testHome)
@@ -67,19 +120,22 @@ func TestFirstRunIntegration(t *testing.T) {
 			t.Fatalf("config file not found at %s", confpath)
 		}
 
-		// Verify community cheatpath is commented out in config
+		// Verify config file contents
 		content, err := os.ReadFile(confpath)
 		if err != nil {
 			t.Fatalf("failed to read config: %v", err)
 		}
 		contentStr := string(content)
-		for _, line := range strings.Split(contentStr, "\n") {
-			trimmed := strings.TrimSpace(line)
-			if trimmed == "- name: community" {
-				t.Error("community cheatpath should be commented out")
-				break
-			}
-		}
+
+		// No placeholder strings should survive (regression for #721)
+		assertNoPlaceholders(t, contentStr)
+
+		// Community cheatpath should be commented out
+		assertCommunityCommentedOut(t, contentStr)
+
+		// Personal and work cheatpaths should be active (uncommented)
+		assertCheatpathActive(t, contentStr, "personal")
+		assertCheatpathActive(t, contentStr, "work")
 
 		// Verify personal and work directories were created
 		confdir := filepath.Dir(confpath)
@@ -161,6 +217,74 @@ func parseCreatedConfPath(t *testing.T, output string) string {
 		rest = rest[:nl]
 	}
 	return strings.TrimSpace(rest)
+}
+
+// firstRunConfpaths returns the config file paths that cheat would check
+// for the given home directory, matching the logic in config.Paths().
+func firstRunConfpaths(home string) []string {
+	switch runtime.GOOS {
+	case "windows":
+		return []string{
+			filepath.Join(home, "AppData", "Roaming", "cheat", "conf.yml"),
+		}
+	default:
+		return []string{
+			filepath.Join(home, ".config", "cheat", "conf.yml"),
+		}
+	}
+}
+
+// assertNoPlaceholders verifies that no template placeholder strings survived
+// in the config output. This is the regression check for #721 (literal
+// PAGER_PATH appearing in the config).
+func assertNoPlaceholders(t *testing.T, content string) {
+	t.Helper()
+	placeholders := []string{
+		"PAGER_PATH",
+		"COMMUNITY_PATH",
+		"PERSONAL_PATH",
+		"WORK_PATH",
+	}
+	for _, p := range placeholders {
+		if strings.Contains(content, p) {
+			t.Errorf("placeholder %q was not replaced in config", p)
+		}
+	}
+	// EDITOR_PATH is special: it survives if no editor is found.
+	// In our test env EDITOR=vi is set, so it should be replaced.
+	if strings.Contains(content, "editor: EDITOR_PATH") {
+		t.Error("placeholder EDITOR_PATH was not replaced in config")
+	}
+}
+
+// assertCommunityCommentedOut verifies that the community cheatpath entry
+// is commented out (not active) in the config.
+func assertCommunityCommentedOut(t *testing.T, content string) {
+	t.Helper()
+	for _, line := range strings.Split(content, "\n") {
+		trimmed := strings.TrimSpace(line)
+		if trimmed == "- name: community" {
+			t.Error("community cheatpath should be commented out")
+			return
+		}
+	}
+	if !strings.Contains(content, "#- name: community") {
+		t.Error("expected commented-out community cheatpath")
+	}
+}
+
+// assertCheatpathActive verifies that a named cheatpath is present and
+// uncommented in the config.
+func assertCheatpathActive(t *testing.T, content string, name string) {
+	t.Helper()
+	marker := "- name: " + name
+	for _, line := range strings.Split(content, "\n") {
+		trimmed := strings.TrimSpace(line)
+		if trimmed == marker {
+			return
+		}
+	}
+	t.Errorf("expected active (uncommented) cheatpath %q", name)
 }
 
 // firstRunConfigExists checks whether a cheat config file exists under the

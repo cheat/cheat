@@ -62,6 +62,20 @@ func cmdInit() {
 		configs = strings.Replace(configs, "EDITOR_PATH", editor, -1)
 	}
 
+	// comment out the community cheatpath by default, since the directory
+	// won't exist until the user clones it
+	configs = strings.Replace(configs,
+		"  - name: community\n"+
+			"    path: "+community+"\n"+
+			"    tags: [ community ]\n"+
+			"    readonly: true",
+		"  #- name: community\n"+
+			"  #  path: "+community+"\n"+
+			"  #  tags: [ community ]\n"+
+			"  #  readonly: true",
+		-1,
+	)
+
 	// output the templated configs
 	fmt.Println(configs)
 }
