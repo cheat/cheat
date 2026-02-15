@@ -4,7 +4,6 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
-	"runtime"
 	"testing"
 
 	"github.com/davecgh/go-spew/spew"
@@ -16,6 +15,16 @@ import (
 
 // TestConfig asserts that the configs are loaded correctly
 func TestConfigSuccessful(t *testing.T) {
+
+	// clear env vars so they don't override the config file value
+	oldVisual := os.Getenv("VISUAL")
+	oldEditor := os.Getenv("EDITOR")
+	os.Unsetenv("VISUAL")
+	os.Unsetenv("EDITOR")
+	defer func() {
+		os.Setenv("VISUAL", oldVisual)
+		os.Setenv("EDITOR", oldEditor)
+	}()
 
 	// initialize a config
 	conf, err := New(map[string]interface{}{}, mock.Path("conf/conf.yml"), false)
@@ -76,40 +85,78 @@ func TestConfigFailure(t *testing.T) {
 	}
 }
 
-// TestEmptyEditor asserts that envvars are respected if an editor is not
-// specified in the configs
-func TestEmptyEditor(t *testing.T) {
-	if runtime.GOOS == "windows" {
-		t.Skip("Editor() returns notepad on Windows before checking env vars")
+// TestEditorEnvOverride asserts that $VISUAL and $EDITOR override the
+// config file value at runtime (regression test for #589)
+func TestEditorEnvOverride(t *testing.T) {
+	// save and clear the environment variables
+	oldVisual := os.Getenv("VISUAL")
+	oldEditor := os.Getenv("EDITOR")
+	defer func() {
+		os.Setenv("VISUAL", oldVisual)
+		os.Setenv("EDITOR", oldEditor)
+	}()
+
+	// with no env vars, the config file value should be used
+	os.Unsetenv("VISUAL")
+	os.Unsetenv("EDITOR")
+	conf, err := New(map[string]interface{}{}, mock.Path("conf/conf.yml"), false)
+	if err != nil {
+		t.Fatalf("failed to init configs: %v", err)
+	}
+	if conf.Editor != "vim" {
+		t.Errorf("expected config file editor: want: vim, got: %s", conf.Editor)
 	}
 
-	// clear the environment variables
-	os.Setenv("VISUAL", "")
-	os.Setenv("EDITOR", "")
+	// $EDITOR should override the config file value
+	os.Setenv("EDITOR", "nano")
+	conf, err = New(map[string]interface{}{}, mock.Path("conf/conf.yml"), false)
+	if err != nil {
+		t.Fatalf("failed to init configs: %v", err)
+	}
+	if conf.Editor != "nano" {
+		t.Errorf("$EDITOR should override config: want: nano, got: %s", conf.Editor)
+	}
 
-	// initialize a config
+	// $VISUAL should override both $EDITOR and the config file value
+	os.Setenv("VISUAL", "emacs")
+	conf, err = New(map[string]interface{}{}, mock.Path("conf/conf.yml"), false)
+	if err != nil {
+		t.Fatalf("failed to init configs: %v", err)
+	}
+	if conf.Editor != "emacs" {
+		t.Errorf("$VISUAL should override all: want: emacs, got: %s", conf.Editor)
+	}
+}
+
+// TestEditorEnvFallback asserts that env vars are used as fallback when
+// no editor is specified in the config file
+func TestEditorEnvFallback(t *testing.T) {
+	// save and clear the environment variables
+	oldVisual := os.Getenv("VISUAL")
+	oldEditor := os.Getenv("EDITOR")
+	defer func() {
+		os.Setenv("VISUAL", oldVisual)
+		os.Setenv("EDITOR", oldEditor)
+	}()
+
+	// set $EDITOR and assert it's used when config has no editor
+	os.Unsetenv("VISUAL")
+	os.Setenv("EDITOR", "foo")
 	conf, err := New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
 	if err != nil {
-		t.Errorf("failed to initialize test: %v", err)
-	}
-
-	// set editor, and assert that it is respected
-	os.Setenv("EDITOR", "foo")
-	conf, err = New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
-	if err != nil {
-		t.Errorf("failed to init configs: %v", err)
+		t.Fatalf("failed to init configs: %v", err)
 	}
 	if conf.Editor != "foo" {
-		t.Errorf("failed to respect editor: want: foo, got: %s", conf.Editor)
+		t.Errorf("failed to respect $EDITOR: want: foo, got: %s", conf.Editor)
 	}
 
-	// set visual, and assert that it overrides editor
+	// set $VISUAL and assert it takes precedence over $EDITOR
 	os.Setenv("VISUAL", "bar")
 	conf, err = New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
 	if err != nil {
-		t.Errorf("failed to init configs: %v", err)
+		t.Fatalf("failed to init configs: %v", err)
 	}
 	if conf.Editor != "bar" {
-		t.Errorf("failed to respect editor: want: bar, got: %s", conf.Editor)
+		t.Errorf("failed to respect $VISUAL: want: bar, got: %s", conf.Editor)
 	}
 }

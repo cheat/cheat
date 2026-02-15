@@ -7,6 +7,16 @@ import (
 )
 
 func TestNewTrimsWhitespace(t *testing.T) {
+	// clear env vars so they don't override the config file value
+	oldVisual := os.Getenv("VISUAL")
+	oldEditor := os.Getenv("EDITOR")
+	os.Unsetenv("VISUAL")
+	os.Unsetenv("EDITOR")
+	defer func() {
+		os.Setenv("VISUAL", oldVisual)
+		os.Setenv("EDITOR", oldEditor)
+	}()
+
 	// Create a temporary config file with whitespace in editor and pager
 	tmpDir := t.TempDir()
 	configPath := filepath.Join(tmpDir, "config.yml")

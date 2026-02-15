@@ -3,7 +3,7 @@ package main
 // configs returns the default configuration template
 func configs() string {
 	return `---
-# The editor to use with 'cheat -e <sheet>'. Defaults to $EDITOR or $VISUAL.
+# The editor to use with 'cheat -e <sheet>'. Overridden by $VISUAL or $EDITOR.
 editor: EDITOR_PATH
 
 # Should 'cheat' always colorize output?

@@ -107,10 +107,17 @@ func New(_ map[string]interface{}, confPath string, resolve bool) (Config, error
 	}
 	conf.Cheatpaths = validPaths
 
-	// trim editor whitespace
-	conf.Editor = strings.TrimSpace(conf.Editor)
+	// determine the editor: env vars override the config file value,
+	// following standard Unix convention (see #589)
+	if v := os.Getenv("VISUAL"); v != "" {
+		conf.Editor = v
+	} else if v := os.Getenv("EDITOR"); v != "" {
+		conf.Editor = v
+	} else {
+		conf.Editor = strings.TrimSpace(conf.Editor)
+	}
 
-	// if an editor was not provided in the configs, attempt to choose one
+	// if an editor was still not determined, attempt to choose one
 	// that's appropriate for the environment
 	if conf.Editor == "" {
 		if conf.Editor, err = Editor(); err != nil {
