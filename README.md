@@ -129,6 +129,10 @@ tags: [ array, map ]
 const squares = [1, 2, 3, 4].map(x => x * x);
 ```
 
+Syntax highlighting is provided by [Chroma][], and the `syntax` value may be
+set to any lexer name that Chroma supports. See Chroma's [supported
+languages][] for a complete list.
+
 The `cheat` executable includes no cheatsheets, but [community-sourced
 cheatsheets are available][cheatsheets]. You will be asked if you would like to
 install the community-sourced cheatsheets the first time you run `cheat`.
@@ -189,5 +193,7 @@ Additionally, `cheat` supports enhanced autocompletion via integration with
 [Releases]:      https://github.com/cheat/cheat/releases
 [cheatsheets]:   https://github.com/cheat/cheatsheets
 [completions]:   https://github.com/cheat/cheat/tree/master/scripts
-[fzf]:           https://github.com/junegunn/fzf
-[go]:            https://golang.org
+[Chroma]:                https://github.com/alecthomas/chroma
+[supported languages]:   https://github.com/alecthomas/chroma#supported-languages
+[fzf]:                   https://github.com/junegunn/fzf
+[go]:                    https://golang.org
