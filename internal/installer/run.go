@@ -3,8 +3,6 @@ package installer
 import (
 	"fmt"
 	"os"
-	"path/filepath"
-	"strings"
 
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/repo"
@@ -13,27 +11,11 @@ import (
 // Run runs the installer
 func Run(configs string, confpath string) error {
 
-	// determine the appropriate paths for config data and (optional) community
-	// cheatsheets based on the user's platform
-	confdir := filepath.Dir(confpath)
+	// expand template placeholders with platform-appropriate paths
+	configs = ExpandTemplate(configs, confpath)
 
-	// create paths for community, personal, and work cheatsheets
-	community := filepath.Join(confdir, "cheatsheets", "community")
-	personal := filepath.Join(confdir, "cheatsheets", "personal")
-	work := filepath.Join(confdir, "cheatsheets", "work")
-
-	// set default cheatpaths
-	configs = strings.Replace(configs, "COMMUNITY_PATH", community, -1)
-	configs = strings.Replace(configs, "PERSONAL_PATH", personal, -1)
-	configs = strings.Replace(configs, "WORK_PATH", work, -1)
-
-	// locate and set a default pager
-	configs = strings.Replace(configs, "PAGER_PATH", config.Pager(), -1)
-
-	// locate and set a default editor
-	if editor, err := config.Editor(); err == nil {
-		configs = strings.Replace(configs, "EDITOR_PATH", editor, -1)
-	}
+	// determine cheatsheet directory paths
+	community, personal, work := cheatsheetDirs(confpath)
 
 	// prompt the user to download the community cheatsheets
 	yes, err := Prompt(
@@ -51,19 +33,7 @@ func Run(configs string, confpath string) error {
 			return fmt.Errorf("failed to clone cheatsheets: %v", err)
 		}
 	} else {
-		// comment out the community cheatpath in the config since
-		// the directory won't exist
-		configs = strings.Replace(configs,
-			"  - name: community\n"+
-				"    path: "+community+"\n"+
-				"    tags: [ community ]\n"+
-				"    readonly: true",
-			"  #- name: community\n"+
-				"  #  path: "+community+"\n"+
-				"  #  tags: [ community ]\n"+
-				"  #  readonly: true",
-			-1,
-		)
+		configs = CommentCommunity(configs, confpath)
 	}
 
 	// always create personal and work directories

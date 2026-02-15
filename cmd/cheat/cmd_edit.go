@@ -9,6 +9,7 @@ import (
 
 	"github.com/cheat/cheat/internal/cheatpath"
 	"github.com/cheat/cheat/internal/config"
+	"github.com/cheat/cheat/internal/sheet"
 	"github.com/cheat/cheat/internal/sheets"
 )
 
@@ -18,7 +19,7 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 	cheatsheet := opts["--edit"].(string)
 
 	// validate the cheatsheet name
-	if err := cheatpath.ValidateSheetName(cheatsheet); err != nil {
+	if err := sheet.Validate(cheatsheet); err != nil {
 		fmt.Fprintf(os.Stderr, "invalid cheatsheet name: %v\n", err)
 		os.Exit(1)
 	}
@@ -29,8 +30,6 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
 		os.Exit(1)
 	}
-
-	// filter cheatcheats by tag if --tag was provided
 	if opts["--tag"] != nil {
 		cheatsheets = sheets.Filter(
 			cheatsheets,
@@ -52,55 +51,36 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 	// if the sheet exists and is not read-only, edit it in place
 	if ok && !sheet.ReadOnly {
 		editpath = sheet.Path
-
-		// if the sheet exists but is read-only, copy it before editing
-	} else if ok && sheet.ReadOnly {
-		// compute the new edit path
-		// begin by getting a writeable cheatpath
+	} else {
+		// for read-only or non-existent sheets, resolve a writeable path
 		writepath, err := cheatpath.Writeable(conf.Cheatpaths)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "failed to get writeable path: %v\n", err)
 			os.Exit(1)
 		}
 
-		// compute the new edit path
-		editpath = filepath.Join(writepath.Path, sheet.Title)
+		// use the existing title for read-only copies, the requested name otherwise
+		title := cheatsheet
+		if ok {
+			title = sheet.Title
+		}
+		editpath = filepath.Join(writepath.Path, title)
 
-		// create any necessary subdirectories
-		dirs := filepath.Dir(editpath)
-		if dirs != "." {
-			if err := os.MkdirAll(dirs, 0755); err != nil {
-				fmt.Fprintf(os.Stderr, "failed to create directory: %s, %v\n", dirs, err)
+		if ok {
+			// copy the read-only sheet to the writeable path
+			// (Copy handles MkdirAll internally)
+			if err := sheet.Copy(editpath); err != nil {
+				fmt.Fprintf(os.Stderr, "failed to copy cheatsheet: %v\n", err)
 				os.Exit(1)
 			}
-		}
-
-		// copy the sheet to the new edit path
-		err = sheet.Copy(editpath)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed to copy cheatsheet: %v\n", err)
-			os.Exit(1)
-		}
-
-		// if the sheet does not exist, create it
-	} else {
-		// compute the new edit path
-		// begin by getting a writeable cheatpath
-		writepath, err := cheatpath.Writeable(conf.Cheatpaths)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed to get writeable path: %v\n", err)
-			os.Exit(1)
-		}
-
-		// compute the new edit path
-		editpath = filepath.Join(writepath.Path, cheatsheet)
-
-		// create any necessary subdirectories
-		dirs := filepath.Dir(editpath)
-		if dirs != "." {
-			if err := os.MkdirAll(dirs, 0755); err != nil {
-				fmt.Fprintf(os.Stderr, "failed to create directory: %s, %v\n", dirs, err)
-				os.Exit(1)
+		} else {
+			// create any necessary subdirectories for the new sheet
+			dirs := filepath.Dir(editpath)
+			if dirs != "." {
+				if err := os.MkdirAll(dirs, 0755); err != nil {
+					fmt.Fprintf(os.Stderr, "failed to create directory: %s, %v\n", dirs, err)
+					os.Exit(1)
+				}
 			}
 		}
 	}

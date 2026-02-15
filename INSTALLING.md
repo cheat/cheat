@@ -1,30 +1,29 @@
-Installing
-==========
+# Installing
 `cheat` has no runtime dependencies. As such, installing it is generally
 straightforward. There are a few methods available:
 
-### Install manually
-#### Unix-like
+## Install manually
+### Unix-like
 On Unix-like systems, you may simply paste the following snippet into your terminal:
 
 ```sh
 cd /tmp \
-  && wget https://github.com/cheat/cheat/releases/download/4.5.1/cheat-linux-amd64.gz \
+  && wget https://github.com/cheat/cheat/releases/download/4.7.0/cheat-linux-amd64.gz \
   && gunzip cheat-linux-amd64.gz \
   && chmod +x cheat-linux-amd64 \
   && sudo mv cheat-linux-amd64 /usr/local/bin/cheat
 ```
 
-You may need to need to change the version number (`4.5.1`) and the archive
+You may need to need to change the version number (`4.7.0`) and the archive
 (`cheat-linux-amd64.gz`) depending on your platform.
 
 See the [releases page][releases] for a list of supported platforms.
 
-#### Windows
+### Windows
 On Windows, download the appropriate binary from the [releases page][releases],
 unzip the archive, and place the `cheat.exe` executable on your `PATH`.
 
-### Install via `go install`
+## Install via `go install`
 If you have `go` version `>=1.17` available on your `PATH`, you can install
 `cheat` via `go install`:
 
@@ -32,7 +31,7 @@ If you have `go` version `>=1.17` available on your `PATH`, you can install
 go install github.com/cheat/cheat/cmd/cheat@latest
 ```
 
-### Install via package manager
+## Install via package manager
 Several community-maintained packages are also available:
 
 Package manager  | Package(s)
@@ -42,8 +41,6 @@ brew             | [cheat][pkg-brew]
 docker           | [docker-cheat][pkg-docker]
 nix              | [nixos.cheat][pkg-nix]
 snap             | [cheat][pkg-snap]
-
-<!--[pacman][]       |-->
 
 ## Configuring
 Three things must be done before you can use `cheat`:
@@ -56,7 +53,7 @@ automatically. After the installer is complete, it is strongly advised that you
 view the configuration file that was generated, as you may want to change some
 of its default values (to enable colorization, change the paginator, etc).
 
-### conf.yml ###
+### conf.yml
 `cheat` is configured by a YAML file that will be auto-generated on first run.
 
 By default, the config file is assumed to exist on an XDG-compliant
@@ -72,8 +69,8 @@ export CHEAT_CONFIG_PATH="~/.dotfiles/cheat/conf.yml"
 [community]:         https://github.com/cheat/cheatsheets/
 [pkg-aur-cheat-bin]: https://aur.archlinux.org/packages/cheat-bin
 [pkg-aur-cheat]:     https://aur.archlinux.org/packages/cheat
-[pkg-brew]:          https://formulae.brew.sh/formula/cheat 
+[pkg-brew]:          https://formulae.brew.sh/formula/cheat
 [pkg-docker]:        https://github.com/bannmann/docker-cheat
-[pkg-nix]:           https://search.nixos.org/packages?channel=unstable&show=cheat&from=0&size=50&sort=relevance&type=packages&query=cheat 
+[pkg-nix]:           https://search.nixos.org/packages?channel=unstable&show=cheat&from=0&size=50&sort=relevance&type=packages&query=cheat
 [pkg-snap]:          https://snapcraft.io/cheat
 [releases]:          https://github.com/cheat/cheat/releases

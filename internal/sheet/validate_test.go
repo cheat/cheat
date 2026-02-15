@@ -1,4 +1,4 @@
-package cheatpath
+package sheet
 
 import (
 	"runtime"
@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestValidateSheetName(t *testing.T) {
+func TestValidate(t *testing.T) {
 	tests := []struct {
 		name    string
 		input   string
@@ -98,14 +98,14 @@ func TestValidateSheetName(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := ValidateSheetName(tt.input)
+			err := Validate(tt.input)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ValidateName(%q) error = %v, wantErr %v", tt.input, err, tt.wantErr)
+				t.Errorf("Validate(%q) error = %v, wantErr %v", tt.input, err, tt.wantErr)
 				return
 			}
 			if err != nil && tt.errMsg != "" {
 				if !strings.Contains(err.Error(), tt.errMsg) {
-					t.Errorf("ValidateName(%q) error = %v, want error containing %q", tt.input, err, tt.errMsg)
+					t.Errorf("Validate(%q) error = %v, want error containing %q", tt.input, err, tt.errMsg)
 				}
 			}
 		})

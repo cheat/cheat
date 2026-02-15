@@ -24,8 +24,6 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
 		os.Exit(1)
 	}
-
-	// filter cheatsheets by tag if --tag was provided
 	if opts["--tag"] != nil {
 		cheatsheets = sheets.Filter(
 			cheatsheets,

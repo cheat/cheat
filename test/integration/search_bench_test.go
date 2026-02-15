@@ -1,6 +1,6 @@
 //go:build integration
 
-package main
+package integration
 
 import (
 	"bytes"
@@ -9,7 +9,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"testing"
-	"time"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
@@ -17,12 +16,10 @@ import (
 
 // BenchmarkSearchCommand benchmarks the actual cheat search command
 func BenchmarkSearchCommand(b *testing.B) {
+	root := repoRootBench(b)
+
 	// Build the cheat binary in .tmp (using absolute path)
-	rootDir, err := filepath.Abs(filepath.Join("..", ".."))
-	if err != nil {
-		b.Fatalf("Failed to get root dir: %v", err)
-	}
-	tmpDir := filepath.Join(rootDir, ".tmp", "bench-test")
+	tmpDir := filepath.Join(root, ".tmp", "bench-test")
 	if err := os.MkdirAll(tmpDir, 0755); err != nil {
 		b.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -35,7 +32,7 @@ func BenchmarkSearchCommand(b *testing.B) {
 	})
 
 	cmd := exec.Command("go", "build", "-o", cheatBin, "./cmd/cheat")
-	cmd.Dir = rootDir
+	cmd.Dir = root
 	if output, err := cmd.CombinedOutput(); err != nil {
 		b.Fatalf("Failed to build cheat: %v\nOutput: %s", err, output)
 	}
@@ -108,23 +105,15 @@ cheatpaths:
 				cmd := exec.Command(cheatBin, tc.args...)
 				cmd.Env = env
 
-				// Capture output to prevent spamming
 				var stdout, stderr bytes.Buffer
 				cmd.Stdout = &stdout
 				cmd.Stderr = &stderr
 
-				start := time.Now()
 				err := cmd.Run()
-				elapsed := time.Since(start)
-
 				if err != nil {
 					b.Fatalf("Command failed: %v\nStderr: %s", err, stderr.String())
 				}
 
-				// Report custom metric
-				b.ReportMetric(float64(elapsed.Nanoseconds())/1e6, "ms/op")
-
-				// Ensure we got some results
 				if stdout.Len() == 0 {
 					b.Fatal("No output from search")
 				}
@@ -135,12 +124,10 @@ cheatpaths:
 
 // BenchmarkListCommand benchmarks the list command for comparison
 func BenchmarkListCommand(b *testing.B) {
+	root := repoRootBench(b)
+
 	// Build the cheat binary in .tmp (using absolute path)
-	rootDir, err := filepath.Abs(filepath.Join("..", ".."))
-	if err != nil {
-		b.Fatalf("Failed to get root dir: %v", err)
-	}
-	tmpDir := filepath.Join(rootDir, ".tmp", "bench-test")
+	tmpDir := filepath.Join(root, ".tmp", "bench-test")
 	if err := os.MkdirAll(tmpDir, 0755); err != nil {
 		b.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -153,7 +140,7 @@ func BenchmarkListCommand(b *testing.B) {
 	})
 
 	cmd := exec.Command("go", "build", "-o", cheatBin, "./cmd/cheat")
-	cmd.Dir = rootDir
+	cmd.Dir = root
 	if output, err := cmd.CombinedOutput(); err != nil {
 		b.Fatalf("Failed to build cheat: %v\nOutput: %s", err, output)
 	}

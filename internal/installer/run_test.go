@@ -1,7 +1,6 @@
 package installer
 
 import (
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -245,10 +244,10 @@ cheatpaths:
 	if strings.Contains(contentStr, "PERSONAL_PATH") {
 		t.Error("PERSONAL_PATH was not replaced")
 	}
-	if strings.Contains(contentStr, "EDITOR_PATH") && !strings.Contains(contentStr, fmt.Sprintf("editor: %s", "")) {
+	if strings.Contains(contentStr, "EDITOR_PATH") {
 		t.Error("EDITOR_PATH was not replaced")
 	}
-	if strings.Contains(contentStr, "PAGER_PATH") && !strings.Contains(contentStr, fmt.Sprintf("pager: %s", "")) {
+	if strings.Contains(contentStr, "PAGER_PATH") {
 		t.Error("PAGER_PATH was not replaced")
 	}
 	if strings.Contains(contentStr, "WORK_PATH") {

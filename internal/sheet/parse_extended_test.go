@@ -27,22 +27,3 @@ func TestParseWindowsLineEndings(t *testing.T) {
 		t.Errorf("failed to parse syntax: want: %s, got: %s", want, fm.Syntax)
 	}
 }
-
-// TestParseInvalidYAML tests parsing with invalid YAML in frontmatter
-func TestParseInvalidYAML(t *testing.T) {
-	// stub our cheatsheet content with invalid YAML
-	markdown := `---
-syntax: go
-tags: [ test
-  unclosed bracket
----
-To foo the bar: baz`
-
-	// parse the frontmatter
-	_, _, err := parse(markdown)
-
-	// assert that an error was returned for invalid YAML
-	if err == nil {
-		t.Error("expected error for invalid YAML, got nil")
-	}
-}

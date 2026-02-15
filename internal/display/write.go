@@ -24,7 +24,7 @@ func Write(out string, conf config.Config) {
 
 // writeToPager writes output through a pager command
 func writeToPager(out string, conf config.Config) {
-	parts := strings.Split(conf.Pager, " ")
+	parts := strings.Fields(conf.Pager)
 	pager := parts[0]
 	args := parts[1:]
 

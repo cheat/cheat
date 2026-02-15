@@ -22,8 +22,6 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
 		os.Exit(1)
 	}
-
-	// filter cheatcheats by tag if --tag was provided
 	if opts["--tag"] != nil {
 		cheatsheets = sheets.Filter(
 			cheatsheets,
@@ -80,7 +78,7 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 				// append the cheatsheet title
 				sheet.Title,
 				// append the cheatsheet path
-				display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf),
+				display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf.Color(opts)),
 				// indent each line of content
 				display.Indent(sheet.Text),
 			)

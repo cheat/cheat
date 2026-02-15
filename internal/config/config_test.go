@@ -11,7 +11,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 
 	"github.com/cheat/cheat/internal/cheatpath"
-	"github.com/cheat/cheat/internal/mock"
+	"github.com/cheat/cheat/mocks"
 )
 
 // TestFindLocalCheatpathInCurrentDir tests that .cheat in the given dir is found
@@ -286,7 +286,7 @@ func TestConfigSuccessful(t *testing.T) {
 	}()
 
 	// initialize a config
-	conf, err := New(map[string]interface{}{}, mock.Path("conf/conf.yml"), false)
+	conf, err := New(mocks.Path("conf/conf.yml"), false)
 	if err != nil {
 		t.Errorf("failed to parse config file: %v", err)
 	}
@@ -306,18 +306,18 @@ func TestConfigSuccessful(t *testing.T) {
 	}
 
 	// assert that the cheatpaths are correct
-	want := []cheatpath.Cheatpath{
-		cheatpath.Cheatpath{
+	want := []cheatpath.Path{
+		cheatpath.Path{
 			Path:     filepath.Join(home, ".dotfiles", "cheat", "community"),
 			ReadOnly: true,
 			Tags:     []string{"community"},
 		},
-		cheatpath.Cheatpath{
+		cheatpath.Path{
 			Path:     filepath.Join(home, ".dotfiles", "cheat", "work"),
 			ReadOnly: false,
 			Tags:     []string{"work"},
 		},
-		cheatpath.Cheatpath{
+		cheatpath.Path{
 			Path:     filepath.Join(home, ".dotfiles", "cheat", "personal"),
 			ReadOnly: false,
 			Tags:     []string{"personal"},
@@ -338,7 +338,7 @@ func TestConfigSuccessful(t *testing.T) {
 func TestConfigFailure(t *testing.T) {
 
 	// attempt to read a non-existent config file
-	_, err := New(map[string]interface{}{}, "/does-not-exit", false)
+	_, err := New("/does-not-exit", false)
 	if err == nil {
 		t.Errorf("failed to error on unreadable config")
 	}
@@ -358,7 +358,7 @@ func TestEditorEnvOverride(t *testing.T) {
 	// with no env vars, the config file value should be used
 	os.Unsetenv("VISUAL")
 	os.Unsetenv("EDITOR")
-	conf, err := New(map[string]interface{}{}, mock.Path("conf/conf.yml"), false)
+	conf, err := New(mocks.Path("conf/conf.yml"), false)
 	if err != nil {
 		t.Fatalf("failed to init configs: %v", err)
 	}
@@ -368,7 +368,7 @@ func TestEditorEnvOverride(t *testing.T) {
 
 	// $EDITOR should override the config file value
 	os.Setenv("EDITOR", "nano")
-	conf, err = New(map[string]interface{}{}, mock.Path("conf/conf.yml"), false)
+	conf, err = New(mocks.Path("conf/conf.yml"), false)
 	if err != nil {
 		t.Fatalf("failed to init configs: %v", err)
 	}
@@ -378,7 +378,7 @@ func TestEditorEnvOverride(t *testing.T) {
 
 	// $VISUAL should override both $EDITOR and the config file value
 	os.Setenv("VISUAL", "emacs")
-	conf, err = New(map[string]interface{}{}, mock.Path("conf/conf.yml"), false)
+	conf, err = New(mocks.Path("conf/conf.yml"), false)
 	if err != nil {
 		t.Fatalf("failed to init configs: %v", err)
 	}
@@ -401,7 +401,7 @@ func TestEditorEnvFallback(t *testing.T) {
 	// set $EDITOR and assert it's used when config has no editor
 	os.Unsetenv("VISUAL")
 	os.Setenv("EDITOR", "foo")
-	conf, err := New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
+	conf, err := New(mocks.Path("conf/empty.yml"), false)
 	if err != nil {
 		t.Fatalf("failed to init configs: %v", err)
 	}
@@ -411,7 +411,7 @@ func TestEditorEnvFallback(t *testing.T) {
 
 	// set $VISUAL and assert it takes precedence over $EDITOR
 	os.Setenv("VISUAL", "bar")
-	conf, err = New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
+	conf, err = New(mocks.Path("conf/empty.yml"), false)
 	if err != nil {
 		t.Fatalf("failed to init configs: %v", err)
 	}

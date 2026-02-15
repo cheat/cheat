@@ -1,4 +1,4 @@
-package main
+package integration
 
 import (
 	"os"
@@ -19,7 +19,8 @@ func TestFirstRunIntegration(t *testing.T) {
 		binName += ".exe"
 	}
 	binPath := filepath.Join(t.TempDir(), binName)
-	build := exec.Command("go", "build", "-o", binPath, ".")
+	build := exec.Command("go", "build", "-o", binPath, "./cmd/cheat")
+	build.Dir = repoRoot(t)
 	if output, err := build.CombinedOutput(); err != nil {
 		t.Fatalf("failed to build cheat: %v\nOutput: %s", err, output)
 	}

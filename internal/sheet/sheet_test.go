@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/cheat/cheat/internal/mock"
+	"github.com/cheat/cheat/mocks"
 )
 
 // TestSheetSuccess asserts that sheets initialize properly
@@ -14,7 +14,7 @@ func TestSheetSuccess(t *testing.T) {
 	sheet, err := New(
 		"foo",
 		"community",
-		mock.Path("sheet/foo"),
+		mocks.Path("sheet/foo"),
 		[]string{"alpha", "bravo"},
 		false,
 	)
@@ -27,10 +27,10 @@ func TestSheetSuccess(t *testing.T) {
 		t.Errorf("failed to init title: want: foo, got: %s", sheet.Title)
 	}
 
-	if sheet.Path != mock.Path("sheet/foo") {
+	if sheet.Path != mocks.Path("sheet/foo") {
 		t.Errorf(
 			"failed to init path: want: %s, got: %s",
-			mock.Path("sheet/foo"),
+			mocks.Path("sheet/foo"),
 			sheet.Path,
 		)
 	}
@@ -63,7 +63,7 @@ func TestSheetFailure(t *testing.T) {
 	_, err := New(
 		"foo",
 		"community",
-		mock.Path("/does-not-exist"),
+		mocks.Path("/does-not-exist"),
 		[]string{"alpha", "bravo"},
 		false,
 	)
@@ -80,7 +80,7 @@ func TestSheetFrontMatterFailure(t *testing.T) {
 	_, err := New(
 		"foo",
 		"community",
-		mock.Path("sheet/bad-fm"),
+		mocks.Path("sheet/bad-fm"),
 		[]string{"alpha", "bravo"},
 		false,
 	)

@@ -38,10 +38,10 @@ The validation is performed at the application layer before any file operations 
 
 ### Validation Function
 
-The validation is implemented in `internal/cheatpath/validate.go`:
+The validation is implemented in `internal/sheet/validate.go`:
 
 ```go
-func ValidateSheetName(name string) error {
+func Validate(name string) error {
     // Reject empty names
     if name == "" {
         return fmt.Errorf("cheatsheet name cannot be empty")
@@ -133,7 +133,7 @@ The following patterns are explicitly allowed:
 
 Comprehensive tests ensure the validation works correctly:
 
-1. **Unit tests** (`internal/cheatpath/validate_test.go`) verify the validation logic
+1. **Unit tests** (`internal/sheet/validate_test.go`) verify the validation logic
 2. **Integration tests** verify the actual binary blocks malicious inputs
 3. **No system files are accessed** during testing - all tests use isolated directories
 

@@ -15,7 +15,7 @@ import (
 	"github.com/cheat/cheat/internal/installer"
 )
 
-const version = "4.7.0"
+const version = "4.7.1"
 
 func main() {
 
@@ -24,13 +24,6 @@ func main() {
 	if err != nil {
 		// panic here, because this should never happen
 		panic(fmt.Errorf("docopt failed to parse: %v", err))
-	}
-
-	// if --init was passed, we don't want to attempt to load a config file.
-	// Instead, just execute cmd_init and exit
-	if opts["--init"] != nil && opts["--init"] == true {
-		cmdInit()
-		os.Exit(0)
 	}
 
 	// get the user's home directory
@@ -49,6 +42,13 @@ func main() {
 			pair[0] = strings.ToUpper(pair[0])
 		}
 		envvars[pair[0]] = pair[1]
+	}
+
+	// if --init was passed, we don't want to attempt to load a config file.
+	// Instead, just execute cmd_init and exit
+	if opts["--init"] == true {
+		cmdInit(home, envvars)
+		os.Exit(0)
 	}
 
 	// identify the os-specifc paths at which configs may be located
@@ -92,7 +92,7 @@ func main() {
 	}
 
 	// initialize the configs
-	conf, err := config.New(opts, confpath, true)
+	conf, err := config.New(confpath, true)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to load config: %v\n", err)
 		os.Exit(1)

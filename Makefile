@@ -44,6 +44,7 @@ releases :=                        \
 	$(dist_dir)/cheat-linux-arm7   \
 	$(dist_dir)/cheat-netbsd-amd64  \
 	$(dist_dir)/cheat-openbsd-amd64  \
+	$(dist_dir)/cheat-plan9-amd64   \
 	$(dist_dir)/cheat-solaris-amd64  \
 	$(dist_dir)/cheat-windows-amd64.exe
 
@@ -213,12 +214,12 @@ test-all: test test-integration
 ## test-fuzz: run quick fuzz tests for security-critical functions
 .PHONY: test-fuzz
 test-fuzz:
-	@./build/fuzz.sh 15s
+	@./test/fuzz.sh 15s
 
 ## test-fuzz-long: run extended fuzz tests (10 minutes each)
 .PHONY: test-fuzz-long
 test-fuzz-long:
-	@./build/fuzz.sh 10m
+	@./test/fuzz.sh 10m
 
 ## coverage: generate a test coverage report
 .PHONY: coverage
@@ -240,22 +241,22 @@ coverage-text: .tmp
 ## benchmark: run performance benchmarks
 .PHONY: benchmark
 benchmark: .tmp
-	$(GO) test -tags=integration -bench=. -benchtime=10s -benchmem ./cmd/cheat | tee .tmp/benchmark-latest.txt && \
-	$(RM) -f cheat.test
+	$(GO) test -tags=integration -bench=. -benchtime=10s -benchmem ./test/integration | tee .tmp/benchmark-latest.txt && \
+	$(RM) -f integration.test
 
 ## benchmark-cpu: run benchmarks with CPU profiling
 .PHONY: benchmark-cpu
 benchmark-cpu: .tmp
-	$(GO) test -tags=integration -bench=. -benchtime=10s -cpuprofile=.tmp/cpu.prof ./cmd/cheat && \
-	$(RM) -f cheat.test && \
+	$(GO) test -tags=integration -bench=. -benchtime=10s -cpuprofile=.tmp/cpu.prof ./test/integration && \
+	$(RM) -f integration.test && \
 	echo "CPU profile saved to .tmp/cpu.prof" && \
 	echo "View with: go tool pprof -http=:8080 .tmp/cpu.prof"
 
 ## benchmark-mem: run benchmarks with memory profiling
 .PHONY: benchmark-mem
 benchmark-mem: .tmp
-	$(GO) test -tags=integration -bench=. -benchtime=10s -benchmem -memprofile=.tmp/mem.prof ./cmd/cheat && \
-	$(RM) -f cheat.test && \
+	$(GO) test -tags=integration -bench=. -benchtime=10s -benchmem -memprofile=.tmp/mem.prof ./test/integration && \
+	$(RM) -f integration.test && \
 	echo "Memory profile saved to .tmp/mem.prof" && \
 	echo "View with: go tool pprof -http=:8080 .tmp/mem.prof"
 

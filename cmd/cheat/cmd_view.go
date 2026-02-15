@@ -21,8 +21,6 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
 		os.Exit(1)
 	}
-
-	// filter cheatcheats by tag if --tag was provided
 	if opts["--tag"] != nil {
 		cheatsheets = sheets.Filter(
 			cheatsheets,
@@ -42,7 +40,7 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 				// identify the matching cheatsheet
 				out += fmt.Sprintf("%s %s\n",
 					sheet.Title,
-					display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf),
+					display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf.Color(opts)),
 				)
 
 				// apply colorization if requested

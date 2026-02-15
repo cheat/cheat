@@ -85,7 +85,11 @@ The `cheat` command-line tool is organized into several key packages:
    - Writes to stdout or pager
    - Handles text formatting and indentation
 
-6. **`internal/repo`**: Git repository management
+6. **`internal/installer`**: First-run installer
+   - Prompts user for initial configuration choices
+   - Generates default `conf.yml` and downloads community cheatsheets
+
+7. **`internal/repo`**: Git repository management
    - Clones community cheatsheet repositories
    - Updates existing repositories
 
@@ -95,6 +99,7 @@ The `cheat` command-line tool is organized into several key packages:
 - **Override mechanism**: Local sheets override community sheets with same name
 - **Tag system**: Sheets can be categorized with tags in frontmatter
 - **Multiple cheatpaths**: Supports personal, community, and directory-scoped sheets
+- **Directory-scoped discovery**: Walks up from cwd to find the nearest `.cheat` directory (like `.git` discovery)
 
 ### Sheet Format
 
@@ -114,4 +119,4 @@ ssh -L 8080:localhost:80 user@remote
 - Use `go-git` for repository operations, not exec'ing git commands
 - Platform-specific paths are handled in `internal/config/paths.go`
 - Color output uses ANSI codes via the Chroma library
-- Test files use the `internal/mock` package for test data
+- Test files use the `mocks` package for test data

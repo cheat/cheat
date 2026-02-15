@@ -32,9 +32,7 @@ func Tags(cheatpaths []map[string]sheet.Sheet) []string {
 	}
 
 	// sort the slice
-	sort.Slice(sorted, func(i, j int) bool {
-		return sorted[i] < sorted[j]
-	})
+	sort.Strings(sorted)
 
 	return sorted
 }

@@ -5,22 +5,22 @@ import (
 	"testing"
 
 	"github.com/cheat/cheat/internal/cheatpath"
-	"github.com/cheat/cheat/internal/mock"
+	"github.com/cheat/cheat/mocks"
 )
 
 // TestLoad asserts that sheets on valid cheatpaths can be loaded successfully
 func TestLoad(t *testing.T) {
 
 	// mock cheatpaths
-	cheatpaths := []cheatpath.Cheatpath{
+	cheatpaths := []cheatpath.Path{
 		{
 			Name:     "community",
-			Path:     path.Join(mock.Path("cheatsheets"), "community"),
+			Path:     path.Join(mocks.Path("cheatsheets"), "community"),
 			ReadOnly: true,
 		},
 		{
 			Name:     "personal",
-			Path:     path.Join(mock.Path("cheatsheets"), "personal"),
+			Path:     path.Join(mocks.Path("cheatsheets"), "personal"),
 			ReadOnly: false,
 		},
 	}
@@ -54,7 +54,7 @@ func TestLoad(t *testing.T) {
 func TestLoadBadPath(t *testing.T) {
 
 	// mock a bad cheatpath
-	cheatpaths := []cheatpath.Cheatpath{
+	cheatpaths := []cheatpath.Path{
 		{
 			Name:     "badpath",
 			Path:     "/cheat/test/path/does/not/exist",

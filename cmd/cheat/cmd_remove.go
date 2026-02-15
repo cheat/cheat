@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/cheat/cheat/internal/cheatpath"
 	"github.com/cheat/cheat/internal/config"
+	"github.com/cheat/cheat/internal/sheet"
 	"github.com/cheat/cheat/internal/sheets"
 )
 
@@ -16,7 +16,7 @@ func cmdRemove(opts map[string]interface{}, conf config.Config) {
 	cheatsheet := opts["--rm"].(string)
 
 	// validate the cheatsheet name
-	if err := cheatpath.ValidateSheetName(cheatsheet); err != nil {
+	if err := sheet.Validate(cheatsheet); err != nil {
 		fmt.Fprintf(os.Stderr, "invalid cheatsheet name: %v\n", err)
 		os.Exit(1)
 	}
@@ -27,8 +27,6 @@ func cmdRemove(opts map[string]interface{}, conf config.Config) {
 		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
 		os.Exit(1)
 	}
-
-	// filter cheatcheats by tag if --tag was provided
 	if opts["--tag"] != nil {
 		cheatsheets = sheets.Filter(
 			cheatsheets,

@@ -1,8 +1,6 @@
 ![Workflow status](https://github.com/cheat/cheat/actions/workflows/build.yml/badge.svg)
 
-
-cheat
-=====
+# cheat
 
 `cheat` allows you to create and view interactive cheatsheets on the
 command-line. It was designed to help remind \*nix system administrators of
@@ -13,9 +11,7 @@ remember.
 
 Use `cheat` with [cheatsheets][].
 
-
-Example
--------
+## Example
 The next time you're forced to disarm a nuclear weapon without consulting
 Google, you may run:
 
@@ -42,8 +38,10 @@ tar -xjvf '/path/to/foo.tgz'
 tar -cjvf '/path/to/foo.tgz' '/path/to/foo/'
 ```
 
-Usage
------
+## Installing
+For installation and configuration instructions, see [INSTALLING.md][].
+
+## Usage
 To view a cheatsheet:
 
 ```sh
@@ -107,14 +105,7 @@ Flags may be combined in intuitive ways. Example: to search sheets on the
 cheat -p personal -t networking --regex -s '(?:[0-9]{1,3}\.){3}[0-9]{1,3}'
 ```
 
-
-
-Installing
-----------
-For installation and configuration instructions, see [INSTALLING.md][].
-
-Cheatsheets
------------
+## Cheatsheets
 Cheatsheets are plain-text files with no file extension, and are named
 according to the command used to view them:
 
@@ -143,8 +134,7 @@ The `cheat` executable includes no cheatsheets, but [community-sourced
 cheatsheets are available][cheatsheets]. You will be asked if you would like to
 install the community-sourced cheatsheets the first time you run `cheat`.
 
-Cheatpaths
-----------
+## Cheatpaths
 Cheatsheets are stored on "cheatpaths", which are directories that contain
 cheatsheets. Cheatpaths are specified in the `conf.yml` file.
 
@@ -176,7 +166,7 @@ If a user attempts to edit a cheatsheet on a read-only cheatpath, `cheat` will
 transparently copy that sheet to a writeable directory before opening it for
 editing.
 
-### Directory-scoped Cheatpaths ###
+### Directory-scoped Cheatpaths
 At times, it can be useful to closely associate cheatsheets with a directory on
 your filesystem. `cheat` facilitates this by searching for a `.cheat` directory
 in the current working directory and its ancestors (similar to how `git` locates
@@ -184,8 +174,7 @@ in the current working directory and its ancestors (similar to how `git` locates
 added to the cheatpaths. This means you can place a `.cheat` directory at your
 project root and it will be available from any subdirectory within that project.
 
-Autocompletion
---------------
+## Autocompletion
 Shell autocompletion is currently available for `bash`, `fish`, and `zsh`. Copy
 the relevant [completion script][completions] into the appropriate directory on
 your filesystem to enable autocompletion. (This directory will vary depending
@@ -204,4 +193,3 @@ Additionally, `cheat` supports enhanced autocompletion via integration with
 [Chroma]:                https://github.com/alecthomas/chroma
 [supported languages]:   https://github.com/alecthomas/chroma#supported-languages
 [fzf]:                   https://github.com/junegunn/fzf
-[go]:                    https://golang.org

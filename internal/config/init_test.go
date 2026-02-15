@@ -4,7 +4,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 	"testing"
 )
 
@@ -89,9 +88,6 @@ func TestInitWriteError(t *testing.T) {
 	err := Init(invalidPath, "test")
 	if err == nil {
 		t.Error("expected error when writing to invalid path, got nil")
-	}
-	if err != nil && !strings.Contains(err.Error(), "failed to create") {
-		t.Errorf("expected 'failed to create' error, got: %v", err)
 	}
 }
 

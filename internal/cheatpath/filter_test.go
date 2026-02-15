@@ -9,10 +9,10 @@ import (
 func TestFilterSuccess(t *testing.T) {
 
 	// init cheatpaths
-	paths := []Cheatpath{
-		Cheatpath{Name: "foo"},
-		Cheatpath{Name: "bar"},
-		Cheatpath{Name: "baz"},
+	paths := []Path{
+		Path{Name: "foo"},
+		Path{Name: "bar"},
+		Path{Name: "baz"},
 	}
 
 	// filter the paths
@@ -39,10 +39,10 @@ func TestFilterSuccess(t *testing.T) {
 func TestFilterFailure(t *testing.T) {
 
 	// init cheatpaths
-	paths := []Cheatpath{
-		Cheatpath{Name: "foo"},
-		Cheatpath{Name: "bar"},
-		Cheatpath{Name: "baz"},
+	paths := []Path{
+		Path{Name: "foo"},
+		Path{Name: "bar"},
+		Path{Name: "baz"},
 	}
 
 	// filter the paths

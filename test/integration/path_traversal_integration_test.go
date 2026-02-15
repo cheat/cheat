@@ -1,4 +1,4 @@
-package main
+package integration
 
 import (
 	"fmt"
@@ -19,7 +19,9 @@ func TestPathTraversalIntegration(t *testing.T) {
 
 	// Build the cheat binary
 	binPath := filepath.Join(t.TempDir(), "cheat_test")
-	if output, err := exec.Command("go", "build", "-o", binPath, ".").CombinedOutput(); err != nil {
+	build := exec.Command("go", "build", "-o", binPath, "./cmd/cheat")
+	build.Dir = repoRoot(t)
+	if output, err := build.CombinedOutput(); err != nil {
 		t.Fatalf("Failed to build cheat: %v\nOutput: %s", err, output)
 	}
 
@@ -159,7 +161,9 @@ func TestPathTraversalRealWorld(t *testing.T) {
 
 	// Build cheat
 	binPath := filepath.Join(t.TempDir(), "cheat_test")
-	if output, err := exec.Command("go", "build", "-o", binPath, ".").CombinedOutput(); err != nil {
+	build := exec.Command("go", "build", "-o", binPath, "./cmd/cheat")
+	build.Dir = repoRoot(t)
+	if output, err := build.CombinedOutput(); err != nil {
 		t.Fatalf("Failed to build: %v\n%s", err, output)
 	}
 

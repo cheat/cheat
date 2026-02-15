@@ -88,7 +88,7 @@ The main configuration structure:
 type Config struct {
     Colorize   bool           `yaml:"colorize"`
     Editor     string         `yaml:"editor"`
-    Cheatpaths []cp.Cheatpath `yaml:"cheatpaths"`
+    Cheatpaths []cp.Path      `yaml:"cheatpaths"`
     Style      string         `yaml:"style"`
     Formatter  string         `yaml:"formatter"`
     Pager      string         `yaml:"pager"`
@@ -97,7 +97,7 @@ type Config struct {
 ```
 
 Key functions:
-- `New(opts, confPath, resolve)` - Load config from file
+- `New(confPath, resolve)` - Load config from file
 - `Validate()` - Validate configuration values
 - `Editor()` - Get editor from environment or defaults (package-level function)
 - `Pager()` - Get pager from environment or defaults (package-level function)
@@ -107,7 +107,7 @@ Key functions:
 Represents a directory containing cheatsheets:
 
 ```go
-type Cheatpath struct {
+type Path struct {
     Name     string   // Friendly name (e.g., "personal")
     Path     string   // Filesystem path
     Tags     []string // Tags applied to all sheets in this path
@@ -202,7 +202,7 @@ go test ./...       # Go test directly
 Test files follow Go conventions:
 - `*_test.go` files in same package
 - Table-driven tests for multiple scenarios
-- Mock data in `internal/mock` package
+- Mock data in `mocks` package
 
 ## Error Handling
 

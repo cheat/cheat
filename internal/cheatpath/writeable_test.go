@@ -9,10 +9,10 @@ import (
 func TestWriteableOK(t *testing.T) {
 
 	// initialize some cheatpaths
-	cheatpaths := []Cheatpath{
-		Cheatpath{Path: "/foo", ReadOnly: true},
-		Cheatpath{Path: "/bar", ReadOnly: false},
-		Cheatpath{Path: "/baz", ReadOnly: true},
+	cheatpaths := []Path{
+		Path{Path: "/foo", ReadOnly: true},
+		Path{Path: "/bar", ReadOnly: false},
+		Path{Path: "/baz", ReadOnly: true},
 	}
 
 	// get the writeable cheatpath
@@ -34,10 +34,10 @@ func TestWriteableOK(t *testing.T) {
 func TestWriteableNotOK(t *testing.T) {
 
 	// initialize some cheatpaths
-	cheatpaths := []Cheatpath{
-		Cheatpath{Path: "/foo", ReadOnly: true},
-		Cheatpath{Path: "/bar", ReadOnly: true},
-		Cheatpath{Path: "/baz", ReadOnly: true},
+	cheatpaths := []Path{
+		Path{Path: "/foo", ReadOnly: true},
+		Path{Path: "/bar", ReadOnly: true},
+		Path{Path: "/baz", ReadOnly: true},
 	}
 
 	// get the writeable cheatpath

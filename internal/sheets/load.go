@@ -8,12 +8,11 @@ import (
 	"strings"
 
 	cp "github.com/cheat/cheat/internal/cheatpath"
-	"github.com/cheat/cheat/internal/repo"
 	"github.com/cheat/cheat/internal/sheet"
 )
 
 // Load produces a map of cheatsheet titles to filesystem paths
-func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
+func Load(cheatpaths []cp.Path) ([]map[string]sheet.Sheet, error) {
 
 	// create a slice of maps of sheets. This structure will store all sheets
 	// that are associated with each cheatpath.
@@ -27,10 +26,10 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 
 		// recursively iterate over the cheatpath, and load each cheatsheet
 		// encountered along the way
-		err := filepath.Walk(
+		err := filepath.WalkDir(
 			cheatpath.Path, func(
 				path string,
-				info os.FileInfo,
+				d fs.DirEntry,
 				err error) error {
 
 				// fail if an error occurred while walking the directory
@@ -38,8 +37,12 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 					return fmt.Errorf("failed to walk path: %v", err)
 				}
 
-				// don't register directories as cheatsheets
-				if info.IsDir() {
+				if d.IsDir() {
+					// skip .git directories to avoid hundreds/thousands of
+					// needless syscalls (see repo.GitDir for full history)
+					if filepath.Base(path) == ".git" {
+						return fs.SkipDir
+					}
 					return nil
 				}
 
@@ -62,17 +65,6 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 					strings.TrimPrefix(path, cheatpath.Path),
 					string(os.PathSeparator),
 				)
-
-				// Don't walk the `.git` directory. Doing so creates
-				// hundreds/thousands of needless syscalls and could
-				// potentially harm performance on machines with slow disks.
-				skip, err := repo.GitDir(path)
-				if err != nil {
-					return fmt.Errorf("failed to identify .git directory: %v", err)
-				}
-				if skip {
-					return fs.SkipDir
-				}
 
 				// parse the cheatsheet file into a `sheet` struct
 				s, err := sheet.New(

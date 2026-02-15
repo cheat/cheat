@@ -38,7 +38,7 @@ cheatpaths:
 	}
 
 	// Load the config
-	conf, err := New(map[string]interface{}{}, configPath, false)
+	conf, err := New(configPath, false)
 	if err != nil {
 		t.Fatalf("failed to load config: %v", err)
 	}
@@ -88,7 +88,7 @@ cheatpaths:
 	}
 
 	// Load the config
-	conf, err := New(map[string]interface{}{}, configPath, false)
+	conf, err := New(configPath, false)
 	if err != nil {
 		// It's OK if this fails due to no editor being found
 		// The important thing is it doesn't panic
@@ -123,7 +123,7 @@ cheatpaths:
 	}
 
 	// Load the config
-	conf, err := New(map[string]interface{}{}, configPath, false)
+	conf, err := New(configPath, false)
 	if err != nil {
 		t.Fatalf("failed to load config: %v", err)
 	}

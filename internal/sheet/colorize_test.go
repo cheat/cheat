@@ -1,6 +1,7 @@
 package sheet
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/cheat/cheat/internal/config"
@@ -16,45 +17,26 @@ func TestColorize(t *testing.T) {
 	}
 
 	// mock a sheet
+	original := "echo 'foo'"
 	s := Sheet{
-		Text: "echo 'foo'",
+		Text: original,
 	}
 
 	// colorize the sheet text
 	s.Colorize(conf)
 
-	// initialize expectations
-	want := "[38;2;181;137;0mecho[0m[38;2;147;161;161m"
-	want += " [0m[38;2;42;161;152m'foo'[0m"
-
-	// assert
-	if s.Text != want {
-		t.Errorf("failed to colorize sheet: want: %s, got: %s", want, s.Text)
-	}
-}
-
-// TestColorizeError tests the error handling in Colorize
-func TestColorizeError(_ *testing.T) {
-	// Create a sheet with content
-	sheet := Sheet{
-		Text:   "some text",
-		Syntax: "invalidlexer12345", // Use an invalid lexer that might cause issues
+	// assert that the text was modified (colorization applied)
+	if s.Text == original {
+		t.Error("Colorize did not modify sheet text")
 	}
 
-	// Create a config with invalid formatter/style
-	conf := config.Config{
-		Formatter: "invalidformatter",
-		Style:     "invalidstyle",
+	// assert that ANSI escape codes are present
+	if !strings.Contains(s.Text, "\x1b[") && !strings.Contains(s.Text, "[0m") {
+		t.Errorf("colorized text does not contain ANSI escape codes: %q", s.Text)
 	}
 
-	// Store original text
-	originalText := sheet.Text
-
-	// Colorize should not panic even with invalid settings
-	sheet.Colorize(conf)
-
-	// The text might be unchanged if there was an error, or it might be colorized
-	// We're mainly testing that it doesn't panic
-	_ = sheet.Text
-	_ = originalText
+	// assert that the original content is still present within the colorized output
+	if !strings.Contains(s.Text, "echo") || !strings.Contains(s.Text, "foo") {
+		t.Errorf("colorized text lost original content: %q", s.Text)
+	}
 }

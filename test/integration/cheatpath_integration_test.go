@@ -1,4 +1,4 @@
-package main
+package integration
 
 import (
 	"fmt"
@@ -32,7 +32,8 @@ func TestLocalCheatpathIntegration(t *testing.T) {
 
 	// Build the cheat binary once for all sub-tests.
 	binPath := filepath.Join(t.TempDir(), "cheat_test")
-	build := exec.Command("go", "build", "-o", binPath, ".")
+	build := exec.Command("go", "build", "-o", binPath, "./cmd/cheat")
+	build.Dir = repoRoot(t)
 	if output, err := build.CombinedOutput(); err != nil {
 		t.Fatalf("failed to build cheat: %v\nOutput: %s", err, output)
 	}

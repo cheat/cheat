@@ -1,4 +1,4 @@
-package cheatpath
+package sheet
 
 import (
 	"strings"
@@ -6,9 +6,9 @@ import (
 	"unicode/utf8"
 )
 
-// FuzzValidateSheetName tests the ValidateSheetName function with fuzzing
+// FuzzValidate tests the Validate function with fuzzing
 // to ensure it properly prevents path traversal and other security issues
-func FuzzValidateSheetName(f *testing.F) {
+func FuzzValidate(f *testing.F) {
 	// Add seed corpus with various valid and malicious inputs
 	// Valid names
 	f.Add("docker")
@@ -84,11 +84,11 @@ func FuzzValidateSheetName(f *testing.F) {
 		func() {
 			defer func() {
 				if r := recover(); r != nil {
-					t.Errorf("ValidateSheetName panicked with input %q: %v", input, r)
+					t.Errorf("Validate panicked with input %q: %v", input, r)
 				}
 			}()
 
-			err := ValidateSheetName(input)
+			err := Validate(input)
 
 			// Security invariants that must always hold
 			if err == nil {
@@ -129,8 +129,8 @@ func FuzzValidateSheetName(f *testing.F) {
 	})
 }
 
-// FuzzValidateSheetNamePathTraversal specifically targets path traversal bypasses
-func FuzzValidateSheetNamePathTraversal(f *testing.F) {
+// FuzzValidatePathTraversal specifically targets path traversal bypasses
+func FuzzValidatePathTraversal(f *testing.F) {
 	// Seed corpus focusing on path traversal variations
 	f.Add("..", "/", "")
 	f.Add("", "..", "/")
@@ -153,11 +153,11 @@ func FuzzValidateSheetNamePathTraversal(f *testing.F) {
 			func() {
 				defer func() {
 					if r := recover(); r != nil {
-						t.Errorf("ValidateSheetName panicked with constructed input %q: %v", input, r)
+						t.Errorf("Validate panicked with constructed input %q: %v", input, r)
 					}
 				}()
 
-				err := ValidateSheetName(input)
+				err := Validate(input)
 
 				// If the input contains literal "..", it must be rejected
 				if strings.Contains(input, "..") && err == nil {

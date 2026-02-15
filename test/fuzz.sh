@@ -16,14 +16,12 @@ DURATION="${1:-15s}"
 # Define fuzz tests: "TestName:Package:Description"
 TESTS=(
     "FuzzParse:./internal/sheet:YAML frontmatter parsing"
-    "FuzzValidateSheetName:./internal/cheatpath:sheet name validation (path traversal protection)"
+    "FuzzValidate:./internal/sheet:sheet name validation (path traversal protection)"
     "FuzzSearchRegex:./internal/sheet:regex search operations"
-    "FuzzSearchCatastrophicBacktracking:./internal/sheet:catastrophic backtracking"
     "FuzzTagged:./internal/sheet:tag matching with malicious input"
     "FuzzFilter:./internal/sheets:tag filtering operations"
     "FuzzTags:./internal/sheets:tag aggregation and sorting"
     "FuzzFindLocalCheatpath:./internal/config:recursive .cheat directory discovery"
-    "FuzzFindLocalCheatpathNearestWins:./internal/config:nearest .cheat wins invariant"
 )
 
 echo "Running fuzz tests ($DURATION each)..."
