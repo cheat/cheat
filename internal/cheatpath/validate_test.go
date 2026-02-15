@@ -1,6 +1,7 @@
 package cheatpath
 
 import (
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -53,9 +54,15 @@ func TestValidateSheetName(t *testing.T) {
 			errMsg:  "'..'",
 		},
 		{
-			name:    "absolute path",
+			name:    "absolute path unix",
 			input:   "/etc/passwd",
-			wantErr: true,
+			wantErr: runtime.GOOS != "windows", // /etc/passwd is not absolute on Windows
+			errMsg:  "absolute",
+		},
+		{
+			name:    "absolute path windows",
+			input:   `C:\evil`,
+			wantErr: runtime.GOOS == "windows", // C:\evil is not absolute on Unix
 			errMsg:  "absolute",
 		},
 		{

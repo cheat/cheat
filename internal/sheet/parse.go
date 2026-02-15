@@ -2,7 +2,6 @@ package sheet
 
 import (
 	"fmt"
-	"runtime"
 	"strings"
 
 	"gopkg.in/yaml.v3"
@@ -11,9 +10,9 @@ import (
 // Parse parses cheatsheet frontmatter
 func parse(markdown string) (frontmatter, string, error) {
 
-	// determine the appropriate line-break for the platform
+	// detect the line-break style used in the content
 	linebreak := "\n"
-	if runtime.GOOS == "windows" {
+	if strings.Contains(markdown, "\r\n") {
 		linebreak = "\r\n"
 	}
 

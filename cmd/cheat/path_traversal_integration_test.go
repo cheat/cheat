@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -12,6 +13,10 @@ import (
 // TestPathTraversalIntegration tests that the cheat binary properly blocks
 // path traversal attempts when invoked as a subprocess.
 func TestPathTraversalIntegration(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("integration test uses Unix-specific env and tools")
+	}
+
 	// Build the cheat binary
 	binPath := filepath.Join(t.TempDir(), "cheat_test")
 	if output, err := exec.Command("go", "build", "-o", binPath, ".").CombinedOutput(); err != nil {
@@ -146,6 +151,10 @@ cheatpaths:
 
 // TestPathTraversalRealWorld tests with more realistic scenarios
 func TestPathTraversalRealWorld(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("integration test uses Unix-specific env and tools")
+	}
+
 	// This test ensures our protection works with actual file operations
 
 	// Build cheat

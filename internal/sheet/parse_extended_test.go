@@ -1,17 +1,11 @@
 package sheet
 
 import (
-	"runtime"
 	"testing"
 )
 
 // TestParseWindowsLineEndings tests parsing with Windows line endings
 func TestParseWindowsLineEndings(t *testing.T) {
-	// Only test Windows line endings on Windows
-	if runtime.GOOS != "windows" {
-		t.Skip("Skipping Windows line ending test on non-Windows platform")
-	}
-
 	// stub our cheatsheet content with Windows line endings
 	markdown := "---\r\nsyntax: go\r\ntags: [ test ]\r\n---\r\nTo foo the bar: baz"
 

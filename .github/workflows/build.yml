@@ -3,9 +3,6 @@ name: CI
 
 on:
   push:
-    branches: [master]
-  pull_request:
-    branches: [master]
 
 jobs:
   lint:
@@ -26,6 +23,7 @@ jobs:
 
   test:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}

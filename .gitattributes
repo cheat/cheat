@@ -1,0 +1,3 @@
+# Force LF line endings for mock/test data files to ensure consistent
+# behavior across platforms (Windows git autocrlf converts to CRLF otherwise)
+mocks/** text eol=lf

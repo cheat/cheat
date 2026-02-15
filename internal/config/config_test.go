@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"runtime"
 	"testing"
 
 	"github.com/davecgh/go-spew/spew"
@@ -78,6 +79,9 @@ func TestConfigFailure(t *testing.T) {
 // TestEmptyEditor asserts that envvars are respected if an editor is not
 // specified in the configs
 func TestEmptyEditor(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Editor() returns notepad on Windows before checking env vars")
+	}
 
 	// clear the environment variables
 	os.Setenv("VISUAL", "")

@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/cheat/cheat/internal/mock"
@@ -226,6 +227,10 @@ cheatpaths:
 
 // TestConfigGetCwdError tests error handling when os.Getwd fails
 func TestConfigGetCwdError(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Windows does not allow removing the current directory")
+	}
+
 	// This is difficult to test without being able to break os.Getwd
 	// We'll create a scenario where the current directory is removed
 

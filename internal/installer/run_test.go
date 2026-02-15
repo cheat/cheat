@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -69,23 +70,31 @@ cheatpaths:
 			wantInErr: "failed to clone cheatsheets",
 		},
 		{
-			name:      "invalid config path",
-			configs:   "test",
-			confpath:  "/nonexistent/path/conf.yml",
+			name:    "invalid config path",
+			configs: "test",
+			// /dev/null/... is truly uncreatable on Unix;
+			// NUL\... is uncreatable on Windows
+			confpath: func() string {
+				if runtime.GOOS == "windows" {
+					return `NUL\impossible\conf.yml`
+				}
+				return "/dev/null/impossible/conf.yml"
+			}(),
 			userInput: "n\n",
 			wantErr:   true,
-			wantInErr: "failed to create config file",
+			wantInErr: "failed to create",
 		},
 	}
 
-	// Pre-create a non-empty community dir so PlainClone fails reliably
-	// (otherwise, on CI runners with network access, the clone succeeds)
-	cloneBlocker := filepath.Join(tempDir, "conf2", "cheatsheets", "community")
-	if err := os.MkdirAll(cloneBlocker, 0755); err != nil {
-		t.Fatalf("failed to create clone blocker dir: %v", err)
+	// Pre-create a .git dir inside the community path so go-git's PlainClone
+	// returns ErrRepositoryAlreadyExists (otherwise, on CI runners with
+	// network access, the real clone succeeds and the test fails)
+	fakeGitDir := filepath.Join(tempDir, "conf2", "cheatsheets", "community", ".git")
+	if err := os.MkdirAll(fakeGitDir, 0755); err != nil {
+		t.Fatalf("failed to create fake .git dir: %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(cloneBlocker, ".gitkeep"), []byte(""), 0644); err != nil {
-		t.Fatalf("failed to write clone blocker file: %v", err)
+	if err := os.WriteFile(filepath.Join(fakeGitDir, "HEAD"), []byte("ref: refs/heads/main\n"), 0644); err != nil {
+		t.Fatalf("failed to write fake HEAD: %v", err)
 	}
 
 	for _, tt := range tests {

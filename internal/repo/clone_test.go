@@ -3,6 +3,7 @@ package repo
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 )
 
@@ -12,6 +13,9 @@ func TestClone(t *testing.T) {
 	// that don't require actual cloning
 
 	t.Run("clone to read-only directory", func(t *testing.T) {
+		if runtime.GOOS == "windows" {
+			t.Skip("chmod does not restrict writes on Windows")
+		}
 		if os.Getuid() == 0 {
 			t.Skip("Cannot test read-only directory as root")
 		}

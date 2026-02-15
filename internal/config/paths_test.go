@@ -1,7 +1,9 @@
 package config
 
 import (
+	"path/filepath"
 	"reflect"
+	"runtime"
 	"testing"
 
 	"github.com/davecgh/go-spew/spew"
@@ -10,6 +12,9 @@ import (
 // TestValidatePathsNix asserts that the proper config paths are returned on
 // *nix platforms
 func TestValidatePathsNix(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("filepath.Join uses backslashes on Windows")
+	}
 
 	// mock the user's home directory
 	home := "/home/foo"
@@ -57,6 +62,9 @@ func TestValidatePathsNix(t *testing.T) {
 // TestValidatePathsNixNoXDG asserts that the proper config paths are returned
 // on *nix platforms when `XDG_CONFIG_HOME is not set
 func TestValidatePathsNixNoXDG(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("filepath.Join uses backslashes on Windows")
+	}
 
 	// mock the user's home directory
 	home := "/home/foo"
@@ -106,8 +114,8 @@ func TestValidatePathsWindows(t *testing.T) {
 
 	// mock some envvars
 	envvars := map[string]string{
-		"APPDATA":     "/apps",
-		"PROGRAMDATA": "/programs",
+		"APPDATA":     filepath.Join("C:", "apps"),
+		"PROGRAMDATA": filepath.Join("C:", "programs"),
 	}
 
 	// get the paths for the platform
@@ -118,8 +126,8 @@ func TestValidatePathsWindows(t *testing.T) {
 
 	// specify the expected output
 	want := []string{
-		"/apps/cheat/conf.yml",
-		"/programs/cheat/conf.yml",
+		filepath.Join("C:", "apps", "cheat", "conf.yml"),
+		filepath.Join("C:", "programs", "cheat", "conf.yml"),
 	}
 
 	// assert that output matches expectations

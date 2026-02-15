@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -74,12 +75,18 @@ func TestInitCreateDirectory(t *testing.T) {
 // TestInitWriteError tests error handling when file write fails
 func TestInitWriteError(t *testing.T) {
 	// Skip this test if running as root (can write anywhere)
-	if os.Getuid() == 0 {
+	if runtime.GOOS != "windows" && os.Getuid() == 0 {
 		t.Skip("Cannot test write errors as root")
 	}
 
+	// Use a platform-appropriate invalid path
+	invalidPath := "/dev/null/impossible/path/conf.yml"
+	if runtime.GOOS == "windows" {
+		invalidPath = `NUL\impossible\path\conf.yml`
+	}
+
 	// Try to write to a read-only directory
-	err := Init("/dev/null/impossible/path/conf.yml", "test")
+	err := Init(invalidPath, "test")
 	if err == nil {
 		t.Error("expected error when writing to invalid path, got nil")
 	}

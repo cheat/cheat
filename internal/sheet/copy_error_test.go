@@ -3,6 +3,7 @@ package sheet
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 )
 
@@ -130,6 +131,10 @@ func TestCopyIOError(t *testing.T) {
 
 // TestCopyCleanupOnError verifies that partially written files are cleaned up on error
 func TestCopyCleanupOnError(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("chmod does not restrict reads on Windows")
+	}
+
 	// Create a source file that we'll make unreadable after opening
 	src, err := os.CreateTemp("", "copy-test-cleanup-*")
 	if err != nil {
