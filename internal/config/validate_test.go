@@ -157,3 +157,28 @@ func TestInvalidateDuplicateCheatpathPaths(t *testing.T) {
 		t.Errorf("failed to invalidate config with cheatpaths with duplicate paths")
 	}
 }
+
+// TestInvalidateInvalidCheatpath asserts that configs containing a cheatpath
+// with an empty name are invalidated
+func TestInvalidateInvalidCheatpath(t *testing.T) {
+
+	// mock a config with a cheatpath that has an empty name
+	conf := Config{
+		Colorize:  true,
+		Editor:    "vim",
+		Formatter: "terminal16m",
+		Cheatpaths: []cheatpath.Path{
+			cheatpath.Path{
+				Name:     "",
+				Path:     "/foo",
+				ReadOnly: false,
+				Tags:     []string{},
+			},
+		},
+	}
+
+	// assert that an error is returned
+	if err := conf.Validate(); err == nil {
+		t.Errorf("failed to invalidate config with invalid cheatpath (empty name)")
+	}
+}

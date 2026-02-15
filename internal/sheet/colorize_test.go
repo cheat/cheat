@@ -40,3 +40,55 @@ func TestColorize(t *testing.T) {
 		t.Errorf("colorized text lost original content: %q", s.Text)
 	}
 }
+
+// TestColorizeDefaultSyntax asserts that when no syntax is specified, the
+// default ("bash") is used and produces the same output as an explicit "bash"
+func TestColorizeDefaultSyntax(t *testing.T) {
+
+	conf := config.Config{
+		Formatter: "terminal16m",
+		Style:     "monokai",
+	}
+
+	// use bash-specific content that tokenizes differently across lexers
+	code := "if [[ -f /etc/passwd ]]; then\n  echo \"found\" | grep -o found\nfi"
+
+	// colorize with empty syntax (should default to "bash")
+	noSyntax := Sheet{Text: code}
+	noSyntax.Colorize(conf)
+
+	// colorize with explicit "bash" syntax
+	bashSyntax := Sheet{Text: code, Syntax: "bash"}
+	bashSyntax.Colorize(conf)
+
+	// both should produce the same output
+	if noSyntax.Text != bashSyntax.Text {
+		t.Errorf(
+			"default syntax does not match explicit bash:\ndefault: %q\nexplicit: %q",
+			noSyntax.Text,
+			bashSyntax.Text,
+		)
+	}
+}
+
+// TestColorizeExplicitSyntax asserts that a specified syntax is used
+func TestColorizeExplicitSyntax(t *testing.T) {
+
+	conf := config.Config{
+		Formatter: "terminal16m",
+		Style:     "monokai",
+	}
+
+	// colorize as bash
+	bashSheet := Sheet{Text: "def hello():\n    pass", Syntax: "bash"}
+	bashSheet.Colorize(conf)
+
+	// colorize as python
+	pySheet := Sheet{Text: "def hello():\n    pass", Syntax: "python"}
+	pySheet.Colorize(conf)
+
+	// different lexers should produce different output for Python code
+	if bashSheet.Text == pySheet.Text {
+		t.Error("bash and python syntax produced identical output")
+	}
+}

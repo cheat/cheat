@@ -1,0 +1,105 @@
+{
+  "version": "1.0",
+  "test_command": "go test ./...",
+  "last_updated": "2026-02-15T00:00:00Z",
+  "modules": {
+    "internal/sheet/parse.go": {
+      "status": "completed",
+      "covering_tests": ["internal/sheet/parse_test.go", "internal/sheet/parse_extended_test.go"],
+      "last_tested": "2026-02-15T00:00:00Z",
+      "mutations_applied": 8,
+      "mutations_killed": 8,
+      "mutation_score": 100.0,
+      "notes": "Originally 7/8 (87.5%). Added TestHasMalformedYAML to kill YAML unmarshal error survivor."
+    },
+    "internal/config/validate.go": {
+      "status": "completed",
+      "covering_tests": ["internal/config/validate_test.go"],
+      "last_tested": "2026-02-15T00:00:00Z",
+      "mutations_applied": 8,
+      "mutations_killed": 8,
+      "mutation_score": 100.0,
+      "notes": "Originally 7/8 (87.5%). Added TestInvalidateInvalidCheatpath to kill cheatpath.Validate() delegation survivor."
+    },
+    "internal/sheets/filter.go": {
+      "status": "completed",
+      "covering_tests": ["internal/sheets/filter_test.go"],
+      "last_tested": "2026-02-15T00:00:00Z",
+      "mutations_applied": 7,
+      "mutations_killed": 5,
+      "mutation_score": 71.4,
+      "notes": "Survivors relate to UTF-8 condition ordering and OR→AND on dead code path. Not actionable — logically equivalent mutations."
+    },
+    "internal/config/paths.go": {
+      "status": "completed",
+      "covering_tests": ["internal/config/paths_test.go"],
+      "last_tested": "2026-02-15T00:00:00Z",
+      "mutations_applied": 8,
+      "mutations_killed": 8,
+      "mutation_score": 100.0,
+      "notes": "Perfect score. Excellent existing coverage."
+    },
+    "internal/sheet/colorize.go": {
+      "status": "completed",
+      "covering_tests": ["internal/sheet/colorize_test.go"],
+      "last_tested": "2026-02-15T00:00:00Z",
+      "mutations_applied": 5,
+      "mutations_killed": 5,
+      "mutation_score": 100.0,
+      "notes": "Originally 2/5 (40%). Added TestColorizeDefaultSyntax and TestColorizeExplicitSyntax. All 5 mutations now killed."
+    },
+    "internal/sheets/consolidate.go": {
+      "status": "completed",
+      "covering_tests": ["internal/sheets/consolidate_test.go"],
+      "last_tested": "2026-02-15T00:00:00Z",
+      "mutations_applied": 2,
+      "mutations_killed": 2,
+      "mutation_score": 100.0,
+      "notes": "Override semantics well-tested."
+    },
+    "internal/display/indent.go": {
+      "status": "completed",
+      "covering_tests": ["internal/display/indent_test.go"],
+      "last_tested": "2026-02-15T00:00:00Z",
+      "mutations_applied": 3,
+      "mutations_killed": 3,
+      "mutation_score": 100.0,
+      "notes": "Originally 2/3 (66.7%). Added TestIndentTrimsWhitespace to kill TrimSpace survivor."
+    },
+    "internal/display/faint.go": {
+      "status": "completed",
+      "covering_tests": ["internal/display/faint_test.go"],
+      "last_tested": "2026-02-15T00:00:00Z",
+      "mutations_applied": 3,
+      "mutations_killed": 3,
+      "mutation_score": 100.0,
+      "notes": "Perfect score."
+    },
+    "internal/sheets/tags.go": {
+      "status": "completed",
+      "covering_tests": ["internal/sheets/tags_test.go"],
+      "last_tested": "2026-02-15T00:00:00Z",
+      "mutations_applied": 2,
+      "mutations_killed": 2,
+      "mutation_score": 100.0,
+      "notes": "UTF-8 validation and sort order both tested."
+    },
+    "internal/sheet/validate.go": {
+      "status": "completed",
+      "covering_tests": ["internal/sheet/validate_test.go"],
+      "last_tested": "2026-02-15T00:00:00Z",
+      "mutations_applied": 10,
+      "mutations_killed": 10,
+      "mutation_score": 100.0,
+      "notes": "Perfect score. All security checks well-tested."
+    }
+  },
+  "global_statistics": {
+    "total_modules": 10,
+    "completed_modules": 10,
+    "total_mutations": 56,
+    "total_killed": 54,
+    "total_survived": 2,
+    "overall_score": 96.4
+  }
+}

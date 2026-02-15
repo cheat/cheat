@@ -93,3 +93,20 @@ To foo the bar: baz`
 		t.Errorf("failed to parse text: want: %s, got: %s", markdown, text)
 	}
 }
+
+// TestHasMalformedYAML asserts that an error is returned when the frontmatter
+// contains invalid YAML that cannot be unmarshalled
+func TestHasMalformedYAML(t *testing.T) {
+
+	// stub cheatsheet content with syntactically invalid YAML between the
+	// delimiters (a bare tab character followed by unquoted colon)
+	markdown := "---\n\t:\t:\n---\nBody text here"
+
+	// parse the frontmatter
+	_, _, err := parse(markdown)
+
+	// assert that an error was returned due to YAML unmarshal failure
+	if err == nil {
+		t.Error("failed to error on malformed YAML frontmatter")
+	}
+}
