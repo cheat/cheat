@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"path/filepath"
 	"runtime"
 	"testing"
 )
@@ -44,29 +45,20 @@ func TestPager(t *testing.T) {
 		os.Setenv("PAGER", "")
 		pager := Pager()
 
-		// Should find one of the fallback pagers or return empty string
+		if pager == "" {
+			return // no pager found is acceptable
+		}
+
+		// Should find one of the known fallback pagers
 		validPagers := map[string]bool{
-			"":      true, // no pager found
 			"pager": true,
 			"less":  true,
 			"more":  true,
 		}
 
-		// Check if it's a path to one of these
-		found := false
-		for p := range validPagers {
-			if p == "" && pager == "" {
-				found = true
-				break
-			}
-			if p != "" && (pager == p || len(pager) >= len(p) && pager[len(pager)-len(p):] == p) {
-				found = true
-				break
-			}
-		}
-
-		if !found {
-			t.Errorf("unexpected pager value: %s", pager)
+		base := filepath.Base(pager)
+		if !validPagers[base] {
+			t.Errorf("unexpected pager value: %s (base: %s)", pager, base)
 		}
 	})
 

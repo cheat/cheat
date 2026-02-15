@@ -9,7 +9,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"testing"
-	"time"
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
@@ -108,23 +107,15 @@ cheatpaths:
 				cmd := exec.Command(cheatBin, tc.args...)
 				cmd.Env = env
 
-				// Capture output to prevent spamming
 				var stdout, stderr bytes.Buffer
 				cmd.Stdout = &stdout
 				cmd.Stderr = &stderr
 
-				start := time.Now()
 				err := cmd.Run()
-				elapsed := time.Since(start)
-
 				if err != nil {
 					b.Fatalf("Command failed: %v\nStderr: %s", err, stderr.String())
 				}
 
-				// Report custom metric
-				b.ReportMetric(float64(elapsed.Nanoseconds())/1e6, "ms/op")
-
-				// Ensure we got some results
 				if stdout.Len() == 0 {
 					b.Fatal("No output from search")
 				}

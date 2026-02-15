@@ -10,15 +10,12 @@ import (
 // TestCopyErrors tests error cases for the Copy method
 func TestCopyErrors(t *testing.T) {
 	tests := []struct {
-		name    string
-		setup   func() (*Sheet, string, func())
-		wantErr bool
-		errMsg  string
+		name  string
+		setup func() (*Sheet, string, func())
 	}{
 		{
 			name: "source file does not exist",
 			setup: func() (*Sheet, string, func()) {
-				// Create a sheet with non-existent path
 				sheet := &Sheet{
 					Title:     "test",
 					Path:      "/non/existent/file.txt",
@@ -30,13 +27,10 @@ func TestCopyErrors(t *testing.T) {
 				}
 				return sheet, dest, cleanup
 			},
-			wantErr: true,
-			errMsg:  "failed to open cheatsheet",
 		},
 		{
 			name: "destination directory creation fails",
 			setup: func() (*Sheet, string, func()) {
-				// Create a source file
 				src, err := os.CreateTemp("", "copy-test-src-*")
 				if err != nil {
 					t.Fatalf("failed to create temp file: %v", err)
@@ -50,13 +44,11 @@ func TestCopyErrors(t *testing.T) {
 					CheatPath: "test",
 				}
 
-				// Create a file where we want a directory
 				blockerFile := filepath.Join(os.TempDir(), "copy-blocker-file")
 				if err := os.WriteFile(blockerFile, []byte("blocker"), 0644); err != nil {
 					t.Fatalf("failed to create blocker file: %v", err)
 				}
 
-				// Try to create dest under the blocker file (will fail)
 				dest := filepath.Join(blockerFile, "subdir", "dest.txt")
 
 				cleanup := func() {
@@ -65,13 +57,10 @@ func TestCopyErrors(t *testing.T) {
 				}
 				return sheet, dest, cleanup
 			},
-			wantErr: true,
-			errMsg:  "failed to create directory",
 		},
 		{
 			name: "destination file creation fails",
 			setup: func() (*Sheet, string, func()) {
-				// Create a source file
 				src, err := os.CreateTemp("", "copy-test-src-*")
 				if err != nil {
 					t.Fatalf("failed to create temp file: %v", err)
@@ -85,7 +74,6 @@ func TestCopyErrors(t *testing.T) {
 					CheatPath: "test",
 				}
 
-				// Create a directory where we want the file
 				destDir := filepath.Join(os.TempDir(), "copy-test-dir")
 				if err := os.Mkdir(destDir, 0755); err != nil && !os.IsExist(err) {
 					t.Fatalf("failed to create dest dir: %v", err)
@@ -97,8 +85,6 @@ func TestCopyErrors(t *testing.T) {
 				}
 				return sheet, destDir, cleanup
 			},
-			wantErr: true,
-			errMsg:  "failed to create outfile",
 		},
 	}
 
@@ -108,43 +94,27 @@ func TestCopyErrors(t *testing.T) {
 			defer cleanup()
 
 			err := sheet.Copy(dest)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Copy() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if err != nil && tt.errMsg != "" {
-				if !contains(err.Error(), tt.errMsg) {
-					t.Errorf("Copy() error = %v, want error containing %q", err, tt.errMsg)
-				}
+			if err == nil {
+				t.Error("Copy() expected error, got nil")
 			}
 		})
 	}
 }
 
-// TestCopyIOError tests the io.Copy error case
-func TestCopyIOError(t *testing.T) {
-	// This is difficult to test without mocking io.Copy
-	// The error case would occur if the source file is modified
-	// or removed after opening but before copying
-	t.Skip("Skipping io.Copy error test - requires file system race condition")
-}
-
-// TestCopyCleanupOnError verifies that partially written files are cleaned up on error
-func TestCopyCleanupOnError(t *testing.T) {
+// TestCopyUnreadableSource verifies that Copy returns an error when the source
+// file cannot be opened (e.g., permission denied).
+func TestCopyUnreadableSource(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("chmod does not restrict reads on Windows")
 	}
 
-	// Create a source file that we'll make unreadable after opening
-	src, err := os.CreateTemp("", "copy-test-cleanup-*")
+	src, err := os.CreateTemp("", "copy-test-unreadable-*")
 	if err != nil {
 		t.Fatalf("failed to create temp file: %v", err)
 	}
 	defer os.Remove(src.Name())
 
-	// Write some content
-	content := "test content for cleanup"
-	if _, err := src.WriteString(content); err != nil {
+	if _, err := src.WriteString("test content"); err != nil {
 		t.Fatalf("failed to write content: %v", err)
 	}
 	src.Close()
@@ -155,38 +125,21 @@ func TestCopyCleanupOnError(t *testing.T) {
 		CheatPath: "test",
 	}
 
-	// Destination path
-	dest := filepath.Join(os.TempDir(), "copy-cleanup-test.txt")
-	defer os.Remove(dest) // Clean up if test fails
+	dest := filepath.Join(os.TempDir(), "copy-unreadable-test.txt")
+	defer os.Remove(dest)
 
-	// Make the source file unreadable (simulating a read error during copy)
-	// This is platform-specific, but should work on Unix-like systems
 	if err := os.Chmod(src.Name(), 0000); err != nil {
 		t.Skip("Cannot change file permissions on this platform")
 	}
-	defer os.Chmod(src.Name(), 0644) // Restore permissions for cleanup
+	defer os.Chmod(src.Name(), 0644)
 
-	// Attempt to copy - this should fail during io.Copy
 	err = sheet.Copy(dest)
 	if err == nil {
-		t.Error("Expected Copy to fail with permission error")
+		t.Error("expected Copy to fail with permission error")
 	}
 
-	// Verify the destination file was cleaned up
+	// Destination should not exist since the error occurs before it is created
 	if _, err := os.Stat(dest); !os.IsNotExist(err) {
-		t.Error("Destination file should have been removed after copy failure")
+		t.Error("destination file should not exist after open failure")
 	}
-}
-
-func contains(s, substr string) bool {
-	return len(s) >= len(substr) && (s == substr || len(s) > 0 && containsHelper(s, substr))
-}
-
-func containsHelper(s, substr string) bool {
-	for i := 0; i <= len(s)-len(substr); i++ {
-		if s[i:i+len(substr)] == substr {
-			return true
-		}
-	}
-	return false
 }

@@ -88,26 +88,3 @@ func TestCheatpathValidate(t *testing.T) {
 		})
 	}
 }
-
-func TestCheatpathStruct(t *testing.T) {
-	// Test that the struct fields work as expected
-	cp := Cheatpath{
-		Name:     "test",
-		Path:     "/test/path",
-		ReadOnly: true,
-		Tags:     []string{"tag1", "tag2"},
-	}
-
-	if cp.Name != "test" {
-		t.Errorf("expected Name to be 'test', got %q", cp.Name)
-	}
-	if cp.Path != "/test/path" {
-		t.Errorf("expected Path to be '/test/path', got %q", cp.Path)
-	}
-	if !cp.ReadOnly {
-		t.Error("expected ReadOnly to be true")
-	}
-	if len(cp.Tags) != 2 || cp.Tags[0] != "tag1" || cp.Tags[1] != "tag2" {
-		t.Errorf("expected Tags to be [tag1 tag2], got %v", cp.Tags)
-	}
-}

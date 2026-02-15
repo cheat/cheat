@@ -71,19 +71,28 @@ func TestInvalidateMissingCheatpaths(t *testing.T) {
 	}
 }
 
-// TestMissingInvalidFormatters asserts that configs which contain invalid
+// TestInvalidateInvalidFormatter asserts that configs which contain invalid
 // formatters are invalidated
-func TestMissingInvalidFormatters(t *testing.T) {
+func TestInvalidateInvalidFormatter(t *testing.T) {
 
-	// mock a config
+	// mock a config with a valid editor and cheatpaths but invalid formatter
 	conf := Config{
-		Colorize: true,
-		Editor:   "vim",
+		Colorize:  true,
+		Editor:    "vim",
+		Formatter: "html",
+		Cheatpaths: []cheatpath.Cheatpath{
+			cheatpath.Cheatpath{
+				Name:     "foo",
+				Path:     "/foo",
+				ReadOnly: false,
+				Tags:     []string{},
+			},
+		},
 	}
 
-	// assert that no errors are returned
+	// assert that the config is invalidated due to the formatter
 	if err := conf.Validate(); err == nil {
-		t.Errorf("failed to invalidate config without formatter")
+		t.Errorf("failed to invalidate config with invalid formatter")
 	}
 }
 

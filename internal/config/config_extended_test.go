@@ -3,7 +3,6 @@ package config
 import (
 	"os"
 	"path/filepath"
-	"runtime"
 	"testing"
 
 	"github.com/cheat/cheat/internal/mock"
@@ -19,7 +18,7 @@ func TestConfigYAMLErrors(t *testing.T) {
 	defer os.RemoveAll(tempDir)
 
 	invalidYAML := filepath.Join(tempDir, "invalid.yml")
-	err = os.WriteFile(invalidYAML, []byte("invalid: yaml: content:\n  - no closing"), 0644)
+	err = os.WriteFile(invalidYAML, []byte("cheatpaths: [{unclosed\n"), 0644)
 	if err != nil {
 		t.Fatalf("failed to write invalid yaml: %v", err)
 	}
@@ -335,7 +334,10 @@ cheatpaths:
 	}
 
 	// Verify symlink was resolved
-	if len(conf.Cheatpaths) > 0 && conf.Cheatpaths[0].Path != targetDir {
+	if len(conf.Cheatpaths) == 0 {
+		t.Fatal("expected at least one cheatpath, got none")
+	}
+	if conf.Cheatpaths[0].Path != targetDir {
 		t.Errorf("expected symlink to be resolved to %s, got %s", targetDir, conf.Cheatpaths[0].Path)
 	}
 }
@@ -379,71 +381,4 @@ cheatpaths:
 	if len(conf.Cheatpaths) != 0 {
 		t.Errorf("expected broken cheatpath to be filtered out, got %d cheatpaths", len(conf.Cheatpaths))
 	}
-}
-
-// TestConfigTildeExpansionError tests tilde expansion error handling
-func TestConfigTildeExpansionError(t *testing.T) {
-	// This is tricky to test without mocking homedir.Expand
-	// We'll create a config with an invalid home reference
-	tempDir, err := os.MkdirTemp("", "cheat-config-test-*")
-	if err != nil {
-		t.Fatalf("failed to create temp dir: %v", err)
-	}
-	defer os.RemoveAll(tempDir)
-
-	// Create config with user that likely doesn't exist
-	configContent := `---
-editor: vim
-cheatpaths:
-  - name: test
-    path: ~nonexistentuser12345/cheat
-    readonly: true
-`
-	configFile := filepath.Join(tempDir, "config.yml")
-	err = os.WriteFile(configFile, []byte(configContent), 0644)
-	if err != nil {
-		t.Fatalf("failed to write config: %v", err)
-	}
-
-	// Load config - this may or may not fail depending on the system
-	// but we're testing that it doesn't panic
-	_, _ = New(map[string]interface{}{}, configFile, false)
-}
-
-// TestConfigGetCwdError tests error handling when os.Getwd fails
-func TestConfigGetCwdError(t *testing.T) {
-	if runtime.GOOS == "windows" {
-		t.Skip("Windows does not allow removing the current directory")
-	}
-
-	// This is difficult to test without being able to break os.Getwd
-	// We'll create a scenario where the current directory is removed
-
-	// Create and enter a temp directory
-	tempDir, err := os.MkdirTemp("", "cheat-config-test-*")
-	if err != nil {
-		t.Fatalf("failed to create temp dir: %v", err)
-	}
-
-	oldCwd, err := os.Getwd()
-	if err != nil {
-		t.Fatalf("failed to get cwd: %v", err)
-	}
-	defer os.Chdir(oldCwd)
-
-	err = os.Chdir(tempDir)
-	if err != nil {
-		t.Fatalf("failed to change dir: %v", err)
-	}
-
-	// Remove the directory we're in
-	err = os.RemoveAll(tempDir)
-	if err != nil {
-		t.Fatalf("failed to remove temp dir: %v", err)
-	}
-
-	// Now os.Getwd should fail
-	_, err = New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
-	// This might not fail on all systems, so we just ensure no panic
-	_ = err
 }

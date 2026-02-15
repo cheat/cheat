@@ -38,7 +38,7 @@ To foo the bar: baz`
 		t.Errorf("failed to parse tags: want: %s, got: %s", want, fm.Tags[0])
 	}
 	if len(fm.Tags) != 1 {
-		t.Errorf("failed to parse tags: want: len 0, got: len %d", len(fm.Tags))
+		t.Errorf("failed to parse tags: want: len 1, got: len %d", len(fm.Tags))
 	}
 }
 
