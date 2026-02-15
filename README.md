@@ -172,9 +172,11 @@ editing.
 
 ### Directory-scoped Cheatpaths ###
 At times, it can be useful to closely associate cheatsheets with a directory on
-your filesystem. `cheat` facilitates this by searching for a `.cheat` folder in
-the current working directory. If found, the `.cheat` directory will
-(temporarily) be added to the cheatpaths.
+your filesystem. `cheat` facilitates this by searching for a `.cheat` directory
+in the current working directory and its ancestors (similar to how `git` locates
+`.git` directories). The nearest `.cheat` directory found will (temporarily) be
+added to the cheatpaths. This means you can place a `.cheat` directory at your
+project root and it will be available from any subdirectory within that project.
 
 Autocompletion
 --------------

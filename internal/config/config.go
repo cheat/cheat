@@ -45,21 +45,20 @@ func New(_ map[string]interface{}, confPath string, resolve bool) (Config, error
 		return Config{}, fmt.Errorf("could not unmarshal yaml: %v", err)
 	}
 
-	// if a .cheat directory exists locally, append it to the cheatpaths
+	// if a .cheat directory exists in the current directory or any ancestor,
+	// append it to the cheatpaths
 	cwd, err := os.Getwd()
 	if err != nil {
 		return Config{}, fmt.Errorf("failed to get cwd: %v", err)
 	}
 
-	local := filepath.Join(cwd, ".cheat")
-	if _, err := os.Stat(local); err == nil {
+	if local := findLocalCheatpath(cwd); local != "" {
 		path := cp.Cheatpath{
 			Name:     "cwd",
 			Path:     local,
 			ReadOnly: false,
 			Tags:     []string{},
 		}
-
 		conf.Cheatpaths = append(conf.Cheatpaths, path)
 	}
 
@@ -139,4 +138,22 @@ func New(_ map[string]interface{}, confPath string, resolve bool) (Config, error
 	conf.Pager = strings.TrimSpace(conf.Pager)
 
 	return conf, nil
+}
+
+// findLocalCheatpath walks upward from dir looking for a .cheat directory.
+// It returns the path to the first .cheat directory found, or an empty string
+// if none exists. This mirrors the discovery pattern used by git for .git
+// directories.
+func findLocalCheatpath(dir string) string {
+	for {
+		candidate := filepath.Join(dir, ".cheat")
+		if info, err := os.Stat(candidate); err == nil && info.IsDir() {
+			return candidate
+		}
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			return ""
+		}
+		dir = parent
+	}
 }
