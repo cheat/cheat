@@ -3,7 +3,6 @@
 package installer
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
@@ -12,20 +11,34 @@ import (
 // Prompt prompts the user for a answer
 func Prompt(prompt string, def bool) (bool, error) {
 
-	// initialize a line reader
-	reader := bufio.NewReader(os.Stdin)
-
 	// display the prompt
 	fmt.Printf("%s: ", prompt)
 
-	// read the answer
-	ans, err := reader.ReadString('\n')
-	if err != nil {
-		return false, fmt.Errorf("failed to parse input: %v", err)
+	// read one byte at a time until newline to avoid buffering past the
+	// end of the current line, which would consume input intended for
+	// subsequent Prompt calls on the same stdin
+	var line []byte
+	buf := make([]byte, 1)
+	for {
+		n, err := os.Stdin.Read(buf)
+		if n > 0 {
+			if buf[0] == '\n' {
+				break
+			}
+			if buf[0] != '\r' {
+				line = append(line, buf[0])
+			}
+		}
+		if err != nil {
+			if len(line) > 0 {
+				break
+			}
+			return false, fmt.Errorf("failed to prompt: %v", err)
+		}
 	}
 
 	// normalize the answer
-	ans = strings.ToLower(strings.TrimSpace(ans))
+	ans := strings.ToLower(strings.TrimSpace(string(line)))
 
 	// return the appropriate response
 	switch ans {

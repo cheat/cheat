@@ -154,8 +154,8 @@ func TestPromptError(t *testing.T) {
 	if err == nil {
 		t.Error("expected error when reading from closed stdin, got nil")
 	}
-	if !strings.Contains(err.Error(), "failed to parse input") {
-		t.Errorf("expected 'failed to parse input' error, got: %v", err)
+	if !strings.Contains(err.Error(), "failed to prompt") {
+		t.Errorf("expected 'failed to prompt' error, got: %v", err)
 	}
 }
 
