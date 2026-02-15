@@ -32,3 +32,29 @@ func TestColorize(t *testing.T) {
 		t.Errorf("failed to colorize sheet: want: %s, got: %s", want, s.Text)
 	}
 }
+
+// TestColorizeError tests the error handling in Colorize
+func TestColorizeError(_ *testing.T) {
+	// Create a sheet with content
+	sheet := Sheet{
+		Text:   "some text",
+		Syntax: "invalidlexer12345", // Use an invalid lexer that might cause issues
+	}
+
+	// Create a config with invalid formatter/style
+	conf := config.Config{
+		Formatter: "invalidformatter",
+		Style:     "invalidstyle",
+	}
+
+	// Store original text
+	originalText := sheet.Text
+
+	// Colorize should not panic even with invalid settings
+	sheet.Colorize(conf)
+
+	// The text might be unchanged if there was an error, or it might be colorized
+	// We're mainly testing that it doesn't panic
+	_ = sheet.Text
+	_ = originalText
+}

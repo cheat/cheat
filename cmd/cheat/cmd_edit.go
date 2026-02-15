@@ -17,6 +17,12 @@ func cmdEdit(opts map[string]interface{}, conf config.Config) {
 
 	cheatsheet := opts["--edit"].(string)
 
+	// validate the cheatsheet name
+	if err := cheatpath.ValidateSheetName(cheatsheet); err != nil {
+		fmt.Fprintf(os.Stderr, "invalid cheatsheet name: %v\n", err)
+		os.Exit(1)
+	}
+
 	// load the cheatsheets
 	cheatsheets, err := sheets.Load(conf.Cheatpaths)
 	if err != nil {

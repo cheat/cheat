@@ -23,6 +23,12 @@ OPTIONS
 --init
 : Print a config file to stdout.
 
+--conf
+: Display the config file path.
+
+-a, --all
+: Search among all cheatpaths.
+
 -c, --colorize
 : Colorize output.
 
@@ -92,6 +98,9 @@ To search (by regex) for cheatsheets that contain an IP address:
 
 To remove (delete) the foo/bar cheatsheet:
 : cheat --rm _foo/bar_
+
+To view the configuration file path:
+: cheat --conf
 
 
 FILES

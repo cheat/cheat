@@ -31,6 +31,21 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 		)
 	}
 
+	// prepare the search pattern
+	pattern := "(?i)" + phrase
+
+	// unless --regex is provided, in which case we pass the regex unaltered
+	if opts["--regex"] == true {
+		pattern = phrase
+	}
+
+	// compile the regex once, outside the loop
+	reg, err := regexp.Compile(pattern)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "failed to compile regexp: %s, %v\n", pattern, err)
+		os.Exit(1)
+	}
+
 	// iterate over each cheatpath
 	out := ""
 	for _, pathcheats := range cheatsheets {
@@ -42,21 +57,6 @@ func cmdSearch(opts map[string]interface{}, conf config.Config) {
 			// matching cheatsheets
 			if opts["<cheatsheet>"] != nil && sheet.Title != opts["<cheatsheet>"] {
 				continue
-			}
-
-			// assume that we want to perform a case-insensitive search for <phrase>
-			pattern := "(?i)" + phrase
-
-			// unless --regex is provided, in which case we pass the regex unaltered
-			if opts["--regex"] == true {
-				pattern = phrase
-			}
-
-			// compile the regex
-			reg, err := regexp.Compile(pattern)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "failed to compile regexp: %s, %v\n", pattern, err)
-				os.Exit(1)
 			}
 
 			// `Search` will return text entries that match the search terms.

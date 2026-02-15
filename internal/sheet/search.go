@@ -9,16 +9,17 @@ import (
 func (s *Sheet) Search(reg *regexp.Regexp) string {
 
 	// record matches
-	matches := ""
+	var matches []string
 
 	// search through the cheatsheet's text line by line
 	for _, line := range strings.Split(s.Text, "\n\n") {
 
-		// exit early if the line doesn't match the regex
+		// save matching lines
 		if reg.MatchString(line) {
-			matches += line + "\n\n"
+			matches = append(matches, line)
 		}
 	}
 
-	return strings.TrimSpace(matches)
+	// Join matches with the same delimiter used for splitting
+	return strings.Join(matches, "\n\n")
 }

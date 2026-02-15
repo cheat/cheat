@@ -26,19 +26,26 @@ func TestLoad(t *testing.T) {
 	}
 
 	// load cheatsheets
-	sheets, err := Load(cheatpaths)
+	cheatpathSheets, err := Load(cheatpaths)
 	if err != nil {
 		t.Errorf("failed to load cheatsheets: %v", err)
 	}
 
 	// assert that the correct number of sheets loaded
 	// (sheet load details are tested in `sheet_test.go`)
+	totalSheets := 0
+	for _, sheets := range cheatpathSheets {
+		totalSheets += len(sheets)
+	}
+
+	// we expect 4 total sheets (2 from community, 2 from personal)
+	// hidden files and files with extensions are excluded
 	want := 4
-	if len(sheets) != want {
+	if totalSheets != want {
 		t.Errorf(
 			"failed to load correct number of cheatsheets: want: %d, got: %d",
 			want,
-			len(sheets),
+			totalSheets,
 		)
 	}
 }

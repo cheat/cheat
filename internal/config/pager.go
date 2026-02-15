@@ -22,7 +22,7 @@ func Pager() string {
 	// Otherwise, search for `pager`, `less`, and `more` on the `$PATH`. If
 	// none are found, return an empty pager.
 	for _, pager := range []string{"pager", "less", "more"} {
-		if path, err := exec.LookPath(pager); err != nil {
+		if path, err := exec.LookPath(pager); err == nil {
 			return path
 		}
 	}

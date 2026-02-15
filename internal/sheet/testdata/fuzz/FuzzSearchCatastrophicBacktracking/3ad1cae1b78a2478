@@ -1,0 +1,4 @@
+go test fuzz v1
+string("0")
+int(-6)
+int(5)

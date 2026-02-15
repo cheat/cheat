@@ -39,6 +39,8 @@ func (s *Sheet) Copy(dest string) error {
 	// copy file contents
 	_, err = io.Copy(outfile, infile)
 	if err != nil {
+		// Clean up the partially written file on error
+		os.Remove(dest)
 		return fmt.Errorf(
 			"failed to copy file: infile: %s, outfile: %s, err: %v",
 			s.Path,

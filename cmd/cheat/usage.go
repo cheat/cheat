@@ -1,13 +1,8 @@
 package main
 
-// Code generated .* DO NOT EDIT.
-
-import (
-	"strings"
-)
-
+// usage returns the usage text for the cheat command
 func usage() string {
-	return strings.TrimSpace(`Usage:
+	return `Usage:
   cheat [options] [<cheatsheet>]
 
 Options:
@@ -65,6 +60,5 @@ Examples:
     cheat --rm foo/bar
 
   To view the configuration file path:
-    cheat --conf
-`)
+    cheat --conf`
 }

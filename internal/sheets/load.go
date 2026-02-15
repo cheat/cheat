@@ -20,7 +20,7 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 	sheets := make([]map[string]sheet.Sheet, len(cheatpaths))
 
 	// iterate over each cheatpath
-	for _, cheatpath := range cheatpaths {
+	for i, cheatpath := range cheatpaths {
 
 		// vivify the map of cheatsheets on this specific cheatpath
 		pathsheets := make(map[string]sheet.Sheet)
@@ -40,6 +40,19 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 
 				// don't register directories as cheatsheets
 				if info.IsDir() {
+					return nil
+				}
+
+				// get the base filename
+				filename := filepath.Base(path)
+
+				// skip hidden files (files that start with a dot)
+				if strings.HasPrefix(filename, ".") {
+					return nil
+				}
+
+				// skip files with extensions (cheatsheets have no extension)
+				if filepath.Ext(filename) != "" {
 					return nil
 				}
 
@@ -88,7 +101,7 @@ func Load(cheatpaths []cp.Cheatpath) ([]map[string]sheet.Sheet, error) {
 
 		// store the sheets on this cheatpath alongside the other cheatsheets on
 		// other cheatpaths
-		sheets = append(sheets, pathsheets)
+		sheets[i] = pathsheets
 	}
 
 	// return the cheatsheets, grouped by cheatpath

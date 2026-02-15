@@ -9,20 +9,20 @@ On Unix-like systems, you may simply paste the following snippet into your termi
 
 ```sh
 cd /tmp \
-  && wget https://github.com/cheat/cheat/releases/download/4.4.2/cheat-linux-amd64.gz \
+  && wget https://github.com/cheat/cheat/releases/download/4.5.0/cheat-linux-amd64.gz \
   && gunzip cheat-linux-amd64.gz \
   && chmod +x cheat-linux-amd64 \
   && sudo mv cheat-linux-amd64 /usr/local/bin/cheat
 ```
 
-You may need to need to change the version number (`4.4.2`) and the archive
+You may need to need to change the version number (`4.5.0`) and the archive
 (`cheat-linux-amd64.gz`) depending on your platform.
 
 See the [releases page][releases] for a list of supported platforms.
 
 #### Windows
-TODO: community support is requested here. Please open a PR if you'd like to
-contribute installation instructions for Windows.
+On Windows, download the appropriate binary from the [releases page][releases],
+unzip the archive, and place the `cheat.exe` executable on your `PATH`.
 
 ### Install via `go install`
 If you have `go` version `>=1.17` available on your `PATH`, you can install

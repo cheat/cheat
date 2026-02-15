@@ -1,8 +1,6 @@
 // Package main serves as the executable entrypoint.
 package main
 
-//go:generate go run ../../build/embed.go
-
 import (
 	"fmt"
 	"os"
@@ -17,7 +15,7 @@ import (
 	"github.com/cheat/cheat/internal/installer"
 )
 
-const version = "4.4.2"
+const version = "4.5.0"
 
 func main() {
 
@@ -45,6 +43,7 @@ func main() {
 	// read the envvars into a map of strings
 	envvars := map[string]string{}
 	for _, e := range os.Environ() {
+		// os.Environ() guarantees "key=value" format (see ADR-002)
 		pair := strings.SplitN(e, "=", 2)
 		if runtime.GOOS == "windows" {
 			pair[0] = strings.ToUpper(pair[0])

@@ -2,6 +2,7 @@ package sheets
 
 import (
 	"strings"
+	"unicode/utf8"
 
 	"github.com/cheat/cheat/internal/sheet"
 )
@@ -31,7 +32,8 @@ func Filter(
 			// iterate over each tag. If the sheet does not match *all* tags, filter
 			// it out.
 			for _, tag := range tags {
-				if !sheet.Tagged(strings.TrimSpace(tag)) {
+				trimmed := strings.TrimSpace(tag)
+				if trimmed == "" || !utf8.ValidString(trimmed) || !sheet.Tagged(trimmed) {
 					keep = false
 				}
 			}

@@ -96,6 +96,9 @@ func New(_ map[string]interface{}, confPath string, resolve bool) (Config, error
 		conf.Cheatpaths[i].Path = expanded
 	}
 
+	// trim editor whitespace
+	conf.Editor = strings.TrimSpace(conf.Editor)
+
 	// if an editor was not provided in the configs, attempt to choose one
 	// that's appropriate for the environment
 	if conf.Editor == "" {

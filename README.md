@@ -117,7 +117,7 @@ cheat tar     # file is named "tar"
 cheat foo/bar # file is named "bar", in a "foo" subdirectory
 ```
 
-Cheatsheet text may optionally be preceeded by a YAML frontmatter header that
+Cheatsheet text may optionally be preceded by a YAML frontmatter header that
 assigns tags and specifies syntax:
 
 ```
