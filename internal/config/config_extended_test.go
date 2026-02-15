@@ -189,10 +189,14 @@ cheatpaths:
 		t.Fatalf("failed to write config: %v", err)
 	}
 
-	// Load config with symlink resolution should fail
-	_, err = New(map[string]interface{}{}, configFile, true)
-	if err == nil {
-		t.Error("expected error for broken symlink, got nil")
+	// Load config with symlink resolution should skip the broken cheatpath
+	// (warn to stderr) rather than hard-error
+	conf, err := New(map[string]interface{}{}, configFile, true)
+	if err != nil {
+		t.Errorf("expected no error for broken symlink (should skip), got: %v", err)
+	}
+	if len(conf.Cheatpaths) != 0 {
+		t.Errorf("expected broken cheatpath to be filtered out, got %d cheatpaths", len(conf.Cheatpaths))
 	}
 }
 

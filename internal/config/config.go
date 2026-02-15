@@ -64,7 +64,8 @@ func New(_ map[string]interface{}, confPath string, resolve bool) (Config, error
 	}
 
 	// process cheatpaths
-	for i, cheatpath := range conf.Cheatpaths {
+	var validPaths []cp.Cheatpath
+	for _, cheatpath := range conf.Cheatpaths {
 
 		// expand ~ in config paths
 		expanded, err := homedir.Expand(cheatpath.Path)
@@ -83,6 +84,14 @@ func New(_ map[string]interface{}, confPath string, resolve bool) (Config, error
 		if resolve {
 			evaled, err := filepath.EvalSymlinks(expanded)
 			if err != nil {
+				// if the path simply doesn't exist, warn and skip it
+				if os.IsNotExist(err) {
+					fmt.Fprintf(os.Stderr,
+						"WARNING: cheatpath '%s' does not exist, skipping\n",
+						expanded,
+					)
+					continue
+				}
 				return Config{}, fmt.Errorf(
 					"failed to resolve symlink: %s: %v",
 					expanded,
@@ -93,8 +102,10 @@ func New(_ map[string]interface{}, confPath string, resolve bool) (Config, error
 			expanded = evaled
 		}
 
-		conf.Cheatpaths[i].Path = expanded
+		cheatpath.Path = expanded
+		validPaths = append(validPaths, cheatpath)
 	}
+	conf.Cheatpaths = validPaths
 
 	// trim editor whitespace
 	conf.Editor = strings.TrimSpace(conf.Editor)

@@ -54,8 +54,8 @@ cheatpaths:
 			confpath:      filepath.Join(tempDir, "conf1", "conf.yml"),
 			userInput:     "n\n",
 			wantErr:       false,
-			checkFiles:    []string{"conf1/conf.yml"},
-			dontWantFiles: []string{"conf1/cheatsheets/community", "conf1/cheatsheets/personal"},
+			checkFiles:    []string{"conf1/conf.yml", "conf1/cheatsheets/personal", "conf1/cheatsheets/work"},
+			dontWantFiles: []string{"conf1/cheatsheets/community"},
 		},
 		{
 			name: "user accepts but clone fails",
@@ -177,10 +177,18 @@ func TestRunStringReplacements(t *testing.T) {
 editor: EDITOR_PATH
 pager: PAGER_PATH
 cheatpaths:
-  - name: community
-    path: COMMUNITY_PATH
   - name: personal
     path: PERSONAL_PATH
+    tags: [ personal ]
+    readonly: false
+  - name: work
+    path: WORK_PATH
+    tags: [ work ]
+    readonly: false
+  - name: community
+    path: COMMUNITY_PATH
+    tags: [ community ]
+    readonly: true
 `
 
 	// Create temp directory
@@ -194,7 +202,6 @@ cheatpaths:
 	confdir := filepath.Dir(confpath)
 
 	// Expected paths
-	expectedCommunity := filepath.Join(confdir, "cheatsheets", "community")
 	expectedPersonal := filepath.Join(confdir, "cheatsheets", "personal")
 
 	// Save original stdin/stdout
@@ -244,10 +251,16 @@ cheatpaths:
 	if strings.Contains(contentStr, "PAGER_PATH") && !strings.Contains(contentStr, fmt.Sprintf("pager: %s", "")) {
 		t.Error("PAGER_PATH was not replaced")
 	}
+	if strings.Contains(contentStr, "WORK_PATH") {
+		t.Error("WORK_PATH was not replaced")
+	}
 
-	// Verify correct paths were used
-	if !strings.Contains(contentStr, expectedCommunity) {
-		t.Errorf("expected community path %q in config", expectedCommunity)
+	// Verify community path is commented out (user declined)
+	if strings.Contains(contentStr, "  - name: community") {
+		t.Error("expected community cheatpath to be commented out when declined")
+	}
+	if !strings.Contains(contentStr, "  #- name: community") {
+		t.Error("expected commented-out community cheatpath")
 	}
 	if !strings.Contains(contentStr, expectedPersonal) {
 		t.Errorf("expected personal path %q in config", expectedPersonal)

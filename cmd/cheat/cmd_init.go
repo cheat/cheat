@@ -44,13 +44,23 @@ func cmdInit() {
 	confpath := confpaths[0]
 	confdir := filepath.Dir(confpath)
 
-	// create paths for community and personal cheatsheets
+	// create paths for community, personal, and work cheatsheets
 	community := filepath.Join(confdir, "cheatsheets", "community")
 	personal := filepath.Join(confdir, "cheatsheets", "personal")
+	work := filepath.Join(confdir, "cheatsheets", "work")
 
 	// template the above paths into the default configs
 	configs = strings.Replace(configs, "COMMUNITY_PATH", community, -1)
 	configs = strings.Replace(configs, "PERSONAL_PATH", personal, -1)
+	configs = strings.Replace(configs, "WORK_PATH", work, -1)
+
+	// locate and set a default pager
+	configs = strings.Replace(configs, "PAGER_PATH", config.Pager(), -1)
+
+	// locate and set a default editor
+	if editor, err := config.Editor(); err == nil {
+		configs = strings.Replace(configs, "EDITOR_PATH", editor, -1)
+	}
 
 	// output the templated configs
 	fmt.Println(configs)

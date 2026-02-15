@@ -17,13 +17,15 @@ func Run(configs string, confpath string) error {
 	// cheatsheets based on the user's platform
 	confdir := filepath.Dir(confpath)
 
-	// create paths for community and personal cheatsheets
+	// create paths for community, personal, and work cheatsheets
 	community := filepath.Join(confdir, "cheatsheets", "community")
 	personal := filepath.Join(confdir, "cheatsheets", "personal")
+	work := filepath.Join(confdir, "cheatsheets", "work")
 
 	// set default cheatpaths
 	configs = strings.Replace(configs, "COMMUNITY_PATH", community, -1)
 	configs = strings.Replace(configs, "PERSONAL_PATH", personal, -1)
+	configs = strings.Replace(configs, "WORK_PATH", work, -1)
 
 	// locate and set a default pager
 	configs = strings.Replace(configs, "PAGER_PATH", config.Pager(), -1)
@@ -44,15 +46,29 @@ func Run(configs string, confpath string) error {
 
 	// clone the community cheatsheets if so instructed
 	if yes {
-		// clone the community cheatsheets
 		fmt.Printf("Cloning community cheatsheets to %s.\n", community)
 		if err := repo.Clone(community); err != nil {
 			return fmt.Errorf("failed to clone cheatsheets: %v", err)
 		}
+	} else {
+		// comment out the community cheatpath in the config since
+		// the directory won't exist
+		configs = strings.Replace(configs,
+			"  - name: community\n"+
+				"    path: "+community+"\n"+
+				"    tags: [ community ]\n"+
+				"    readonly: true",
+			"  #- name: community\n"+
+				"  #  path: "+community+"\n"+
+				"  #  tags: [ community ]\n"+
+				"  #  readonly: true",
+			-1,
+		)
+	}
 
-		// also create a directory for personal cheatsheets
-		fmt.Printf("Cloning personal cheatsheets to %s.\n", personal)
-		if err := os.MkdirAll(personal, os.ModePerm); err != nil {
+	// always create personal and work directories
+	for _, dir := range []string{personal, work} {
+		if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 			return fmt.Errorf("failed to create directory: %v", err)
 		}
 	}
