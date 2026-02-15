@@ -44,7 +44,6 @@ releases :=                        \
 	$(dist_dir)/cheat-linux-arm7   \
 	$(dist_dir)/cheat-netbsd-amd64  \
 	$(dist_dir)/cheat-openbsd-amd64  \
-	$(dist_dir)/cheat-plan9-amd64   \
 	$(dist_dir)/cheat-solaris-amd64  \
 	$(dist_dir)/cheat-windows-amd64.exe
 
@@ -108,11 +107,6 @@ $(dist_dir)/cheat-netbsd-amd64:
 # cheat-openbsd-amd64
 $(dist_dir)/cheat-openbsd-amd64:
 	GOARCH=amd64 GOOS=openbsd \
-	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
-
-# cheat-plan9-amd64
-$(dist_dir)/cheat-plan9-amd64:
-	GOARCH=amd64 GOOS=plan9 \
 	$(GO) build $(BUILD_FLAGS) -o $@ $(cmd_dir) && $(GZIP) $@ && chmod -x $@.gz
 
 # cheat-solaris-amd64
