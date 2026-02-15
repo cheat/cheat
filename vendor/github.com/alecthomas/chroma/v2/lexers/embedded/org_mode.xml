@@ -228,42 +228,42 @@
       </rule>
     </state>
     <state name="inline">
-      <rule pattern="(\s)*(\*[^ \n*][^*]+?[^ \n*]\*)((?=\W|\n|$))">
+      <rule pattern="(\s*)(\*[^ \n*][^*]+?[^ \n*]\*)((?=\W|\n|$))">
         <bygroups>
           <token type="Text"/>
           <token type="GenericStrong"/>
           <token type="Text"/>
         </bygroups>
       </rule>
-      <rule pattern="(\s)*(/[^/]+?/)((?=\W|\n|$))">
+      <rule pattern="(\s*)(/[^/]+?/)((?=\W|\n|$))">
         <bygroups>
           <token type="Text"/>
           <token type="GenericEmph"/>
           <token type="Text"/>
         </bygroups>
       </rule>
-      <rule pattern="(\s)*(=[^\n=]+?=)((?=\W|\n|$))">
+      <rule pattern="(\s*)(=[^\n=]+?=)((?=\W|\n|$))">
         <bygroups>
           <token type="Text"/>
           <token type="NameClass"/>
           <token type="Text"/>
         </bygroups>
       </rule>
-      <rule pattern="(\s)*(~[^\n~]+?~)((?=\W|\n|$))">
+      <rule pattern="(\s*)(~[^\n~]+?~)((?=\W|\n|$))">
         <bygroups>
           <token type="Text"/>
           <token type="NameClass"/>
           <token type="Text"/>
         </bygroups>
       </rule>
-      <rule pattern="(\s)*(\+[^+]+?\+)((?=\W|\n|$))">
+      <rule pattern="(\s*)(\+[^+]+?\+)((?=\W|\n|$))">
         <bygroups>
           <token type="Text"/>
           <token type="GenericDeleted"/>
           <token type="Text"/>
         </bygroups>
       </rule>
-      <rule pattern="(\s)*(_[^_]+?_)((?=\W|\n|$))">
+      <rule pattern="(\s*)(_[^_]+?_)((?=\W|\n|$))">
         <bygroups>
           <token type="Text"/>
           <token type="GenericUnderline"/>

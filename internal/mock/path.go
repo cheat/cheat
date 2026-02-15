@@ -3,7 +3,6 @@ package mock
 
 import (
 	"fmt"
-	"path"
 	"path/filepath"
 	"runtime"
 )
@@ -16,7 +15,7 @@ func Path(filename string) string {
 
 	// compute the mock path
 	file, err := filepath.Abs(
-		path.Join(
+		filepath.Join(
 			filepath.Dir(thisfile),
 			"../../mocks",
 			filename,

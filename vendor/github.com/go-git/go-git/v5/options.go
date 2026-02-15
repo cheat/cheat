@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/ProtonMail/go-crypto/openpgp"
+
 	"github.com/go-git/go-git/v5/config"
 	"github.com/go-git/go-git/v5/plumbing"
 	formatcfg "github.com/go-git/go-git/v5/plumbing/format/config"
@@ -72,9 +73,16 @@ type CloneOptions struct {
 	// Tags describe how the tags will be fetched from the remote repository,
 	// by default is AllTags.
 	Tags TagMode
-	// InsecureSkipTLS skips ssl verify if protocol is https
+	// InsecureSkipTLS skips SSL verification if protocol is HTTPS.
 	InsecureSkipTLS bool
-	// CABundle specify additional ca bundle with system cert pool
+	// ClientCert is the client certificate to use for mutual TLS authentication
+	// over the HTTPS protocol.
+	ClientCert []byte
+	// ClientKey is the client key to use for mutual TLS authentication over
+	// the HTTPS protocol.
+	ClientKey []byte
+	// CABundle specifies an additional CA bundle to use together with the
+	// system cert pool.
 	CABundle []byte
 	// ProxyOptions provides info required for connecting to a proxy.
 	ProxyOptions transport.ProxyOptions
@@ -88,6 +96,25 @@ type CloneOptions struct {
 	// [Reference]: https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---shared
 	Shared bool
 }
+
+// MergeOptions describes how a merge should be performed.
+type MergeOptions struct {
+	// Strategy defines the merge strategy to be used.
+	Strategy MergeStrategy
+}
+
+// MergeStrategy represents the different types of merge strategies.
+type MergeStrategy int8
+
+const (
+	// FastForwardMerge represents a Git merge strategy where the current
+	// branch can be simply updated to point to the HEAD of the branch being
+	// merged. This is only possible if the history of the branch being merged
+	// is a linear descendant of the current branch, with no conflicting commits.
+	//
+	// This is the default option.
+	FastForwardMerge MergeStrategy = iota
+)
 
 // Validate validates the fields and sets the default values.
 func (o *CloneOptions) Validate() error {
@@ -134,9 +161,16 @@ type PullOptions struct {
 	// Force allows the pull to update a local branch even when the remote
 	// branch does not descend from it.
 	Force bool
-	// InsecureSkipTLS skips ssl verify if protocol is https
+	// InsecureSkipTLS skips SSL verification if protocol is HTTPS.
 	InsecureSkipTLS bool
-	// CABundle specify additional ca bundle with system cert pool
+	// ClientCert is the client certificate to use for mutual TLS authentication
+	// over the HTTPS protocol.
+	ClientCert []byte
+	// ClientKey is the client key to use for mutual TLS authentication over
+	// the HTTPS protocol.
+	ClientKey []byte
+	// CABundle specifies an additional CA bundle to use together with the
+	// system cert pool.
 	CABundle []byte
 	// ProxyOptions provides info required for connecting to a proxy.
 	ProxyOptions transport.ProxyOptions
@@ -166,7 +200,7 @@ const (
 	// AllTags fetch all tags from the remote (i.e., fetch remote tags
 	// refs/tags/* into local tags with the same name)
 	AllTags
-	//NoTags fetch no tags from the remote at all
+	// NoTags fetch no tags from the remote at all
 	NoTags
 )
 
@@ -192,12 +226,22 @@ type FetchOptions struct {
 	// Force allows the fetch to update a local branch even when the remote
 	// branch does not descend from it.
 	Force bool
-	// InsecureSkipTLS skips ssl verify if protocol is https
+	// InsecureSkipTLS skips SSL verification if protocol is HTTPS.
 	InsecureSkipTLS bool
-	// CABundle specify additional ca bundle with system cert pool
+	// ClientCert is the client certificate to use for mutual TLS authentication
+	// over the HTTPS protocol.
+	ClientCert []byte
+	// ClientKey is the client key to use for mutual TLS authentication over
+	// the HTTPS protocol.
+	ClientKey []byte
+	// CABundle specifies an additional CA bundle to use together with the
+	// system cert pool.
 	CABundle []byte
 	// ProxyOptions provides info required for connecting to a proxy.
 	ProxyOptions transport.ProxyOptions
+	// Prune specify that local refs that match given RefSpecs and that do
+	// not exist remotely will be removed.
+	Prune bool
 }
 
 // Validate validates the fields and sets the default values.
@@ -245,9 +289,16 @@ type PushOptions struct {
 	// Force allows the push to update a remote branch even when the local
 	// branch does not descend from it.
 	Force bool
-	// InsecureSkipTLS skips ssl verify if protocol is https
+	// InsecureSkipTLS skips SSL verification if protocol is HTTPS.
 	InsecureSkipTLS bool
-	// CABundle specify additional ca bundle with system cert pool
+	// ClientCert is the client certificate to use for mutual TLS authentication
+	// over the HTTPS protocol.
+	ClientCert []byte
+	// ClientKey is the client key to use for mutual TLS authentication over
+	// the HTTPS protocol.
+	ClientKey []byte
+	// CABundle specifies an additional CA bundle to use together with the
+	// system cert pool.
 	CABundle []byte
 	// RequireRemoteRefs only allows a remote ref to be updated if its current
 	// value is the one specified here.
@@ -324,9 +375,9 @@ var (
 
 // CheckoutOptions describes how a checkout operation should be performed.
 type CheckoutOptions struct {
-	// Hash is the hash of the commit to be checked out. If used, HEAD will be
-	// in detached mode. If Create is not used, Branch and Hash are mutually
-	// exclusive.
+	// Hash is the hash of a commit or tag to be checked out. If used, HEAD
+	// will be in detached mode. If Create is not used, Branch and Hash are
+	// mutually exclusive.
 	Hash plumbing.Hash
 	// Branch to be checked out, if Branch and Hash are empty is set to `master`.
 	Branch plumbing.ReferenceName
@@ -394,6 +445,9 @@ type ResetOptions struct {
 	// the index (resetting it to the tree of Commit) and the working tree
 	// depending on Mode. If empty MixedReset is used.
 	Mode ResetMode
+	// Files, if not empty will constrain the reseting the index to only files
+	// specified in this list.
+	Files []string
 }
 
 // Validate validates the fields and sets the default values.
@@ -405,6 +459,11 @@ func (o *ResetOptions) Validate(r *Repository) error {
 		}
 
 		o.Commit = ref.Hash()
+	} else {
+		_, err := r.CommitObject(o.Commit)
+		if err != nil {
+			return fmt.Errorf("invalid reset option: %w", err)
+		}
 	}
 
 	return nil
@@ -474,6 +533,11 @@ type AddOptions struct {
 	// Glob adds all paths, matching pattern, to the index. If pattern matches a
 	// directory path, all directory contents are added to the index recursively.
 	Glob string
+	// SkipStatus adds the path with no status check. This option is relevant only
+	// when the `Path` option is specified and does not apply when the `All` option is used.
+	// Notice that when passing an ignored path it will be added anyway.
+	// When true it can speed up adding files to the worktree in very large repositories.
+	SkipStatus bool
 }
 
 // Validate validates the fields and sets the default values.
@@ -507,6 +571,10 @@ type CommitOptions struct {
 	// commit will not be signed. The private key must be present and already
 	// decrypted.
 	SignKey *openpgp.Entity
+	// Signer denotes a cryptographic signer to sign the commit with.
+	// A nil value here means the commit will not be signed.
+	// Takes precedence over SignKey.
+	Signer Signer
 	// Amend will create a new commit object and replace the commit that HEAD currently
 	// points to. Cannot be used with All nor Parents.
 	Amend bool
@@ -654,9 +722,16 @@ func (o *CreateTagOptions) loadConfigTagger(r *Repository) error {
 type ListOptions struct {
 	// Auth credentials, if required, to use with the remote repository.
 	Auth transport.AuthMethod
-	// InsecureSkipTLS skips ssl verify if protocol is https
+	// InsecureSkipTLS skips SSL verification if protocol is HTTPS.
 	InsecureSkipTLS bool
-	// CABundle specify additional ca bundle with system cert pool
+	// ClientCert is the client certificate to use for mutual TLS authentication
+	// over the HTTPS protocol.
+	ClientCert []byte
+	// ClientKey is the client key to use for mutual TLS authentication over
+	// the HTTPS protocol.
+	ClientKey []byte
+	// CABundle specifies an additional CA bundle to use together with the
+	// system cert pool.
 	CABundle []byte
 	// PeelingOption defines how peeled objects are handled during a
 	// remote list.
@@ -754,3 +829,26 @@ type PlainInitOptions struct {
 
 // Validate validates the fields and sets the default values.
 func (o *PlainInitOptions) Validate() error { return nil }
+
+var (
+	ErrNoRestorePaths = errors.New("you must specify path(s) to restore")
+)
+
+// RestoreOptions describes how a restore should be performed.
+type RestoreOptions struct {
+	// Marks to restore the content in the index
+	Staged bool
+	// Marks to restore the content of the working tree
+	Worktree bool
+	// List of file paths that will be restored
+	Files []string
+}
+
+// Validate validates the fields and sets the default values.
+func (o *RestoreOptions) Validate() error {
+	if len(o.Files) == 0 {
+		return ErrNoRestorePaths
+	}
+
+	return nil
+}

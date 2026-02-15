@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 )
 
@@ -112,7 +113,7 @@ func (s *storage) Rename(from, to string) error {
 	move := [][2]string{{from, to}}
 
 	for pathFrom := range s.files {
-		if pathFrom == from || !filepath.HasPrefix(pathFrom, from) {
+		if pathFrom == from || !strings.HasPrefix(pathFrom, from) {
 			continue
 		}
 
@@ -165,6 +166,18 @@ func (s *storage) Remove(path string) error {
 
 	delete(s.children[base], file)
 	delete(s.files, path)
+	return nil
+}
+
+func (s *storage) Chmod(path string, mode os.FileMode) error {
+	path = clean(path)
+
+	f, has := s.Get(path)
+	if !has {
+		return os.ErrNotExist
+	}
+
+	f.mode = mode
 	return nil
 }
 

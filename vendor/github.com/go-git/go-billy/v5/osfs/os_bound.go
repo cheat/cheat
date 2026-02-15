@@ -176,6 +176,14 @@ func (fs *BoundOS) Readlink(link string) (string, error) {
 	return os.Readlink(link)
 }
 
+func (fs *BoundOS) Chmod(path string, mode os.FileMode) error {
+	abspath, err := fs.abs(path)
+	if err != nil {
+		return err
+	}
+	return os.Chmod(abspath, mode)
+}
+
 // Chroot returns a new OS filesystem, with the base dir set to the
 // result of joining the provided path with the underlying base dir.
 func (fs *BoundOS) Chroot(path string) (billy.Filesystem, error) {
@@ -246,6 +254,10 @@ func (fs *BoundOS) insideBaseDir(filename string) (bool, error) {
 // a dir that is within the fs.baseDir, by first evaluating any symlinks
 // that either filename or fs.baseDir may contain.
 func (fs *BoundOS) insideBaseDirEval(filename string) (bool, error) {
+	// "/" contains all others.
+	if fs.baseDir == "/" {
+		return true, nil
+	}
 	dir, err := filepath.EvalSymlinks(filepath.Dir(filename))
 	if dir == "" || os.IsNotExist(err) {
 		dir = filepath.Dir(filename)
@@ -255,7 +267,7 @@ func (fs *BoundOS) insideBaseDirEval(filename string) (bool, error) {
 		wd = fs.baseDir
 	}
 	if filename != wd && dir != wd && !strings.HasPrefix(dir, wd+string(filepath.Separator)) {
-		return false, fmt.Errorf("path outside base dir")
+		return false, fmt.Errorf("%q: path outside base dir %q: %w", filename, fs.baseDir, os.ErrNotExist)
 	}
 	return true, nil
 }

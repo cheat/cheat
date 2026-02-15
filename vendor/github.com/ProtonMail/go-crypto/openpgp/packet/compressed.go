@@ -8,9 +8,10 @@ import (
 	"compress/bzip2"
 	"compress/flate"
 	"compress/zlib"
-	"github.com/ProtonMail/go-crypto/openpgp/errors"
 	"io"
 	"strconv"
+
+	"github.com/ProtonMail/go-crypto/openpgp/errors"
 )
 
 // Compressed represents a compressed OpenPGP packet. The decompressed contents
@@ -39,6 +40,37 @@ type CompressionConfig struct {
 	Level int
 }
 
+// decompressionReader ensures that the whole compression packet is read.
+type decompressionReader struct {
+	compressed   io.Reader
+	decompressed io.ReadCloser
+	readAll      bool
+}
+
+func newDecompressionReader(r io.Reader, decompressor io.ReadCloser) *decompressionReader {
+	return &decompressionReader{
+		compressed:   r,
+		decompressed: decompressor,
+	}
+}
+
+func (dr *decompressionReader) Read(data []byte) (n int, err error) {
+	if dr.readAll {
+		return 0, io.EOF
+	}
+	n, err = dr.decompressed.Read(data)
+	if err == io.EOF {
+		dr.readAll = true
+		// Close the decompressor.
+		if errDec := dr.decompressed.Close(); errDec != nil {
+			return n, errDec
+		}
+		// Consume all remaining data from the compressed packet.
+		consumeAll(dr.compressed)
+	}
+	return n, err
+}
+
 func (c *Compressed) parse(r io.Reader) error {
 	var buf [1]byte
 	_, err := readFull(r, buf[:])
@@ -50,16 +82,30 @@ func (c *Compressed) parse(r io.Reader) error {
 	case 0:
 		c.Body = r
 	case 1:
-		c.Body = flate.NewReader(r)
+		c.Body = newDecompressionReader(r, flate.NewReader(r))
 	case 2:
-		c.Body, err = zlib.NewReader(r)
+		decompressor, err := zlib.NewReader(r)
+		if err != nil {
+			return err
+		}
+		c.Body = newDecompressionReader(r, decompressor)
 	case 3:
-		c.Body = bzip2.NewReader(r)
+		c.Body = newDecompressionReader(r, io.NopCloser(bzip2.NewReader(r)))
 	default:
 		err = errors.UnsupportedError("unknown compression algorithm: " + strconv.Itoa(int(buf[0])))
 	}
 
 	return err
+}
+
+// LimitedBodyReader wraps the provided body reader with a limiter that restricts
+// the number of bytes read to the specified limit.
+// If limit is nil, the reader is unbounded.
+func (c *Compressed) LimitedBodyReader(limit *int64) io.Reader {
+	if limit == nil {
+		return c.Body
+	}
+	return &LimitReader{R: c.Body, N: *limit}
 }
 
 // compressedWriterCloser represents the serialized compression stream
@@ -122,4 +168,25 @@ func SerializeCompressed(w io.WriteCloser, algo CompressionAlgo, cc *Compression
 	literaldata = compressedWriteCloser{compressed, compressor}
 
 	return
+}
+
+// LimitReader is an io.Reader that fails with MessageToLarge if read bytes exceed N.
+type LimitReader struct {
+	R io.Reader // underlying reader
+	N int64     // max bytes allowed
+}
+
+func (l *LimitReader) Read(p []byte) (int, error) {
+	if l.N <= 0 {
+		return 0, errors.ErrMessageTooLarge
+	}
+
+	n, err := l.R.Read(p)
+	l.N -= int64(n)
+
+	if err == nil && l.N <= 0 {
+		err = errors.ErrMessageTooLarge
+	}
+
+	return n, err
 }

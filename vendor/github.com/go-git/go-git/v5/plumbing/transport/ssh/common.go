@@ -11,7 +11,6 @@ import (
 
 	"github.com/go-git/go-git/v5/plumbing/transport"
 	"github.com/go-git/go-git/v5/plumbing/transport/internal/common"
-	"github.com/skeema/knownhosts"
 
 	"github.com/kevinburke/ssh_config"
 	"golang.org/x/crypto/ssh"
@@ -49,7 +48,9 @@ type runner struct {
 func (r *runner) Command(cmd string, ep *transport.Endpoint, auth transport.AuthMethod) (common.Command, error) {
 	c := &command{command: cmd, endpoint: ep, config: r.config}
 	if auth != nil {
-		c.setAuth(auth)
+		if err := c.setAuth(auth); err != nil {
+			return nil, err
+		}
 	}
 
 	if err := c.connect(); err != nil {
@@ -125,17 +126,17 @@ func (c *command) connect() error {
 	}
 	hostWithPort := c.getHostWithPort()
 	if config.HostKeyCallback == nil {
-		kh, err := newKnownHosts()
+		db, err := NewKnownHostsDb()
 		if err != nil {
 			return err
 		}
-		config.HostKeyCallback = kh.HostKeyCallback()
-		config.HostKeyAlgorithms = kh.HostKeyAlgorithms(hostWithPort)
-	} else if len(config.HostKeyAlgorithms) == 0 {
-		// Set the HostKeyAlgorithms based on HostKeyCallback.
-		// For background see https://github.com/go-git/go-git/issues/411 as well as
-		// https://github.com/golang/go/issues/29286 for root cause.
-		config.HostKeyAlgorithms = knownhosts.HostKeyAlgorithms(config.HostKeyCallback, hostWithPort)
+		config.HostKeyCallback = db.HostKeyCallback()
+		config.HostKeyAlgorithms = db.HostKeyAlgorithms(hostWithPort)
+	} else {
+		// If the user gave a custom HostKeyCallback, we do not try to detect host key algorithms
+		// based on knownhosts functionality, as the user may be requesting a FixedKey or using a
+		// different key approval strategy. In that case, the user is responsible for populating
+		// HostKeyAlgorithms appropriately
 	}
 
 	overrideConfig(c.config, config)

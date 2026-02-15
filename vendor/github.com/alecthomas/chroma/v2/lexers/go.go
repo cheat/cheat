@@ -13,7 +13,6 @@ var Go = Register(MustNewLexer(
 		Aliases:   []string{"go", "golang"},
 		Filenames: []string{"*.go"},
 		MimeTypes: []string{"text/x-gosrc"},
-		EnsureNL:  true,
 	},
 	goRules,
 ).SetAnalyser(func(text string) float32 {
@@ -29,17 +28,17 @@ var Go = Register(MustNewLexer(
 func goRules() Rules {
 	return Rules{
 		"root": {
-			{`\n`, Text, nil},
-			{`\s+`, Text, nil},
-			{`\\\n`, Text, nil},
-			{`//(.*?)\n`, CommentSingle, nil},
+			{`\n`, TextWhitespace, nil},
+			{`\s+`, TextWhitespace, nil},
+			{`//[^\s][^\n\r]*`, CommentPreproc, nil},
+			{`//\s+[^\n\r]*`, CommentSingle, nil},
 			{`/(\\\n)?[*](.|\n)*?[*](\\\n)?/`, CommentMultiline, nil},
 			{`(import|package)\b`, KeywordNamespace, nil},
 			{`(var|func|struct|map|chan|type|interface|const)\b`, KeywordDeclaration, nil},
 			{Words(``, `\b`, `break`, `default`, `select`, `case`, `defer`, `go`, `else`, `goto`, `switch`, `fallthrough`, `if`, `range`, `continue`, `for`, `return`), Keyword, nil},
 			{`(true|false|iota|nil)\b`, KeywordConstant, nil},
 			{Words(``, `\b(\()`, `uint`, `uint8`, `uint16`, `uint32`, `uint64`, `int`, `int8`, `int16`, `int32`, `int64`, `float`, `float32`, `float64`, `complex64`, `complex128`, `byte`, `rune`, `string`, `bool`, `error`, `uintptr`, `print`, `println`, `panic`, `recover`, `close`, `complex`, `real`, `imag`, `len`, `cap`, `append`, `copy`, `delete`, `new`, `make`, `clear`, `min`, `max`), ByGroups(NameBuiltin, Punctuation), nil},
-			{Words(``, `\b`, `uint`, `uint8`, `uint16`, `uint32`, `uint64`, `int`, `int8`, `int16`, `int32`, `int64`, `float`, `float32`, `float64`, `complex64`, `complex128`, `byte`, `rune`, `string`, `bool`, `error`, `uintptr`), KeywordType, nil},
+			{Words(``, `\b`, `uint`, `uint8`, `uint16`, `uint32`, `uint64`, `int`, `int8`, `int16`, `int32`, `int64`, `float`, `float32`, `float64`, `complex64`, `complex128`, `byte`, `rune`, `string`, `bool`, `error`, `uintptr`, `any`), KeywordType, nil},
 			{`\d+i`, LiteralNumber, nil},
 			{`\d+\.\d*([Ee][-+]\d+)?i`, LiteralNumber, nil},
 			{`\.\d+([Ee][-+]\d+)?i`, LiteralNumber, nil},
@@ -55,7 +54,7 @@ func goRules() Rules {
 			{`"(\\\\|\\"|[^"])*"`, LiteralString, nil},
 			{`(<<=|>>=|<<|>>|<=|>=|&\^=|&\^|\+=|-=|\*=|/=|%=|&=|\|=|&&|\|\||<-|\+\+|--|==|!=|:=|\.\.\.|[+\-*/%&])`, Operator, nil},
 			{`([a-zA-Z_]\w*)(\s*)(\()`, ByGroups(NameFunction, UsingSelf("root"), Punctuation), nil},
-			{`[|^<>=!()\[\]{}.,;:]`, Punctuation, nil},
+			{`[|^<>=!()\[\]{}.,;:~]`, Punctuation, nil},
 			{`[^\W\d]\w*`, NameOther, nil},
 		},
 	}

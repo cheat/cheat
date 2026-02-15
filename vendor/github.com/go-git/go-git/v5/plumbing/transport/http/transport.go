@@ -9,26 +9,28 @@ import (
 type transportOptions struct {
 	insecureSkipTLS bool
 	// []byte is not comparable.
-	caBundle string
-	proxyURL url.URL
+	clientCert string
+	clientKey  string
+	caBundle   string
+	proxyURL   url.URL
 }
 
 func (c *client) addTransport(opts transportOptions, transport *http.Transport) {
-	c.m.Lock()
+	c.mutex.Lock()
 	c.transports.Add(opts, transport)
-	c.m.Unlock()
+	c.mutex.Unlock()
 }
 
 func (c *client) removeTransport(opts transportOptions) {
-	c.m.Lock()
+	c.mutex.Lock()
 	c.transports.Remove(opts)
-	c.m.Unlock()
+	c.mutex.Unlock()
 }
 
 func (c *client) fetchTransport(opts transportOptions) (*http.Transport, bool) {
-	c.m.RLock()
+	c.mutex.RLock()
 	t, ok := c.transports.Get(opts)
-	c.m.RUnlock()
+	c.mutex.RUnlock()
 	if !ok {
 		return nil, false
 	}
