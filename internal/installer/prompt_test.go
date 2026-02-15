@@ -2,7 +2,6 @@ package installer
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"os"
 	"strings"
@@ -157,24 +156,4 @@ func TestPromptError(t *testing.T) {
 	if !strings.Contains(err.Error(), "failed to prompt") {
 		t.Errorf("expected 'failed to prompt' error, got: %v", err)
 	}
-}
-
-// TestPromptIntegration provides a simple integration test
-func TestPromptIntegration(t *testing.T) {
-	// This demonstrates how the prompt would be used in practice
-	// It's skipped by default since it requires actual user input
-	if os.Getenv("TEST_INTERACTIVE") != "1" {
-		t.Skip("Skipping interactive test - set TEST_INTERACTIVE=1 to run")
-	}
-
-	fmt.Println("\n=== Interactive Prompt Test ===")
-	fmt.Println("You will be prompted to answer a question.")
-	fmt.Println("Try different inputs: y, n, Y, N, empty (just press Enter)")
-
-	result, err := Prompt("Would you like to continue? [Y/n]", true)
-	if err != nil {
-		t.Fatalf("Prompt failed: %v", err)
-	}
-
-	fmt.Printf("You answered: %v\n", result)
 }
