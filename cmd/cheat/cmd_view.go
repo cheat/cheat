@@ -5,15 +5,19 @@ import (
 	"os"
 	"strings"
 
+	"github.com/spf13/cobra"
+
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/display"
 	"github.com/cheat/cheat/internal/sheets"
 )
 
 // cmdView displays a cheatsheet for viewing.
-func cmdView(opts map[string]interface{}, conf config.Config) {
+func cmdView(cmd *cobra.Command, args []string, conf config.Config) {
 
-	cheatsheet := opts["<cheatsheet>"].(string)
+	cheatsheet := args[0]
+
+	colorize, _ := cmd.Flags().GetBool("colorize")
 
 	// load the cheatsheets
 	cheatsheets, err := sheets.Load(conf.Cheatpaths)
@@ -21,15 +25,17 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
 		os.Exit(1)
 	}
-	if opts["--tag"] != nil {
+	if cmd.Flags().Changed("tag") {
+		tagVal, _ := cmd.Flags().GetString("tag")
 		cheatsheets = sheets.Filter(
 			cheatsheets,
-			strings.Split(opts["--tag"].(string), ","),
+			strings.Split(tagVal, ","),
 		)
 	}
 
 	// if --all was passed, display cheatsheets from all cheatpaths
-	if opts["--all"].(bool) {
+	allFlag, _ := cmd.Flags().GetBool("all")
+	if allFlag {
 		// iterate over the cheatpaths
 		out := ""
 		for _, cheatpath := range cheatsheets {
@@ -40,11 +46,11 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 				// identify the matching cheatsheet
 				out += fmt.Sprintf("%s %s\n",
 					sheet.Title,
-					display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf.Color(opts)),
+					display.Faint(fmt.Sprintf("(%s)", sheet.CheatPath), conf.Color(colorize)),
 				)
 
 				// apply colorization if requested
-				if conf.Color(opts) {
+				if conf.Color(colorize) {
 					sheet.Colorize(conf)
 				}
 
@@ -71,7 +77,7 @@ func cmdView(opts map[string]interface{}, conf config.Config) {
 	}
 
 	// apply colorization if requested
-	if conf.Color(opts) {
+	if conf.Color(colorize) {
 		sheet.Colorize(conf)
 	}
 

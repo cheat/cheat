@@ -9,6 +9,8 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	"github.com/spf13/cobra"
+
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/display"
 	"github.com/cheat/cheat/internal/sheet"
@@ -16,7 +18,7 @@ import (
 )
 
 // cmdList lists all available cheatsheets.
-func cmdList(opts map[string]interface{}, conf config.Config) {
+func cmdList(cmd *cobra.Command, args []string, conf config.Config) {
 
 	// load the cheatsheets
 	cheatsheets, err := sheets.Load(conf.Cheatpaths)
@@ -24,10 +26,11 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 		fmt.Fprintf(os.Stderr, "failed to list cheatsheets: %v\n", err)
 		os.Exit(1)
 	}
-	if opts["--tag"] != nil {
+	if cmd.Flags().Changed("tag") {
+		tagVal, _ := cmd.Flags().GetString("tag")
 		cheatsheets = sheets.Filter(
 			cheatsheets,
-			strings.Split(opts["--tag"].(string), ","),
+			strings.Split(tagVal, ","),
 		)
 	}
 
@@ -47,16 +50,13 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 	})
 
 	// filter if <cheatsheet> was specified
-	// NB: our docopt specification is misleading here. When used in conjunction
-	// with `-l`, `<cheatsheet>` is really a pattern against which to filter
-	// sheet titles.
-	if opts["<cheatsheet>"] != nil {
+	if len(args) > 0 {
 
 		// initialize a slice of filtered sheets
 		filtered := []sheet.Sheet{}
 
 		// initialize our filter pattern
-		pattern := "(?i)" + opts["<cheatsheet>"].(string)
+		pattern := "(?i)" + args[0]
 
 		// compile the regex
 		reg, err := regexp.Compile(pattern)
@@ -86,7 +86,8 @@ func cmdList(opts map[string]interface{}, conf config.Config) {
 	w := tabwriter.NewWriter(&out, 0, 0, 1, ' ', 0)
 
 	// generate sorted, columnized output
-	if opts["--brief"].(bool) {
+	briefFlag, _ := cmd.Flags().GetBool("brief")
+	if briefFlag {
 		fmt.Fprintln(w, "title:\ttags:")
 		for _, sheet := range flattened {
 			fmt.Fprintf(w, "%s\t%s\n", sheet.Title, strings.Join(sheet.Tags, ","))

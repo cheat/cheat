@@ -4,13 +4,15 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/spf13/cobra"
+
 	"github.com/cheat/cheat/internal/config"
 	"github.com/cheat/cheat/internal/display"
 	"github.com/cheat/cheat/internal/sheets"
 )
 
 // cmdTags lists all tags in use.
-func cmdTags(_ map[string]interface{}, conf config.Config) {
+func cmdTags(_ *cobra.Command, _ []string, conf config.Config) {
 
 	// load the cheatsheets
 	cheatsheets, err := sheets.Load(conf.Cheatpaths)

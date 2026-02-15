@@ -10,13 +10,11 @@ func TestColor(t *testing.T) {
 	// mock a config
 	conf := Config{}
 
-	opts := map[string]interface{}{"--colorize": false}
-	if conf.Color(opts) {
-		t.Errorf("failed to respect --colorize (false)")
+	if conf.Color(false) {
+		t.Errorf("failed to respect forceColorize (false)")
 	}
 
-	opts = map[string]interface{}{"--colorize": true}
-	if !conf.Color(opts) {
-		t.Errorf("failed to respect --colorize (true)")
+	if !conf.Color(true) {
+		t.Errorf("failed to respect forceColorize (true)")
 	}
 }
