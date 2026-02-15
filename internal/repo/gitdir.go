@@ -6,6 +6,11 @@ import (
 	"strings"
 )
 
+// gitSep is the `.git` path component surrounded by path separators.
+// Used to match `.git` as a complete path component, not as a suffix
+// of a directory name (e.g., `personal.git`).
+var gitSep = string(os.PathSeparator) + ".git" + string(os.PathSeparator)
+
 // GitDir returns `true` if we are iterating over a directory contained within
 // a repositories `.git` directory.
 func GitDir(path string) (bool, error) {
@@ -50,9 +55,20 @@ func GitDir(path string) (bool, error) {
 
 		See: https://github.com/cheat/cheat/issues/699
 
-		Accounting for all of the above (hopefully?), the current solution is
-		not to search for `.git`, but `.git/` (including the directory
-		separator), and then only ceasing to walk the directory on a match.
+		Accounting for all of the above, the next solution was to search not
+		for `.git`, but `.git/` (including the directory separator), and then
+		only ceasing to walk the directory on a match.
+
+		This, however, also had a bug: searching for `.git/` also matched
+		directory names that *ended with* `.git`, like `personal.git/`. This
+		caused cheatsheets stored under such paths to be silently skipped.
+
+		See: https://github.com/cheat/cheat/issues/711
+
+		The current (and hopefully final) solution requires the path separator
+		on *both* sides of `.git`, i.e., searching for `/.git/`. This ensures
+		that `.git` is matched only as a complete path component, not as a
+		suffix of a directory name.
 
 		To summarize, this code must account for the following possibilities:
 
@@ -61,17 +77,16 @@ func GitDir(path string) (bool, error) {
 		3. A cheatpath is a repository, and contains a `.git*` file
 		4. A cheatpath is a submodule
 		5. A cheatpath is a hidden directory
+		6. A cheatpath is inside a directory whose name ends with `.git`
 
 		Care must be taken to support the above on both Unix and Windows
 		systems, which have different directory separators and line-endings.
 
-		There is a lot of nuance to all of this, and it would be worthwhile to
-		do two things to stop writing bugs here:
+		NB: `filepath.Walk` always passes absolute paths to the walk function,
+		so `.git` will never appear as the first path component. This is what
+		makes the "separator on both sides" approach safe.
 
-		1. Build integration tests around all of this
-		2. Discard string-matching solutions entirely, and use `go-git` instead
-
-		NB: A reasonable smoke-test for ensuring that skipping is being applied
+		A reasonable smoke-test for ensuring that skipping is being applied
 		correctly is to run the following command:
 
 		    make && strace ./dist/cheat -l | wc -l
@@ -83,8 +98,8 @@ func GitDir(path string) (bool, error) {
 		of syscalls should be significantly lower with the skip check enabled.
 	*/
 
-	// determine if the literal string `.git` appears within `path`
-	pos := strings.Index(path, fmt.Sprintf(".git%s", string(os.PathSeparator)))
+	// determine if `.git` appears as a complete path component
+	pos := strings.Index(path, gitSep)
 
 	// if it does not, we know for certain that we are not within a `.git`
 	// directory.
