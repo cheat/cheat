@@ -27,6 +27,7 @@ ZIP    := zip -m
 docker_image := cheat-devel:latest
 
 # build flags
+export CGO_ENABLED := 0
 BUILD_FLAGS  := -ldflags="-s -w" -mod vendor -trimpath
 GOBIN        :=
 TMPDIR       := /tmp
