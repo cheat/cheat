@@ -22,6 +22,8 @@ TESTS=(
     "FuzzTagged:./internal/sheet:tag matching with malicious input"
     "FuzzFilter:./internal/sheets:tag filtering operations"
     "FuzzTags:./internal/sheets:tag aggregation and sorting"
+    "FuzzFindLocalCheatpath:./internal/config:recursive .cheat directory discovery"
+    "FuzzFindLocalCheatpathNearestWins:./internal/config:nearest .cheat wins invariant"
 )
 
 echo "Running fuzz tests ($DURATION each)..."

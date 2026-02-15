@@ -27,8 +27,9 @@
 // # Directory-Scoped Cheatpaths
 //
 // The package supports directory-scoped cheatpaths via `.cheat` directories.
-// When running cheat from a directory containing a `.cheat` subdirectory,
-// that directory is temporarily added to the available cheatpaths.
+// When running cheat, the tool walks upward from the current working directory
+// to the filesystem root, stopping at the first `.cheat` directory found. That
+// directory is temporarily added to the available cheatpaths.
 //
 // # Precedence and Overrides
 //

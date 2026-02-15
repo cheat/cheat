@@ -86,6 +86,187 @@ func TestConfigLocalCheatpath(t *testing.T) {
 	}
 }
 
+// TestConfigLocalCheatpathInParent tests that .cheat in a parent directory is found
+func TestConfigLocalCheatpathInParent(t *testing.T) {
+	tempDir, err := os.MkdirTemp("", "cheat-config-test-*")
+	if err != nil {
+		t.Fatalf("failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	// Resolve symlinks in temp dir path (macOS /var -> /private/var)
+	tempDir, err = filepath.EvalSymlinks(tempDir)
+	if err != nil {
+		t.Fatalf("failed to resolve temp dir symlinks: %v", err)
+	}
+
+	oldCwd, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("failed to get cwd: %v", err)
+	}
+	defer os.Chdir(oldCwd)
+
+	// Create .cheat in the root of the temp dir
+	localCheat := filepath.Join(tempDir, ".cheat")
+	if err := os.Mkdir(localCheat, 0755); err != nil {
+		t.Fatalf("failed to create .cheat dir: %v", err)
+	}
+
+	// Create a subdirectory and cd into it
+	subDir := filepath.Join(tempDir, "sub")
+	if err := os.Mkdir(subDir, 0755); err != nil {
+		t.Fatalf("failed to create sub dir: %v", err)
+	}
+	if err := os.Chdir(subDir); err != nil {
+		t.Fatalf("failed to chdir: %v", err)
+	}
+
+	conf, err := New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
+	if err != nil {
+		t.Errorf("failed to load config: %v", err)
+	}
+
+	found := false
+	for _, cp := range conf.Cheatpaths {
+		if cp.Name == "cwd" && cp.Path == localCheat {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Error("parent .cheat directory was not added to cheatpaths")
+	}
+}
+
+// TestConfigLocalCheatpathNearestWins tests that the nearest .cheat wins
+func TestConfigLocalCheatpathNearestWins(t *testing.T) {
+	tempDir, err := os.MkdirTemp("", "cheat-config-test-*")
+	if err != nil {
+		t.Fatalf("failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	// Resolve symlinks in temp dir path (macOS /var -> /private/var)
+	tempDir, err = filepath.EvalSymlinks(tempDir)
+	if err != nil {
+		t.Fatalf("failed to resolve temp dir symlinks: %v", err)
+	}
+
+	oldCwd, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("failed to get cwd: %v", err)
+	}
+	defer os.Chdir(oldCwd)
+
+	// Create .cheat at root
+	if err := os.Mkdir(filepath.Join(tempDir, ".cheat"), 0755); err != nil {
+		t.Fatalf("failed to create root .cheat dir: %v", err)
+	}
+
+	// Create sub/.cheat (the nearer one)
+	subDir := filepath.Join(tempDir, "sub")
+	if err := os.Mkdir(subDir, 0755); err != nil {
+		t.Fatalf("failed to create sub dir: %v", err)
+	}
+	nearCheat := filepath.Join(subDir, ".cheat")
+	if err := os.Mkdir(nearCheat, 0755); err != nil {
+		t.Fatalf("failed to create near .cheat dir: %v", err)
+	}
+
+	// cd into sub/deep/
+	deepDir := filepath.Join(subDir, "deep")
+	if err := os.Mkdir(deepDir, 0755); err != nil {
+		t.Fatalf("failed to create deep dir: %v", err)
+	}
+	if err := os.Chdir(deepDir); err != nil {
+		t.Fatalf("failed to chdir: %v", err)
+	}
+
+	conf, err := New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
+	if err != nil {
+		t.Errorf("failed to load config: %v", err)
+	}
+
+	found := false
+	for _, cp := range conf.Cheatpaths {
+		if cp.Name == "cwd" {
+			if cp.Path != nearCheat {
+				t.Errorf("expected nearest .cheat %s, got %s", nearCheat, cp.Path)
+			}
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Error("no cwd cheatpath found")
+	}
+}
+
+// TestConfigNoLocalCheatpath tests that no cwd cheatpath is added when no .cheat exists
+func TestConfigNoLocalCheatpath(t *testing.T) {
+	tempDir, err := os.MkdirTemp("", "cheat-config-test-*")
+	if err != nil {
+		t.Fatalf("failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	oldCwd, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("failed to get cwd: %v", err)
+	}
+	defer os.Chdir(oldCwd)
+
+	if err := os.Chdir(tempDir); err != nil {
+		t.Fatalf("failed to chdir: %v", err)
+	}
+
+	conf, err := New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
+	if err != nil {
+		t.Errorf("failed to load config: %v", err)
+	}
+
+	for _, cp := range conf.Cheatpaths {
+		if cp.Name == "cwd" {
+			t.Error("cwd cheatpath should not be added when no .cheat exists")
+		}
+	}
+}
+
+// TestConfigLocalCheatpathFileSkipped tests that a .cheat file (not dir) is skipped
+func TestConfigLocalCheatpathFileSkipped(t *testing.T) {
+	tempDir, err := os.MkdirTemp("", "cheat-config-test-*")
+	if err != nil {
+		t.Fatalf("failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	oldCwd, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("failed to get cwd: %v", err)
+	}
+	defer os.Chdir(oldCwd)
+
+	// Create .cheat as a file, not a directory
+	if err := os.WriteFile(filepath.Join(tempDir, ".cheat"), []byte("not a dir"), 0644); err != nil {
+		t.Fatalf("failed to create .cheat file: %v", err)
+	}
+
+	if err := os.Chdir(tempDir); err != nil {
+		t.Fatalf("failed to chdir: %v", err)
+	}
+
+	conf, err := New(map[string]interface{}{}, mock.Path("conf/empty.yml"), false)
+	if err != nil {
+		t.Errorf("failed to load config: %v", err)
+	}
+
+	for _, cp := range conf.Cheatpaths {
+		if cp.Name == "cwd" {
+			t.Error("cwd cheatpath should not be added for a .cheat file")
+		}
+	}
+}
+
 // TestConfigDefaults tests default values
 func TestConfigDefaults(t *testing.T) {
 	// Load empty config
