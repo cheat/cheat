@@ -39,6 +39,12 @@ func TestConfigLocalCheatpath(t *testing.T) {
 	}
 	defer os.RemoveAll(tempDir)
 
+	// Resolve symlinks in temp dir path (macOS /var -> /private/var)
+	tempDir, err = filepath.EvalSymlinks(tempDir)
+	if err != nil {
+		t.Fatalf("failed to resolve temp dir symlinks: %v", err)
+	}
+
 	// Save current working directory
 	oldCwd, err := os.Getwd()
 	if err != nil {
@@ -105,6 +111,12 @@ func TestConfigSymlinkResolution(t *testing.T) {
 		t.Fatalf("failed to create temp dir: %v", err)
 	}
 	defer os.RemoveAll(tempDir)
+
+	// Resolve symlinks in temp dir path (macOS /var -> /private/var)
+	tempDir, err = filepath.EvalSymlinks(tempDir)
+	if err != nil {
+		t.Fatalf("failed to resolve temp dir symlinks: %v", err)
+	}
 
 	// Create target directory
 	targetDir := filepath.Join(tempDir, "target")

@@ -78,6 +78,16 @@ cheatpaths:
 		},
 	}
 
+	// Pre-create a non-empty community dir so PlainClone fails reliably
+	// (otherwise, on CI runners with network access, the clone succeeds)
+	cloneBlocker := filepath.Join(tempDir, "conf2", "cheatsheets", "community")
+	if err := os.MkdirAll(cloneBlocker, 0755); err != nil {
+		t.Fatalf("failed to create clone blocker dir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(cloneBlocker, ".gitkeep"), []byte(""), 0644); err != nil {
+		t.Fatalf("failed to write clone blocker file: %v", err)
+	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Create stdin pipe
