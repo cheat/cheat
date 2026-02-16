@@ -59,6 +59,9 @@ OPTIONS
 -T, --tags
 : List all tags in use.
 
+-u, --update
+: Update git-backed cheatpaths by pulling the latest changes.
+
 -v, --version
 : Print the version number.
 
@@ -106,6 +109,12 @@ To search (by regex) for cheatsheets that contain an IP address:
 To remove (delete) the foo/bar cheatsheet:
 : cheat --rm _foo/bar_
 
+To update all git-backed cheatpaths:
+: cheat --update
+
+To update only the 'community' cheatpath:
+: cheat -u -p _community_
+
 To view the configuration file path:
 : cheat --conf
 
@@ -116,15 +125,16 @@ FILES
 Configuration
 -------------
 **cheat** is configured via a YAML file that is conventionally named
-_conf.yaml_.  **cheat** will search for _conf.yaml_ in varying locations,
+_conf.yml_.  **cheat** will search for _conf.yml_ in varying locations,
 depending upon your platform:
 
 ### Linux, OSX, and other Unixes ###
 
 1. **CHEAT_CONFIG_PATH**
-2. **XDG_CONFIG_HOME**/cheat/conf.yaml
+2. **XDG_CONFIG_HOME**/cheat/conf.yml
 3. **$HOME**/.config/cheat/conf.yml
 4. **$HOME**/.cheat/conf.yml
+5. /etc/cheat/conf.yml
 
 ### Windows ###
 
@@ -132,7 +142,7 @@ depending upon your platform:
 2. **APPDATA**/cheat/conf.yml
 3. **PROGRAMDATA**/cheat/conf.yml
 
-**cheat** will search in the order specified above. The first _conf.yaml_
+**cheat** will search in the order specified above. The first _conf.yml_
 encountered will be respected.
 
 If **cheat** cannot locate a config file, it will ask if you'd like to generate
@@ -144,7 +154,7 @@ for your platform.
 Cheatpaths
 ----------
 **cheat** reads its cheatsheets from "cheatpaths", which are the directories in
-which cheatsheets are stored. Cheatpaths may be configured in _conf.yaml_, and
+which cheatsheets are stored. Cheatpaths may be configured in _conf.yml_, and
 viewed via **cheat -d**.
 
 For detailed instructions on how to configure cheatpaths, please refer to the

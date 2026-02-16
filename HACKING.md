@@ -213,7 +213,7 @@ The codebase follows consistent error handling patterns:
 
 Example:
 ```go
-sheet, err := sheet.New(path, tags, false)
+s, err := sheet.New(title, cheatpath, path, tags, false)
 if err != nil {
     return fmt.Errorf("failed to load sheet: %w", err)
 }

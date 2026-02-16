@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-In the `envVars()` function in `cmd/cheat/main.go`, the code parses environment variables assuming they all contain an equals sign:
+In the `EnvVars()` function in `internal/config/env.go`, the code parses environment variables assuming they all contain an equals sign:
 
 ```go
 for _, e := range os.Environ() {

@@ -15,7 +15,7 @@ import (
 	"github.com/cheat/cheat/internal/installer"
 )
 
-const version = "5.0.0"
+const version = "5.1.0"
 
 var rootCmd = &cobra.Command{
 	Use:   "cheat [cheatsheet]",
@@ -60,6 +60,9 @@ remember.`,
   To remove (delete) the foo/bar cheatsheet:
     cheat --rm foo/bar
 
+  To update all git-backed cheatpaths:
+    cheat --update
+
   To view the configuration file path:
     cheat --conf
 
@@ -87,6 +90,7 @@ func init() {
 	f.BoolP("list", "l", false, "List cheatsheets")
 	f.BoolP("regex", "r", false, "Treat search <phrase> as a regex")
 	f.BoolP("tags", "T", false, "List all tags in use")
+	f.BoolP("update", "u", false, "Update git-backed cheatpaths")
 	f.BoolP("version", "v", false, "Print the version number")
 	f.Bool("conf", false, "Display the config file path")
 
@@ -221,6 +225,7 @@ func run(cmd *cobra.Command, args []string) error {
 	listFlag, _ := f.GetBool("list")
 	briefFlag, _ := f.GetBool("brief")
 	tagsFlag, _ := f.GetBool("tags")
+	updateFlag, _ := f.GetBool("update")
 	tagVal, _ := f.GetString("tag")
 
 	switch {
@@ -238,6 +243,9 @@ func run(cmd *cobra.Command, args []string) error {
 
 	case tagsFlag:
 		cmdTags(cmd, args, conf)
+
+	case updateFlag:
+		cmdUpdate(cmd, args, conf)
 
 	case f.Changed("search"):
 		cmdSearch(cmd, args, conf)

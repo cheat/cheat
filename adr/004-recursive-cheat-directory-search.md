@@ -77,4 +77,4 @@ multiple cheatpaths can configure them in `conf.yml`.
 ## References
 
 - GitHub issue: #602
-- Implementation: `findLocalCheatpath()` in `internal/config/config.go`
+- Implementation: `findLocalCheatpath()` in `internal/config/new.go`

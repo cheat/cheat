@@ -24,7 +24,7 @@ On Windows, download the appropriate binary from the [releases page][releases],
 unzip the archive, and place the `cheat.exe` executable on your `PATH`.
 
 ## Install via `go install`
-If you have `go` version `>=1.17` available on your `PATH`, you can install
+If you have `go` version `>=1.26` available on your `PATH`, you can install
 `cheat` via `go install`:
 
 ```sh
