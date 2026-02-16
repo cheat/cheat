@@ -53,6 +53,9 @@ Filter only to sheets tagged with \f[I]TAG\f[R].
 \-T, \[en]tags
 List all tags in use.
 .TP
+\-u, \[en]update
+Update git\-backed cheatpaths by pulling the latest changes.
+.TP
 \-v, \[en]version
 Print the version number.
 .TP
@@ -98,23 +101,31 @@ cheat \-c \-r \-s \f[I]`(?:[0\-9]{1,3}.){3}[0\-9]{1,3}'\f[R]
 To remove (delete) the foo/bar cheatsheet:
 cheat \[en]rm \f[I]foo/bar\f[R]
 .TP
+To update all git\-backed cheatpaths:
+cheat \[en]update
+.TP
+To update only the `community' cheatpath:
+cheat \-u \-p \f[I]community\f[R]
+.TP
 To view the configuration file path:
 cheat \[en]conf
 .SH FILES
 .SS Configuration
 \f[B]cheat\f[R] is configured via a YAML file that is conventionally
-named \f[I]conf.yaml\f[R].
-\f[B]cheat\f[R] will search for \f[I]conf.yaml\f[R] in varying
-locations, depending upon your platform:
+named \f[I]conf.yml\f[R].
+\f[B]cheat\f[R] will search for \f[I]conf.yml\f[R] in varying locations,
+depending upon your platform:
 .SS Linux, OSX, and other Unixes
 .IP "1." 3
 \f[B]CHEAT_CONFIG_PATH\f[R]
 .IP "2." 3
-\f[B]XDG_CONFIG_HOME\f[R]/cheat/conf.yaml
+\f[B]XDG_CONFIG_HOME\f[R]/cheat/conf.yml
 .IP "3." 3
 \f[B]$HOME\f[R]/.config/cheat/conf.yml
 .IP "4." 3
 \f[B]$HOME\f[R]/.cheat/conf.yml
+.IP "5." 3
+/etc/cheat/conf.yml
 .SS Windows
 .IP "1." 3
 \f[B]CHEAT_CONFIG_PATH\f[R]
@@ -124,7 +135,7 @@ locations, depending upon your platform:
 \f[B]PROGRAMDATA\f[R]/cheat/conf.yml
 .PP
 \f[B]cheat\f[R] will search in the order specified above.
-The first \f[I]conf.yaml\f[R] encountered will be respected.
+The first \f[I]conf.yml\f[R] encountered will be respected.
 .PP
 If \f[B]cheat\f[R] cannot locate a config file, it will ask if you\[cq]d
 like to generate one automatically.
@@ -134,7 +145,7 @@ location for your platform.
 .SS Cheatpaths
 \f[B]cheat\f[R] reads its cheatsheets from \[lq]cheatpaths\[rq], which
 are the directories in which cheatsheets are stored.
-Cheatpaths may be configured in \f[I]conf.yaml\f[R], and viewed via
+Cheatpaths may be configured in \f[I]conf.yml\f[R], and viewed via
 \f[B]cheat \-d\f[R].
 .PP
 For detailed instructions on how to configure cheatpaths, please refer

@@ -57,8 +57,11 @@ The `cheat` command-line tool is organized into several key packages:
 ### Command Layer (`cmd/cheat/`)
 - `main.go`: Entry point, cobra command definition, flag registration, command routing
 - `cmd_*.go`: Individual command implementations (view, edit, list, search, etc.)
-- `completions.go`: Dynamic shell completion functions for cheatsheet names, tags, and paths
 - Commands are routed via a `switch` block in the cobra `RunE` handler
+
+### Completions (`internal/completions/`)
+- Dynamic shell completion functions for cheatsheet names, tags, and cheatpath names
+- `generate.go`: Generates completion scripts for bash, zsh, fish, and powershell
 
 ### Core Internal Packages
 
