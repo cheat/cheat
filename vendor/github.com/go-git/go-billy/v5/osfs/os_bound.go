@@ -126,6 +126,14 @@ func (fs *BoundOS) TempFile(dir, prefix string) (billy.File, error) {
 		if err != nil {
 			return nil, err
 		}
+
+		_, err = os.Stat(dir)
+		if err != nil && os.IsNotExist(err) {
+			err = os.MkdirAll(dir, defaultDirectoryMode)
+			if err != nil {
+				return nil, err
+			}
+		}
 	}
 
 	return tempFile(dir, prefix)
